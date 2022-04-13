@@ -20,6 +20,7 @@ Lee y gestiona de manera accesible el chat de youtube en tus propios directos o 
 ## Atajos de teclado.
 ### Usando interfaz invisible.
 | acción                    | combinación de teclas |
+| ------------------------- | ----------- |
 | Silencia la voz sapy      | control           |
 | Conmuta entre todos los chats o solo miembros y donativos      | alt shift flecha izquierda o derecha           |
 | Elemento anterior      | alt shift flecha arriba           |
@@ -27,7 +28,9 @@ Lee y gestiona de manera accesible el chat de youtube en tus propios directos o 
 | Elemento inicial      | alt shift inicio           |
 | Elemento final      | alt shift fin           |
 | activa o desactiva el modo automático      | alt shift m           |
+
 ### En el historial  del chat:
 | acción                    | combinación de teclas |
+| ------------------------- | ----------- |
 | Reproducir mensaje seleccionado      | espacio           |
 | borrar mensaje seleccionado      | suprimir           |
