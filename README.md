@@ -35,6 +35,7 @@ Lee y gestiona de manera accesible el chat de youtube en tus propios directos o 
 | ------------------------- | ----------- |
 | Reproducir mensaje seleccionado      | espacio           |
 | borrar mensaje seleccionado      | suprimir           |
+Puedes descargar el proyecto desde [aquí](https://github.com/metalalchemist/VeTube/files/8535263/VeTube.zip)
 ## futuras actualizaciones:
 - He agregado para  futuras actualizaciones próximas el poder traducir facilmente la aplicación a otros idiomas.
 - Posibilidad de mostrar información de la persona que está chateando desde la interfaz invisible:
