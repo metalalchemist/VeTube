@@ -1,0 +1,6 @@
+wx
+playsound==1.2.2
+pytchat
+youtube_dl
+keyboard
+accessible_output2
