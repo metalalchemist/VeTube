@@ -4,3 +4,5 @@ pytchat
 youtube_dl
 keyboard
 accessible_output2
+pyperclip
+chat_downloader

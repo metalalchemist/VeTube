@@ -1,5 +1,6 @@
 # vetube
 Lee y gestiona de manera accesible el chat de youtube en tus propios directos o en los de tus creadores favoritos.
+[demostración del producto en funcionamiento](https://www.youtube.com/c/4everzyanya/)
 ## Características
 - Modo automático: Lee los mensajes de chat en tiempo real utilizando la voz sapy5
 - Interfaz invisible: Gestiona los chats desde cualquier ventana utilizando simples comandos de teclado. Es necesario tener un lector de pantalla activo.
@@ -29,12 +30,16 @@ Lee y gestiona de manera accesible el chat de youtube en tus propios directos o 
 | Elemento final      | alt shift fin           |
 | Copia el mensaje actual      | alt shift c           |
 | Activa o desactiva el modo automático      | alt shift m           |
+| muestra el mensaje actual en un cuadro de texto      | alt shift v           |
 
 ### En el historial  del chat:
 | acción                    | combinación de teclas |
 | ------------------------- | ----------- |
 | Reproducir mensaje seleccionado      | espacio           |
 | borrar mensaje seleccionado      | suprimir           |
+
+Con tu apoyo contribuyes a que este programa siga en crecimiento
+[¿Te unes a nuestra causa?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 ## futuras actualizaciones:
 - He agregado para  futuras actualizaciones próximas el poder traducir facilmente la aplicación a otros idiomas.
 - Posibbilidad de mostrar información de la persona que está chateando desde la interfaz invisible:
@@ -47,7 +52,7 @@ Se que gracias a ustedes  esta aplicación seguirá mejorando y cada una de sus 
 Agradesco a:
 [4everzyanya](https://www.youtube.com/c/4everzyanya/)
 principal tester del proyecto.
-A Johan G,  el cual me ayudó  ha crear la interfaz gráfica para el proyecto y a corregir  ciertos bugs menores.
+[Johan G](https://github.com/JohanAnim) el cual me ayudó  ha crear la interfaz gráfica para el proyecto y a corregir  ciertos bugs menores.
 Y a todos y cada uno de ustedes por sus futuras ideas y alimentar el proyecto constantemente.
 Si gustas reportarme bugs, ideas o simplemente escribirme puedes  hacerlo en:
 cesar.verastegui17@gmail.com

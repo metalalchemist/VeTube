@@ -1,11 +1,13 @@
-﻿#!/usr/bin/env python
-# -*- coding: UTF-8 -*-
-import pytchat, json,wx,threading,keyboard,time,gettext
+﻿#!/usr/bin/python
+# -*- coding: <encoding name> -*-
+import pytchat, json,wx,threading,keyboard,time,gettext,webbrowser
 from playsound import playsound
 from os import path
 from accessible_output2.outputs import auto, sapi5
 from youtube_dl import YoutubeDL
 from pyperclip import copy
+#pronto se dejará de usar pytchat
+from chat_downloader import ChatDownloader
 voz=0
 configchat=1
 tono=0
@@ -18,11 +20,10 @@ todos=True
 sonidos=True
 idiomas = []
 miembros=[]
-ydlop = {'ignoreerrors': True, 'quiet': True}
 leer=sapi5.SAPI5()
 lector=auto.Auto()
 lista=leer.list_voices()
-t = gettext.translation('VeTube', 'locale', languages=idiomas, fallback=True,)
+t = gettext.translation('VeTube', 'locales',fallback=True,)
 _ = t.gettext
 def asignarBuffer():
 	if mensajes==0 : buffer=100
@@ -69,16 +70,6 @@ def leerConfiguracion():
         mensajes=resultado['mensajes']
         sonidos=resultado['sonidos']
     else: escribirConfiguracion()
-def sacarId(enlace):
-    if ".be" in enlace: enlace=enlace.split("/")
-    elif "youtube.com" in enlace: enlace=enlace.split("v=")
-    else: return 0
-    if "&" in enlace[-1]:
-        enlace=enlace[-1]
-        enlace=enlace.split("&")
-        enlace=enlace[0]
-    else: enlace=enlace[-1]
-    return enlace[:-1] if "/" in enlace else enlace
 leerConfiguracion()
 asignarBuffer()
 leer.set_rate(speed)
@@ -89,17 +80,24 @@ class MyFrame(wx.Frame):
     def __init__(self, *args, **kwds):
         self.contarmiembros=0
         self.contador=0
+        self.dentro=False
         self.hilo1 = threading.Thread(target=self.capturarTeclas)
         self.hilo1.daemon = True
         self.hilo1.start()
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
+        self.donar = wx.Dialog(self, wx.ID_ANY, _("información"))
+        dlg = wx.MessageDialog(self.donar, _(u"Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te unes a nuestra causa?"), _(u"Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
+        dlg.SetYesNoLabels(_("&Aceptar"), _("&Cancelar"))
+        if dlg.ShowModal()==wx.ID_YES:
+            webbrowser.open('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
+            self.donar.Destroy()
+        else: self.donar.Destroy()
         self.SetSize((800, 600))
         self.SetTitle("VeTube")
         self.SetWindowStyle(wx.RESIZE_BORDER | wx.CAPTION | wx.CLOSE_BOX | wx.CLIP_CHILDREN)
         self.panel_1 = wx.Panel(self, wx.ID_ANY)
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
-
         self.menu_1 = wx.Button(self.panel_1, wx.ID_ANY, _(u"&Más opciones"))
         self.menu_1.Bind(wx.EVT_BUTTON, self.opcionesMenu)
         self.menu_1.SetToolTip(_(u"Pulse alt para abrir el menú"))
@@ -113,7 +111,6 @@ class MyFrame(wx.Frame):
 
         self.label_1 = wx.StaticText(self.tap_1, wx.ID_ANY, _("Escriba o pegue una URL de youtube"), style=wx.ALIGN_CENTER_HORIZONTAL)
         sizer_2.Add(self.label_1, 0, 0, 0)
-
         self.text_ctrl_1 = wx.TextCtrl(self.tap_1, wx.ID_ANY, "", style=wx.TE_AUTO_URL | wx.TE_CENTRE | wx.TE_PROCESS_ENTER)
         self.text_ctrl_1.SetToolTip(_("Escribe o pega una URL"))
         self.text_ctrl_1.Bind(wx.EVT_TEXT, self.mostrarBoton)
@@ -128,26 +125,6 @@ class MyFrame(wx.Frame):
         self.button_2.Bind(wx.EVT_BUTTON, self.borrarContenido)
         self.button_2.Disable()
         sizer_2.Add(self.button_2, 0, 0, 0)
-        self.tap_2 = wx.Panel(self.notebook_1, wx.ID_ANY)
-        self.notebook_1.AddPage(self.tap_2, _("Chat"))
-        sizer_3 = wx.BoxSizer(wx.VERTICAL)
-        self.label_2 = wx.StaticText(self.tap_2, wx.ID_ANY, _("Historial de mensajes"))
-        sizer_3.Add(self.label_2, 0, 0, 0)
-        self.list_box_1 = wx.ListBox(self.tap_2, wx.ID_ANY, choices=[])
-        self.list_box_1.Bind(wx.EVT_KEY_UP, self.historialItemsTeclas)
-        if self.list_box_1.GetCount() > 0: self.list_box_1.SetSelection(0)
-        sizer_3.Add(self.list_box_1, 0, 0, 0)
-        self.button_3 = wx.Button(self.tap_2, wx.ID_ANY, _("&Detener"))
-        self.button_3.Disable()
-        self.button_3.Bind(wx.EVT_BUTTON, self.detenerLectura)
-        sizer_3.Add(self.button_3, 0, 0, 0)
-
-        self.button_4 = wx.Button(self.tap_2, wx.ID_ANY, _("&Limpiar historial."))
-        self.button_4.Bind(wx.EVT_BUTTON, self.borrarEnlace)
-        sizer_3.Add(self.button_4, 0, 0, 0)
-
-        self.tap_2.SetSizer(sizer_3)
-
         self.tap_1.SetSizer(sizer_2)
 
         self.panel_1.SetSizer(sizer_1)
@@ -267,7 +244,7 @@ class MyFrame(wx.Frame):
 
     def reproducirPrueva(self, event):
         if leer.silence(): leer.silence()
-        else: leer.speak(_("Hola, soy la voz que te acompañará de ahora en adelante a leer tus mensajes de tus canales favoritos."))
+        else: leer.speak(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
     def infoApp(self, event):
         wx.MessageBox(_("Creadores del proyecto:")+"\nCésar Verástegui & Johan G.\n"+_("Descripción:\n Lee en voz alta los mensajes de los directos en youtube, ajusta tus preferencias como quieras y disfruta más tus canales favoritos."), _("Información"), wx.ICON_INFORMATION)
     def cambiarVelocidad(self, event):
@@ -297,47 +274,64 @@ class MyFrame(wx.Frame):
         mensajes=self.choice_4.GetSelection()
         buffer=int(self.choice_4.GetString(self.choice_4.GetSelection()))
     def acceder(self, event):
-        self.contador=0
-        self.contarmiembros=0
         if self.text_ctrl_1.GetValue() == "":
             wx.MessageBox(_("No se puede  acceder porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
             self.text_ctrl_1.SetFocus()
         else:
+            try: chat = ChatDownloader().get_chat(self.text_ctrl_1.GetValue())
+            except:                
+                wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), "error.", wx.ICON_ERROR)
+                return
             try:
+                self.contador=0
+                self.contarmiembros=0
                 self.chat = pytchat.create(self.text_ctrl_1.GetValue(),interruptable=False)
-                self.button_1.Disable()
-                self.button_2.Disable()
-                self.label_1.SetLabel(_("Chat en ejecución"))
-                self.text_ctrl_1.Disable()
-                self.list_box_1.SetFocus()
-                self.button_3.Enable()
-                if self.list_box_1.GetCount() > 0: self.list_box_1.Clear()
-                lector.speak(_("Ingresando al chat..."))
                 self.dentro=True
+                self.dialog_mensaje = wx.Dialog(self, wx.ID_ANY, _("Chat en vivo"))
+                sizer_mensaje_1 = wx.BoxSizer(wx.VERTICAL)
+                self.label_dialog = wx.StaticText(self.dialog_mensaje, wx.ID_ANY, _("Lectura del chat en vivo..."))
+                sizer_mensaje_1.Add(self.label_dialog, 0, 0, 0)
+                sizer_mensaje_2 = wx.StdDialogButtonSizer()
+                sizer_mensaje_1.Add(sizer_mensaje_2, 0, wx.ALIGN_RIGHT | wx.ALL, 4)
+                self.label_mensaje = wx.StaticText(self.dialog_mensaje, wx.ID_ANY, _("historial  de mensajes: "))
+                sizer_mensaje_2.Add(self.label_mensaje, 20, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 0)
+                self.list_box_1 = wx.ListBox(self.dialog_mensaje, wx.ID_ANY, choices=[])
+                self.list_box_1.SetFocus()
+                self.list_box_1.Bind(wx.EVT_KEY_UP, self.historialItemsTeclas)
+                sizer_mensaje_2.Add(self.list_box_1, 20, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 0)
+                self.button_mensaje_anterior = wx.Button(self.dialog_mensaje, wx.ID_ANY, _("Limpiar historial"))
+                self.button_mensaje_anterior.Bind(wx.EVT_BUTTON,self.borrarEnlace)
+                sizer_mensaje_2.Add(self.button_mensaje_anterior, 5, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 0)
+                self.button_mensaje_detener = wx.Button(self.dialog_mensaje, wx.ID_ANY, _("&Detener"))
+                self.button_mensaje_detener.Bind(wx.EVT_BUTTON,self.detenerLectura)
+                sizer_mensaje_2.Add(self.button_mensaje_detener, 10, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 0)
+                sizer_mensaje_2.Realize()
+                self.dialog_mensaje.SetSizer(sizer_mensaje_1)
+                sizer_mensaje_1.Fit(self.dialog_mensaje)
+                self.dialog_mensaje.Centre()
+                self.dialog_mensaje.SetEscapeId(self.button_mensaje_detener.GetId())
+                leer.speak(_("Ingresando al chat."))
                 self.hilo2 = threading.Thread(target=self.iniciarChat)
                 self.hilo2.daemon = True
                 self.hilo2.start()
-                keyboard.send('control+tab')
+                self.dialog_mensaje.ShowModal()
             except Exception as e:
-                wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válildo."), "error.", wx.ICON_ERROR)
+                wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), "error.", wx.ICON_ERROR)
                 self.text_ctrl_1.SetFocus()
     def borrarContenido(self, event): self.text_ctrl_1.SetValue("")
     def detenerLectura(self, event):
-        self.dentro=False
-        leer.silence()
-        lector.speak(_("ha finalizado la lectura del chat."))
-        self.button_3.Disable()
-        self.label_1.SetLabel(_("Escriba o pegue una URL de youtube"))
-        self.label_2.SetLabel(_("Historial de mensajes"))
-        self.text_ctrl_1.Enable()
-        self.list_box_1.SetFocus()
+        dlg_mensaje = wx.MessageDialog(self.dialog_mensaje, _(u"¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _(u"Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
+        if dlg_mensaje.ShowModal() == wx.ID_YES:
+            self.dentro=False
+            leer.silence()
+            self.dialog_mensaje.Destroy()
+            self.text_ctrl_1.SetFocus()
+            leer.speak(_("ha finalizado la lectura del chat."))
     def guardar(self, event):
         escribirConfiguracion()
         self.dialogo_2.Close()
     def borrarEnlace(self,event):
-        rango = self.list_box_1.GetCount()
-        rango = str(rango)
-        dlg_2 = wx.MessageDialog(self, _(u"Está apunto de eliminar del historial aproximadamente ")+rango+_(" elementos, ¿desea proceder? Esta acción no se puede desacer."), _(u"Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
+        dlg_2 = wx.MessageDialog(self.dialog_mensaje, _(u"Está apunto de eliminar del historial aproximadamente ")+str(self.list_box_1.GetCount())+_(" elementos, ¿desea proceder? Esta acción no se puede desacer."), _(u"Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
         dlg_2.SetYesNoLabels(_("&Eliminar"), _("&Cancelar"))
         if self.list_box_1.GetCount() <= 0: wx.MessageBox(_("No hay elementos que borrar"), "Error", wx.ICON_ERROR)
         elif dlg_2.ShowModal()==wx.ID_YES:
@@ -348,7 +342,6 @@ class MyFrame(wx.Frame):
         if self.dlg_3.ShowModal()==wx.ID_YES:
             asignarConfiguracion()
             escribirConfiguracion()
-
     def mostrarBoton(self, event):
         if self.text_ctrl_1.GetValue() != "":
             self.button_1.Enable()
@@ -371,8 +364,9 @@ class MyFrame(wx.Frame):
             if leer.silence(): leer.silence()
             else: leer.speak(self.list_box_1.GetString(self.list_box_1.GetSelection()))
     def iniciarChat(self):
+        ydlop = {'ignoreerrors': True, 'quiet': True}
         with YoutubeDL(ydlop) as ydl: info_dict = ydl.extract_info(self.text_ctrl_1.GetValue(), download=False)
-        self.label_2.SetLabel(info_dict.get('title'))
+        self.label_dialog.SetLabel(info_dict.get('title')+', '+str(info_dict["view_count"])+_(' reproducciones'))
         self.text_ctrl_1.SetValue("")
         while self.chat.is_alive():
             for c in self.chat.get().sync_items():
@@ -400,60 +394,64 @@ class MyFrame(wx.Frame):
                 if self.list_box_1.GetCount()> buffer: self.list_box_1.Delete(0)
                 if len(miembros)> buffer: miembros.pop(0)
     def elementoAnterior(self):
-        if todos:
-            if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
+        if self.dentro:
+            if todos:
+                if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
+                else:
+                    if self.contador>0: self.contador-=1
+                    lector.speak(self.list_box_1.GetString(self.contador))
             else:
-                if self.contador>0: self.contador-=1
-                lector.speak(self.list_box_1.GetString(self.contador))
-        else:
-            if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
-            else:
-                if self.contarmiembros>0: self.contarmiembros-=1
-                lector.speak(miembros[self.contarmiembros])
+                if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
+                else:
+                    if self.contarmiembros>0: self.contarmiembros-=1
+                    lector.speak(miembros[self.contarmiembros])
     def elementoSiguiente(self):
-        if todos:
-            if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
+        if self.dentro:
+            if todos:
+                if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
+                else:
+                    if self.contador<self.list_box_1.GetCount()-1: self.contador+=1
+                    lector.speak(self.list_box_1.GetString(self.contador))
             else:
-                if self.contador<self.list_box_1.GetCount()-1: self.contador+=1
-                lector.speak(self.list_box_1.GetString(self.contador))
-        else:
-            if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
-            else:
-                if self.contarmiembros<len(miembros)-1: self.contarmiembros+=1
-                lector.speak(miembros[self.contarmiembros])
+                if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
+                else:
+                    if self.contarmiembros<len(miembros)-1: self.contarmiembros+=1
+                    lector.speak(miembros[self.contarmiembros])
     def copiar(self):
-        if todos:
-            if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
+        if self.dentro:
+            if todos:
+                if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
+                else:
+                    copy(self.list_box_1.GetString(self.contador))
+                    lector.speak(_("¡Copiado!"))
             else:
-                copy(self.list_box_1.GetString(self.contador))
-                lector.speak(_("¡Copiado!"))
-        else:
-            if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
-            else:
-                copy(miembros[self.contarmiembros])
-                lector.speak(_("¡Copiado!"))
+                if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
+                else:
+                    copy(miembros[self.contarmiembros])
+                    lector.speak(_("¡Copiado!"))
     def elementoInicial(self):
-        if todos:
-            if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
+        if self.dentro:
+            if todos:
+                if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
+                else:
+                    lector.speak(self.list_box_1.GetString(self.contador))
             else:
-                self.contador=0
-                lector.speak(self.list_box_1.GetString(self.contador))
-        else:
-            if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
-            else:
-                self.contarmiembros=0
-                lector.speak(miembros[self.contarmiembros])
+                if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
+                else:
+                    self.contarmiembros=0
+                    lector.speak(miembros[self.contarmiembros])
     def elementoFinal(self):
-        if todos:
-            if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
+        if self.dentro:
+            if todos:
+                if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
+                else:
+                    self.contador=self.list_box_1.GetCount()-1
+                    lector.speak(self.list_box_1.GetString(self.contador))
             else:
-                self.contador=self.list_box_1.GetCount()-1
-                lector.speak(self.list_box_1.GetString(self.contador))
-        else:
-            if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
-            else:
-                self.contarmiembros=len(miembros)-1
-                lector.speak(miembros[self.contarmiembros])
+                if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
+                else:
+                    self.contarmiembros=len(miembros)-1
+                    lector.speak(miembros[self.contarmiembros])
     def cambiarHistorial(self):
         global todos,configchat
         if todos:
@@ -477,8 +475,9 @@ class MyFrame(wx.Frame):
         keyboard.add_hotkey('alt+shift+right',self.cambiarHistorial)
         keyboard.add_hotkey('alt+shift+home',self.elementoInicial)
         keyboard.add_hotkey('alt+shift+end',self.elementoFinal)
-        keyboard.add_hotkey('alt+shift+m',self.callar)
         keyboard.add_hotkey('alt+shift+c',self.copiar)
+        keyboard.add_hotkey('alt+shift+m',self.callar)
+        keyboard.add_hotkey('alt+shift+v',wx.CallAfter,args=(self.mostrarMensaje,))
         keyboard.add_hotkey('control',leer.silence)
         keyboard.wait()
     def cerrarVentana(self, event):
@@ -486,8 +485,21 @@ class MyFrame(wx.Frame):
         if dialogo_cerrar.ShowModal()==wx.ID_YES:
             self.Close()
     def retornarMensaje(self):
-        if todos: return self.list_box_1.GetString(self.contador)
-        else: return miembros[self.contarmiembros]
+        if self.list_box_1.GetCount()>0 and todos: return self.list_box_1.GetString(self.contador)
+        elif todos==False and len(miembros)>0: return miembros[self.contarmiembros]
+    def mostrarMensaje(self):
+        if self.dentro and self.retornarMensaje():
+            my_dialog = wx.Dialog(self, wx.ID_ANY, _("mensaje"))
+            sizer_mensaje = wx.BoxSizer(wx.HORIZONTAL)
+            text_box = wx.TextCtrl(my_dialog, wx.ID_ANY, self.retornarMensaje(), style=wx.TE_CENTRE | wx.TE_READONLY)
+            sizer_mensaje.Add(text_box, 0, 0, 0)
+            cancelar = wx.Button(my_dialog, wx.ID_CLOSE, _("&Cerrar"))
+            sizer_mensaje.Add(cancelar,0,0,0)
+            my_dialog.SetSizer(sizer_mensaje)
+            sizer_mensaje.Fit(my_dialog)
+            my_dialog.Centre()
+            my_dialog.SetEscapeId(cancelar.GetId())
+            my_dialog.ShowModal()
 class MyApp(wx.App):
     def OnInit(self):
         self.frame = MyFrame(None, wx.ID_ANY, "")
