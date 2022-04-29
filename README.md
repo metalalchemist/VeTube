@@ -39,7 +39,7 @@ Lee y gestiona de manera accesible el chat de youtube en tus propios directos o 
 | borrar mensaje seleccionado      | suprimir           |
 
 ## futuras actualizaciones:
-- He agregado para  futuras actualizaciones próximas
+He agregado para  futuras actualizaciones próximas
 - el poder traducir facilmente la aplicación a otros idiomas.
 - Posibbilidad de mostrar información de la persona que está chateando desde la interfaz invisible:
   - El usuario es moderador?
@@ -59,9 +59,9 @@ Quien ayudó  ha crear la interfaz gráfica para el proyecto y a corregir  ciert
 
 Se que gracias a ustedes esta aplicación seguirá mejorando y cada una de sus ideas y colaboraciones serán bienvenidas a este proyecto que iremos construyendo entre todos.
 
- Para ideas, bugs y sugerencias Puedes escribirme a 
+Para ideas, bugs y sugerencias Puedes escribirme a 
 cesar.verastegui17@gmail.com
-##Links de descarga.
+## Links de descarga.
 Con tu apoyo contribuyes a que este programa siga en crecimiento.
 
 [¿Te unes a nuestra causa?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
