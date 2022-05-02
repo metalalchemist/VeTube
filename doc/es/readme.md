@@ -1,6 +1,6 @@
 # vetube
 Lee y gestiona de manera accesible el chat de youtube en tus propios directos o en los de tus creadores favoritos.
-[demostración del producto en funcionamiento](https://www.youtube.com/c/4everzyanya/)
+[demostración del producto en funcionamiento](https://youtu.be/4XawJoBymPs)
 ## Características
 - Modo automático: Lee los mensajes de chat en tiempo real utilizando la voz sapy5
 - Interfaz invisible: Gestiona los chats desde cualquier ventana utilizando simples comandos de teclado. Es necesario tener un lector de pantalla activo.
@@ -38,21 +38,32 @@ Lee y gestiona de manera accesible el chat de youtube en tus propios directos o 
 | Reproducir mensaje seleccionado      | espacio           |
 | borrar mensaje seleccionado      | suprimir           |
 
-Con tu apoyo contribuyes a que este programa siga en crecimiento
-[¿Te unes a nuestra causa?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 ## futuras actualizaciones:
-- He agregado para  futuras actualizaciones próximas el poder traducir facilmente la aplicación a otros idiomas.
+He agregado para  futuras actualizaciones próximas
+- el poder traducir facilmente la aplicación a otros idiomas.
 - Posibbilidad de mostrar información de la persona que está chateando desde la interfaz invisible:
   - El usuario es moderador?
   - Nombre del canal del usuario
   - Entre muchas cosas mas.
 
-Se que gracias a ustedes  esta aplicación seguirá mejorando y cada una de sus ideas y colaboraciones serán bienvenidas a este proyecto que iremos construyendo entre todos.
 # agradecimientos:
 Agradesco a:
-[4everzyanya](https://www.youtube.com/c/4everzyanya/)
-principal tester del proyecto.
-[Johan G](https://github.com/JohanAnim) el cual me ayudó  ha crear la interfaz gráfica para el proyecto y a corregir  ciertos bugs menores.
-Y a todos y cada uno de ustedes por sus futuras ideas y alimentar el proyecto constantemente.
-Si gustas reportarme bugs, ideas o simplemente escribirme puedes  hacerlo en:
+
+[4everzyanya](https://www.youtube.com/c/4everzyanya/),
+
+Principal tester del proyecto.
+
+[Johan G](https://github.com/JohanAnim),
+
+Quien ayudó  ha crear la interfaz gráfica para el proyecto y a corregir  ciertos bugs menores.
+
+Se que gracias a ustedes esta aplicación seguirá mejorando y cada una de sus ideas y colaboraciones serán bienvenidas a este proyecto que iremos construyendo entre todos.
+
+Para ideas, bugs y sugerencias Puedes escribirme a 
 cesar.verastegui17@gmail.com
+## Links de descarga.
+Con tu apoyo contribuyes a que este programa siga en crecimiento.
+
+[¿Te unes a nuestra causa?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
+
+[Descarga el programa desde aquí](https://github.com/metalalchemist/VeTube/files/8586368/VeTube.zip)

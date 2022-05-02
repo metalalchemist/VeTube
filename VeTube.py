@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import pytchat, json,wx,threading,keyboard,time,gettext,webbrowser
+import pytchat, json,wx,threading,keyboard,gettext,webbrowser,urllib.request
 from playsound import playsound
 from os import path
 from accessible_output2.outputs import auto, sapi5
@@ -18,18 +18,20 @@ speed=0
 sapy=True
 todos=True
 sonidos=True
+version=1.2
 idiomas = []
 miembros=[]
+favoritos=[]
 leer=sapi5.SAPI5()
 lector=auto.Auto()
 lista=leer.list_voices()
 t = gettext.translation('VeTube', 'locales',fallback=True,)
 _ = t.gettext
 def asignarBuffer():
-	if mensajes==0 : buffer=100
-	elif mensajes==1 : buffer=300
-	elif mensajes==2 : buffer=500
-	elif mensajes==3 : buffer=1000
+    if mensajes==0 : buffer=100
+    elif mensajes==1 : buffer=300
+    elif mensajes==2 : buffer=500
+    elif mensajes==3 : buffer=1000
 def asignarConfiguracion():
     global voz,tono,volume,speed,configchat,sapy,mensajes,sonidos,buffer
     voz=0
@@ -81,13 +83,14 @@ class MyFrame(wx.Frame):
         self.contarmiembros=0
         self.contador=0
         self.dentro=False
+        self.msg=""
         self.hilo1 = threading.Thread(target=self.capturarTeclas)
         self.hilo1.daemon = True
         self.hilo1.start()
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.donar = wx.Dialog(self, wx.ID_ANY, _("información"))
-        dlg = wx.MessageDialog(self.donar, _(u"Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te unes a nuestra causa?"), _(u"Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
+        dlg = wx.MessageDialog(self.donar, _("Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te unes a nuestra causa?"), _(u"Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
         dlg.SetYesNoLabels(_("&Aceptar"), _("&Cancelar"))
         if dlg.ShowModal()==wx.ID_YES:
             webbrowser.open('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
@@ -101,14 +104,11 @@ class MyFrame(wx.Frame):
         self.menu_1 = wx.Button(self.panel_1, wx.ID_ANY, _(u"&Más opciones"))
         self.menu_1.Bind(wx.EVT_BUTTON, self.opcionesMenu)
         self.menu_1.SetToolTip(_(u"Pulse alt para abrir el menú"))
-
         self.notebook_1 = wx.Notebook(self.panel_1, wx.ID_ANY)
         sizer_1.Add(self.notebook_1, 1, wx.EXPAND, 0)
         self.tap_1 = wx.Panel(self.notebook_1, wx.ID_ANY)
         self.notebook_1.AddPage(self.tap_1, _("Inicio"))
-
         sizer_2 = wx.BoxSizer(wx.VERTICAL)
-
         self.label_1 = wx.StaticText(self.tap_1, wx.ID_ANY, _("Escriba o pegue una URL de youtube"), style=wx.ALIGN_CENTER_HORIZONTAL)
         sizer_2.Add(self.label_1, 0, 0, 0)
         self.text_ctrl_1 = wx.TextCtrl(self.tap_1, wx.ID_ANY, "", style=wx.TE_AUTO_URL | wx.TE_CENTRE | wx.TE_PROCESS_ENTER)
@@ -126,7 +126,6 @@ class MyFrame(wx.Frame):
         self.button_2.Disable()
         sizer_2.Add(self.button_2, 0, 0, 0)
         self.tap_1.SetSizer(sizer_2)
-
         self.panel_1.SetSizer(sizer_1)
         self.Layout()
         self.Maximize()
@@ -136,12 +135,17 @@ class MyFrame(wx.Frame):
     def opcionesMenu(self, event):
         self.menu = wx.Menu()
         self.opciones = wx.Menu()
-        
+        self.ayuda = wx.Menu()
         self.menu.AppendSubMenu(self.opciones, _(u"&Opciones"))
         self.opcion_1 = self.opciones.Append(wx.ID_ANY, _(u"Configuración"))
         self.Bind(wx.EVT_MENU, self.appConfiguracion, self.opcion_1)
         self.opcion_2 = self.opciones.Append(wx.ID_ANY, _(u"Restablecer los ajustes"))
         self.Bind(wx.EVT_MENU, self.restaurar, self.opcion_2)
+        self.menu.AppendSubMenu(self.ayuda, _("&Ayuda"))
+        self.apoyo = self.ayuda.Append(wx.ID_ANY, _(u"Únete a nuestra &causa"))
+        self.Bind(wx.EVT_MENU, self.donativo, self.apoyo)
+        self.itemPageMain = self.ayuda.Append(wx.ID_ANY, _(u"&Visita nuestra página de github"))
+        self.Bind(wx.EVT_MENU, self.pageMain, self.itemPageMain)
         self.acercade = self.menu.Append(wx.ID_ANY, _(u"Acerca de"))
         self.Bind(wx.EVT_MENU, self.infoApp, self.acercade)
         self.salir = self.menu.Append(wx.ID_EXIT)
@@ -149,22 +153,20 @@ class MyFrame(wx.Frame):
         position = self.menu_1.GetPosition()
         self.PopupMenu(self.menu, position)
         pass
-
+    def pageMain(self, evt): webbrowser.open('https://github.com/metalalchemist/VeTube')
+    def donativo(self, evt): webbrowser.open('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
     def appConfiguracion(self, event):            
         self.dialogo_2 = wx.Dialog(self, wx.ID_ANY, _("Configuración"))
-
         sizer_5 = wx.BoxSizer(wx.VERTICAL)
         labelConfic = wx.StaticText(self.dialogo_2, -1, _("Categorías"))
         sizer_5.Add(labelConfic, 1, wx.EXPAND, 0)
         self.tree_1 = wx.Treebook(self.dialogo_2, wx.ID_ANY)
         sizer_5.Add(self.tree_1, 1, wx.EXPAND, 0)
-
         self.treeItem_1 = wx.Panel(self.tree_1, wx.ID_ANY)
         self.tree_1.AddPage(self.treeItem_1, _("General"))
         sizer_4 = wx.BoxSizer(wx.HORIZONTAL)
         box_1 = wx.StaticBox(self.treeItem_1, -1, _("Opciones de la app"))
         boxSizer_1 = wx.StaticBoxSizer(box_1,wx.VERTICAL)
-
         label_7 = wx.StaticText(self.treeItem_1, wx.ID_ANY, _("Modalidad del chat: "))
         boxSizer_1.Add(label_7)
         self.choice_3 = wx.Choice(self.treeItem_1, wx.ID_ANY, choices=[_("Todos los chats"), _("solo chats de miembros y donativos.")])
@@ -182,7 +184,6 @@ class MyFrame(wx.Frame):
         self.check_2.Bind(wx.EVT_CHECKBOX, self.reproducirSonidos)
         boxSizer_1.Add(self.check_2)
         sizer_4.Add(boxSizer_1, 0, 0, 0)
-
         self.treeItem_2 = wx.Panel(self.tree_1, wx.ID_ANY)
         self.tree_1.AddPage(self.treeItem_2, _("Voz"))
         sizer_6 = wx.BoxSizer(wx.HORIZONTAL)
@@ -192,32 +193,24 @@ class MyFrame(wx.Frame):
         self.check_1.SetValue(sapy)
         self.check_1.Bind(wx.EVT_CHECKBOX, self.checar)
         boxSizer_2.Add(self.check_1)
-
         label_6 = wx.StaticText(self.treeItem_2, wx.ID_ANY, _("Voz: "))
         boxSizer_2 .Add(label_6)
-
         self.choice_2 = wx.Choice(self.treeItem_2, wx.ID_ANY, choices=lista)
         self.choice_2.SetSelection(voz)
         self.choice_2.Bind(wx.EVT_CHOICE, self.cambiarVoz)
         boxSizer_2 .Add(self.choice_2)
-
         label_8 = wx.StaticText(self.treeItem_2, wx.ID_ANY, _("Tono: "))
         boxSizer_2 .Add(label_8)
-
         self.slider_1 = wx.Slider(self.treeItem_2, wx.ID_ANY, tono+10, 0, 20)
         self.slider_1.Bind(wx.EVT_SLIDER, self.cambiarTono)
         boxSizer_2 .Add(self.slider_1)
-
         label_9 = wx.StaticText(self.treeItem_2, wx.ID_ANY, _("Volumen: "))
         boxSizer_2 .Add(label_9)
-
         self.slider_2 = wx.Slider(self.treeItem_2, wx.ID_ANY, volume, 0, 100)
         self.slider_2.Bind(wx.EVT_SLIDER, self.cambiarVolumen)
         boxSizer_2 .Add(self.slider_2)
-
         label_10 = wx.StaticText(self.treeItem_2, wx.ID_ANY, _("Velocidad: "))
         boxSizer_2 .Add(label_10)
-
         self.slider_3 = wx.Slider(self.treeItem_2, wx.ID_ANY, speed+10, 0, 20)
         self.slider_3.Bind(wx.EVT_SLIDER, self.cambiarVelocidad)
         boxSizer_2 .Add(self.slider_3)
@@ -225,14 +218,11 @@ class MyFrame(wx.Frame):
         self.boton_prueva.Bind(wx.EVT_BUTTON, self.reproducirPrueva)
         boxSizer_2.Add(self.boton_prueva)
         sizer_6.Add(boxSizer_2, 0, 0, 0)
-
         self.button_cansel = wx.Button(self.dialogo_2, wx.ID_CLOSE, _("&Cancelar"))
         sizer_5.Add(self.button_cansel, 0, 0, 0)
-
         self.button_6 = wx.Button(self.dialogo_2, wx.ID_ANY, _("&Aceptar"))
         self.button_6.Bind(wx.EVT_BUTTON, self.guardar)
         sizer_5.Add(self.button_6, 0, 0, 0)
-
         self.treeItem_1.SetSizer(sizer_4)
         self.treeItem_2.SetSizer(sizer_6)
         self.dialogo_2.SetSizer(sizer_5)        
@@ -241,12 +231,10 @@ class MyFrame(wx.Frame):
         self.dialogo_2.ShowModal()
         self.dialogo_2.Destroy()
     # Fin de la ventana de configuración
-
     def reproducirPrueva(self, event):
-        if leer.silence(): leer.silence()
-        else: leer.speak(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
-    def infoApp(self, event):
-        wx.MessageBox(_("Creadores del proyecto:")+"\nCésar Verástegui & Johan G.\n"+_("Descripción:\n Lee en voz alta los mensajes de los directos en youtube, ajusta tus preferencias como quieras y disfruta más tus canales favoritos."), _("Información"), wx.ICON_INFORMATION)
+        leer.silence()
+        leer.speak(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
+    def infoApp(self, event): wx.MessageBox(_("Creadores del proyecto:")+"\nCésar Verástegui & Johan G.\n"+_("Descripción:\n Lee en voz alta los mensajes de los directos en youtube, ajusta tus preferencias como quieras y disfruta más tus canales favoritos."), _("Información"), wx.ICON_INFORMATION)
     def cambiarVelocidad(self, event):
         global speed
         value=self.slider_3.GetValue()-10
@@ -278,9 +266,14 @@ class MyFrame(wx.Frame):
             wx.MessageBox(_("No se puede  acceder porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
             self.text_ctrl_1.SetFocus()
         else:
+            if 'studio' in self.text_ctrl_1.GetValue():
+                pag=self.text_ctrl_1.GetValue()
+                pag=pag.split("/")
+                pag=pag[-2]
+                self.text_ctrl_1.SetValue("https://www.youtube.com/watch?v="+pag)
             try: chat = ChatDownloader().get_chat(self.text_ctrl_1.GetValue())
-            except:                
-                wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), "error.", wx.ICON_ERROR)
+            except Exception as e:
+                wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."+str(e)), "error.", wx.ICON_ERROR)
                 return
             try:
                 self.contador=0
@@ -310,10 +303,12 @@ class MyFrame(wx.Frame):
                 sizer_mensaje_1.Fit(self.dialog_mensaje)
                 self.dialog_mensaje.Centre()
                 self.dialog_mensaje.SetEscapeId(self.button_mensaje_detener.GetId())
+                if sonidos: playsound("sounds/abrirchat.mp3",False)
                 leer.speak(_("Ingresando al chat."))
                 self.hilo2 = threading.Thread(target=self.iniciarChat)
                 self.hilo2.daemon = True
                 self.hilo2.start()
+                if not self.hilo1.is_alive(): self.hilo1.start()
                 self.dialog_mensaje.ShowModal()
             except Exception as e:
                 wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), "error.", wx.ICON_ERROR)
@@ -399,59 +394,64 @@ class MyFrame(wx.Frame):
                 if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
                 else:
                     if self.contador>0: self.contador-=1
-                    lector.speak(self.list_box_1.GetString(self.contador))
+                    self.msg=(self.list_box_1.GetString(self.contador))
+                    lector.speak(self.msg)
             else:
                 if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
                 else:
                     if self.contarmiembros>0: self.contarmiembros-=1
-                    lector.speak(miembros[self.contarmiembros])
+                    self.msg=(miembros[self.contarmiembros])
+                    lector.speak(self.msg)
+        if sonidos: self.reproducirMsg()
     def elementoSiguiente(self):
         if self.dentro:
             if todos:
                 if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
                 else:
                     if self.contador<self.list_box_1.GetCount()-1: self.contador+=1
-                    lector.speak(self.list_box_1.GetString(self.contador))
+                    self.msg=(self.list_box_1.GetString(self.contador))
+                    lector.speak(self.msg)
             else:
                 if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
                 else:
                     if self.contarmiembros<len(miembros)-1: self.contarmiembros+=1
-                    lector.speak(miembros[self.contarmiembros])
+                    self.msg=(miembros[self.contarmiembros])
+                    lector.speak(self.msg)
+        if sonidos: self.reproducirMsg()
     def copiar(self):
         if self.dentro:
-            if todos:
-                if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
-                else:
-                    copy(self.list_box_1.GetString(self.contador))
-                    lector.speak(_("¡Copiado!"))
-            else:
-                if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
-                else:
-                    copy(miembros[self.contarmiembros])
-                    lector.speak(_("¡Copiado!"))
+            copy(self.msg)
+            lector.speak(_("¡copiado!"))
     def elementoInicial(self):
         if self.dentro:
             if todos:
                 if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
                 else:
-                    lector.speak(self.list_box_1.GetString(self.contador))
+                    self.contador=0
+                    self.msg=(self.list_box_1.GetString(self.contador))
+                    lector.speak(self.msg)
             else:
                 if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
                 else:
                     self.contarmiembros=0
-                    lector.speak(miembros[self.contarmiembros])
+                    self.msg=(miembros[self.contarmiembros])
+                    lector.speak(self.msg)
+        if sonidos: self.reproducirMsg()
     def elementoFinal(self):
         if self.dentro:
             if todos:
                 if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
                 else:
                     self.contador=self.list_box_1.GetCount()-1
-                    lector.speak(self.list_box_1.GetString(self.contador))
+                    self.msg=(self.list_box_1.GetString(self.contador))
+                    lector.speak(self.msg)
             else:
                 if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
                 else:
                     self.contarmiembros=len(miembros)-1
-                    lector.speak(miembros[self.contarmiembros])
+                    self.msg=(miembros[self.contarmiembros])
+                    lector.speak(self.msg)
+        if sonidos: self.reproducirMsg()
     def cambiarHistorial(self):
         global todos,configchat
         if todos:
@@ -481,9 +481,8 @@ class MyFrame(wx.Frame):
         keyboard.add_hotkey('control',leer.silence)
         keyboard.wait()
     def cerrarVentana(self, event):
-        dialogo_cerrar = wx.MessageDialog(self, _(u"¿está seguro que desea salir del programa?"), _(u"¡atención!:"), wx.YES_NO | wx.ICON_ASTERISK)
-        if dialogo_cerrar.ShowModal()==wx.ID_YES:
-            self.Close()
+        dialogo_cerrar = wx.MessageDialog(self, _("¿está seguro que desea salir del programa?"), _("¡atención!:"), wx.YES_NO | wx.ICON_ASTERISK)
+        if dialogo_cerrar.ShowModal()==wx.ID_YES: self.Close()
     def retornarMensaje(self):
         if self.list_box_1.GetCount()>0 and todos: return self.list_box_1.GetString(self.contador)
         elif todos==False and len(miembros)>0: return miembros[self.contarmiembros]
@@ -500,6 +499,13 @@ class MyFrame(wx.Frame):
             my_dialog.Centre()
             my_dialog.SetEscapeId(cancelar.GetId())
             my_dialog.ShowModal()
+    def reproducirMsg(self):
+        if todos:
+            if self.contador==0 or self.contador==self.list_box_1.GetCount()-1: playsound("sounds/orilla.mp3",False)
+            else: playsound("sounds/msj.mp3",False)
+        else:
+            if self.contarmiembros==0 or self.contarmiembros==len(miembros)-1: playsound("sounds/orilla.mp3",False)
+            else: playsound("sounds/msj.mp3",False)
 class MyApp(wx.App):
     def OnInit(self):
         self.frame = MyFrame(None, wx.ID_ANY, "")

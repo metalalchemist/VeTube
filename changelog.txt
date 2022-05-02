@@ -1,0 +1,16 @@
+V1.2
+corregido el que la interfaz se congelara al momento de ingresar al chat.
+corregido el no poder ir al inicio del chat en la lista principal.
+agregado sonidos al navegar por el chat y al llegar  al borde, gracias Glein
+Agregamos un sonido para indicar que se a ingresado al chat. gracias Johan G.
+Agregado el fácil acceso a nuestra página de github para poder colaborar con nosotros desde github, así como también una opción de apoyo en la sección de ayuda. gracias Johan G
+Ahora el mensaje se copia de manera precisa.
+VeTube ahora reconoce un link de YouTube Studio cuando es en vivo, por lo cual ya no es necesario sacar el link de youtube
+***
+v1.1
+agregado diálogo para el chat aparte, gracias Johan G
+Agregado poder mostrar el mensaje en un cuadro de  texto.
+Ahora VeTube reconoce cuando un enlace no está en vivo para hebitar la creación del chat.
+***
+v1.0
+primera versión del proyecto
