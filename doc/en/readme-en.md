@@ -4,13 +4,13 @@ Read and manage youtube chat in an accessible way in your own live shows or thos
 - Automatic mode: Read chat messages in real time using the sapy5 voice
 - Invisible interface: Manage chats from any window using simple key commands. It is necessary to have an active screen reader.
 - Supported readers:
-- NVDA
-- JAWS
-- Window-Eyes
-- SuperNova
-- System Access
-- PC Talker
-- ZDSR
+  - NVDA
+  - JAWS
+  - Window-Eyes
+  - SuperNova
+  - System Access
+  - PC Talker
+  - ZDSR
 - Possibility of configuring according to the user's needs.
 - activates or deactivates the sounds of the program.
 - Turn automatic mode on or off.
@@ -30,8 +30,9 @@ Read and manage youtube chat in an accessible way in your own live shows or thos
 |Copy the current message | alt shift c |
 |Turn on or off automatic mode | alt shift m |
 |Shows the current message in a text box |alt shift v |
-| Displays information about the user who sent the message | alt shift i |
+
 ### In the chat history:
 |action |key combination |
 | ------------------------- | ------------- |
 |Play selected message |space
+| Delete selected message      | Delete |

@@ -40,8 +40,9 @@ Lee y gestiona de manera accesible el chat de youtube en tus propios directos o 
 
 ## futuras actualizaciones:
 He agregado para  futuras actualizaciones próximas
-- el poder traducir facilmente la aplicación a otros idiomas.
-- Posibbilidad de mostrar información de la persona que está chateando desde la interfaz invisible:
+- la creación de distintas categorías  de mensajes en la interfaz invisible.
+  - poder ordenar el contenido por distintas insignias tales como donativos, miembros moderadores.
+- Posibilidad de mostrar información de la persona que está chateando desde la interfaz invisible:
   - El usuario es moderador?
   - Nombre del canal del usuario
   - Entre muchas cosas mas.

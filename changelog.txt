@@ -1,10 +1,18 @@
 V1.2
-corregido el que la interfaz se congelara al momento de ingresar al chat.
+(programadores): se agrega el catálogo de VeTube (lenguage original en españñol) para poderse traducir a varios idiomas. el archivo se llama VeTube.pot.
+(programadores): se quita pytchat para reemplazarlo con chat_downloader. esto para soporte de varias plataformas.
+ahora se escoge el idioma que tienes por defecto en tu configuración.
+si el programa está actualizado ahora VeTube avisará si tienes la última versión del mismo si buscas actualizaciones.
+se agregan sonidos que avisan cuando llega un chat tanto como de un miembro como un chat normal
+se agrega un actualizador. comprueba una actualización al iniciar. pero también se lo puede encontrar en mas opciones & ayuda.
+se quitó el límite de mensajes
+experimental: VeTube puede detectar el idioma del sistema y  si hay un catálogo disponible, lo cargará.
+el programa no iniciaba en algunas ocaciones por lo que cada ves que se abra el mismo se borran los archivos temporales de %temp/gempy
+corregido el que la interfaz invisible se congelara al momento de ingresar al chat.
 corregido el no poder ir al inicio del chat en la lista principal.
 agregado sonidos al navegar por el chat y al llegar  al borde, gracias Glein
 Agregamos un sonido para indicar que se a ingresado al chat. gracias Johan G.
 Agregado el fácil acceso a nuestra página de github para poder colaborar con nosotros desde github, así como también una opción de apoyo en la sección de ayuda. gracias Johan G
-Ahora el mensaje se copia de manera precisa.
 VeTube ahora reconoce un link de YouTube Studio cuando es en vivo, por lo cual ya no es necesario sacar el link de youtube
 ***
 v1.1
