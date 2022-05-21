@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,threading,keyboard,webbrowser,urllib.request,languageHandler,socket,os,time,restart
+import json,wx,threading,keyboard,urllib.request,languageHandler,socket,os,time,restart,wx.adv
 from playsound import playsound
 from accessible_output2.outputs import auto, sapi5
 from youtube_dl import YoutubeDL
@@ -15,15 +15,16 @@ speed=0
 sapy=True
 todos=True
 sonidos=True
+reader=True
 idioma="system"
-version="v1.2"
+version="v1.2.1"
 miembros=[]
 favoritos=[]
 leer=sapi5.SAPI5()
 lector=auto.Auto()
 lista=leer.list_voices()
 def asignarConfiguracion():
-    global voz,tono,volume,speed,configchat,sapy,sonidos,idioma
+    global voz,tono,volume,speed,configchat,sapy,sonidos,idioma,reader
     voz=0
     configchat=1
     tono=0
@@ -32,6 +33,7 @@ def asignarConfiguracion():
     sapy=True
     sonidos=True
     idioma="system"
+    reader=True
     leer.set_rate(speed)
     leer.set_pitch(tono)
     leer.set_voice(lista[voz])
@@ -45,14 +47,14 @@ def escribirConfiguracion():
 "speed": speed,
 'sapy':sapy,
 'sonidos': sonidos,
-'idioma': idioma
-}
+'idioma': idioma,
+'reader': reader}
     with open('data.json', 'w+') as file: json.dump(data, file)
 def leerConfiguracion():
     if os.path.exists("data.json"):
         with open ("data.json") as file:
             resultado=json.load(file)
-        global voz,configchat,tono,volume,speed,sapy,sonidos,idioma
+        global voz,configchat,tono,volume,speed,sapy,sonidos,idioma,reader
         voz=resultado['voz']
         configchat=resultado['configchat']
         tono=resultado['tono']
@@ -61,6 +63,7 @@ def leerConfiguracion():
         sapy=resultado['sapy']
         sonidos=resultado['sonidos']
         idioma=resultado['idioma']
+        reader=resultado['reader']
     else: escribirConfiguracion()
 leerConfiguracion()
 languageHandler.setLanguage(idioma)
@@ -208,7 +211,7 @@ class MyFrame(wx.Frame):
         dlg = wx.MessageDialog(None, _("Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te unes a nuestra causa?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
         dlg.SetYesNoLabels(_("&Aceptar"), _("&Cancelar"))
         if dlg.ShowModal()==wx.ID_YES:
-            webbrowser.open('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
+            wx.LaunchDefaultBrowser('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
             dlg.Destroy()
         else: dlg.Destroy()
         self.contarmiembros=0
@@ -275,8 +278,8 @@ class MyFrame(wx.Frame):
         position = self.menu_1.GetPosition()
         self.PopupMenu(self.menu, position)
         pass
-    def pageMain(self, evt): webbrowser.open('https://github.com/metalalchemist/VeTube')
-    def donativo(self, evt): webbrowser.open('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
+    def pageMain(self, evt): wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube')
+    def donativo(self, evt): wx.LaunchDefaultBrowser('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
     def appConfiguracion(self, event):            
         self.dialogo_2 = wx.Dialog(self, wx.ID_ANY, _("Configuración"))
         sizer_5 = wx.BoxSizer(wx.VERTICAL)
@@ -310,10 +313,14 @@ class MyFrame(wx.Frame):
         sizer_6 = wx.BoxSizer(wx.HORIZONTAL)
         box_2 = wx.StaticBox(self.treeItem_2, -1, _("Opciones del habla"))
         boxSizer_2 = wx.StaticBoxSizer(box_2,wx.VERTICAL)
-        self.check_1 = wx.CheckBox(self.treeItem_2, wx.ID_ANY, _("Voz sapy"))
+        self.check_1 = wx.CheckBox(self.treeItem_2, wx.ID_ANY, _("Usar voz sapy en lugar de lector de pantalla."))
         self.check_1.SetValue(sapy)
         self.check_1.Bind(wx.EVT_CHECKBOX, self.checar)
         boxSizer_2.Add(self.check_1)
+        self.chk1 = wx.CheckBox(self.treeItem_2, wx.ID_ANY, _("Activar lectura de mensajes automática"))
+        self.chk1.SetValue(reader)
+        self.chk1.Bind(wx.EVT_CHECKBOX, self.checar1)
+        boxSizer_2.Add(self.chk1)
         label_6 = wx.StaticText(self.treeItem_2, wx.ID_ANY, _("Voz: "))
         boxSizer_2 .Add(label_6)
         self.choice_2 = wx.Choice(self.treeItem_2, wx.ID_ANY, choices=lista)
@@ -378,6 +385,10 @@ class MyFrame(wx.Frame):
         global sapy
         if event.IsChecked(): sapy=True
         else: sapy=False
+    def checar1(self, event):
+        global reader
+        if event.IsChecked(): reader=True
+        else: reader=False
     def acceder(self, event):
         if self.text_ctrl_1.GetValue() == "":
             wx.MessageBox(_("No se puede  acceder porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
@@ -389,8 +400,6 @@ class MyFrame(wx.Frame):
                 pag=pag[-2]
                 self.text_ctrl_1.SetValue("https://www.youtube.com/watch?v="+pag)
             try:
-                self.contador=0
-                self.contarmiembros=0
                 self.chat=ChatDownloader().get_chat(self.text_ctrl_1.GetValue(),message_groups=["messages", "superchat"])
                 self.dentro=True
                 self.dialog_mensaje = wx.Dialog(self, wx.ID_ANY, _("Chat en vivo"))
@@ -416,14 +425,17 @@ class MyFrame(wx.Frame):
                 sizer_mensaje_1.Fit(self.dialog_mensaje)
                 self.dialog_mensaje.Centre()
                 self.dialog_mensaje.SetEscapeId(self.button_mensaje_detener.GetId())
-                if sonidos: playsound("sounds/abrirchat.mp3",False)
+                if sonidos: wx.adv.Sound('sounds/abrirchat.wav').Play(wx.adv.SOUND_ASYNC)
                 leer.speak(_("Ingresando al chat."))
                 self.hilo2 = threading.Thread(target=self.iniciarChat)
                 self.hilo2.daemon = True
                 self.hilo2.start()
-                self.hilo1 = threading.Thread(target=self.capturarTeclas)
-                self.hilo1.daemon = True
-                self.hilo1.start()
+                try:
+                    if self.hilo1.is_alive() or not self.hilo1.is_alive(): pass
+                except:
+                    self.hilo1 = threading.Thread(target=self.capturarTeclas)
+                    self.hilo1.daemon = True
+                    self.hilo1.start()
                 self.dialog_mensaje.ShowModal()
             except Exception as e:
                 wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), "error.", wx.ICON_ERROR)
@@ -433,6 +445,8 @@ class MyFrame(wx.Frame):
         dlg_mensaje = wx.MessageDialog(self.dialog_mensaje, _("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
         if dlg_mensaje.ShowModal() == wx.ID_YES:
             self.dentro=False
+            self.contador=0
+            self.contarmiembros=0
             leer.silence()
             self.dialog_mensaje.Destroy()
             self.text_ctrl_1.SetFocus()
@@ -483,7 +497,7 @@ class MyFrame(wx.Frame):
             if leer.silence(): leer.silence()
             else: leer.speak(self.list_box_1.GetString(self.list_box_1.GetSelection()))
     def iniciarChat(self):
-        ydlop = {'ignoreerrors': True, 'quiet': True}
+        ydlop = {'ignoreerrors': True, 'extract_flat': 'in_playlist', 'dump_single_json': True, 'quiet': True}
         with YoutubeDL(ydlop) as ydl: info_dict = ydl.extract_info(self.text_ctrl_1.GetValue(), download=False)
         self.label_dialog.SetLabel(info_dict.get('title')+', '+str(info_dict["view_count"])+_(' reproducciones'))
         self.text_ctrl_1.SetValue("")
@@ -492,41 +506,55 @@ class MyFrame(wx.Frame):
                 if message['message']!=None:
                     miembros.append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
                     self.list_box_1.Append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
-                    if sapy: leer.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
+                    if reader:
+                        if sapy: leer.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
+                        else: lector.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
                 else:
                     miembros.append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
                     self.list_box_1.Append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
-                    if sapy: leer.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
+                    if reader:
+                        if sapy: leer.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
+                        else: lector.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
                 if sonidos and self.chat.status!="past": playsound("sounds/donar.mp3",False)
             if 'header_secondary_text' in message:
                 for t in message['author']['badges']:
                     miembros.append(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
                     self.list_box_1.Append(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
                 if sonidos and self.chat.status!="past": playsound("sounds/miembros.mp3",False)
-                if sapy: leer.speak(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
+                if reader:
+                    if sapy: leer.speak(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
+                    else: lector.speak(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
             if 'badges' in message['author']:
                 for t in message['author']['badges']:
                     if 'Moderator' in t['title']:
                         miembros.append(_('Moderador ')+message['author']['name'] +': ' +message['message'])
                         self.list_box_1.Append(_('Moderador ')+message['author']['name'] +': ' +message['message'])
-                        if sapy: leer.speak(_('Moderador ')+message['author']['name'] +': ' +message['message'])
+                        if reader:
+                            if sapy: leer.speak(_('Moderador ')+message['author']['name'] +': ' +message['message'])
+                            else: lector.speak(_('Moderador ')+message['author']['name'] +': ' +message['message'])
                     if 'Member' in t['title']:
                         if message['message'] == None: pass
                         else:
                             miembros.append(_('Miembro ')+message['author']['name'] +': ' +message['message'])
                             self.list_box_1.Append(_('Miembro ')+message['author']['name'] +': ' +message['message'])
-                            if sapy: leer.speak(_('Miembro ')+message['author']['name'] +': ' +message['message'])
+                            if reader:
+                                if sapy: leer.speak(_('Miembro ')+message['author']['name'] +': ' +message['message'])
+                                else: lector.speak(_('Miembro ')+message['author']['name'] +': ' +message['message'])
                     if 'Verified' in t['title']:
                         miembros.append(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
                         self.list_box_1.Append(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
-                        if sapy: leer.speak(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
+                        if reader:
+                            if sapy: leer.speak(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
+                            else: lector.speak(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
                 if sonidos and self.chat.status!="past": playsound("sounds/chatmiembro.mp3",False)
             else:
                 if message['message_type']=='paid_message' or message['message_type']=='paid_sticker': pass
                 else:
                     if self.dentro:
                         if configchat==1:
-                            if sapy: leer.speak(message['author']['name'] +': ' +message['message'])
+                            if reader:
+                                if sapy: leer.speak(message['author']['name'] +': ' +message['message'])
+                                else: lector.speak(message['author']['name'] +': ' +message['message'])
                             if sonidos and self.chat.status!="past": playsound("sounds/chat.mp3",False)
                         self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
                     else:
@@ -606,12 +634,12 @@ class MyFrame(wx.Frame):
             configchat=1
         lector.speak(_("Todos los chats.") if todos else _("Miembros y donativos."))
     def callar(self):
-        global sapy
-        if sapy:
-            sapy=False
+        global reader
+        if reader:
+            reader=False
             leer.silence()
-        else: sapy=True
-        lector.speak(_("Voz activada.")if sapy else _("Voz desactivada."))
+        else: reader=True
+        lector.speak(_("Lectura automática activada.")if reader else _("Lectura automática  desactivada."))
     def capturarTeclas(self):
         keyboard.add_hotkey('alt+shift+up',self.elementoAnterior)
         keyboard.add_hotkey('alt+shift+down',self.elementoSiguiente)

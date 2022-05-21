@@ -1,3 +1,10 @@
+V1.2.1
+(programadores): se quita webbrowser para reemplazarlo por funciones nativas de wx-python. gracias hector
+se agrega el idioma inglés en el catálogo de idiomas soportados. gracias Ulises Monge
+se agrega la opción que permite leer tus mensajes con voz sapy o con tu lector de pantalla en automático. gracias a sus sugerencias
+se modifica una opción. ahora alt shift mas m activa o desactiva respectivamente la lectura de mensajes automáticamente. así mismo en ajustes se puede encontrar la casilla con el mismo nombre.
+se optimiza la optensión de datos tanto del título como de las reproducciones en el enlace pegado. gracias Hector.
+si cerrabas y abrías otro directo se abría otro hilo de la interfaz invisible dificultando la lectura del chat. esto ya no debería pasar
 V1.2
 (programadores): se agrega el catálogo de VeTube (lenguage original en españñol) para poderse traducir a varios idiomas. el archivo se llama VeTube.pot.
 (programadores): se quita pytchat para reemplazarlo con chat_downloader. esto para soporte de varias plataformas.
