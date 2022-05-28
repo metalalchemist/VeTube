@@ -13,7 +13,7 @@ import platform
 #a few Windows locale constants
 LOCALE_SLANGUAGE=0x2
 LOCALE_SLANGDISPLAYNAME=0x6f
-curLang="en"
+curLang="es"
 def localeNameToWindowsLCID(localeName):
     """Retreave the Windows locale identifier (LCID) for the given locale name
     @param localeName: a string of 2letterLanguage_2letterCountry or or just 2letterLanguage
@@ -57,11 +57,10 @@ def getAvailableLanguages():
     @rtype: list of tuples
     """
     #Make a list of all the locales found in NVDA's locale dir
-    l=[x for x in os.listdir('locales') if not x.startswith('.')]
-    l=[x for x in l if os.path.isfile(os.path.join('locales', '%s/LC_MESSAGES/%s.po' % (x, 'VeTube')))]
-    #Make sure that en (english) is in the list as it may not have any locale files, but is default
-    if 'en' not in l:
-        l.append('en')
+    l=[x for x in os.listdir('locales') if os.path.isfile(os.path.join('locales', x, 'LC_MESSAGES', 'VeTube.mo'))]
+    #Make sure that es (spanish) is in the list as it may not have any locale files, but is default
+    if 'es' not in l:
+        l.append('es')
         l.sort()
     #For each locale, ask Windows for its human readable display name
     d=[]
@@ -148,7 +147,6 @@ def normalizeLanguage(lang):
     if len(ld)>=2:
         ld[1]=ld[1].upper()
     return "_".join(ld)
-
 def langToWindowsLocale(lang):
     languages = {"en": "eng",
                  "ar": "ara",

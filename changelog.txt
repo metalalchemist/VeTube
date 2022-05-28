@@ -1,6 +1,12 @@
+v2.0
+se agrega twitch a la lista de streams soportados.
+se corrige un bug el cual podía hacer que el programa se cerraba si es que tenías sapy o lector leyendo el chat.
+se agrega una sección de favoritos, podrás guardar algún envivo que te  guste para poder repetir el chat cuantas veces gustes.
+se agrega portugués a los  idiomas traducidos, gracias eternal legend
+se aregla el cargar los idiomas correctamente.
 V1.2.1
 (programadores): se quita webbrowser para reemplazarlo por funciones nativas de wx-python. gracias hector
-se agrega el idioma inglés en el catálogo de idiomas soportados. gracias Ulises Monge
+se agrega el idioma inglés en el catálogo de idiomas soportados.
 se agrega la opción que permite leer tus mensajes con voz sapy o con tu lector de pantalla en automático. gracias a sus sugerencias
 se modifica una opción. ahora alt shift mas m activa o desactiva respectivamente la lectura de mensajes automáticamente. así mismo en ajustes se puede encontrar la casilla con el mismo nombre.
 se optimiza la optensión de datos tanto del título como de las reproducciones en el enlace pegado. gracias Hector.
