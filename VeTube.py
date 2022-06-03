@@ -8,21 +8,21 @@ from pyperclip import copy
 from chat_downloader import ChatDownloader
 os.system('rmdir %temp%\gen_py /Q/S')
 voz=0
-configchat=1
 tono=0
 volume=100
 speed=0
 sapy=True
-todos=True
 sonidos=True
 reader=True
 idioma="system"
 version="v2.0"
 miembros=[]
 favorite=[]
+pos=[1,1,1,1,1,1]
+yt=0
 leer=sapi5.SAPI5()
 lector=auto.Auto()
-lista=leer.list_voices()
+lista_voces=leer.list_voices()
 db_fichero_complemento = os.path.join(os.getcwd(), 'vetube.zip')
 def escribirFavorito():
     with open('favoritos.json', 'w+') as file: json.dump(favorite, file)
@@ -33,9 +33,8 @@ def leerFavoritos():
             favorite=json.load(file)
     else: escribirFavorito()
 def asignarConfiguracion():
-    global voz,tono,volume,speed,configchat,sapy,sonidos,idioma,reader
+    global voz,tono,volume,speed,sapy,sonidos,idioma,reader
     voz=0
-    configchat=1
     tono=0
     volume=100
     speed=0
@@ -45,7 +44,7 @@ def asignarConfiguracion():
     reader=True
     leer.set_rate(speed)
     leer.set_pitch(tono)
-    leer.set_voice(lista[voz])
+    leer.set_voice(lista_voces[voz])
     leer.set_volume(volume)
 def convertirFavoritos(lista):
     if len(lista)<=0: return[]
@@ -55,7 +54,6 @@ def convertirFavoritos(lista):
         return newlista
 def escribirConfiguracion():
     data={'voz': voz,
-"configchat": configchat,
 "tono": tono,
 "volume": volume,
 "speed": speed,
@@ -68,9 +66,8 @@ def leerConfiguracion():
     if os.path.exists("data.json"):
         with open ("data.json") as file:
             resultado=json.load(file)
-        global voz,configchat,tono,volume,speed,sapy,sonidos,idioma,reader
+        global voz,tono,volume,speed,sapy,sonidos,idioma,reader
         voz=resultado['voz']
-        configchat=resultado['configchat']
         tono=resultado['tono']
         volume=resultado['volume']
         speed=resultado['speed']
@@ -83,7 +80,7 @@ leerConfiguracion()
 leerFavoritos()
 leer.set_rate(speed)
 leer.set_pitch(tono)
-leer.set_voice(lista[voz])
+leer.set_voice(lista_voces[voz])
 leer.set_volume(volume)
 favs=convertirFavoritos(favorite)
 languageHandler.setLanguage(idioma)
@@ -94,6 +91,7 @@ codes = []
 [codes.append(i[0]) for i in idiomas]
 codes.reverse()
 langs.reverse()
+lista=[[_('General')],[_('Miembros')],[_('Donativos')],[_('Moderadores')],[_('Usuarios Verificados')],[_('Favoritos')]]
 class HiloActualizacionComplemento(threading.Thread):
     def __init__(self, frame):
         super(HiloActualizacionComplemento, self).__init__()
@@ -214,7 +212,6 @@ class MyFrame(wx.Frame):
             wx.LaunchDefaultBrowser('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
             dlg.Destroy()
         else: dlg.Destroy()
-        self.contarmiembros=0
         self.contador=0
         self.dentro=False
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
@@ -310,12 +307,6 @@ class MyFrame(wx.Frame):
         self.choice_language = wx.Choice(self.treeItem_1, wx.ID_ANY, choices=langs)
         self.choice_language.SetSelection(codes.index(idioma))
         boxSizer_1.Add(self.choice_language)
-        label_7 = wx.StaticText(self.treeItem_1, wx.ID_ANY, _("Modalidad del chat: "))
-        boxSizer_1.Add(label_7)
-        self.choice_3 = wx.Choice(self.treeItem_1, wx.ID_ANY, choices=[_("Todos los chats"), _("solo chats de miembros y donativos.")])
-        self.choice_3.Bind(wx.EVT_CHOICE, self.cambiarModoChat)
-        self.choice_3.SetSelection(configchat-1)
-        boxSizer_1.Add(self.choice_3)
         self.check_2 = wx.CheckBox(self.treeItem_1, wx.ID_ANY, _("Reproducir sonidos."))
         self.check_2.SetValue(sonidos)
         self.check_2.Bind(wx.EVT_CHECKBOX, self.reproducirSonidos)
@@ -336,7 +327,7 @@ class MyFrame(wx.Frame):
         boxSizer_2.Add(self.chk1)
         label_6 = wx.StaticText(self.treeItem_2, wx.ID_ANY, _("Voz: "))
         boxSizer_2 .Add(label_6)
-        self.choice_2 = wx.Choice(self.treeItem_2, wx.ID_ANY, choices=lista)
+        self.choice_2 = wx.Choice(self.treeItem_2, wx.ID_ANY, choices=lista_voces)
         self.choice_2.SetSelection(voz)
         self.choice_2.Bind(wx.EVT_CHOICE, self.cambiarVoz)
         boxSizer_2 .Add(self.choice_2)
@@ -466,11 +457,13 @@ class MyFrame(wx.Frame):
         self.text_ctrl_1.SetValue("")
         self.text_ctrl_1.SetFocus()
     def detenerLectura(self, event):
+        global yt,pos
         dlg_mensaje = wx.MessageDialog(self.dialog_mensaje, _("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
         if dlg_mensaje.ShowModal() == wx.ID_YES:
             self.dentro=False
             self.contador=0
-            self.contarmiembros=0
+            yt=0
+            pos=[1,1,1,1,1,1]
             leer.silence()
             leer.speak(_("ha finalizado la lectura del chat."))
             self.text_ctrl_1.SetValue("")
@@ -508,14 +501,10 @@ class MyFrame(wx.Frame):
         else:
             self.button_1.Disable()
             self.button_2.Disable()
-    def cambiarModoChat(self, event):
-        global configchat
-        if event.GetSelection()==0: configchat=1
-        else: configchat=2
     def cambiarVoz(self, event):    
         global voz
         voz=event.GetSelection()
-        leer.set_voice(lista[event.GetSelection()])
+        leer.set_voice(lista_voces[event.GetSelection()])
     def historialItemsTeclas(self, event):
         event.Skip()
         if event.GetKeyCode() == 127: self.list_box_1.Delete(self.list_box_1.GetSelection())
@@ -526,82 +515,78 @@ class MyFrame(wx.Frame):
         global info_dict
         ydlop = {'ignoreerrors': True, 'extract_flat': 'in_playlist', 'dump_single_json': True, 'quiet': True}
         with YoutubeDL(ydlop) as ydl: info_dict = ydl.extract_info(self.text_ctrl_1.GetValue(), download=False)
-        self.label_dialog.SetLabel(info_dict.get('title')+', '+str(info_dict["view_count"])+_(' reproducciones'))
+        try: self.label_dialog.SetLabel(info_dict.get('title')+', '+str(info_dict["view_count"])+_(' reproducciones'))
+        except: pass
         if 'yout' in self.text_ctrl_1.GetValue(): self.recibirYT()
         elif 'twitch' in self.text_ctrl_1.GetValue(): self.recibirTwich()
     def elementoAnterior(self):
+        global pos
         if self.dentro:
-            if todos:
+            if lista[yt][0]=='General':
                 if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
                 else:
                     if self.contador>0: self.contador-=1
                     lector.speak(self.list_box_1.GetString(self.contador))
             else:
-                if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
+                if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
                 else:
-                    if self.contarmiembros>0: self.contarmiembros-=1
-                    lector.speak(miembros[self.contarmiembros])
+                    if pos[yt]>1: pos[yt]-=1
+                    lector.speak(lista[yt][pos[yt]])
         if sonidos: self.reproducirMsg()
     def elementoSiguiente(self):
+        global pos
         if self.dentro:
-            if todos:
+            if lista[yt][0]=='General':
                 if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
                 else:
                     if self.contador<self.list_box_1.GetCount()-1: self.contador+=1
                     lector.speak(self.list_box_1.GetString(self.contador))
             else:
-                if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
+                if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
                 else:
-                    if self.contarmiembros<len(miembros)-1: self.contarmiembros+=1
-                    lector.speak(miembros[self.contarmiembros])
+                    if pos[yt]<len(lista[yt])-1: pos[yt]+=1
+                    lector.speak(lista[yt][pos[yt]])
         if sonidos: self.reproducirMsg()
     def copiar(self):
         if self.dentro:
-            if todos:
+            if lista[yt][0]=='General':
                 if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
                 else:
                     copy(self.list_box_1.GetString(self.contador))
                     lector.speak(_("¡Copiado!"))
             else:
-                if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
+                if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
                 else:
-                    copy(miembros[self.contarmiembros])
+                    copy(lista[yt][pos[yt]])
                     lector.speak(_("¡Copiado!"))
     def elementoInicial(self):
+        global pos
         if self.dentro:
-            if todos:
+            if lista[yt][0]=='General':
                 if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
                 else:
                     self.contador=0
                     lector.speak(self.list_box_1.GetString(self.contador))
             else:
-                if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
+                if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
                 else:
-                    self.contarmiembros=0
-                    lector.speak(miembros[self.contarmiembros])
+                    pos[yt]=1
+                    lector.speak(lista[yt][pos[yt]])
         if sonidos: self.reproducirMsg()
     def elementoFinal(self):
+        global pos
         if self.dentro:
-            if todos:
+            if lista[yt][0]=='General':
                 if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
                 else:
                     self.contador=self.list_box_1.GetCount()-1
                     lector.speak(self.list_box_1.GetString(self.contador))
             else:
-                if len(miembros) <= 0: lector.speak(_("no hay elementos en el historial"))
+                if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
                 else:
-                    self.contarmiembros=len(miembros)-1
-                    lector.speak(miembros[self.contarmiembros])
+                    pos[yt]=len(lista[yt])-1
+                    lector.speak(lista[yt][pos[yt]])
         if sonidos: self.reproducirMsg()
-    def cambiarHistorial(self):
-        global todos,configchat
-        if todos:
-            todos=False
-            configchat=2
-        else:
-            todos=True
-            configchat=1
-        lector.speak(_("Todos los chats.") if todos else _("Miembros y donativos."))
     def callar(self):
         global reader
         if reader:
@@ -612,10 +597,11 @@ class MyFrame(wx.Frame):
     def capturarTeclas(self):
         keyboard.add_hotkey('alt+shift+up',self.elementoAnterior)
         keyboard.add_hotkey('alt+shift+down',self.elementoSiguiente)
-        keyboard.add_hotkey('alt+shift+left',self.cambiarHistorial)
-        keyboard.add_hotkey('alt+shift+right',self.cambiarHistorial)
+        keyboard.add_hotkey('alt+shift+left',self.retrocederCategorias)
+        keyboard.add_hotkey('alt+shift+right',self.avanzarCategorias)
         keyboard.add_hotkey('alt+shift+home',self.elementoInicial)
         keyboard.add_hotkey('alt+shift+end',self.elementoFinal)
+        keyboard.add_hotkey('alt+shift+f',self.destacarMensaje)
         keyboard.add_hotkey('alt+shift+c',self.copiar)
         keyboard.add_hotkey('alt+shift+m',self.callar)
         keyboard.add_hotkey('alt+shift+v',wx.CallAfter,args=(self.mostrarMensaje,))
@@ -625,8 +611,8 @@ class MyFrame(wx.Frame):
         dialogo_cerrar = wx.MessageDialog(self, _("¿está seguro que desea salir del programa?"), _("¡atención!:"), wx.YES_NO | wx.ICON_ASTERISK)
         if dialogo_cerrar.ShowModal()==wx.ID_YES: self.Destroy()
     def retornarMensaje(self):
-        if self.list_box_1.GetCount()>0 and todos: return self.list_box_1.GetString(self.contador)
-        elif todos==False and len(miembros)>0: return miembros[self.contarmiembros]
+        if self.list_box_1.GetCount()>0 and lista[yt][0]=='General': return self.list_box_1.GetString(self.contador)
+        if lista[yt][0]!='General' and len(lista[yt])>0: return lista[yt][pos[yt]]
     def mostrarMensaje(self):
         if self.dentro and self.retornarMensaje():
             my_dialog = wx.Dialog(self, wx.ID_ANY, _("mensaje"))
@@ -641,11 +627,11 @@ class MyFrame(wx.Frame):
             my_dialog.SetEscapeId(cancelar.GetId())
             my_dialog.ShowModal()
     def reproducirMsg(self):
-        if todos:
+        if lista[yt][0]=='General':
             if self.contador==0 or self.contador==self.list_box_1.GetCount()-1: playsound("sounds/orilla.mp3",False)
             else: playsound("sounds/msj.mp3",False)
         else:
-            if self.contarmiembros==0 or self.contarmiembros==len(miembros)-1: playsound("sounds/orilla.mp3",False)
+            if pos[yt]<=1 or pos[yt]==len(lista[yt])-1: playsound("sounds/orilla.mp3",False)
             else: playsound("sounds/msj.mp3",False)
     def addFavoritos(self, event):
         if len(favorite)<=0:
@@ -693,54 +679,59 @@ class MyFrame(wx.Frame):
         for message in self.chat:
             if message['message_type']=='paid_message' or message['message_type']=='paid_sticker':
                 if message['message']!=None:
-                    miembros.append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
+                    lista[2].append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
                     self.list_box_1.Append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
-                    if reader:
-                        if sapy: leer.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
-                        else: lector.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
+                    if lista[yt][0]=='Donativos':
+                        if reader:
+                            if sapy: leer.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
+                            else: lector.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
                 else:
-                    miembros.append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
+                    lista[2].append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
                     self.list_box_1.Append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
-                    if reader:
-                        if sapy: leer.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
-                        else: lector.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
-                if sonidos and self.chat.status!="past": playsound("sounds/donar.mp3",False)
+                    if lista[yt][0]=='Donativos':
+                        if reader:
+                            if sapy: leer.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
+                            else: lector.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
             if 'header_secondary_text' in message:
                 for t in message['author']['badges']:
-                    miembros.append(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
+                    lista[1].append(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
                     self.list_box_1.Append(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
                 if sonidos and self.chat.status!="past": playsound("sounds/miembros.mp3",False)
-                if reader:
-                    if sapy: leer.speak(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
-                    else: lector.speak(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
+                if lista[yt][0]=='Miembros':
+                    if reader:
+                        if sapy: leer.speak(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
+                        else: lector.speak(message['author']['name']+ _(' se a conectado al chat. ')+t['title'])
             if 'badges' in message['author']:
                 for t in message['author']['badges']:
                     if 'Moderator' in t['title']:
-                        miembros.append(_('Moderador ')+message['author']['name'] +': ' +message['message'])
+                        lista[3].append(message['author']['name'] +': ' +message['message'])
                         self.list_box_1.Append(_('Moderador ')+message['author']['name'] +': ' +message['message'])
-                        if reader:
-                            if sapy: leer.speak(_('Moderador ')+message['author']['name'] +': ' +message['message'])
-                            else: lector.speak(_('Moderador ')+message['author']['name'] +': ' +message['message'])
+                        if lista[yt][0]=='Moderadores':
+                            if reader:
+                                if sapy: leer.speak(message['author']['name'] +': ' +message['message'])
+                                else: lector.speak(message['author']['name'] +': ' +message['message'])
                     if 'Member' in t['title']:
                         if message['message'] == None: pass
                         else:
-                            miembros.append(_('Miembro ')+message['author']['name'] +': ' +message['message'])
+                            lista[1].append(message['author']['name'] +': ' +message['message'])
                             self.list_box_1.Append(_('Miembro ')+message['author']['name'] +': ' +message['message'])
-                            if reader:
-                                if sapy: leer.speak(_('Miembro ')+message['author']['name'] +': ' +message['message'])
-                                else: lector.speak(_('Miembro ')+message['author']['name'] +': ' +message['message'])
+                            if lista[yt][0]=='Miembros':
+                                if reader:
+                                    if sapy: leer.speak(message['author']['name'] +': ' +message['message'])
+                                    else: lector.speak(message['author']['name'] +': ' +message['message'])
                     if 'Verified' in t['title']:
-                        miembros.append(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
+                        lista[4].append(message['author']['name'] +': ' +message['message'])
                         self.list_box_1.Append(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
-                        if reader:
-                            if sapy: leer.speak(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
-                            else: lector.speak(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
+                        if lista[yt][0]=='Usuarios Verificados':
+                            if reader:
+                                if sapy: leer.speak(message['author']['name'] +': ' +message['message'])
+                                else: lector.speak(message['author']['name'] +': ' +message['message'])
                 if sonidos and self.chat.status!="past": playsound("sounds/chatmiembro.mp3",False)
             else:
                 if message['message_type']=='paid_message' or message['message_type']=='paid_sticker': pass
                 else:
                     if self.dentro:
-                        if configchat==1:
+                        if lista[yt][0]=='General':
                             if reader:
                                 if sapy: leer.speak(message['author']['name'] +': ' +message['message'])
                                 else: lector.speak(message['author']['name'] +': ' +message['message'])
@@ -756,92 +747,111 @@ class MyFrame(wx.Frame):
                 divide=message['message'].split()
                 dinero=divide[0]
                 divide=" ".join(divide[1:])
-                miembros.append(dinero+', '+message['author']['name']+': '+divide)
+                lista[2].append(dinero+', '+message['author']['name']+': '+divide)
                 self.list_box_1.Append(dinero+', '+message['author']['name']+': '+divide)
-                if reader:
-                    if sapy: leer.speak(dinero+', '+message['author']['name']+': '+divide)
-                    else: lector.speak(dinero+', '+message['author']['name']+': '+divide)
+                if lista[yt][0]=='Donativos':
+                    if reader:
+                        if sapy: leer.speak(dinero+', '+message['author']['name']+': '+divide)
+                        else: lector.speak(dinero+', '+message['author']['name']+': '+divide)
                 if sonidos and self.chat.status!="past": playsound("sounds/donar.mp3",False)
                 anadido=True
             if message['message_type']=='subscription' and not anadido:
-                miembros.append(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
+                lista[1].append(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
                 self.list_box_1.Append(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
-                if reader:
-                    if sapy: leer.speak(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
-                    else: lector.speak(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
+                if lista[yt][0]=='Miembros':
+                    if reader:
+                        if sapy: leer.speak(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
+                        else: lector.speak(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
                 if sonidos and self.chat.status!="past": playsound("sounds/miembros.mp3",False)
                 anadido=True
             if message['message_type']=='mystery_subscription_gift' and not anadido:
-                miembros.append(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
+                lista[1].append(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
                 self.list_box_1.Append(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
-                if reader:
-                    if sapy: leer.speak(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
-                    else: lector.speak(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
+                if lista[yt][0]=='Miembros':
+                    if reader:
+                        if sapy: leer.speak(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
+                        else: lector.speak(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
                 if sonidos and self.chat.status!="past": playsound("sounds/miembros.mp3",False)
                 anadido=True
             if message['message_type']=='subscription_gift' and not anadido:
-                miembros.append(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
+                lista[1].append(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
                 self.list_box_1.Append(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
-                if reader:
-                    if sapy: leer.speak(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
-                    else: lector.speak(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
+                if lista[yt][0]=='Miembros':
+                    if reader:
+                        if sapy: leer.speak(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
+                        else: lector.speak(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
                 if sonidos and self.chat.status!="past": playsound("sounds/miembros.mp3",False)
                 anadido=True
             if message['message_type']=='resubscription' and not anadido:
                 mssg=message['message'].split('! ')
                 mssg=str(mssg[1:])
-                miembros.append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!')+mssg)
-                self.list_box_1.Append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!')+mssg)
-                if reader:
-                    if sapy: leer.speak(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!')+mssg)
-                    else: lector.speak(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!')+mssg)
+                lista[1].append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses! ')+mssg)
+                self.list_box_1.Append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses! ')+mssg)
+                if lista[yt][0]=='Miembros':
+                    if reader:
+                        if sapy: leer.speak(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!')+mssg)
+                        else: lector.speak(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!')+mssg)
                 if sonidos and self.chat.status!="past": playsound("sounds/miembros.mp3",False)
                 anadido=True
             if 'badges' in message['author']:
                 for t in message['author']['badges']:
-                    if 'Moderator' in t['title'] and not anadido:
-                        miembros.append(_('Moderador ')+message['author']['name'] +': ' +message['message'])
+                    if 'Moderator' in t['title']:
+                        lista[3].append(message['author']['name'] +': ' +message['message'])
                         self.list_box_1.Append(_('Moderador ')+message['author']['name'] +': ' +message['message'])
-                        if reader:
-                            if sapy: leer.speak(_('Moderador ')+message['author']['name'] +': ' +message['message'])
-                            else: lector.speak(_('Moderador ')+message['author']['name'] +': ' +message['message'])
+                        if lista[yt][0]=='Moderadores':
+                            if reader:
+                                if sapy: leer.speak(message['author']['name'] +': ' +message['message'])
+                                else: lector.speak(message['author']['name'] +': ' +message['message'])
                         if sonidos and self.chat.status!="past": playsound("sounds/chatmiembro.mp3",False)
-                        anadido=True
                     elif 'Subscriber' in t['title'] and not anadido:
-                        miembros.append(_('Miembro ')+message['author']['name'] +': ' +message['message'])
+                        lista[1].append(message['author']['name'] +': ' +message['message'])
                         self.list_box_1.Append(_('Miembro ')+message['author']['name'] +': ' +message['message'])
-                        if reader:
-                            if sapy: leer.speak(_('Miembro ')+message['author']['name'] +': ' +message['message'])
-                            else: lector.speak(_('Miembro ')+message['author']['name'] +': ' +message['message'])
+                        if lista[yt][0]=='Miembros':
+                            if reader:
+                                if sapy: leer.speak(message['author']['name'] +': ' +message['message'])
+                                else: lector.speak(message['author']['name'] +': ' +message['message'])
                         if sonidos and self.chat.status!="past": playsound("sounds/chatmiembro.mp3",False)
-                        anadido=True
-                    elif 'Verified' in t['title'] and not anadido:
+                    elif 'Verified' in t['title']:
+                        lista[4].append(message['author']['name'] +': ' +message['message'])
                         self.list_box_1.Append(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
-                        if reader:
-                            if sapy: leer.speak(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
-                            else: lector.speak(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
+                        if lista[yt][0]=='Usuarios Verificados':
+                            if reader:
+                                if sapy: leer.speak(message['author']['name'] +': ' +message['message'])
+                                else: lector.speak(message['author']['name'] +': ' +message['message'])
                         if sonidos and self.chat.status!="past": playsound("sounds/miembro.mp3",False)
-                        anadido=True
-                    elif not anadido:
-                        if configchat==1:
+                    else:
+                        if lista[yt][0]=='General':
                             if reader:
                                 if sapy: leer.speak(message['author']['name'] +': ' +message['message'])
                                 else: lector.speak(message['author']['name'] +': ' +message['message'])
                             if sonidos and self.chat.status!="past": playsound("sounds/chat.mp3",False)
                         self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
-                        anadido=True
-            elif not anadido:
+            else:
                 if self.dentro:
-                    if configchat==1:
+                    if lista[yt][0]=='General':
                         if reader:
                             if sapy: leer.speak(message['author']['name'] +': ' +message['message'])
                             else: lector.speak(message['author']['name'] +': ' +message['message'])
                         if sonidos and self.chat.status!="past": playsound("sounds/chat.mp3",False)
                     self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
-                    anadido=True
                 else:
                     exit()
                     self.hilo2.join()
+    def avanzarCategorias(self):
+        global yt
+        if yt<len(lista)-1: yt+=1
+        else: yt=0
+        lector.speak(lista[yt][0])
+    def retrocederCategorias(self):
+        global yt
+        if yt<=0: yt=len(lista)-1
+        else: yt-=1
+        lector.speak(lista[yt][0])
+    def destacarMensaje(self):
+        global lista
+        if lista[yt][0]=='General': lista[5].append(self.list_box_1.GetString(self.contador))
+        else: lista[5].append(lista[yt][pos[yt]])
+        lector.speak('se agregó el elemento a la lista de favoritos...')
 class MyApp(wx.App):
     def OnInit(self):
         self.frame = MyFrame(None, wx.ID_ANY, "")

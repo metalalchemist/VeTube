@@ -1,3 +1,8 @@
+v2.1
+si cambias a las diversas categorías el modo automático solo leerá los mensajes de dicha categoría, por lo que si no quieres que te lea ningún mensaje y deseas tener la lectura automática puedes cambiar  a favoritos.
+se agrega un atajo de teclado para destacar un mensaje, el mismo se irá a la categoría  de favoritos: alt shift f
+se añaden categorías por mensajes, estas son: miembros, donativos, moderadores, usuarios verificados, y favoritos.
+se corrige el no poder iniciar el chat automáticamente si no se consigue el título o las views de un envivo.
 v2.0
 se agrega twitch a la lista de streams soportados.
 se corrige un bug el cual podía hacer que el programa se cerraba si es que tenías sapy o lector leyendo el chat.
