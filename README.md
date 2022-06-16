@@ -47,8 +47,6 @@ Lee y gestiona de manera accesible el chat de youtube y twitch en tus propios di
 
 ## futuras actualizaciones:
 He agregado para  futuras actualizaciones próximas
-- la creación de distintas categorías  de mensajes en la interfaz invisible.
-  - poder ordenar el contenido por distintas insignias tales como donativos, miembros moderadores.
 - Posibilidad de mostrar información de la persona que está chateando desde la interfaz invisible:
   - Nombre del canal del usuario
   - Entre muchas cosas mas.
