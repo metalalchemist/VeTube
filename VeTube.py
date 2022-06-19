@@ -330,10 +330,6 @@ class MyFrame(wx.Frame):
         self.choice_language = wx.Choice(self.treeItem_1, wx.ID_ANY, choices=langs)
         self.choice_language.SetSelection(codes.index(idioma))
         boxSizer_1.Add(self.choice_language)
-        self.check_2 = wx.CheckBox(self.treeItem_1, wx.ID_ANY, _("Reproducir sonidos."))
-        self.check_2.SetValue(sonidos)
-        self.check_2.Bind(wx.EVT_CHECKBOX, self.reproducirSonidos)
-        boxSizer_1.Add(self.check_2)
         sizer_4.Add(boxSizer_1, 0, 0, 0)
         self.treeItem_2 = wx.Panel(self.tree_1, wx.ID_ANY)
         self.tree_1.AddPage(self.treeItem_2, _("Voz"))
@@ -385,18 +381,26 @@ class MyFrame(wx.Frame):
         self.treeItem_3.SetSizer(sizer_categoriza)
         self.tree_1.AddPage(self.treeItem_3, _('Categorías'))
         self.treeItem_4 = wx.Panel(self.tree_1, wx.ID_ANY)
+        self.check_2 = wx.CheckBox(self.treeItem_4, wx.ID_ANY, _("Reproducir sonidos."))
+        self.check_2.SetValue(sonidos)
+        self.check_2.Bind(wx.EVT_CHECKBOX, self.mostrarSonidos)
         self.soniditos=wx.ListCtrl(self.treeItem_4, wx.ID_ANY)
         self.soniditos.EnableCheckBoxes()
         for contador in range(len(listasonidos)):
             self.soniditos.InsertItem(contador,mensajes_sonidos[contador])
             self.soniditos.CheckItem(contador,check=listasonidos[contador])
         self.soniditos.Focus(0)
-        self.soniditos.Bind(wx.EVT_KEY_UP, self.sonidosTeclas)
+        if sonidos: self.soniditos.Enable()
+        else: self.soniditos.Disable()
         sizer_soniditos = wx.BoxSizer()
+        sizer_soniditos.Add(self.check_2)
         sizer_soniditos.Add(self.soniditos, 1, wx.EXPAND)
-        reproducir= wx.Button(self.treeItem_4, wx.ID_ANY, _("&Reproducir"))
-        reproducir.Bind(wx.EVT_BUTTON, self.reproducirSonidos)
-        sizer_soniditos.Add(reproducir)
+        self.reproducir= wx.Button(self.treeItem_4, wx.ID_ANY, _("&Reproducir"))
+        self.reproducir.Bind(wx.EVT_BUTTON, self.reproducirSonidos)
+        if sonidos: self.reproducir.Enable()
+        else: self.reproducir.Disable()
+        
+        sizer_soniditos.Add(self.reproducir)
         self.treeItem_4.SetSizer(sizer_soniditos)
         self.tree_1.AddPage(self.treeItem_4, _('Sonidos'))
         self.button_cansel = wx.Button(self.dialogo_2, wx.ID_CLOSE, _("&Cancelar"))
@@ -430,10 +434,16 @@ class MyFrame(wx.Frame):
         global volume
         leer.set_volume(self.slider_2.GetValue())
         volume=self.slider_2.GetValue()
-    def reproducirSonidos(self,event):
+    def mostrarSonidos(self,event):
         global sonidos
-        if event.IsChecked(): sonidos=True
-        else: sonidos=False
+        if event.IsChecked():
+            sonidos=True
+            self.soniditos.Enable()
+            self.reproducir.Enable()
+        else:
+            sonidos=False
+            self.soniditos.Disable()
+            self.reproducir.Disable()
     def checar(self, event):
         global sapy
         if event.IsChecked(): sapy=True
@@ -998,11 +1008,7 @@ class MyFrame(wx.Frame):
         if lista[yt][0]=='General': lista[contador].append(self.list_box_1.GetString(self.contador))
         else: lista[contador].append(lista[yt][pos[yt]])
         lector.speak(_('Se agregó el elemento a la lista de favoritos...'))
-    def sonidosTeclas(self,event):
-        event.Skip()
-        if event.GetKeyCode() == 82: self.reproducirSonidos()
-    def reproducirSonidos(self,event=None):
-        playsound(rutasonidos[self.soniditos.GetFocusedItem()], False)
+    def reproducirSonidos(self,event): playsound(rutasonidos[self.soniditos.GetFocusedItem()], False)
 class MyApp(wx.App):
     def OnInit(self):
         self.frame = MyFrame(None, wx.ID_ANY, "")

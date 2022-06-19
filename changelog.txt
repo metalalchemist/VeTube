@@ -1,6 +1,7 @@
 v2.1
+ahora se muestran los mensajes del propietario del canal.
 ahora puedes escoger ciertos sonidos habilitados desde la configuración del programa.
-VeTube ya no permite tener 2 instancias del mismo abiertas.
+VeTube ya no permite tener 2 instancias abiertas
 ahora puedes habilitar y desabilitar las  categorías desde la configuración del programa
 se corrige el bug de que se añadiera un enlace a favoritos el número de favoritos que tuvieras.
 si cambias a las diversas categorías el modo automático solo leerá los mensajes de dicha categoría.
