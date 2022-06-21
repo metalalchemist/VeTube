@@ -15,8 +15,9 @@ Lee y gestiona de manera accesible el chat de youtube y twitch en tus propios di
 - Posibilidad de configurar según las necesidades del usuario.
   - activa o desactiva los sonidos del programa.
   - activa o desactiva el modo automático. 
+  - configura el listado de los mensajes en la interfaz invisible.
   - Configura las preferencias de la voz sapy.
-- cambia de modalidad de lectura de chats fácilmente: decide si quieres leer todos los chats o los mensajes de los  diversos buffers.
+- cambia de modalidad de lectura de chats fácilmente: decide si quieres leer todos los chats o solo miembros y donativos.
 - guarda tus envivos en una sección de favoritos. repite cuantas veces  desees el chat sin necesidad de ir a buscar el enlace nuevamente.
 ## Atajos de teclado.
 ### Usando interfaz invisible.
@@ -46,8 +47,6 @@ Lee y gestiona de manera accesible el chat de youtube y twitch en tus propios di
 
 ## futuras actualizaciones:
 He agregado para  futuras actualizaciones próximas
-- la creación de distintas categorías  de mensajes en la interfaz invisible.
-  - poder ordenar el contenido por distintas insignias tales como donativos, miembros moderadores.
 - Posibilidad de mostrar información de la persona que está chateando desde la interfaz invisible:
   - Nombre del canal del usuario
   - Entre muchas cosas mas.
