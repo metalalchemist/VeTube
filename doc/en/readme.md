@@ -63,5 +63,5 @@ cesar.verastegui17@gmail.com
 ## Download links.
 With your support, you contribute  for this program to keep on growing.
 
-[Want to join our cause?[(https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
+[Want to join our cause?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 [Download the program here](https://github.com/metalalchemist/VeTube/releases/download/v1.2/vetube1.zip)
