@@ -1,3 +1,5 @@
+v2.2
+ahora es posible buscar mensajes por palabra o nombre de autor. se creará un buffer con el término de la búsqueda ingresada donde contendrá todas las coinsidencias (alt shift s)
 v2.1
 ahora se muestran los mensajes del propietario del canal.
 ahora puedes escoger ciertos sonidos habilitados desde la configuración del programa.
