@@ -1,12 +1,12 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,threading,keyboard,urllib.request,languageHandler,socket,os,time,restart,wx.adv
+import json,wx,threading,urllib.request,languageHandler,socket,os,time,restart,wx.adv
+from keyboard_handler.wx_handler import WXKeyboardHandler
 from playsound import playsound
 from accessible_output2.outputs import auto, sapi5
 from youtube_dl import YoutubeDL
 from pyperclip import copy
 from chat_downloader import ChatDownloader
-os.system('rmdir %temp%\gen_py /Q/S')
 voz=0
 tono=0
 volume=100
@@ -21,9 +21,8 @@ favorite=[]
 categ=[True,True,False,False,False]
 listasonidos=[True,True,True,True,True,True,True,True]
 rutasonidos=["sounds/chat.mp3","sounds/chatmiembro.mp3","sounds/miembros.mp3","sounds/donar.mp3","sounds/moderators.mp3","sounds/verified.mp3","sounds/abrirchat.wav","sounds/propietario.mp3"]
-pos=[1,1,1,1,1,1]
-leer=sapi5.SAPI5()
 lector=auto.Auto()
+leer=sapi5.SAPI5()
 lista_voces=leer.list_voices()
 db_fichero_complemento = os.path.join(os.getcwd(), 'vetube.zip')
 def retornarCategorias():
@@ -92,6 +91,16 @@ def leerConfiguracion():
         categ=resultado['categorias']
         listasonidos=resultado['listasonidos']
     else: escribirConfiguracion()
+def escribirTeclas():
+    with open('keys.txt', 'w+') as arch: arch.write("""{"control+p": leer.silence,"alt+shift+up": self.elementoAnterior,"alt+shift+down": self.elementoSiguiente,"alt+shift+left": self.retrocederCategorias,"alt+shift+right": self.avanzarCategorias,"alt+shift+home": self.elementoInicial,"alt+shift+end": self.elementoFinal,"alt+shift+f": self.destacarMensaje,"alt+shift+c": self.copiar,"alt+shift+m": self.callar,"alt+shift+s": self.iniciarBusqueda,"alt+shift+v": self.mostrarMensaje,"alt+shift+d": self.borrarBuffer,"alt+shift+p": self.desactivarSonidos}""")
+    leerTeclas()
+def leerTeclas():
+    if os.path.exists("keys.txt"):
+        global mis_teclas
+        with open ("keys.txt",'r') as arch:
+            mis_teclas=arch.read()
+    else: escribirTeclas()
+pos=[]
 leerConfiguracion()
 leerFavoritos()
 leer.set_rate(speed)
@@ -105,12 +114,13 @@ langs = []
 [langs.append(i[1]) for i in idiomas]
 codes = []
 [codes.append(i[0]) for i in idiomas]
+mensaje_teclas=[_('Silencia la voz sapy'),_('Buffer anterior.'),_('Siguiente buffer.'),_('Mensaje anterior'),_('Mensaje siguiente'),_('Ir al comienzo del buffer'),_('Ir al final del buffer'),_('Copia el mensaje actual'),_('Activa o desactiva la lectura automática'),_('Muestra el mensaje actual en un cuadro de texto'),_('Busca una palabra en los mensajes actuales')]
 mensajes_categorias=[_('Miembros'),_('Donativos'),_('Moderadores'),_('Usuarios Verificados'),_('Favoritos')]
 mensajes_sonidos=[_('Sonido cuando llega un mensaje'),_('Sonido cuando habla un miembro'),_('Sonido cuando se conecta un miembro'),_('Sonido cuando llega un donativo'),_('Sonido cuando habla un moderador'),_('Sonido cuando habla un usuario verificado'),_('Sonido al ingresar al chat'),_('Sonido cuando habla el propietario del canal')]
 codes.reverse()
 langs.reverse()
 lista=retornarCategorias()
-print (languageHandler.getLanguage())
+for temporal in lista: pos.append(1)
 class HiloActualizacionComplemento(threading.Thread):
     def __init__(self, frame):
         super(HiloActualizacionComplemento, self).__init__()
@@ -244,6 +254,7 @@ class MyFrame(wx.Frame):
         self.SetSize((800, 600))
         self.SetTitle("VeTube")
         self.SetWindowStyle(wx.RESIZE_BORDER | wx.CAPTION | wx.CLOSE_BOX | wx.CLIP_CHILDREN)
+        self.handler_keyboard = WXKeyboardHandler(self)
         self.panel_1 = wx.Panel(self, wx.ID_ANY)
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
         self.menu_1 = wx.Button(self.panel_1, wx.ID_ANY, _("&Más opciones"))
@@ -366,7 +377,7 @@ class MyFrame(wx.Frame):
         self.slider_3 = wx.Slider(self.treeItem_2, wx.ID_ANY, speed+10, 0, 20)
         self.slider_3.Bind(wx.EVT_SLIDER, self.cambiarVelocidad)
         boxSizer_2 .Add(self.slider_3)
-        self.boton_prueva = wx.Button(self.treeItem_2, wx.ID_ANY, _("&Reproducir prueba."))
+        self.boton_prueva = wx.Button(self.treeItem_2, wx.ID_ANY, label=_("&Reproducir prueba."))
         self.boton_prueva.Bind(wx.EVT_BUTTON, self.reproducirPrueva)
         boxSizer_2.Add(self.boton_prueva)
         sizer_6.Add(boxSizer_2, 0, 0, 0)
@@ -400,7 +411,6 @@ class MyFrame(wx.Frame):
         self.reproducir.Bind(wx.EVT_BUTTON, self.reproducirSonidos)
         if sonidos: self.reproducir.Enable()
         else: self.reproducir.Disable()
-        
         sizer_soniditos.Add(self.reproducir)
         self.treeItem_4.SetSizer(sizer_soniditos)
         self.tree_1.AddPage(self.treeItem_4, _('Sonidos'))
@@ -501,12 +511,6 @@ class MyFrame(wx.Frame):
                 self.hilo2 = threading.Thread(target=self.iniciarChat)
                 self.hilo2.daemon = True
                 self.hilo2.start()
-                try:
-                    if self.hilo1.is_alive() or not self.hilo1.is_alive(): pass
-                except:
-                    self.hilo1 = threading.Thread(target=self.capturarTeclas)
-                    self.hilo1.daemon = True
-                    self.hilo1.start()
                 self.dialog_mensaje.ShowModal()
             except Exception as e:
                 wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), "error.", wx.ICON_ERROR)
@@ -524,13 +528,15 @@ class MyFrame(wx.Frame):
             self.dentro=False
             self.contador=0
             yt=0
-            pos=[1,1,1,1,1,1]
+            pos=[]
+            for temporal in lista: pos.append(1)
             leer.silence()
             leer.speak(_("ha finalizado la lectura del chat."))
             self.text_ctrl_1.SetValue("")
             self.text_ctrl_1.SetFocus()
             self.dialog_mensaje.Destroy()
             self.text_ctrl_1.SetFocus()
+            self.handler_keyboard.unregister_all_keys()
     def guardar(self, event):
         global idioma, rest,categ,lista,listasonidos
         rest=False
@@ -582,8 +588,8 @@ class MyFrame(wx.Frame):
         event.Skip()
         if event.GetKeyCode() == 127: self.list_box_1.Delete(self.list_box_1.GetSelection())
         if event.GetKeyCode() == 32:
-            if leer.silence(): leer.silence()
-            else: leer.speak(self.list_box_1.GetString(self.list_box_1.GetSelection()))
+            leer.silence()
+            leer.speak(self.list_box_1.GetString(self.list_box_1.GetSelection()))
     def iniciarChat(self):
         global info_dict
         ydlop = {'ignoreerrors': True, 'extract_flat': 'in_playlist', 'dump_single_json': True, 'quiet': True}
@@ -592,6 +598,7 @@ class MyFrame(wx.Frame):
         except: pass
         if 'yout' in self.text_ctrl_1.GetValue(): self.recibirYT()
         elif 'twitch' in self.text_ctrl_1.GetValue(): self.recibirTwich()
+        self.registrarTeclas()
     def elementoAnterior(self):
         global pos
         if self.dentro:
@@ -667,20 +674,6 @@ class MyFrame(wx.Frame):
             leer.silence()
         else: reader=True
         lector.speak(_("Lectura automática activada.")if reader else _("Lectura automática  desactivada."))
-    def capturarTeclas(self):
-        keyboard.add_hotkey('alt+shift+up',self.elementoAnterior)
-        keyboard.add_hotkey('alt+shift+down',self.elementoSiguiente)
-        keyboard.add_hotkey('alt+shift+left',self.retrocederCategorias)
-        keyboard.add_hotkey('alt+shift+right',self.avanzarCategorias)
-        keyboard.add_hotkey('alt+shift+home',self.elementoInicial)
-        keyboard.add_hotkey('alt+shift+end',self.elementoFinal)
-        keyboard.add_hotkey('alt+shift+f',self.destacarMensaje)
-        keyboard.add_hotkey('alt+shift+c',self.copiar)
-        keyboard.add_hotkey('alt+shift+m',self.callar)
-        keyboard.add_hotkey('alt+shift+v',wx.CallAfter,args=(self.mostrarMensaje,))
-        keyboard.add_hotkey('control',leer.silence)
-        keyboard.add_hotkey('alt+shift+s',wx.CallAfter,args=(self.iniciarBusqueda,))
-        keyboard.wait()
     def cerrarVentana(self, event):
         dialogo_cerrar = wx.MessageDialog(self, _("¿está seguro que desea salir del programa?"), _("¡atención!:"), wx.YES_NO | wx.ICON_ASTERISK)
         if dialogo_cerrar.ShowModal()==wx.ID_YES: self.Destroy()
@@ -751,7 +744,6 @@ class MyFrame(wx.Frame):
             escribirFavorito()
     def favoritoTeclas(self,event):
         event.Skip()
-        if event.GetKeyCode() == 127: self.borrarFavorito()
         if event.GetKeyCode() == 32: self.acceder(url=favorite[self.list_favorite.GetSelection()]['url'])
     def recibirYT(self):
         global lista
@@ -1041,6 +1033,20 @@ class MyFrame(wx.Frame):
         else:
             wx.MessageBox(_("No hay nada que buscar porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
             self.text_box.SetFocus()
+    def borrarBuffer(self):
+        if lista[yt][0]!='General' and lista[yt][0]!='Miembros' and lista[yt][0]!='Donativos' and lista[yt][0]!='Moderadores' and lista[yt][0]!='Usuarios Verificados':
+            lista.pop()
+            pos.pop()
+            lector.speak(_('Se eliminó el buffer'))
+        else: lector.speak(_('No es posible borrar este buffer'))
+    def desactivarSonidos(self):
+        global sonidos
+        sonidos=False if sonidos else True
+        lector.speak(_("Sonidos activados.") if sonidos else _("Sonidos desactivados"))
+    def registrarTeclas(self):
+        leerTeclas()
+        try: self.handler_keyboard.register_keys(eval(mis_teclas))
+        except: lector.speak(_("hubo un error al registrar los atajos de teclado globales."))
 class MyApp(wx.App):
     def OnInit(self):
         self.frame = MyFrame(None, wx.ID_ANY, "")

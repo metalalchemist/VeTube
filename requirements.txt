@@ -1,7 +1,7 @@
 wxPython
 playsound==1.2.2
 youtube_dl
-keyboard
-accessible_output2
 pyperclip
 chat_downloader
+git+https://github.com/accessibleapps/accessible_output2
+git+https://github.com/accessibleapps/keyboard_handler

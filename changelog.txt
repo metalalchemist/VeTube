@@ -1,4 +1,9 @@
 v2.2
+se agrega un atajo para desactivar los sonidos temporalmente: alt shift p.
+se separa las teclas en un archivo indepentiende para en un futuro trabajar en un editor de combinaciones.
+(programadores): se quita keyboard para reemplazarla por keyboard_handler.
+se cambia la combinación para silenciar un mensaje entrante con sapi5: control p.
+agregado atajo para borrar los buffers de búsquedas y el buffer de favoritos:  alt shift d
 ahora es posible buscar mensajes por palabra o nombre de autor. se creará un buffer con el término de la búsqueda ingresada donde contendrá todas las coinsidencias (alt shift s)
 v2.1
 ahora se muestran los mensajes del propietario del canal.

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-06-18 15:12-0700\n"
+"POT-Creation-Date: 2022-07-23 15:17-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,72 +21,116 @@ msgstr ""
 msgid "Idioma del sistema"
 msgstr ""
 
-#: chat/vetube.py:30 chat/vetube.py:324
+#: chat/vetube.py:29 chat/vetube.py:336
 msgid "General"
 msgstr ""
 
-#: chat/vetube.py:31 chat/vetube.py:108
+#: chat/vetube.py:30 chat/vetube.py:118
 msgid "Miembros"
 msgstr ""
 
-#: chat/vetube.py:32 chat/vetube.py:108
+#: chat/vetube.py:31 chat/vetube.py:118
 msgid "Donativos"
 msgstr ""
 
-#: chat/vetube.py:33 chat/vetube.py:108
+#: chat/vetube.py:32 chat/vetube.py:118
 msgid "Moderadores"
 msgstr ""
 
-#: chat/vetube.py:34 chat/vetube.py:108
+#: chat/vetube.py:33 chat/vetube.py:118
 msgid "Usuarios Verificados"
 msgstr ""
 
-#: chat/vetube.py:35 chat/vetube.py:108 chat/vetube.py:257 chat/vetube.py:1005
+#: chat/vetube.py:34 chat/vetube.py:118 chat/vetube.py:269 chat/vetube.py:999
 msgid "Favoritos"
 msgstr ""
 
-#: chat/vetube.py:109
+#: chat/vetube.py:117
+msgid "Silencia la voz sapy"
+msgstr ""
+
+#: chat/vetube.py:117
+msgid "Buffer anterior."
+msgstr ""
+
+#: chat/vetube.py:117
+msgid "Siguiente buffer."
+msgstr ""
+
+#: chat/vetube.py:117
+msgid "Mensaje anterior"
+msgstr ""
+
+#: chat/vetube.py:117
+msgid "Mensaje siguiente"
+msgstr ""
+
+#: chat/vetube.py:117
+msgid "Ir al comienzo del buffer"
+msgstr ""
+
+#: chat/vetube.py:117
+msgid "Ir al final del buffer"
+msgstr ""
+
+#: chat/vetube.py:117
+msgid "Copia el mensaje actual"
+msgstr ""
+
+#: chat/vetube.py:117
+msgid "Activa o desactiva la lectura automática"
+msgstr ""
+
+#: chat/vetube.py:117
+msgid "Muestra el mensaje actual en un cuadro de texto"
+msgstr ""
+
+#: chat/vetube.py:117
+msgid "Busca una palabra en los mensajes actuales"
+msgstr ""
+
+#: chat/vetube.py:119
 msgid "Sonido cuando llega un mensaje"
 msgstr ""
 
-#: chat/vetube.py:109
+#: chat/vetube.py:119
 msgid "Sonido cuando habla un miembro"
 msgstr ""
 
-#: chat/vetube.py:109
+#: chat/vetube.py:119
 msgid "Sonido cuando se conecta un miembro"
 msgstr ""
 
-#: chat/vetube.py:109
+#: chat/vetube.py:119
 msgid "Sonido cuando llega un donativo"
 msgstr ""
 
-#: chat/vetube.py:109
+#: chat/vetube.py:119
 msgid "Sonido cuando habla un moderador"
 msgstr ""
 
-#: chat/vetube.py:109
+#: chat/vetube.py:119
 msgid "Sonido cuando habla un usuario verificado"
 msgstr ""
 
-#: chat/vetube.py:109
+#: chat/vetube.py:119
 msgid "Sonido al ingresar al chat"
 msgstr ""
 
-#: chat/vetube.py:109
+#: chat/vetube.py:119
 msgid "Sonido cuando habla el propietario del canal"
 msgstr ""
 
-#: chat/vetube.py:142 chat/vetube.py:146
+#: chat/vetube.py:153 chat/vetube.py:157
 msgid "Espere por favor...\n"
 msgstr ""
 
-#: chat/vetube.py:142 chat/vetube.py:146
+#: chat/vetube.py:153 chat/vetube.py:157
 #, python-format
 msgid "Descargando: %s"
 msgstr ""
 
-#: chat/vetube.py:157
+#: chat/vetube.py:168
 msgid ""
 "Se terminó la descarga de la nueva actualización.\n"
 "el programa se cerrará para que usted reemplase los archivos de la nueva "
@@ -94,389 +138,415 @@ msgid ""
 "¿disfrute!"
 msgstr ""
 
-#: chat/vetube.py:160
+#: chat/vetube.py:171
 msgid ""
 "Algo salió mal.\n"
 "Compruebe que tiene conexión a internet y vuelva a intentarlo.\n"
 "el programa se  cerrará."
 msgstr ""
 
-#: chat/vetube.py:166
+#: chat/vetube.py:177
 msgid "Actualizando el programa..."
 msgstr ""
 
-#: chat/vetube.py:173 chat/vetube.py:233 chat/vetube.py:408
+#: chat/vetube.py:184 chat/vetube.py:244 chat/vetube.py:419
 msgid "&Aceptar"
 msgstr ""
 
-#: chat/vetube.py:176 chat/vetube.py:693
+#: chat/vetube.py:187 chat/vetube.py:689 chat/vetube.py:1016
 msgid "&Cerrar"
 msgstr ""
 
-#: chat/vetube.py:230
+#: chat/vetube.py:241
 msgid ""
 "VeTube ya se encuentra en ejecución. Cierra la otra instancia antes de "
 "iniciar esta."
 msgstr ""
 
-#: chat/vetube.py:232
+#: chat/vetube.py:243
 msgid ""
 "Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te "
 "unes a nuestra causa?"
 msgstr ""
 
-#: chat/vetube.py:232 chat/vetube.py:520 chat/vetube.py:549 chat/vetube.py:554
-#: chat/vetube.py:562 chat/vetube.py:729
+#: chat/vetube.py:243 chat/vetube.py:526 chat/vetube.py:557 chat/vetube.py:562
+#: chat/vetube.py:570 chat/vetube.py:725
 msgid "Atención:"
 msgstr ""
 
-#: chat/vetube.py:233 chat/vetube.py:406 chat/vetube.py:555
+#: chat/vetube.py:244 chat/vetube.py:417 chat/vetube.py:563
 msgid "&Cancelar"
 msgstr ""
 
-#: chat/vetube.py:248
+#: chat/vetube.py:260
 msgid "&Más opciones"
 msgstr ""
 
-#: chat/vetube.py:250
+#: chat/vetube.py:262
 msgid "Pulse alt para abrir el menú"
 msgstr ""
 
-#: chat/vetube.py:254
+#: chat/vetube.py:266
 msgid "Inicio"
 msgstr ""
 
-#: chat/vetube.py:259
+#: chat/vetube.py:271
 msgid "Escriba o pegue una URL de youtube"
 msgstr ""
 
-#: chat/vetube.py:262
+#: chat/vetube.py:274
 msgid "Escribe o pega una URL"
 msgstr ""
 
-#: chat/vetube.py:267
+#: chat/vetube.py:279
 msgid "&Acceder"
 msgstr ""
 
-#: chat/vetube.py:271
+#: chat/vetube.py:283
 msgid "Borrar"
 msgstr ""
 
-#: chat/vetube.py:276
+#: chat/vetube.py:288
 msgid "Tus favoritos: "
 msgstr ""
 
-#: chat/vetube.py:281
+#: chat/vetube.py:293
 msgid "&Borrar favorito"
 msgstr ""
 
-#: chat/vetube.py:295
+#: chat/vetube.py:307
 msgid "&Opciones"
 msgstr ""
 
-#: chat/vetube.py:296 chat/vetube.py:317
+#: chat/vetube.py:308 chat/vetube.py:329
 msgid "Configuración"
 msgstr ""
 
-#: chat/vetube.py:298
+#: chat/vetube.py:310
 msgid "Restablecer los ajustes"
 msgstr ""
 
-#: chat/vetube.py:300
+#: chat/vetube.py:312
 msgid "&Ayuda"
 msgstr ""
 
-#: chat/vetube.py:301
+#: chat/vetube.py:313
 msgid "Únete a nuestra &causa"
 msgstr ""
 
-#: chat/vetube.py:303
+#: chat/vetube.py:315
 msgid "&Visita nuestra página de github"
 msgstr ""
 
-#: chat/vetube.py:305
+#: chat/vetube.py:317
 msgid "&buscar actualizaciones"
 msgstr ""
 
-#: chat/vetube.py:307
+#: chat/vetube.py:319
 msgid "Acerca de"
 msgstr ""
 
-#: chat/vetube.py:319 chat/vetube.py:382
+#: chat/vetube.py:331 chat/vetube.py:394
 msgid "Categorías"
 msgstr ""
 
-#: chat/vetube.py:326
+#: chat/vetube.py:338
 msgid "Opciones de la app"
 msgstr ""
 
-#: chat/vetube.py:328
+#: chat/vetube.py:340
 msgid "Idioma de VeTube (Requiere reiniciar)"
 msgstr ""
 
-#: chat/vetube.py:335
+#: chat/vetube.py:347
 msgid "Voz"
 msgstr ""
 
-#: chat/vetube.py:337
+#: chat/vetube.py:349
 msgid "Opciones del habla"
 msgstr ""
 
-#: chat/vetube.py:339
-msgid "Usar voz sapy en lugar de lector de pantalla."
+#: chat/vetube.py:351
+msgid "Usar voz sapi en lugar de lector de pantalla."
 msgstr ""
 
-#: chat/vetube.py:343
+#: chat/vetube.py:355
 msgid "Activar lectura de mensajes automática"
 msgstr ""
 
-#: chat/vetube.py:347
+#: chat/vetube.py:359
 msgid "Voz: "
 msgstr ""
 
-#: chat/vetube.py:353
+#: chat/vetube.py:365
 msgid "Tono: "
 msgstr ""
 
-#: chat/vetube.py:358
+#: chat/vetube.py:370
 msgid "Volumen: "
 msgstr ""
 
-#: chat/vetube.py:363
+#: chat/vetube.py:375
 msgid "Velocidad: "
 msgstr ""
 
-#: chat/vetube.py:368
+#: chat/vetube.py:380
 msgid "&Reproducir prueba."
 msgstr ""
 
-#: chat/vetube.py:384
+#: chat/vetube.py:396
 msgid "Reproducir sonidos."
 msgstr ""
 
-#: chat/vetube.py:398
+#: chat/vetube.py:410
 msgid "&Reproducir"
 msgstr ""
 
-#: chat/vetube.py:405
+#: chat/vetube.py:416
 msgid "Sonidos"
 msgstr ""
 
-#: chat/vetube.py:421
+#: chat/vetube.py:432
 msgid ""
 "Hola, soy la voz que te acompañará de ahora en adelante a leer los "
 "mensajes de tus canales favoritos."
 msgstr ""
 
-#: chat/vetube.py:422
+#: chat/vetube.py:433
 msgid "Creadores del proyecto:"
 msgstr ""
 
-#: chat/vetube.py:422
+#: chat/vetube.py:433
 msgid ""
 "Descripción:\n"
 " Lee en voz alta los mensajes de los directos en youtube, ajusta tus "
 "preferencias como quieras y disfruta más tus canales favoritos."
 msgstr ""
 
-#: chat/vetube.py:422 chat/vetube.py:742
+#: chat/vetube.py:433 chat/vetube.py:738
 msgid "Información"
 msgstr ""
 
-#: chat/vetube.py:467 chat/vetube.py:510
+#: chat/vetube.py:478 chat/vetube.py:516
 msgid ""
 "¡Parece que el enlace al cual está intentando acceder no es un enlace "
 "válido."
 msgstr ""
 
-#: chat/vetube.py:471
+#: chat/vetube.py:482
 msgid "Chat en vivo"
 msgstr ""
 
-#: chat/vetube.py:473
+#: chat/vetube.py:484
 msgid "Lectura del chat en vivo..."
 msgstr ""
 
-#: chat/vetube.py:477
+#: chat/vetube.py:488
 msgid "historial  de mensajes: "
 msgstr ""
 
-#: chat/vetube.py:483
+#: chat/vetube.py:494
 msgid "Limpiar historial"
 msgstr ""
 
-#: chat/vetube.py:486
+#: chat/vetube.py:497
 msgid "&Detener"
 msgstr ""
 
-#: chat/vetube.py:489
+#: chat/vetube.py:500
 msgid "Añadir a &favoritos"
 msgstr ""
 
-#: chat/vetube.py:498
+#: chat/vetube.py:510
 msgid "Ingresando al chat."
 msgstr ""
 
-#: chat/vetube.py:513
+#: chat/vetube.py:519
 msgid ""
 "No se puede  acceder porque el campo de  texto está vacío, debe escribir"
 "  algo."
 msgstr ""
 
-#: chat/vetube.py:520
+#: chat/vetube.py:526
 msgid "¿Desea salir de esta ventana y detener la lectura de los mensajes?"
 msgstr ""
 
-#: chat/vetube.py:527
+#: chat/vetube.py:534
 msgid "ha finalizado la lectura del chat."
 msgstr ""
 
-#: chat/vetube.py:549
+#: chat/vetube.py:557
 msgid ""
 "Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea "
 "reiniciarlo ahora?"
 msgstr ""
 
-#: chat/vetube.py:554
+#: chat/vetube.py:562
 msgid "Está apunto de eliminar del historial aproximadamente "
 msgstr ""
 
-#: chat/vetube.py:554
+#: chat/vetube.py:562
 msgid " elementos, ¿desea proceder? Esta acción no se puede desacer."
 msgstr ""
 
-#: chat/vetube.py:555
+#: chat/vetube.py:563
 msgid "&Eliminar"
 msgstr ""
 
-#: chat/vetube.py:556 chat/vetube.py:744
+#: chat/vetube.py:564 chat/vetube.py:740
 msgid "No hay elementos que borrar"
 msgstr ""
 
-#: chat/vetube.py:562
+#: chat/vetube.py:570
 msgid ""
 "Estás apunto de reiniciar la configuración a sus valores predeterminados,"
 " ¿Deseas proceder?"
 msgstr ""
 
-#: chat/vetube.py:589
+#: chat/vetube.py:597
 msgid " reproducciones"
 msgstr ""
 
-#: chat/vetube.py:597 chat/vetube.py:602 chat/vetube.py:611 chat/vetube.py:616
-#: chat/vetube.py:624 chat/vetube.py:629 chat/vetube.py:637 chat/vetube.py:642
-#: chat/vetube.py:651 chat/vetube.py:656
+#: chat/vetube.py:606 chat/vetube.py:611 chat/vetube.py:620 chat/vetube.py:625
+#: chat/vetube.py:633 chat/vetube.py:638 chat/vetube.py:646 chat/vetube.py:651
+#: chat/vetube.py:660 chat/vetube.py:665
 msgid "no hay elementos en el historial"
 msgstr ""
 
-#: chat/vetube.py:627 chat/vetube.py:632
+#: chat/vetube.py:636 chat/vetube.py:641
 msgid "¡Copiado!"
 msgstr ""
 
-#: chat/vetube.py:667
+#: chat/vetube.py:676
 msgid "Lectura automática activada."
 msgstr ""
 
-#: chat/vetube.py:667
+#: chat/vetube.py:676
 msgid "Lectura automática  desactivada."
 msgstr ""
 
-#: chat/vetube.py:682
+#: chat/vetube.py:678
 msgid "¿está seguro que desea salir del programa?"
 msgstr ""
 
-#: chat/vetube.py:682
+#: chat/vetube.py:678
 msgid "¡atención!:"
 msgstr ""
 
-#: chat/vetube.py:689
+#: chat/vetube.py:685
 msgid "mensaje"
 msgstr ""
 
-#: chat/vetube.py:719
+#: chat/vetube.py:715
 msgid "al parecer ya tienes ese enlace en tus favoritos"
 msgstr ""
 
-#: chat/vetube.py:724
+#: chat/vetube.py:720
 msgid "Se a añadido el elemento a favoritos"
 msgstr ""
 
-#: chat/vetube.py:729
+#: chat/vetube.py:725
 msgid "Una nueva  versión de VeTube está disponible. ¿desea descargarla aora?"
 msgstr ""
 
-#: chat/vetube.py:742
+#: chat/vetube.py:738
 msgid "Al parecer tienes la última versión del programa"
 msgstr ""
 
-#: chat/vetube.py:786 chat/vetube.py:789 chat/vetube.py:792 chat/vetube.py:793
+#: chat/vetube.py:781 chat/vetube.py:784 chat/vetube.py:787 chat/vetube.py:788
 msgid " se a conectado al chat. "
 msgstr ""
 
-#: chat/vetube.py:803
+#: chat/vetube.py:798
 msgid "Propietario "
 msgstr ""
 
-#: chat/vetube.py:815 chat/vetube.py:941
+#: chat/vetube.py:810 chat/vetube.py:936
 msgid "Moderador "
 msgstr ""
 
-#: chat/vetube.py:829 chat/vetube.py:953
+#: chat/vetube.py:824 chat/vetube.py:948
 msgid "Miembro "
 msgstr ""
 
-#: chat/vetube.py:841 chat/vetube.py:965
+#: chat/vetube.py:836 chat/vetube.py:960
 msgid " (usuario verificado): "
 msgstr ""
 
-#: chat/vetube.py:882 chat/vetube.py:885 chat/vetube.py:888 chat/vetube.py:889
+#: chat/vetube.py:877 chat/vetube.py:880 chat/vetube.py:883 chat/vetube.py:884
 msgid " se ha suscrito en el nivel "
 msgstr ""
 
-#: chat/vetube.py:882 chat/vetube.py:885 chat/vetube.py:888 chat/vetube.py:889
-#: chat/vetube.py:908 chat/vetube.py:911 chat/vetube.py:914 chat/vetube.py:915
+#: chat/vetube.py:877 chat/vetube.py:880 chat/vetube.py:883 chat/vetube.py:884
+#: chat/vetube.py:903 chat/vetube.py:906 chat/vetube.py:909 chat/vetube.py:910
 msgid " por "
 msgstr ""
 
-#: chat/vetube.py:882 chat/vetube.py:885 chat/vetube.py:888 chat/vetube.py:889
-#: chat/vetube.py:908 chat/vetube.py:911 chat/vetube.py:914 chat/vetube.py:915
-#: chat/vetube.py:929 chat/vetube.py:930
+#: chat/vetube.py:877 chat/vetube.py:880 chat/vetube.py:883 chat/vetube.py:884
+#: chat/vetube.py:903 chat/vetube.py:906 chat/vetube.py:909 chat/vetube.py:910
+#: chat/vetube.py:924 chat/vetube.py:925
 msgid " meses!"
 msgstr ""
 
-#: chat/vetube.py:895 chat/vetube.py:898 chat/vetube.py:901 chat/vetube.py:902
+#: chat/vetube.py:890 chat/vetube.py:893 chat/vetube.py:896 chat/vetube.py:897
 msgid " regaló una suscripción de nivel "
 msgstr ""
 
-#: chat/vetube.py:895 chat/vetube.py:898 chat/vetube.py:901 chat/vetube.py:902
+#: chat/vetube.py:890 chat/vetube.py:893 chat/vetube.py:896 chat/vetube.py:897
 msgid " a la  comunidad, ha regalado un total de "
 msgstr ""
 
-#: chat/vetube.py:895 chat/vetube.py:898 chat/vetube.py:901 chat/vetube.py:902
+#: chat/vetube.py:890 chat/vetube.py:893 chat/vetube.py:896 chat/vetube.py:897
 msgid " suscripciones!"
 msgstr ""
 
-#: chat/vetube.py:908 chat/vetube.py:911 chat/vetube.py:914 chat/vetube.py:915
+#: chat/vetube.py:903 chat/vetube.py:906 chat/vetube.py:909 chat/vetube.py:910
 msgid " a regalado una suscripción a "
 msgstr ""
 
-#: chat/vetube.py:908 chat/vetube.py:911 chat/vetube.py:914 chat/vetube.py:915
+#: chat/vetube.py:903 chat/vetube.py:906 chat/vetube.py:909 chat/vetube.py:910
 msgid " en el nivel "
 msgstr ""
 
-#: chat/vetube.py:923 chat/vetube.py:926 chat/vetube.py:929 chat/vetube.py:930
+#: chat/vetube.py:918 chat/vetube.py:921 chat/vetube.py:924 chat/vetube.py:925
 msgid " ha renovado su suscripción en el nivel "
 msgstr ""
 
-#: chat/vetube.py:923 chat/vetube.py:926 chat/vetube.py:929 chat/vetube.py:930
+#: chat/vetube.py:918 chat/vetube.py:921 chat/vetube.py:924 chat/vetube.py:925
 msgid ". lleva suscrito por"
 msgstr ""
 
-#: chat/vetube.py:923 chat/vetube.py:926
+#: chat/vetube.py:918 chat/vetube.py:921
 msgid " meses! "
 msgstr ""
 
-#: chat/vetube.py:1010
+#: chat/vetube.py:1004
 msgid "Se agregó el elemento a la lista de favoritos..."
+msgstr ""
+
+#: chat/vetube.py:1007
+msgid "escriba el término de su búsqueda"
+msgstr ""
+
+#: chat/vetube.py:1013
+msgid "&Buscar"
+msgstr ""
+
+#: chat/vetube.py:1034
+msgid ""
+"No hay nada que buscar porque el campo de  texto está vacío, debe "
+"escribir  algo."
+msgstr ""
+
+#: chat/vetube.py:1040
+msgid "Se eliminó el buffer"
+msgstr ""
+
+#: chat/vetube.py:1041
+msgid "No es posible borrar este buffer"
+msgstr ""
+
+#: chat/vetube.py:1045
+msgid "hubo un error al registrar los atajos de teclado globales."
 msgstr ""
 

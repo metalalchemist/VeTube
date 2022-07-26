@@ -15,9 +15,8 @@ Lee y gestiona de manera accesible el chat de youtube y twitch en tus propios di
 - Posibilidad de configurar según las necesidades del usuario.
   - activa o desactiva los sonidos del programa.
   - activa o desactiva el modo automático. 
-  - configura el listado de los mensajes en la interfaz invisible.
   - Configura las preferencias de la voz sapy.
-- cambia de modalidad de lectura de chats fácilmente: decide si quieres leer todos los chats o solo miembros y donativos.
+- cambia de modalidad de lectura de chats fácilmente: decide si quieres leer todos los chats o los mensajes de los  diversos buffers.
 - guarda tus envivos en una sección de favoritos. repite cuantas veces  desees el chat sin necesidad de ir a buscar el enlace nuevamente.
 ## Atajos de teclado.
 ### Usando interfaz invisible.
@@ -47,6 +46,8 @@ Lee y gestiona de manera accesible el chat de youtube y twitch en tus propios di
 
 ## futuras actualizaciones:
 He agregado para  futuras actualizaciones próximas
+- la creación de distintas categorías  de mensajes en la interfaz invisible.
+  - poder ordenar el contenido por distintas insignias tales como donativos, miembros moderadores.
 - Posibilidad de mostrar información de la persona que está chateando desde la interfaz invisible:
   - Nombre del canal del usuario
   - Entre muchas cosas mas.
@@ -71,5 +72,4 @@ Con tu apoyo contribuyes a que este programa siga en crecimiento.
 
 [¿Te unes a nuestra causa?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
-[descarga el programa para 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v2.1/vetube64v2.1.zip)
-[descarga el programa para 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v2.1/vetube32v2.1.zip)
+[Descarga el programa desde aquí](https://github.com/metalalchemist/VeTube/releases/download/v2.0/vetubeV2.0.zip)

@@ -124,7 +124,7 @@ def setLanguage(lang):
                 ctypes.windll.kernel32.SetThreadLocale(LCID)
     except IOError:
         trans=gettext.translation('VeTube', fallback=True)
-        curLang="en"
+        curLang="es"
     if sys.version[0] == "3":
         trans.install()
     else:

@@ -25,7 +25,7 @@ Read and manage youtube and Twitch  chats in an accessible way on your own live 
 ### Using an invisible interface.
 |action |key combination |
 | ------------------------- | ------------- |
-|interrupts sapi speech| control p|
+|interrupts sapi speech| control |
 |Cycles between different buffers including all chats or only members and donations | alt shift left or right arrow |
 |Jump to Previous item | alt shift up arrow |
 |Jump to Next item | alt shift down arrow |
@@ -63,6 +63,5 @@ cesar.verastegui17@gmail.com
 ## Download links.
 With your support, you contribute  for this program to keep on growing.
 
-[Want to join our cause?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
-[Download the program here for 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v2.1/vetube64v2.1.zip)
-[Download the program here for 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v2.1/vetube32v2.1.zip)
+[Want to join our cause?[(https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
+[Download the program here](https://github.com/metalalchemist/VeTube/releases/download/v1.2/vetube1.zip)
