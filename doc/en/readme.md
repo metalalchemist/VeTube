@@ -25,7 +25,7 @@ Read and manage youtube and Twitch  chats in an accessible way on your own live 
 ### Using an invisible interface.
 |action |key combination |
 | ------------------------- | ------------- |
-|interrupts sapi speech| control p|
+|interrupts sapi speech| control |
 |Cycles between different buffers including all chats or only members and donations | alt shift left or right arrow |
 |Jump to Previous item | alt shift up arrow |
 |Jump to Next item | alt shift down arrow |

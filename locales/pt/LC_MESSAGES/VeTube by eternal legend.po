@@ -64,7 +64,7 @@ msgstr ""
 #: chat/vetube.py:117
 #, fuzzy
 msgid "Mensaje anterior"
-msgstr ""
+msgstr "mensagem"
 
 #: chat/vetube.py:117
 msgid "Mensaje siguiente"

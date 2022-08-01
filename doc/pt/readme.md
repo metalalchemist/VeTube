@@ -24,7 +24,7 @@ Leia e gerencie de forma acessível o bate-papo do youtube e do twitch em suas p
 ### Usando interface invisível.
 | Ação | combinação de teclas  |
 | ------------------------- | ----------- |
-| Silencia a voz sapy      | control p          |
+| Silencia a voz sapy      | control           |
 | Alternar entre todos os chats ou apenas membros e doações| alt shift setas esquerda ou  direita           |
 | Item anterior      | alt shift seta para cima           |
 | Próximo item      | alt shift seta para baixo.          |

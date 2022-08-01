@@ -7,6 +7,7 @@ from accessible_output2.outputs import auto, sapi5
 from youtube_dl import YoutubeDL
 from pyperclip import copy
 from chat_downloader import ChatDownloader
+from update import updater
 voz=0
 tono=0
 volume=100
@@ -14,6 +15,8 @@ speed=0
 sapi=True
 sonidos=True
 reader=True
+donations=True
+updates=True
 idioma="system"
 version="v2.1"
 yt=0
@@ -42,7 +45,7 @@ def leerFavoritos():
             favorite=json.load(file)
     else: escribirFavorito()
 def asignarConfiguracion():
-    global voz,tono,volume,speed,sapi,sonidos,idioma,reader,categ,listasonidos
+    global voz,tono,volume,speed,sapi,sonidos,idioma,reader,categ,listasonidos,donations,updates
     voz=0
     tono=0
     volume=100
@@ -53,6 +56,8 @@ def asignarConfiguracion():
     reader=True
     categ=[True,True,False,False,False]
     listasonidos=[True,True,True,True,True,True,True,True]
+    donations=True
+    updates=True
     leer.set_rate(speed)
     leer.set_pitch(tono)
     leer.set_voice(lista_voces[voz])
@@ -73,13 +78,15 @@ def escribirConfiguracion():
 'idioma': idioma,
 'categorias': categ,
 'listasonidos': listasonidos,
-'reader': reader}
+'reader': reader,
+'donations': donations,
+'updates': updates}
     with open('data.json', 'w+') as file: json.dump(data, file)
 def leerConfiguracion():
     if os.path.exists("data.json"):
         with open ("data.json") as file:
             resultado=json.load(file)
-        global voz,tono,volume,speed,sapi,sonidos,idioma,reader,categ,listasonidos
+        global voz,tono,volume,speed,sapi,sonidos,idioma,reader,categ,listasonidos,donations,updates
         voz=resultado['voz']
         tono=resultado['tono']
         volume=resultado['volume']
@@ -89,6 +96,8 @@ def leerConfiguracion():
         idioma=resultado['idioma']
         reader=resultado['reader']
         categ=resultado['categorias']
+        donations=resultado['donations']
+        updates=resultado['updates']
         listasonidos=resultado['listasonidos']
     else: escribirConfiguracion()
 def escribirTeclas():
@@ -240,17 +249,18 @@ class MyFrame(wx.Frame):
         if self.instance.IsAnotherRunning():
             wx.MessageBox(_('VeTube ya se encuentra en ejecución. Cierra la otra instancia antes de iniciar esta.'), 'Error', wx.ICON_ERROR)
             return False
-        dlg = wx.MessageDialog(None, _("Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te unes a nuestra causa?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
-        dlg.SetYesNoLabels(_("&Aceptar"), _("&Cancelar"))
-        if dlg.ShowModal()==wx.ID_YES:
-            wx.LaunchDefaultBrowser('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
-            dlg.Destroy()
-        else: dlg.Destroy()
+        if donations:
+            dlg = wx.MessageDialog(None, _("Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te unes a nuestra causa?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
+            dlg.SetYesNoLabels(_("&Aceptar"), _("&Cancelar"))
+            if dlg.ShowModal()==wx.ID_YES:
+                wx.LaunchDefaultBrowser('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
+                dlg.Destroy()
+            else: dlg.Destroy()
         self.contador=0
         self.dentro=False
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
-        self.updater()
+        if updates: updater.do_update()
         self.SetSize((800, 600))
         self.SetTitle("VeTube")
         self.SetWindowStyle(wx.RESIZE_BORDER | wx.CAPTION | wx.CLOSE_BOX | wx.CLIP_CHILDREN)
@@ -342,6 +352,14 @@ class MyFrame(wx.Frame):
         self.choice_language = wx.Choice(self.treeItem_1, wx.ID_ANY, choices=langs)
         self.choice_language.SetSelection(codes.index(idioma))
         boxSizer_1.Add(self.choice_language)
+        self.check_donaciones = wx.CheckBox(self.treeItem_1, wx.ID_ANY, _("Activar diálogo de donaciones al inicio de la app."))
+        self.check_donaciones.SetValue(donations)
+        self.check_donaciones.Bind(wx.EVT_CHECKBOX, self.checarDonaciones)
+        boxSizer_1.Add(self.check_donaciones)
+        self.check_actualizaciones = wx.CheckBox(self.treeItem_1, wx.ID_ANY, _("Comprobar si hay actualizaciones al iniciar la app"))
+        self.check_actualizaciones.SetValue(updates)
+        self.check_actualizaciones.Bind(wx.EVT_CHECKBOX, self.checarActualizaciones)
+        boxSizer_1.Add(self.check_actualizaciones)
         sizer_4.Add(boxSizer_1, 0, 0, 0)
         self.treeItem_2 = wx.Panel(self.tree_1, wx.ID_ANY)
         self.tree_1.AddPage(self.treeItem_2, _("Voz"))
@@ -457,12 +475,10 @@ class MyFrame(wx.Frame):
             self.reproducir.Disable()
     def checar(self, event):
         global sapi
-        if event.IsChecked(): sapi=True
-        else: sapi=False
+        sapi=True if event.IsChecked() else False
     def checar1(self, event):
         global reader
-        if event.IsChecked(): reader=True
-        else: reader=False
+        reader=True if event.IsChecked() else False
     def acceder(self, event=None,url=""):
         if not url: url=self.text_ctrl_1.GetValue()
         if url:
@@ -1047,6 +1063,12 @@ class MyFrame(wx.Frame):
         leerTeclas()
         try: self.handler_keyboard.register_keys(eval(mis_teclas))
         except: lector.speak(_("hubo un error al registrar los atajos de teclado globales."))
+    def checarDonaciones(self,event):
+        global donations
+        donations=True if event.IsChecked() else False
+    def checarActualizaciones(self,event):
+        global updates
+        updates= True if event.IsChecked() else False
 class MyApp(wx.App):
     def OnInit(self):
         self.frame = MyFrame(None, wx.ID_ANY, "")

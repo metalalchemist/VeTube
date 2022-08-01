@@ -1,4 +1,5 @@
 v2.2
+se agregan 2 opciones de configuración en la  categoría general del menú configuración
 se agrega un atajo para desactivar los sonidos temporalmente: alt shift p.
 se separa las teclas en un archivo indepentiende para en un futuro trabajar en un editor de combinaciones.
 (programadores): se quita keyboard para reemplazarla por keyboard_handler.
