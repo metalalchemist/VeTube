@@ -7,7 +7,6 @@ from accessible_output2.outputs import auto, sapi5
 from youtube_dl import YoutubeDL
 from pyperclip import copy
 from chat_downloader import ChatDownloader
-from update import updater
 voz=0
 tono=0
 volume=100
@@ -260,7 +259,7 @@ class MyFrame(wx.Frame):
         self.dentro=False
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
-        if updates: updater.do_update()
+        if updates: updater()
         self.SetSize((800, 600))
         self.SetTitle("VeTube")
         self.SetWindowStyle(wx.RESIZE_BORDER | wx.CAPTION | wx.CLOSE_BOX | wx.CLIP_CHILDREN)
