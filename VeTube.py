@@ -1,12 +1,14 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,threading,urllib.request,languageHandler,socket,os,time,restart,wx.adv
+import json,wx,threading,languageHandler,restart,wx.adv
 from keyboard_handler.wx_handler import WXKeyboardHandler
 from playsound import playsound
 from accessible_output2.outputs import auto, sapi5
 from youtube_dl import YoutubeDL
 from pyperclip import copy
 from chat_downloader import ChatDownloader
+from update import updater
+from os import path
 voz=0
 tono=0
 volume=100
@@ -17,7 +19,6 @@ reader=True
 donations=True
 updates=True
 idioma="system"
-version="v2.1"
 yt=0
 favorite=[]
 categ=[True,True,False,False,False]
@@ -26,7 +27,6 @@ rutasonidos=["sounds/chat.mp3","sounds/chatmiembro.mp3","sounds/miembros.mp3","s
 lector=auto.Auto()
 leer=sapi5.SAPI5()
 lista_voces=leer.list_voices()
-db_fichero_complemento = os.path.join(os.getcwd(), 'vetube.zip')
 def retornarCategorias():
     lista=[[_('General')]]
     if categ[0]: lista.append([_('Miembros')])
@@ -38,7 +38,7 @@ def retornarCategorias():
 def escribirFavorito():
     with open('favoritos.json', 'w+') as file: json.dump(favorite, file)
 def leerFavoritos():
-    if os.path.exists("favoritos.json"):
+    if path.exists("favoritos.json"):
         with open ("favoritos.json") as file:
             global favorite
             favorite=json.load(file)
@@ -82,7 +82,7 @@ def escribirConfiguracion():
 'updates': updates}
     with open('data.json', 'w+') as file: json.dump(data, file)
 def leerConfiguracion():
-    if os.path.exists("data.json"):
+    if path.exists("data.json"):
         with open ("data.json") as file:
             resultado=json.load(file)
         global voz,tono,volume,speed,sapi,sonidos,idioma,reader,categ,listasonidos,donations,updates
@@ -103,7 +103,7 @@ def escribirTeclas():
     with open('keys.txt', 'w+') as arch: arch.write("""{"control+p": leer.silence,"alt+shift+up": self.elementoAnterior,"alt+shift+down": self.elementoSiguiente,"alt+shift+left": self.retrocederCategorias,"alt+shift+right": self.avanzarCategorias,"alt+shift+home": self.elementoInicial,"alt+shift+end": self.elementoFinal,"alt+shift+f": self.destacarMensaje,"alt+shift+c": self.copiar,"alt+shift+m": self.callar,"alt+shift+s": self.iniciarBusqueda,"alt+shift+v": self.mostrarMensaje,"alt+shift+d": self.borrarBuffer,"alt+shift+p": self.desactivarSonidos}""")
     leerTeclas()
 def leerTeclas():
-    if os.path.exists("keys.txt"):
+    if path.exists("keys.txt"):
         global mis_teclas
         with open ("keys.txt",'r') as arch:
             mis_teclas=arch.read()
@@ -129,118 +129,6 @@ codes.reverse()
 langs.reverse()
 lista=retornarCategorias()
 for temporal in lista: pos.append(1)
-class HiloActualizacionComplemento(threading.Thread):
-    def __init__(self, frame):
-        super(HiloActualizacionComplemento, self).__init__()
-        self.frame = frame
-        self.tiempo = 30
-        self.daemon = True
-        threading.Thread.__init__(self)
-    def humanbytes(self, B): # Convierte bytes
-        B = float(B)
-        KB = float(1024)
-        MB = float(KB ** 2) # 1,048,576
-        GB = float(KB ** 3) # 1,073,741,824
-        TB = float(KB ** 4) # 1,099,511,627,776
-        if B < KB:
-            return '{0} {1}'.format(B,'Bytes' if 0 == B > 1 else 'Byte')
-        elif KB <= B < MB:
-            return '{0:.2f} KB'.format(B/KB)
-        elif MB <= B < GB:
-            return '{0:.2f} MB'.format(B/MB)
-        elif GB <= B < TB:
-            return '{0:.2f} GB'.format(B/GB)
-        elif TB <= B:
-            return '{0:.2f} TB'.format(B/TB)
-    def __call__(self, block_num, block_size, total_size):
-        readsofar = block_num * block_size
-        if total_size > 0:
-            percent = readsofar * 1e2 / total_size
-            wx.CallAfter(self.frame.next, percent)
-            time.sleep(1 / 995)
-            wx.CallAfter(self.frame.TextoRefresco, _("Espere por favor...\n") + _("Descargando: %s") % self.humanbytes(readsofar))
-            if readsofar >= total_size: # Si queremos hacer algo cuando la descarga termina.
-                pass
-        else: # Si la descarga es solo el tamaño
-            wx.CallAfter(self.frame.TextoRefresco, _("Espere por favor...\n") + _("Descargando: %s") % self.humanbytes(readsofar))
-    def run(self):
-        while self.tiempo==30:
-            try:
-                socket.setdefaulttimeout(self.tiempo) # Dara error si pasan 30 seg sin internet
-                try:
-                    req = urllib.request.Request(urlDescarga, headers={'User-Agent': 'Mozilla/5.0'})
-                    obj = urllib.request.urlopen(req).geturl()
-                    urllib.request.urlretrieve(obj, db_fichero_complemento, reporthook=self.__call__)
-                except Exception as e:
-                    urllib.request.urlretrieve(obj, db_fichero_complemento, reporthook=self.__call__)
-                wx.CallAfter(self.frame.done, _("Se terminó la descarga de la nueva actualización.\nel programa se cerrará para que usted reemplase los archivos de la nueva actualización.\n¿disfrute!"))
-                self.tiempo=0
-            except:
-                wx.CallAfter(self.frame.error, _("Algo salió mal.\nCompruebe que tiene conexión a internet y vuelva a intentarlo.\nel programa se  cerrará."))
-                self.tiempo=0
-class ActualizacionDialogo(wx.Dialog):
-    def __init__(self, frame):
-        WIDTH = 550
-        HEIGHT = 400
-        super(ActualizacionDialogo, self).__init__(None, -1, title=_("Actualizando el programa..."), size = (WIDTH, HEIGHT))
-        self.CenterOnScreen()
-        self.frame = frame
-        self.Panel = wx.Panel(self)
-        self.progressBar=wx.Gauge(self.Panel, wx.ID_ANY, range=100, style = wx.GA_HORIZONTAL)
-        self.textorefresco = wx.TextCtrl(self.Panel, wx.ID_ANY, style =wx.TE_MULTILINE|wx.TE_READONLY)
-        self.textorefresco.Bind(wx.EVT_CONTEXT_MENU, self.skip)
-        self.AceptarTRUE = wx.Button(self.Panel, wx.NewIdRef(), _("&Aceptar"))
-        self.Bind(wx.EVT_BUTTON, self.onAceptarTRUE, id=self.AceptarTRUE.GetId())
-        self.AceptarTRUE.Disable()
-        self.AceptarFALSE = wx.Button(self.Panel, wx.NewIdRef(), _("&Cerrar"))
-        self.Bind(wx.EVT_BUTTON, self.onAceptarFALSE, id=self.AceptarFALSE.GetId())
-        self.AceptarFALSE.Disable()
-        self.Bind(wx.EVT_CLOSE, self.onNull)
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer_botones = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(self.progressBar, 0, wx.EXPAND)
-        sizer.Add(self.textorefresco, 1, wx.EXPAND)
-        sizer_botones.Add(self.AceptarTRUE, 2, wx.CENTER)
-        sizer_botones.Add(self.AceptarFALSE, 2, wx.CENTER)
-        sizer.Add(sizer_botones, 0, wx.EXPAND)
-        self.Panel.SetSizer(sizer)
-        self.textorefresco.SetFocus()
-        global act
-        act=HiloActualizacionComplemento(self)
-        act.start()
-    def skip(self, event):
-        return
-    def onNull(self, event):
-        pass
-    def next(self, event):
-        self.progressBar.SetValue(event)
-    def TextoRefresco(self, event):
-        self.textorefresco.Clear()
-        self.textorefresco.AppendText(event)
-    def done(self, event):
-        self.AceptarTRUE.Enable()
-        self.textorefresco.Clear()
-        self.textorefresco.AppendText(event)
-        self.textorefresco.SetInsertionPoint(0) 
-        act.join()
-    def error(self, event):
-        self.AceptarFALSE.Enable()
-        self.textorefresco.Clear()
-        self.textorefresco.AppendText(event)
-        self.textorefresco.SetInsertionPoint(0) 
-        act.join()
-    def onAceptarTRUE(self, event):
-        if self.IsModal():
-            self.EndModal(event.EventObject.Id)
-        else:
-            self.Destroy()
-        os.system("start update.bat")
-    def onAceptarFALSE(self, event):
-        if self.IsModal():
-            self.EndModal(event.EventObject.Id)
-        else:
-            self.Destroy()
-        os.system("start update.bat")
 class MyFrame(wx.Frame):
     def __init__(self, *args, **kwds):
         self.name = 'vetube-%s'.format(wx.GetUserId())
@@ -259,7 +147,7 @@ class MyFrame(wx.Frame):
         self.dentro=False
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
-        if updates: updater()
+        if updates: updater.do_update()
         self.SetSize((800, 600))
         self.SetTitle("VeTube")
         self.SetWindowStyle(wx.RESIZE_BORDER | wx.CAPTION | wx.CLOSE_BOX | wx.CLIP_CHILDREN)
@@ -734,22 +622,8 @@ class MyFrame(wx.Frame):
                 escribirFavorito()
                 lector.speak(_("Se a añadido el elemento a favoritos"))
     def updater(self,event=None):
-        r = urllib.request.urlopen('https://api.github.com/repos/metalalchemist/VeTube/releases').read()
-        gitJson = json.loads(r.decode('utf-8'))
-        if gitJson[0]["tag_name"] != version:
-            dlg = wx.MessageDialog(None, _("Una nueva  versión de VeTube está disponible. ¿desea descargarla aora?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
-            if dlg.ShowModal()==wx.ID_YES:
-                global urlDescarga
-                urlDescarga = gitJson[0]['body']
-                urlDescarga=urlDescarga.split('](')
-                urlDescarga=urlDescarga[1]
-                urlDescarga=urlDescarga.split(')')
-                urlDescarga=urlDescarga[0]
-                dlg.Destroy
-                dlg = ActualizacionDialogo(self)
-                result = dlg.ShowModal()
-            else: dlg.Destroy()
-        else:
+        update = updater.do_update()
+        if update==False:
             if self.GetTitle(): wx.MessageBox(_("Al parecer tienes la última versión del programa"), _("Información"), wx.ICON_INFORMATION)
     def borrarFavorito(self, event=None):
         if self.list_favorite.GetCount() <= 0: wx.MessageBox(_("No hay elementos que borrar"), "Error", wx.ICON_ERROR)
@@ -1050,7 +924,7 @@ class MyFrame(wx.Frame):
             self.text_box.SetFocus()
     def borrarBuffer(self):
         if lista[yt][0]!='General' and lista[yt][0]!='Miembros' and lista[yt][0]!='Donativos' and lista[yt][0]!='Moderadores' and lista[yt][0]!='Usuarios Verificados':
-            lista.pop()
+            lista.pop(yt)
             pos.pop()
             lector.speak(_('Se eliminó el buffer'))
         else: lector.speak(_('No es posible borrar este buffer'))

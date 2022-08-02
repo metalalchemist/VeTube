@@ -1,7 +1,8 @@
 v2.2
+se cambia el actualizador. adaptado para VeTube de https://github.com/MCV-Software/TWBlue/tree/next-gen/src/update
 se agregan 2 opciones de configuración en la  categoría general del menú configuración
 se agrega un atajo para desactivar los sonidos temporalmente: alt shift p.
-se separa las teclas en un archivo indepentiende para en un futuro trabajar en un editor de combinaciones.
+se separa las teclas en un archivo independiente para en un futuro trabajar en un editor de combinaciones.
 (programadores): se quita keyboard para reemplazarla por keyboard_handler.
 se cambia la combinación para silenciar un mensaje entrante con sapi5: control p.
 agregado atajo para borrar los buffers de búsquedas y el buffer de favoritos:  alt shift d
