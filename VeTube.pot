@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-08-02 03:57-0700\n"
+"POT-Creation-Date: 2022-08-02 04:25-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,22 +127,23 @@ msgid ""
 "iniciar esta."
 msgstr ""
 
-#: chat/vetube.py:140
+#: chat/update/update.py:120 chat/vetube.py:140
 msgid ""
 "Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te "
 "unes a nuestra causa?"
 msgstr ""
 
-#: chat/vetube.py:140 chat/vetube.py:429 chat/vetube.py:460 chat/vetube.py:465
-#: chat/vetube.py:473
+#: chat/update/update.py:120 chat/vetube.py:140 chat/vetube.py:429
+#: chat/vetube.py:460 chat/vetube.py:465 chat/vetube.py:473
 msgid "Atención:"
 msgstr ""
 
-#: chat/vetube.py:141 chat/vetube.py:324
+#: chat/update/update.py:121 chat/vetube.py:141 chat/vetube.py:324
 msgid "&Aceptar"
 msgstr ""
 
-#: chat/vetube.py:141 chat/vetube.py:322 chat/vetube.py:466
+#: chat/update/update.py:121 chat/vetube.py:141 chat/vetube.py:322
+#: chat/vetube.py:466
 msgid "&Cancelar"
 msgstr ""
 
