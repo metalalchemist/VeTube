@@ -1,4 +1,6 @@
 v2.2
+ahora es posible traducir los mensajes de algún streaming ha  cualquier idioma.
+se crea un botón para guardar el historial de los mensajes en un archivo. gracias Johan G
 se cambia el actualizador. adaptado para VeTube de https://github.com/MCV-Software/TWBlue/tree/next-gen/src/update
 se agregan 2 opciones de configuración en la  categoría general del menú configuración
 se agrega un atajo para desactivar los sonidos temporalmente: alt shift p.

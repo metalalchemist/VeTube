@@ -1,5 +1,8 @@
 wxPython
 playsound==1.2.2
+# Install the latest RC of this lib
+# see https://github.com/ssut/py-googletrans/issues/234
+googletrans==4.0.0-rc1
 youtube_dl
 pyperclip
 chat_downloader

@@ -1,6 +1,6 @@
 from logging import getLogger
 logger = getLogger('update')
-
+import json
 import contextlib
 import io
 import os
@@ -15,6 +15,10 @@ import wx
 from platform_utils import paths
 
 def perform_update(endpoint, current_version, app_name='', password=None, update_available_callback=None, progress_callback=None, update_complete_callback=None):
+    if os.path.exists("data.json"):
+        with open ("data.json") as file: resultado=json.load(file)
+        donations=resultado['donations']
+    else: donations=True
     requests_session = create_requests_session(app_name=app_name, version=current_version)
     available_update = find_update(endpoint, requests_session=requests_session)
     if not available_update:
@@ -28,7 +32,7 @@ def perform_update(endpoint, current_version, app_name='', password=None, update
     available_date = available_update.get('date', None)
     update_url = available_update ['downloads'][platform.system()+platform.architecture()[0][:2]]
     logger.info("A new update is available. Version %s" % available_version)
-    donation()
+    if not donations: donation()
     if callable(update_available_callback) and not update_available_callback(version=available_version, description=available_description, date=available_date): #update_available_callback should return a falsy value to stop the process
         logger.info("User canceled update.")
         return
