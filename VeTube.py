@@ -22,8 +22,8 @@ idioma="system"
 yt=0
 favorite=[]
 categ=[True,True,False,False,False]
-listasonidos=[True,True,True,True,True,True,True,True]
-rutasonidos=["sounds/chat.mp3","sounds/chatmiembro.mp3","sounds/miembros.mp3","sounds/donar.mp3","sounds/moderators.mp3","sounds/verified.mp3","sounds/abrirchat.wav","sounds/propietario.mp3"]
+listasonidos=[True,True,True,True,True,True,True,True,True]
+rutasonidos=["sounds/chat.mp3","sounds/chatmiembro.mp3","sounds/miembros.mp3","sounds/donar.mp3","sounds/moderators.mp3","sounds/verified.mp3","sounds/abrirchat.wav","sounds/propietario.mp3","sounds/buscar.wav"]
 lector=auto.Auto()
 leer=sapi5.SAPI5()
 lista_voces=leer.list_voices()
@@ -54,7 +54,7 @@ def asignarConfiguracion():
 	idioma="system"
 	reader=True
 	categ=[True,True,False,False,False]
-	listasonidos=[True,True,True,True,True,True,True,True]
+	listasonidos=[True,True,True,True,True,True,True,True,True]
 	donations=True
 	updates=True
 	leer.set_rate(speed)
@@ -123,7 +123,7 @@ codes = []
 [codes.append(i[0]) for i in idiomas]
 mensaje_teclas=[_('Silencia la voz sapy'),_('Buffer anterior.'),_('Siguiente buffer.'),_('Mensaje anterior'),_('Mensaje siguiente'),_('Ir al comienzo del buffer'),_('Ir al final del buffer'),_('Copia el mensaje actual'),_('Activa o desactiva la lectura automática'),_('Muestra el mensaje actual en un cuadro de texto'),_('Busca una palabra en los mensajes actuales')]
 mensajes_categorias=[_('Miembros'),_('Donativos'),_('Moderadores'),_('Usuarios Verificados'),_('Favoritos')]
-mensajes_sonidos=[_('Sonido cuando llega un mensaje'),_('Sonido cuando habla un miembro'),_('Sonido cuando se conecta un miembro'),_('Sonido cuando llega un donativo'),_('Sonido cuando habla un moderador'),_('Sonido cuando habla un usuario verificado'),_('Sonido al ingresar al chat'),_('Sonido cuando habla el propietario del canal')]
+mensajes_sonidos=[_('Sonido cuando llega un mensaje'),_('Sonido cuando habla un miembro'),_('Sonido cuando se conecta un miembro'),_('Sonido cuando llega un donativo'),_('Sonido cuando habla un moderador'),_('Sonido cuando habla un usuario verificado'),_('Sonido al ingresar al chat'),_('Sonido cuando habla el propietario del canal'),_('sonido al terminar la búsqueda de mensajes')]
 codes.reverse()
 langs.reverse()
 lista=retornarCategorias()
@@ -191,31 +191,29 @@ class MyFrame(wx.Frame):
 		self.Centre()
 		self.Show()
 
-
 	# Evento que hace aparecer las opciones del menú
 	def opcionesMenu(self, event):
-		self.menu = wx.Menu()
-		self.opciones = wx.Menu()
-		self.ayuda = wx.Menu()
-		self.menu.AppendSubMenu(self.opciones, _(u"&Opciones"))
-		self.opcion_1 = self.opciones.Append(wx.ID_ANY, _("Configuración"))
-		self.Bind(wx.EVT_MENU, self.appConfiguracion, self.opcion_1)
-		self.opcion_2 = self.opciones.Append(wx.ID_ANY, _("Restablecer los ajustes"))
-		self.Bind(wx.EVT_MENU, self.restaurar, self.opcion_2)
-		self.menu.AppendSubMenu(self.ayuda, _("&Ayuda"))
-		self.apoyo = self.ayuda.Append(wx.ID_ANY, _("Únete a nuestra &causa"))
-		self.Bind(wx.EVT_MENU, self.donativo, self.apoyo)
-		self.itemPageMain = self.ayuda.Append(wx.ID_ANY, _("&Visita nuestra página de github"))
-		self.Bind(wx.EVT_MENU, self.pageMain, self.itemPageMain)
-		self.actualizador = self.ayuda.Append(wx.ID_ANY, _("&buscar actualizaciones"))
-		self.Bind(wx.EVT_MENU, self.updater, self.actualizador)
-		self.acercade = self.menu.Append(wx.ID_ANY, _("Acerca de"))
-		self.Bind(wx.EVT_MENU, self.infoApp, self.acercade)
-		self.salir = self.menu.Append(wx.ID_EXIT)
-		self.Bind(wx.EVT_MENU, self.cerrarVentana, self.salir)
-		position = self.menu_1.GetPosition()
-		self.PopupMenu(self.menu, position)
-		pass
+		menu1 = wx.Menu()
+		opciones = wx.Menu()
+		ayuda = wx.Menu()
+		menu1.AppendSubMenu(opciones, _(u"&Opciones"))
+		opcion_1 = opciones.Append(wx.ID_ANY, _("Configuración"))
+		self.Bind(wx.EVT_MENU, self.appConfiguracion, opcion_1)
+		opcion_2 = opciones.Append(wx.ID_ANY, _("Restablecer los ajustes"))
+		self.Bind(wx.EVT_MENU, self.restaurar, opcion_2)
+		menu1.AppendSubMenu(ayuda, _("&Ayuda"))
+		apoyo = ayuda.Append(wx.ID_ANY, _("Únete a nuestra &causa"))
+		self.Bind(wx.EVT_MENU, self.donativo, apoyo)
+		itemPageMain = ayuda.Append(wx.ID_ANY, _("&Visita nuestra página de github"))
+		self.Bind(wx.EVT_MENU, self.pageMain, itemPageMain)
+		actualizador = ayuda.Append(wx.ID_ANY, _("&buscar actualizaciones"))
+		self.Bind(wx.EVT_MENU, self.updater, actualizador)
+		acercade = menu1.Append(wx.ID_ANY, _("Acerca de"))
+		self.Bind(wx.EVT_MENU, self.infoApp, acercade)
+		salir = menu1.Append(wx.ID_EXIT)
+		self.Bind(wx.EVT_MENU, self.cerrarVentana, salir)
+		self.PopupMenu(menu1, self.menu_1.GetPosition())
+		menu1.Destroy
 	def pageMain(self, evt): wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube')
 	def donativo(self, evt): wx.LaunchDefaultBrowser('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
 	def appConfiguracion(self, event):			
@@ -324,23 +322,23 @@ class MyFrame(wx.Frame):
 		sizer_soniditos.Add(self.reproducir)
 		self.treeItem_4.SetSizer(sizer_soniditos)
 		self.tree_1.AddPage(self.treeItem_4, _('Sonidos'))
-		self.button_cansel = wx.Button(self.dialogo_2, wx.ID_CLOSE, _("&Cancelar"))
+		self.button_cansel = wx.Button(self.dialogo_2, wx.ID_CANCEL, _("&Cancelar"))
 		sizer_5.Add(self.button_cansel, 0, 0, 0)
-		self.button_6 = wx.Button(self.dialogo_2, wx.ID_ANY, _("&Aceptar"))
-		self.button_6.Bind(wx.EVT_BUTTON, self.guardar)
+		self.button_6 = wx.Button(self.dialogo_2, wx.ID_OK, _("&Aceptar"))
+		self.button_6.SetDefault()
 		sizer_5.Add(self.button_6, 0, 0, 0)
 		self.treeItem_1.SetSizer(sizer_4)
 		self.treeItem_2.SetSizer(sizer_6)
 		self.dialogo_2.SetSizer(sizer_5)		
 		self.dialogo_2.SetEscapeId(self.button_cansel.GetId())
 		self.dialogo_2.Center()
-		self.dialogo_2.ShowModal()
-		self.dialogo_2.Destroy()
-	# Fin de la ventana de configuración
+		hey=self.dialogo_2.ShowModal()
+		if hey==wx.ID_OK: self.guardar()
+		else: self.dialogo_2.Destroy()
 	def reproducirPrueva(self, event):
 		leer.silence()
 		leer.speak(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
-	def infoApp(self, event): wx.MessageBox(_("Creadores del proyecto:")+"\nCésar Verástegui & Johan G.\n"+_("Descripción:\n Lee en voz alta los mensajes de los directos en youtube, ajusta tus preferencias como quieras y disfruta más tus canales favoritos."), _("Información"), wx.ICON_INFORMATION)
+	def infoApp(self, event): wx.MessageBox(_("Creadores del proyecto:")+"\nCésar Verástegui & Johan G.\n"+_("Descripción:\n Lee en voz alta los mensajes de los directos en youtube y twitch, ajusta tus preferencias como quieras y disfruta más tus canales favoritos."), _("Información"), wx.ICON_INFORMATION)
 	def cambiarVelocidad(self, event):
 		global speed
 		value=self.slider_3.GetValue()-10
@@ -420,7 +418,7 @@ class MyFrame(wx.Frame):
 				sizer_mensaje_1.Fit(self.dialog_mensaje)
 				self.dialog_mensaje.Centre()
 				self.dialog_mensaje.SetEscapeId(self.button_mensaje_detener.GetId())
-				if sonidos and listasonidos[6]: wx.adv.Sound(rutasonidos[6]).Play(wx.adv.SOUND_ASYNC)
+				if sonidos and listasonidos[6]: playsound(rutasonidos[6],False)
 				leer.speak(_("Ingresando al chat."))
 				self.hilo2 = threading.Thread(target=self.iniciarChat)
 				self.hilo2.daemon = True
@@ -448,8 +446,9 @@ class MyFrame(wx.Frame):
 			for temporal in lista: pos.append(1)
 			leer.silence()
 			leer.speak(_("ha finalizado la lectura del chat."))
+			try: self.choice_traducir.SetSelection(0)
+			except: pass
 			self.text_ctrl_1.SetValue("")
-			self.text_ctrl_1.SetFocus()
 			self.dialog_mensaje.Destroy()
 			self.text_ctrl_1.SetFocus()
 			self.handler_keyboard.unregister_all_keys()
@@ -463,7 +462,7 @@ class MyFrame(wx.Frame):
 				wx.MessageBox(_("Lista de mensajes guardada correctamente."), "info.", wx.ICON_INFORMATION)
 			dlg_mensaje.Destroy()
 		else: wx.MessageBox(_("No hay mensajes para guardar."), "info.", wx.ICON_INFORMATION)
-	def guardar(self, event):
+	def guardar(self):
 		global idioma, rest,categ,lista,listasonidos
 		rest=False
 		categ=[]
@@ -487,7 +486,7 @@ class MyFrame(wx.Frame):
 			self.language_dict = translator.LANGUAGES
 			for k in self.language_dict:
 				if self.language_dict[k] == self.choice_traducir.GetStringSelection(): self.dst = k
-		self.dialogo_2.Close()
+		self.dialogo_2.Destroy()
 	def borrarEnlace(self,event):
 		dlg_2 = wx.MessageDialog(self.dialog_mensaje, _("Está apunto de eliminar del historial aproximadamente ")+str(self.list_box_1.GetCount())+_(" elementos, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		dlg_2.SetYesNoLabels(_("&Eliminar"), _("&Cancelar"))
@@ -772,8 +771,7 @@ class MyFrame(wx.Frame):
 						self.hilo2.join()
 	def recibirTwich(self):
 		for message in self.chat:
-			anadido=False
-			if 'Cheer' in message['message'] and not anadido:
+			if 'Cheer' in message['message']:
 				divide=message['message'].split()
 				dinero=divide[0]
 				divide=" ".join(divide[1:])
@@ -788,8 +786,8 @@ class MyFrame(wx.Frame):
 					if reader:
 						if sapi: leer.speak(dinero+', '+message['author']['name']+': '+divide)
 						else: lector.speak(dinero+', '+message['author']['name']+': '+divide)
-				anadido=True
-			if message['message_type']=='subscription' and not anadido:
+				continue
+			if message['message_type']=='subscription':
 				if categ[0]:
 					for contador in range(len(lista)):
 						if lista[contador][0]=='Miembros':
@@ -801,8 +799,8 @@ class MyFrame(wx.Frame):
 					if reader:
 						if sapi: leer.speak(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
 						else: lector.speak(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
-				anadido=True
-			if message['message_type']=='mystery_subscription_gift' and not anadido:
+				continue
+			if message['message_type']=='mystery_subscription_gift':
 				if categ[0]:
 					for contador in range(len(lista)):
 						if lista[contador][0]=='Miembros':
@@ -814,8 +812,8 @@ class MyFrame(wx.Frame):
 					if reader:
 						if sapi: leer.speak(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
 						else: lector.speak(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
-				anadido=True
-			if message['message_type']=='subscription_gift' and not anadido:
+				continue
+			if message['message_type']=='subscription_gift':
 				if categ[0]:
 					for contador in range(len(lista)):
 						if lista[contador][0]=='Miembros':
@@ -827,8 +825,8 @@ class MyFrame(wx.Frame):
 					if reader:
 						if sapi: leer.speak(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
 						else: lector.speak(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
-				anadido=True
-			if message['message_type']=='resubscription' and not anadido:
+				continue
+			if message['message_type']=='resubscription':
 				mssg=message['message'].split('! ')
 				mssg=str(mssg[1:])
 				if categ[0]:
@@ -842,7 +840,7 @@ class MyFrame(wx.Frame):
 					if reader:
 						if sapi: leer.speak(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!')+mssg)
 						else: lector.speak(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!')+mssg)
-				anadido=True
+				continue
 			if 'badges' in message['author']:
 				for t in message['author']['badges']:
 					if 'Moderator' in t['title']:
@@ -852,19 +850,17 @@ class MyFrame(wx.Frame):
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
 							if sonidos and self.chat.status!="past" and listasonidos[4]: playsound(rutasonidos[4],False)
-						self.list_box_1.Append(_('Moderador ')+message['author']['name'] +': ' +message['message'])
 						if lista[yt][0]=='Moderadores':
 							if reader:
 								if sapi: leer.speak(message['author']['name'] +': ' +message['message'])
 								else: lector.speak(message['author']['name'] +': ' +message['message'])
-					elif 'Subscriber' in t['title'] and not anadido:
+					elif 'Subscriber' in t['title']:
 						if categ[0]:
 							for contador in range(len(lista)):
 								if lista[contador][0]=='Miembros':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
 							if sonidos and self.chat.status!="past" and listasonidos[1]: playsound(rutasonidos[1],False)
-						self.list_box_1.Append(_('Miembro ')+message['author']['name'] +': ' +message['message'])
 						if lista[yt][0]=='Miembros':
 							if reader:
 								if sapi: leer.speak(message['author']['name'] +': ' +message['message'])
@@ -876,7 +872,6 @@ class MyFrame(wx.Frame):
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
 							if sonidos and self.chat.status!="past" and listasonidos[5]: playsound(rutasonidos[5],False)
-						self.list_box_1.Append(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
 						if lista[yt][0]=='Usuarios Verificados':
 							if reader:
 								if sapi: leer.speak(message['author']['name'] +': ' +message['message'])
@@ -949,6 +944,13 @@ class MyFrame(wx.Frame):
 			self.my_dialog.Close()
 			for busqueda in range(self.list_box_1.GetCount()):
 				if self.text_box.GetValue() in self.list_box_1.GetString(busqueda).lower(): lista[-1].append(self.list_box_1.GetString(busqueda))
+			if len(lista[-1])==1:
+				lista.pop(-1)
+				pos.pop()
+				wx.MessageBox(_("No hay ningún criterio de búsqueda que coincida con el término ingresado."), _("información"), wx.ICON_INFORMATION)
+			else:
+				if listasonidos[8]: playsound(rutasonidos[8],False)
+				lector.speak(f"se encontraron {len(lista[-1])-1} resultados")
 		else:
 			wx.MessageBox(_("No hay nada que buscar porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
 			self.text_box.SetFocus()

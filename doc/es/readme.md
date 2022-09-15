@@ -17,20 +17,27 @@ Lee y gestiona de manera accesible el chat de youtube y twitch en tus propios di
   - activa o desactiva el modo automático. 
   - configura el listado de los mensajes en la interfaz invisible.
   - Configura las preferencias de la voz sapy.
-- cambia de modalidad de lectura de chats fácilmente: decide si quieres leer todos los chats o solo miembros y donativos.
+- cambia de modalidad de lectura de chats fácilmente: decide si quieres leer todos los chats o solo los de alguna categoría en específico.
 - guarda tus envivos en una sección de favoritos. repite cuantas veces  desees el chat sin necesidad de ir a buscar el enlace nuevamente.
+- guarda un historial de los mensajes.
+- traduce el chat de un streaming al idiomma que  gustes.
 ## Atajos de teclado.
 ### Usando interfaz invisible.
 | acción                    | combinación de teclas |
 | ------------------------- | ----------- |
-| Silencia la voz sapy      | control           |
-| Conmuta entre todos los chats o solo miembros y donativos      | alt shift flecha izquierda o derecha           |
+| Silencia la voz sapy      | control+p           |
+| buffer anterior      | alt shift flecha izquierda            |
+| buffer siguiente      | alt shift flecha derecha            |
 | Elemento anterior      | alt shift flecha arriba           |
 | Elemento siguiente      | alt shift flecha abajo           |
 | Elemento inicial      | alt shift inicio           |
 | Elemento final      | alt shift fin           |
 | Copia el mensaje actual      | alt shift c           |
+| Borra un buffer previamente creado      | alt shift d           |
+| añade el mensaje al buffer de favoritos      | alt shift f           |
 | Activa o desactiva el modo automático      | alt shift m           |
+| desactiva los sonidos del programa      | alt shift p           |
+| buscar una palabra entre  los mensajes      | alt shift s           |
 | muestra el mensaje actual en un cuadro de texto      | alt shift v           |
 
 ### En el historial  del chat:
@@ -43,7 +50,6 @@ Lee y gestiona de manera accesible el chat de youtube y twitch en tus propios di
 | acción                    | combinación de teclas |
 | ------------------------- | ----------- |
 | acceder a un enlace seleccionado      | espacio           |
-| borrar enlace seleccionado      | suprimir           |
 
 ## futuras actualizaciones:
 He agregado para  futuras actualizaciones próximas
