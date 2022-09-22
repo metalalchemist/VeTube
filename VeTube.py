@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,threading,languageHandler,restart,wx.adv,translator
+import json,wx,threading,languageHandler,restart,translator
 from keyboard_handler.wx_handler import WXKeyboardHandler
 from playsound import playsound
 from accessible_output2.outputs import auto, sapi5
@@ -950,7 +950,7 @@ class MyFrame(wx.Frame):
 				wx.MessageBox(_("No hay ningún criterio de búsqueda que coincida con el término ingresado."), _("información"), wx.ICON_INFORMATION)
 			else:
 				if listasonidos[8]: playsound(rutasonidos[8],False)
-				lector.speak(f"se encontraron {len(lista[-1])-1} resultados")
+				leer.speak(_("se encontraron %s resultados") % str(len(lista[-1])-1))
 		else:
 			wx.MessageBox(_("No hay nada que buscar porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
 			self.text_box.SetFocus()
