@@ -1,8 +1,14 @@
+v2.6
+Se empieza a trabajar en la opción de estadísticas del chat.
+Se elimina la documentación. en cambio se crea una opción que permite acceder a la misma en línea. Para esto nos dirigimos al menú de mas opciones y luego al submenú ayuda.
+se corrige bug del traductor y se lo agrega a twich
+se agrupan varias opciones del chat en un menú contextual ,gracias Johan G.
 v2.5
 se mejora la función de buscar palabra entre los mensajes.
 se soluciona bug de los mensajes repetidos y cada uno se agregan a sus categorìas correspondientes
 ahora es posible traducir los mensajes de algún streaming ha  cualquier idioma.
 se crea un botón para guardar el historial de los mensajes en un archivo. gracias Johan G
+v2.2
 se cambia el actualizador. adaptado para VeTube de https://github.com/MCV-Software/TWBlue/tree/next-gen/src/update
 se agregan 2 opciones de configuración en la  categoría general del menú configuración
 se agrega un atajo para desactivar los sonidos temporalmente: alt shift p.

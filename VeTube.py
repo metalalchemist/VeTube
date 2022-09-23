@@ -202,6 +202,8 @@ class MyFrame(wx.Frame):
 		opcion_2 = opciones.Append(wx.ID_ANY, _("Restablecer los ajustes"))
 		self.Bind(wx.EVT_MENU, self.restaurar, opcion_2)
 		menu1.AppendSubMenu(ayuda, _("&Ayuda"))
+		manual = ayuda.Append(wx.ID_ANY, _("¿Cómo usar vetube? (documentación en línea)"))
+		self.Bind(wx.EVT_MENU, self.documentacion, manual)
 		apoyo = ayuda.Append(wx.ID_ANY, _("Únete a nuestra &causa"))
 		self.Bind(wx.EVT_MENU, self.donativo, apoyo)
 		itemPageMain = ayuda.Append(wx.ID_ANY, _("&Visita nuestra página de github"))
@@ -214,6 +216,7 @@ class MyFrame(wx.Frame):
 		self.Bind(wx.EVT_MENU, self.cerrarVentana, salir)
 		self.PopupMenu(menu1, self.menu_1.GetPosition())
 		menu1.Destroy
+	def documentacion(self, evt): wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube/tree/master/doc/'+languageHandler.curLang[:2]+'/readme.md')
 	def pageMain(self, evt): wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube')
 	def donativo(self, evt): wx.LaunchDefaultBrowser('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
 	def appConfiguracion(self, event):			
@@ -385,6 +388,8 @@ class MyFrame(wx.Frame):
 					return
 				self.text_ctrl_1.SetValue(url)
 				self.dentro=True
+				self.usuarios = []
+				self.mensajes = []
 				self.dialog_mensaje = wx.Dialog(self, wx.ID_ANY, _("Chat en vivo"))
 				sizer_mensaje_1 = wx.BoxSizer(wx.VERTICAL)
 				self.label_dialog = wx.StaticText(self.dialog_mensaje, wx.ID_ANY, _("Lectura del chat en vivo..."))
@@ -397,27 +402,17 @@ class MyFrame(wx.Frame):
 				self.list_box_1.SetFocus()
 				self.list_box_1.Bind(wx.EVT_KEY_UP, self.historialItemsTeclas)
 				sizer_mensaje_1.Add(self.list_box_1, 1, wx.EXPAND | wx.ALL, 4)
-
-				self.button_mensaje_anterior = wx.Button(self.dialog_mensaje, wx.ID_ANY, _("Limpiar historial"))
-				self.button_mensaje_anterior.Bind(wx.EVT_BUTTON,self.borrarEnlace)
-				sizer_mensaje_2.Add(self.button_mensaje_anterior, 5, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 0)
-				self.button_mensaje_detener = wx.Button(self.dialog_mensaje, wx.ID_ANY, _("&Detener"))
-				self.button_mensaje_detener.Bind(wx.EVT_BUTTON,self.detenerLectura)
-				sizer_mensaje_2.Add(self.button_mensaje_detener, 10, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 0)
-
-				self.button_mensaje_guardarLista = wx.Button(self.dialog_mensaje, wx.ID_ANY, _("&Guardar lista de mensajes"))
-				self.button_mensaje_guardarLista.Bind(wx.EVT_BUTTON,self.guardarLista)
-				sizer_mensaje_2.Add(self.button_mensaje_guardarLista, 5, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 0)
-
-				self.button_favoritos = wx.Button(self.dialog_mensaje, wx.ID_ANY, _("Añadir a &favoritos"))
-				self.button_favoritos.Bind(wx.EVT_BUTTON, self.addFavoritos)
-				if self.chat.status=="upcoming": self.button_favoritos.Disable()
-				sizer_mensaje_2.Add(self.button_favoritos, 15, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 0)
+				self.boton_opciones = wx.Button(self.dialog_mensaje, wx.ID_ANY, _("&Opciones"))
+				self.boton_opciones.Bind(wx.EVT_BUTTON, self.opcionesChat)
+				sizer_mensaje_1.Add(self.boton_opciones, 0, wx.ALIGN_RIGHT | wx.ALL, 4)
+				button_mensaje_detener = wx.Button(self.dialog_mensaje, wx.ID_ANY, _("&Detener chat"))
+				button_mensaje_detener.Bind(wx.EVT_BUTTON,self.detenerLectura)
+				sizer_mensaje_2.Add(button_mensaje_detener, 10, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 0)
 				sizer_mensaje_2.Realize()
 				self.dialog_mensaje.SetSizer(sizer_mensaje_1)
 				sizer_mensaje_1.Fit(self.dialog_mensaje)
 				self.dialog_mensaje.Centre()
-				self.dialog_mensaje.SetEscapeId(self.button_mensaje_detener.GetId())
+				self.dialog_mensaje.SetEscapeId(button_mensaje_detener.GetId())
 				if sonidos and listasonidos[6]: playsound(rutasonidos[6],False)
 				leer.speak(_("Ingresando al chat."))
 				self.hilo2 = threading.Thread(target=self.iniciarChat)
@@ -430,7 +425,30 @@ class MyFrame(wx.Frame):
 		else:
 			wx.MessageBox(_("No se puede  acceder porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
 			self.text_ctrl_1.SetFocus()
-
+	def opcionesChat(self, event):
+		menu = wx.Menu()
+		menu.Append(1, _("&Borrar historial de mensajes"))
+		menu.Append(2, _("&Exportar los mensajes en un archivo de texto"))
+		if self.chat.status!="upcoming": menu.Append(3, _("&Añadir este canal a favoritos"))
+		menu.Append(4, _("&Ver estadísticas del canal"))
+		menu.Bind(wx.EVT_MENU, self.borrarHistorial, id=1)
+		menu.Bind(wx.EVT_MENU, self.guardarLista, id=2)
+		if self.chat.status!="upcoming": menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
+		menu.Bind(wx.EVT_MENU, self.estadisticas, id=4)
+		self.boton_opciones.PopupMenu(menu)
+		menu.Destroy()
+	def estadisticas(self, event):
+		dlg_estadisticas = wx.Dialog(self.dialog_mensaje, wx.ID_ANY, _("Estadísticas del canal:"))
+		sizer_estadisticas = wx.BoxSizer(wx.VERTICAL)
+		text_ctrl_estadisticas = wx.TextCtrl(dlg_estadisticas, wx.ID_ANY, style=wx.TE_MULTILINE | wx.TE_READONLY)
+		text_ctrl_estadisticas.SetValue(_("Total de usuarios: %s\nTotal de mensajes: %s") % (len(self.usuarios), sum(self.mensajes)))
+		sizer_estadisticas.Add(text_ctrl_estadisticas, 1, wx.EXPAND | wx.ALL, 4)
+		button_estadisticas_cerrar = wx.Button(dlg_estadisticas, wx.ID_CANCEL, _("&Cerrar"))
+		dlg_estadisticas.SetSizer(sizer_estadisticas)
+		sizer_estadisticas.Fit(dlg_estadisticas)
+		dlg_estadisticas.Centre()
+		dlg_estadisticas.ShowModal()
+		dlg_estadisticas.Destroy()
 	def borrarContenido(self, event):
 		self.text_ctrl_1.SetValue("")
 		self.text_ctrl_1.SetFocus()
@@ -446,13 +464,11 @@ class MyFrame(wx.Frame):
 			for temporal in lista: pos.append(1)
 			leer.silence()
 			leer.speak(_("ha finalizado la lectura del chat."))
-			try: self.choice_traducir.SetSelection(0)
-			except: pass
+			self.dst =""
 			self.text_ctrl_1.SetValue("")
 			self.dialog_mensaje.Destroy()
 			self.text_ctrl_1.SetFocus()
 			self.handler_keyboard.unregister_all_keys()
-	# funcion para guardar la lista de mensajes en un archivo
 	def guardarLista(self, event):
 		if self.list_box_1.GetCount()>0:
 			dlg_mensaje = wx.FileDialog(self.dialog_mensaje, _("Guardar lista de mensajes"), "", info_dict.get('title'), "*.txt", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
@@ -487,7 +503,7 @@ class MyFrame(wx.Frame):
 			for k in self.language_dict:
 				if self.language_dict[k] == self.choice_traducir.GetStringSelection(): self.dst = k
 		self.dialogo_2.Destroy()
-	def borrarEnlace(self,event):
+	def borrarHistorial(self,event):
 		dlg_2 = wx.MessageDialog(self.dialog_mensaje, _("Está apunto de eliminar del historial aproximadamente ")+str(self.list_box_1.GetCount())+_(" elementos, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		dlg_2.SetYesNoLabels(_("&Eliminar"), _("&Cancelar"))
 		if self.list_box_1.GetCount() <= 0: wx.MessageBox(_("No hay elementos que borrar"), "Error", wx.ICON_ERROR)
@@ -663,9 +679,7 @@ class MyFrame(wx.Frame):
 	def recibirYT(self):
 		global lista
 		for message in self.chat:
-			try:
-				if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
-			except: pass
+			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
 			if message['message_type']=='paid_message' or message['message_type']=='paid_sticker':
 				if message['message']!=None:
 					if categ[1]:
@@ -771,6 +785,7 @@ class MyFrame(wx.Frame):
 						self.hilo2.join()
 	def recibirTwich(self):
 		for message in self.chat:
+			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
 			if 'Cheer' in message['message']:
 				divide=message['message'].split()
 				dinero=divide[0]
