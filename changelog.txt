@@ -1,4 +1,6 @@
 v2.6
+corrección de  bug donde se mezclaban los mensajes de los envivos pasados.
+corrección de bug donde no se  inicialisaba el chat.
 Se empieza a trabajar en la opción de estadísticas del chat.
 Se elimina la documentación. en cambio se crea una opción que permite acceder a la misma en línea. Para esto nos dirigimos al menú de mas opciones y luego al submenú ayuda.
 se corrige bug del traductor y se lo agrega a twich

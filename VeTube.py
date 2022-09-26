@@ -27,14 +27,6 @@ rutasonidos=["sounds/chat.mp3","sounds/chatmiembro.mp3","sounds/miembros.mp3","s
 lector=auto.Auto()
 leer=sapi5.SAPI5()
 lista_voces=leer.list_voices()
-def retornarCategorias():
-	lista=[[_('General')]]
-	if categ[0]: lista.append([_('Miembros')])
-	if categ[1]: lista.append([_('Donativos')])
-	if categ[2]: lista.append([_('Moderadores')])
-	if categ[3]: lista.append([_('Usuarios Verificados')])
-	if categ[4]: lista.append([_('Favoritos')])
-	return lista
 def escribirFavorito():
 	with open('favoritos.json', 'w+') as file: json.dump(favorite, file)
 def leerFavoritos():
@@ -126,6 +118,14 @@ mensajes_categorias=[_('Miembros'),_('Donativos'),_('Moderadores'),_('Usuarios V
 mensajes_sonidos=[_('Sonido cuando llega un mensaje'),_('Sonido cuando habla un miembro'),_('Sonido cuando se conecta un miembro'),_('Sonido cuando llega un donativo'),_('Sonido cuando habla un moderador'),_('Sonido cuando habla un usuario verificado'),_('Sonido al ingresar al chat'),_('Sonido cuando habla el propietario del canal'),_('sonido al terminar la búsqueda de mensajes')]
 codes.reverse()
 langs.reverse()
+def retornarCategorias():
+	lista=[[_('General')]]
+	if categ[0]: lista.append([_('Miembros')])
+	if categ[1]: lista.append([_('Donativos')])
+	if categ[2]: lista.append([_('Moderadores')])
+	if categ[3]: lista.append([_('Usuarios Verificados')])
+	if categ[4]: lista.append([_('Favoritos')])
+	return lista
 lista=retornarCategorias()
 for temporal in lista: pos.append(1)
 class MyFrame(wx.Frame):
@@ -138,6 +138,7 @@ class MyFrame(wx.Frame):
 		if donations: update.donation()
 		self.contador=0
 		self.dentro=False
+		self.dst =""
 		kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
 		wx.Frame.__init__(self, *args, **kwds)
 		if updates: updater.do_update()
@@ -454,13 +455,15 @@ class MyFrame(wx.Frame):
 		self.text_ctrl_1.SetFocus()
 
 	def detenerLectura(self, event):
-		global yt,pos
+		global yt,pos,lista
 		dlg_mensaje = wx.MessageDialog(self.dialog_mensaje, _("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		if dlg_mensaje.ShowModal() == wx.ID_YES:
 			self.dentro=False
 			self.contador=0
 			yt=0
 			pos=[]
+			lista=[]
+			lista=retornarCategorias()				
 			for temporal in lista: pos.append(1)
 			leer.silence()
 			leer.speak(_("ha finalizado la lectura del chat."))
@@ -680,6 +683,7 @@ class MyFrame(wx.Frame):
 		global lista
 		for message in self.chat:
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
+			if not message['author']['name'] in self.usuarios: self.usuarios.append(message['author']['name'])
 			if message['message_type']=='paid_message' or message['message_type']=='paid_sticker':
 				if message['message']!=None:
 					if categ[1]:
@@ -786,6 +790,7 @@ class MyFrame(wx.Frame):
 	def recibirTwich(self):
 		for message in self.chat:
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
+			if not message['author']['name'] in self.usuarios: self.usuarios.append(message['author']['name'])
 			if 'Cheer' in message['message']:
 				divide=message['message'].split()
 				dinero=divide[0]
