@@ -1,0 +1,12 @@
+-f https://download.pytorch.org/whl/torch_stable.html
+Flask
+gunicorn
+inflect
+librosa
+numba
+tacotron2-model
+torch
+numpy
+Unidecode
+gdown
+requests
