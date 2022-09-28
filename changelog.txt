@@ -1,7 +1,7 @@
 v2.6
+ahora es posible saber cuantos mensajes llegaron al chat y ver quien fue el que mas habló. se a creado una lista donde aparece en orden de mayor a menor quien habló y cuantos mensajes envió y luego está un cuadro de texto donde nos dice el total de mensajes y el total de usuarios.
 corrección de  bug donde se mezclaban los mensajes de los envivos pasados.
 corrección de bug donde no se  inicialisaba el chat.
-Se empieza a trabajar en la opción de estadísticas del chat.
 Se elimina la documentación. en cambio se crea una opción que permite acceder a la misma en línea. Para esto nos dirigimos al menú de mas opciones y luego al submenú ayuda.
 se corrige bug del traductor y se lo agrega a twich
 se agrupan varias opciones del chat en un menú contextual ,gracias Johan G.

@@ -431,7 +431,7 @@ class MyFrame(wx.Frame):
 		menu.Append(1, _("&Borrar historial de mensajes"))
 		menu.Append(2, _("&Exportar los mensajes en un archivo de texto"))
 		if self.chat.status!="upcoming": menu.Append(3, _("&Añadir este canal a favoritos"))
-		menu.Append(4, _("&Ver estadísticas del canal"))
+		menu.Append(4, _("&Ver estadísticas del chat"))
 		menu.Bind(wx.EVT_MENU, self.borrarHistorial, id=1)
 		menu.Bind(wx.EVT_MENU, self.guardarLista, id=2)
 		if self.chat.status!="upcoming": menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
@@ -439,8 +439,19 @@ class MyFrame(wx.Frame):
 		self.boton_opciones.PopupMenu(menu)
 		menu.Destroy()
 	def estadisticas(self, event):
+		for k in range(len(self.mensajes)-1):
+			for x in range(len(self.mensajes)-1-k):
+				if self.mensajes[x]<self.mensajes[x+1]:
+					aux1=self.mensajes[x]
+					self.mensajes[x]=self.mensajes[x+1]
+					self.mensajes[x+1]=aux1
+					aux2=self.usuarios[x]
+					self.usuarios[x]=self.usuarios[x+1]
+					self.usuarios[x+1]=aux2
 		dlg_estadisticas = wx.Dialog(self.dialog_mensaje, wx.ID_ANY, _("Estadísticas del canal:"))
 		sizer_estadisticas = wx.BoxSizer(wx.VERTICAL)
+		mayor_menor = wx.ListBox(dlg_estadisticas, wx.ID_ANY, choices=[])
+		for r in range(len(self.usuarios)): mayor_menor.Append(str(self.usuarios[r])+": "+str(self.mensajes[r]))
 		text_ctrl_estadisticas = wx.TextCtrl(dlg_estadisticas, wx.ID_ANY, style=wx.TE_MULTILINE | wx.TE_READONLY)
 		text_ctrl_estadisticas.SetValue(_("Total de usuarios: %s\nTotal de mensajes: %s") % (len(self.usuarios), sum(self.mensajes)))
 		sizer_estadisticas.Add(text_ctrl_estadisticas, 1, wx.EXPAND | wx.ALL, 4)
@@ -683,7 +694,16 @@ class MyFrame(wx.Frame):
 		global lista
 		for message in self.chat:
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
-			if not message['author']['name'] in self.usuarios: self.usuarios.append(message['author']['name'])
+			if not message['author']['name'] in self.usuarios:
+				self.usuarios.append(message['author']['name'])
+				self.mensajes.append(1)
+			else:
+				c=0
+				for a in self.usuarios:
+					if a==message['author']['name']:
+						self.mensajes[c]+=1
+						break
+					c+=1
 			if message['message_type']=='paid_message' or message['message_type']=='paid_sticker':
 				if message['message']!=None:
 					if categ[1]:
@@ -790,7 +810,16 @@ class MyFrame(wx.Frame):
 	def recibirTwich(self):
 		for message in self.chat:
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
-			if not message['author']['name'] in self.usuarios: self.usuarios.append(message['author']['name'])
+			if not message['author']['name'] in self.usuarios:
+				self.usuarios.append(message['author']['name'])
+				self.mensajes.append(1)
+			else:
+				c=0
+				for a in self.usuarios:
+					if a==message['author']['name']:
+						self.mensajes[c]+=1
+						break
+					c+=1
 			if 'Cheer' in message['message']:
 				divide=message['message'].split()
 				dinero=divide[0]
