@@ -643,15 +643,21 @@ class MyFrame(wx.Frame):
 		if self.dentro and self.retornarMensaje():
 			my_dialog = wx.Dialog(self, wx.ID_ANY, _("mensaje"))
 			sizer_mensaje = wx.BoxSizer(wx.HORIZONTAL)
-			text_box = wx.TextCtrl(my_dialog, wx.ID_ANY, self.retornarMensaje(), style=wx.TE_CENTRE | wx.TE_READONLY)
-			sizer_mensaje.Add(text_box, 0, 0, 0)
+			self.text_message = wx.TextCtrl(my_dialog, wx.ID_ANY, self.retornarMensaje(), style=wx.TE_CENTRE)
+			traducir = wx.Button(my_dialog, wx.ID_ANY, _("&traducir el mensaje al idioma del programa"))
+			traducir.Bind(wx.EVT_BUTTON, self.traducirMensaje)
 			cancelar = wx.Button(my_dialog, wx.ID_CLOSE, _("&Cerrar"))
+			sizer_mensaje.Add(self.text_message, 0, 0, 0)
+			sizer_mensaje.Add(traducir,0,0,0)
 			sizer_mensaje.Add(cancelar,0,0,0)
 			my_dialog.SetSizer(sizer_mensaje)
 			sizer_mensaje.Fit(my_dialog)
 			my_dialog.Centre()
 			my_dialog.SetEscapeId(cancelar.GetId())
 			my_dialog.ShowModal()
+	def traducirMensaje(self,event):
+		self.text_message.SetValue(translator.translate(self.text_message.GetValue(),target=languageHandler.curLang[:2]))
+		self.text_message.SetFocus()
 	def reproducirMsg(self):
 		if lista[yt][0]=='General':
 			if self.contador==0 or self.contador==self.list_box_1.GetCount()-1: playsound("sounds/orilla.mp3",False)

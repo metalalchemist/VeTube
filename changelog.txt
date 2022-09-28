@@ -1,4 +1,5 @@
 v2.6
+se agrega traducir mensaje cuando se muestra un mensaje. el mismo se traducirá al idioma del programa. por ejemplo si lo tenemos en inglés y nos llega un mensaje en español se traducirá al inglés.
 ahora es posible saber cuantos mensajes llegaron al chat y ver quien fue el que mas habló. se a creado una lista donde aparece en orden de mayor a menor quien habló y cuantos mensajes envió y luego está un cuadro de texto donde nos dice el total de mensajes y el total de usuarios.
 corrección de  bug donde se mezclaban los mensajes de los envivos pasados.
 corrección de bug donde no se  inicialisaba el chat.
