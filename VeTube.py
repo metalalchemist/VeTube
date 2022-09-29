@@ -337,8 +337,12 @@ class MyFrame(wx.Frame):
 		self.dialogo_2.SetEscapeId(self.button_cansel.GetId())
 		self.dialogo_2.Center()
 		hey=self.dialogo_2.ShowModal()
-		if hey==wx.ID_OK: self.guardar()
-		else: self.dialogo_2.Destroy()
+		if hey==wx.ID_OK:
+			self.guardar()
+			leer.silence()
+		else:
+			self.dialogo_2.Destroy()
+			leer.silence()
 	def reproducirPrueva(self, event):
 		leer.silence()
 		leer.speak(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
@@ -448,19 +452,51 @@ class MyFrame(wx.Frame):
 					aux2=self.usuarios[x]
 					self.usuarios[x]=self.usuarios[x+1]
 					self.usuarios[x+1]=aux2
-		dlg_estadisticas = wx.Dialog(self.dialog_mensaje, wx.ID_ANY, _("Estadísticas del canal:"))
+		self.dlg_estadisticas = wx.Dialog(self.dialog_mensaje, wx.ID_ANY, _("Estadísticas del canal:"))
 		sizer_estadisticas = wx.BoxSizer(wx.VERTICAL)
-		mayor_menor = wx.ListBox(dlg_estadisticas, wx.ID_ANY, choices=[])
-		for r in range(len(self.usuarios)): mayor_menor.Append(str(self.usuarios[r])+": "+str(self.mensajes[r]))
-		text_ctrl_estadisticas = wx.TextCtrl(dlg_estadisticas, wx.ID_ANY, style=wx.TE_MULTILINE | wx.TE_READONLY)
-		text_ctrl_estadisticas.SetValue(_("Total de usuarios: %s\nTotal de mensajes: %s") % (len(self.usuarios), sum(self.mensajes)))
-		sizer_estadisticas.Add(text_ctrl_estadisticas, 1, wx.EXPAND | wx.ALL, 4)
-		button_estadisticas_cerrar = wx.Button(dlg_estadisticas, wx.ID_CANCEL, _("&Cerrar"))
-		dlg_estadisticas.SetSizer(sizer_estadisticas)
-		sizer_estadisticas.Fit(dlg_estadisticas)
-		dlg_estadisticas.Centre()
-		dlg_estadisticas.ShowModal()
-		dlg_estadisticas.Destroy()
+		label_estadisticas = wx.StaticText(self.dlg_estadisticas, wx.ID_ANY, _("&Usuarios y mensajes:"))
+		sizer_estadisticas.Add(label_estadisticas, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 4)
+		self.mayor_menor = wx.ListCtrl(self.dlg_estadisticas, wx.ID_ANY, style=wx.LC_REPORT)
+		self.mayor_menor.InsertColumn(0, _("Usuario: "))
+		self.mayor_menor.InsertColumn(1, _("Cantidad de mensajes: "))
+
+		for i in range(len(self.mensajes)): self.mayor_menor.InsertStringItem(i, self.usuarios[i])
+		for i in range(len(self.mensajes)): self.mayor_menor.SetStringItem(i, 1, str(self.mensajes[i]))
+		sizer_estadisticas.Add(self.mayor_menor, 1, wx.EXPAND | wx.ALL, 4)
+		label_total = wx.StaticText(self.dlg_estadisticas, wx.ID_ANY, _("&Estadísticas totales:"))
+		sizer_estadisticas.Add(label_total, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 4)
+		self.text_ctrl_estadisticas = wx.TextCtrl(self.dlg_estadisticas, wx.ID_ANY, style=wx.TE_MULTILINE | wx.TE_READONLY)
+		self.text_ctrl_estadisticas.SetValue(_("Total de usuarios: %s\nTotal de mensajes: %s") % (len(self.usuarios), sum(self.mensajes)))
+		sizer_estadisticas.Add(self.text_ctrl_estadisticas, 1, wx.EXPAND | wx.ALL, 4)
+		# botón para descargar el archivo de texto
+		button_estadisticas_descargar = wx.Button(self.dlg_estadisticas, wx.ID_ANY, _("&Descargar las estadísticas en un archivo de texto"))
+		button_estadisticas_descargar.Bind(wx.EVT_BUTTON, self.descargarEstadisticas)
+		sizer_estadisticas.Add(button_estadisticas_descargar, 0, wx.ALIGN_RIGHT | wx.ALL, 4)
+		button_estadisticas_cerrar = wx.Button(self.dlg_estadisticas, wx.ID_CANCEL, _("&Cerrar"))
+		self.dlg_estadisticas.SetSizer(sizer_estadisticas)
+		sizer_estadisticas.Fit(self.dlg_estadisticas)
+		self.dlg_estadisticas.Centre()
+		self.dlg_estadisticas.ShowModal()
+		self.dlg_estadisticas.Destroy()
+
+	def descargarEstadisticas(self, event):
+		dlg_file	= wx.FileDialog(self.dlg_estadisticas, _("Guardar archivo de texto"), "", "", _("Archivos de texto (*.txt)|*.txt"), wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+		dlg_file.SetFilename("Estadísticas de mi canal")
+		if dlg_file.ShowModal() == wx.ID_OK:
+			nombre_archivo = dlg_file.GetFilename()
+			directorio = dlg_file.GetDirectory()
+			archivo = open(path.join(directorio, nombre_archivo), "w")
+			# poner un texto que diga el título del canal
+			archivo.write(_("Estadísticas del canal: %s %s") % (self.chat.title, self.chat.status)+ "\n")
+			archivo.write(_("Total de usuarios: %s\nTotal de mensajes: %s") % (len(self.usuarios), sum(self.mensajes))+ "\n")
+			archivo.write(_("Usuarios y mensajes:")+ "\n")
+			arreglo = []
+			for i in range(len(self.mensajes)): arreglo.append(self.usuarios[i] + " " + str(self.mensajes[i]))
+			arreglo.sort()
+			for i in range(len(self.mensajes)): archivo.write(arreglo[i] + "\n")
+			archivo.close()
+		dlg_file.Destroy()
+
 	def borrarContenido(self, event):
 		self.text_ctrl_1.SetValue("")
 		self.text_ctrl_1.SetFocus()
