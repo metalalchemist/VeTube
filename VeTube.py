@@ -227,6 +227,7 @@ class MyFrame(wx.Frame):
 			idiomas_disponibles.append(language_dict[k])
 		self.dialogo_2 = wx.Dialog(self, wx.ID_ANY, _("Configuración"))
 		sizer_5 = wx.BoxSizer(wx.VERTICAL)
+		# Sizer del arbol
 		labelConfic = wx.StaticText(self.dialogo_2, -1, _("Categorías"))
 		sizer_5.Add(labelConfic, 1, wx.EXPAND, 0)
 		self.tree_1 = wx.Treebook(self.dialogo_2, wx.ID_ANY)
