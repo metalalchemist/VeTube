@@ -1,6 +1,11 @@
 v2.6
+correcciones de bugs con el buffer favoritos: no agregar mensajes duplicados ni tampoco poder agregar del mismo buffer de favoritos.
+algunas optimisaciones menores al código.
+se agrega un menú contextual en la lista  del chat  donde aparecen obciones varias como traducir mensaje al idioma del  programa copiar mensaje y archivar mensaje. gracias Johan G
+sección archivar mensajes para cuando deseemos  agregar un mensaje importante. estos mensajes permanecerán en la aplicación hasta  que nosotros los borremos en la tercera pestaña que se agregó. gracias  Johan G
+se agrega el editor de teclado. ´para ello nos dirigimos al menú mas opciones y al submenú opciones.
 se pueden guardar las estadísticas del canal en un archivo de texto, gracias Joan G
-se agrega traducir mensaje cuando se muestra un mensaje. el mismo se traducirá al idioma del programa. por ejemplo si lo tenemos en inglés y nos llega un mensaje en español se traducirá al inglés.
+se agrega traducir mensaje cuando se muestra un mensaje.
 ahora es posible saber cuantos mensajes llegaron al chat y ver quien fue el que mas habló. se a creado una lista donde aparece en orden de mayor a menor quien habló y cuantos mensajes envió y luego está un cuadro de texto donde nos dice el total de mensajes y el total de usuarios.
 corrección de  bug donde se mezclaban los mensajes de los envivos pasados.
 corrección de bug donde no se  inicialisaba el chat.

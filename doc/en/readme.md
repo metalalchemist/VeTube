@@ -45,8 +45,6 @@ Read and manage YouTube and Twitch  chats in an accessible way on your own live 
 |action |key combination |
 | ------------------------- | ------------- |
 |Play the  selected message |space
-| Delete the  selected message      | Delete |
-
 
 ###In the favourites section:
 |action |key combination |

@@ -33,4 +33,3 @@ Lisez et gérez le chat youtube de manière accessible dans vos propres émissio
 |action |combinaison de touches |
 | ------------------------- | ------------- |
 |Jouer le message sélectionné |espace |
-| supprimer le message sélectionné | supprimer

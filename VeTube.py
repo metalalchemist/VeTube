@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,threading,languageHandler,restart,translator, time
+import json,wx,wx.adv,threading,languageHandler,restart,translator,time,keyboard_handler
 from keyboard_handler.wx_handler import WXKeyboardHandler
 from playsound import playsound
 from accessible_output2.outputs import auto, sapi5
@@ -8,7 +8,7 @@ from youtube_dl import YoutubeDL
 from pyperclip import copy
 from chat_downloader import ChatDownloader
 from update import updater,update
-from os import path
+from os import path,remove
 voz=0
 tono=0
 volume=100
@@ -20,21 +20,18 @@ donations=True
 updates=True
 idioma="system"
 yt=0
-favorite=[]
 categ=[True,True,False,False,False]
 listasonidos=[True,True,True,True,True,True,True,True,True]
 rutasonidos=["sounds/chat.mp3","sounds/chatmiembro.mp3","sounds/miembros.mp3","sounds/donar.mp3","sounds/moderators.mp3","sounds/verified.mp3","sounds/abrirchat.wav","sounds/propietario.mp3","sounds/buscar.wav"]
 lector=auto.Auto()
 leer=sapi5.SAPI5()
 lista_voces=leer.list_voices()
-def escribirFavorito():
-	with open('favoritos.json', 'w+') as file: json.dump(favorite, file)
-def leerFavoritos():
-	if path.exists("favoritos.json"):
-		with open ("favoritos.json") as file:
-			global favorite
-			favorite=json.load(file)
-	else: escribirFavorito()
+def escribirJsonLista(arch,lista=[]):
+	with open(arch, 'w+') as file: json.dump(lista, file)
+def leerJsonLista(arch):
+	if path.exists(arch):
+		with open (arch) as file: return json.load(file)
+	else: return []
 def asignarConfiguracion():
 	global voz,tono,volume,speed,sapi,sonidos,idioma,reader,categ,listasonidos,donations,updates
 	voz=0
@@ -53,11 +50,11 @@ def asignarConfiguracion():
 	leer.set_pitch(tono)
 	leer.set_voice(lista_voces[voz])
 	leer.set_volume(volume)
-def convertirFavoritos(lista):
-	if len(lista)<=0: return[]
+def convertirLista(lista, val1, val2):
+	if len(lista)<=0: return []
 	else:
 		newlista=[]
-		for datos in lista: newlista.append(datos['titulo']+': '+datos['url'])
+		for datos in lista: newlista.append(datos[val1]+': '+datos[val2])
 		return newlista
 def escribirConfiguracion():
 	data={'voz': voz,
@@ -91,7 +88,7 @@ def leerConfiguracion():
 		listasonidos=resultado['listasonidos']
 	else: escribirConfiguracion()
 def escribirTeclas():
-	with open('keys.txt', 'w+') as arch: arch.write("""{"control+p": leer.silence,"alt+shift+up": self.elementoAnterior,"alt+shift+down": self.elementoSiguiente,"alt+shift+left": self.retrocederCategorias,"alt+shift+right": self.avanzarCategorias,"alt+shift+home": self.elementoInicial,"alt+shift+end": self.elementoFinal,"alt+shift+f": self.destacarMensaje,"alt+shift+c": self.copiar,"alt+shift+m": self.callar,"alt+shift+s": self.iniciarBusqueda,"alt+shift+v": self.mostrarMensaje,"alt+shift+d": self.borrarBuffer,"alt+shift+p": self.desactivarSonidos}""")
+	with open('keys.txt', 'w+') as arch: arch.write("""{"control+p": leer.silence,"alt+shift+up": self.elementoAnterior,"alt+shift+down": self.elementoSiguiente,"alt+shift+left": self.retrocederCategorias,"alt+shift+right": self.avanzarCategorias,"alt+shift+home": self.elementoInicial,"alt+shift+end": self.elementoFinal,"alt+shift+f": self.destacarMensaje,"alt+shift+c": self.copiar,"alt+shift+m": self.callar,"alt+shift+s": self.iniciarBusqueda,"alt+shift+v": self.mostrarMensaje,"alt+shift+d": self.borrarBuffer,"alt+shift+p": self.desactivarSonidos,"alt+shift+k": self.createEditor, "alt+shift+a": self.addRecuerdo}""")
 	leerTeclas()
 def leerTeclas():
 	if path.exists("keys.txt"):
@@ -101,19 +98,21 @@ def leerTeclas():
 	else: escribirTeclas()
 pos=[]
 leerConfiguracion()
-leerFavoritos()
+favorite=leerJsonLista('favoritos.json')
+mensajes_destacados=leerJsonLista('mensajes_destacados.json')
 leer.set_rate(speed)
 leer.set_pitch(tono)
 leer.set_voice(lista_voces[voz])
 leer.set_volume(volume)
-favs=convertirFavoritos(favorite)
+favs=convertirLista(favorite,'titulo','url')
+msjs=convertirLista(mensajes_destacados,'mensaje','titulo')
 languageHandler.setLanguage(idioma)
 idiomas = languageHandler.getAvailableLanguages()
 langs = []
 [langs.append(i[1]) for i in idiomas]
 codes = []
 [codes.append(i[0]) for i in idiomas]
-mensaje_teclas=[_('Silencia la voz sapy'),_('Buffer anterior.'),_('Siguiente buffer.'),_('Mensaje anterior'),_('Mensaje siguiente'),_('Ir al comienzo del buffer'),_('Ir al final del buffer'),_('Copia el mensaje actual'),_('Activa o desactiva la lectura automática'),_('Muestra el mensaje actual en un cuadro de texto'),_('Busca una palabra en los mensajes actuales')]
+mensaje_teclas=[_('Silencia la voz sapy'),_('Buffer anterior.'),_('Siguiente buffer.'),_('Mensaje anterior'),_('Mensaje siguiente'),_('Ir al comienzo del buffer'),_('Ir al final del buffer'),_('Destaca un mensaje en el buffer de  favoritos'),_('Copia el mensaje actual'),_('Activa o desactiva la lectura automática'),_('Busca una palabra en los mensajes actuales'),_('Muestra el mensaje actual en un cuadro de texto'),_('borra el buffer seleccionado'),_('activa o desactiva los sonidos del programa'),_('Invocar el editor de combinaciones de teclado')]
 mensajes_categorias=[_('Miembros'),_('Donativos'),_('Moderadores'),_('Usuarios Verificados'),_('Favoritos')]
 mensajes_sonidos=[_('Sonido cuando llega un mensaje'),_('Sonido cuando habla un miembro'),_('Sonido cuando se conecta un miembro'),_('Sonido cuando llega un donativo'),_('Sonido cuando habla un moderador'),_('Sonido cuando habla un usuario verificado'),_('Sonido al ingresar al chat'),_('Sonido cuando habla el propietario del canal'),_('sonido al terminar la búsqueda de mensajes')]
 codes.reverse()
@@ -136,9 +135,9 @@ class MyFrame(wx.Frame):
 			wx.MessageBox(_('VeTube ya se encuentra en ejecución. Cierra la otra instancia antes de iniciar esta.'), 'Error', wx.ICON_ERROR)
 			return False
 		if donations: update.donation()
-		self.contador=0
 		self.dentro=False
 		self.dst =""
+		leerTeclas()
 		kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
 		wx.Frame.__init__(self, *args, **kwds)
 		if updates: updater.do_update()
@@ -181,11 +180,33 @@ class MyFrame(wx.Frame):
 		self.list_favorite = wx.ListBox(self.tap_2, wx.ID_ANY, choices=favs)
 		self.list_favorite.Bind(wx.EVT_KEY_UP, self.favoritoTeclas)
 		sizer_favoritos.Add(self.list_favorite)
-
+		if not favs or self.list_favorite.GetCount() == 0: self.list_favorite.Append(_("Tus favoritos aparecerán aquí"), 0)
 		self.button_borrar_favoritos = wx.Button(self.tap_2, wx.ID_ANY, _("&Borrar favorito"))
 		self.button_borrar_favoritos.Bind(wx.EVT_BUTTON, self.borrarFavorito)
 		sizer_favoritos.Add(self.button_borrar_favoritos,0,0,0)
+		# poner una casilla de verificación para borrar todos los favoritos
+		self.borrar_todos_favs = wx.CheckBox(self.tap_2, wx.ID_ANY, _("&Seleccionar todos los elementos"))
+		self.borrar_todos_favs.Bind(wx.EVT_CHECKBOX, self.borrarTodosFavoritos)
+		sizer_favoritos.Add(self.borrar_todos_favs,0,0,0)
 		self.tap_2.SetSizer(sizer_favoritos)
+		self.tap_3 = wx.Panel(self.notebook_1, wx.ID_ANY)
+		self.notebook_1.AddPage(self.tap_3, _("mensajes archivados"))
+		sizer_mensajes = wx.BoxSizer(wx.VERTICAL)
+		label_mensajes = wx.StaticText(self.tap_3, wx.ID_ANY, _("&Mensajes archivados: "))
+		self.list_mensajes = wx.ListBox(self.tap_3, wx.ID_ANY,choices=msjs)
+		# poner un item cuando la lista esté vacía
+		if not self.list_mensajes.GetCount(): self.list_mensajes.Append("Tus mensajes archivados aparecerán aquí", 0)
+		sizer_mensajes.Add(label_mensajes)
+		sizer_mensajes.Add(self.list_mensajes)
+		self.button_borrar_mensajes = wx.Button(self.tap_3, wx.ID_ANY, _("&Borrar mensaje"))
+		self.button_borrar_mensajes.Bind(wx.EVT_BUTTON, self.borraRecuerdo)
+		sizer_mensajes.Add(self.button_borrar_mensajes,0,0,0)
+		# crear una casilla para elegir si se quieren seleccionar todos los elementos para borrarlos
+		self.check_borrar_todos = wx.CheckBox(self.tap_3, wx.ID_ANY, _("&Seleccionar todos los elementos"))
+		self.check_borrar_todos.Bind(wx.EVT_CHECKBOX, self.seleccionarTodos)
+		sizer_mensajes.Add(self.check_borrar_todos,0,0,0)
+		self.tap_3.SetSizer(sizer_mensajes)
+
 		self.panel_1.SetSizer(sizer_1)
 		self.Layout()
 		self.Maximize()
@@ -200,8 +221,10 @@ class MyFrame(wx.Frame):
 		menu1.AppendSubMenu(opciones, _(u"&Opciones"))
 		opcion_1 = opciones.Append(wx.ID_ANY, _("Configuración"))
 		self.Bind(wx.EVT_MENU, self.appConfiguracion, opcion_1)
-		opcion_2 = opciones.Append(wx.ID_ANY, _("Restablecer los ajustes"))
-		self.Bind(wx.EVT_MENU, self.restaurar, opcion_2)
+		opcion_2 = opciones.Append(wx.ID_ANY, _("Editor de combinaciones de teclado para VeTube"))
+		self.Bind(wx.EVT_MENU, self.createEditor, opcion_2)
+		opcion_3 = opciones.Append(wx.ID_ANY, _("Restablecer los ajustes"))
+		self.Bind(wx.EVT_MENU, self.restaurar, opcion_3)
 		menu1.AppendSubMenu(ayuda, _("&Ayuda"))
 		manual = ayuda.Append(wx.ID_ANY, _("¿Cómo usar vetube? (documentación en línea)"))
 		self.Bind(wx.EVT_MENU, self.documentacion, manual)
@@ -217,17 +240,144 @@ class MyFrame(wx.Frame):
 		self.Bind(wx.EVT_MENU, self.cerrarVentana, salir)
 		self.PopupMenu(menu1, self.menu_1.GetPosition())
 		menu1.Destroy
+	def createEditor(self,event=None):
+		global mis_teclas
+		try: mis_teclas=eval(mis_teclas)
+		except: pass
+		self.dlg_teclado = wx.Dialog(None, wx.ID_ANY, _("Editor de combinaciones de teclado para Vetube"))
+		sizer = wx.BoxSizer(wx.VERTICAL)
+		label_editor = wx.StaticText(self.dlg_teclado, wx.ID_ANY, _("&Selecciona la combinación de teclado a editar"))
+		self.combinaciones= wx.ListCtrl(self.dlg_teclado, wx.ID_ANY, style=wx.LC_REPORT)
+		self.combinaciones.InsertColumn(0, _("acción: "))
+		self.combinaciones.InsertColumn(1, _("combinación de teclas: "))
+		for i in range(len(mensaje_teclas)): self.combinaciones.InsertItem(i, mensaje_teclas[i])
+		c=0
+		for valor in mis_teclas:
+			self.combinaciones.SetItem(c, 1, valor)
+			c+=1
+		self.combinaciones.Focus(0)
+		self.combinaciones.SetFocus()
+		editar= wx.Button(self.dlg_teclado, -1, _(u"&Editar"))
+		editar.Bind(wx.EVT_BUTTON, self.editarTeclas)
+		editar.SetDefault()
+		restaurar=wx.Button(self.dlg_teclado, -1, _(u"&restaurar combinaciones por defecto"))
+		restaurar.Bind(wx.EVT_BUTTON, self.restaurarTeclas)
+		close = wx.Button(self.dlg_teclado, wx.ID_CANCEL, _(u"&Cerrar"))
+		firstSizer = wx.BoxSizer(wx.HORIZONTAL)
+		firstSizer.Add(label_editor, 0, wx.ALL, 5)
+		firstSizer.Add(self.combinaciones, 0, wx.ALL, 5)
+		secondSizer = wx.BoxSizer(wx.HORIZONTAL)
+		secondSizer.Add(editar, 0, wx.ALL, 5)
+		secondSizer.Add(restaurar, 0, wx.ALL, 5)
+		secondSizer.Add(close, 0, wx.ALL, 5)
+		sizer.Add(firstSizer, 0, wx.ALL, 5)
+		sizer.Add(secondSizer, 0, wx.ALL, 5)
+		self.dlg_teclado.SetSizer(sizer)
+		sizer.Fit(self.dlg_teclado)
+		self.dlg_teclado.Centre()
+		self.dlg_teclado.ShowModal()
+		self.dlg_teclado.Destroy()
+	def editarTeclas(self, event):
+		indice=self.combinaciones.GetFocusedItem()
+		texto=self.combinaciones.GetItem(indice,1).GetText()
+		self.dlg_editar_combinacion = wx.Dialog(self.dlg_teclado, wx.ID_ANY, _("Editando la combinación de teclas para %s") % mensaje_teclas[indice])
+		sizer = wx.BoxSizer(wx.VERTICAL)
+		firstSizer = wx.BoxSizer(wx.HORIZONTAL)
+		sizer_check = wx.BoxSizer(wx.HORIZONTAL)
+		# el sizer para los botones
+		sizer_buttons = wx.BoxSizer(wx.HORIZONTAL)
+		groupbox = wx.StaticBox(self.dlg_editar_combinacion, wx.ID_ANY, _("Selecciona las teclas que quieres usar"))
+		# el sizer para el agrupamiento
+		sizer_groupbox = wx.StaticBoxSizer(groupbox, wx.VERTICAL)
+		self.check_ctrl = wx.CheckBox(self.dlg_editar_combinacion, wx.ID_ANY, _("&Control"))
+		if 'control' in texto: self.check_ctrl.SetValue(True)
+		self.check_alt = wx.CheckBox(self.dlg_editar_combinacion, wx.ID_ANY, _("&Alt"))
+		if 'alt' in texto: self.check_alt.SetValue(True)
+		self.check_shift = wx.CheckBox(self.dlg_editar_combinacion, wx.ID_ANY, _("&Shift"))
+		if 'shift' in texto: self.check_shift.SetValue(True)
+		self.check_win = wx.CheckBox(self.dlg_editar_combinacion, wx.ID_ANY, _("&Windows"))
+		if 'win' in texto: self.check_win.SetValue(True)
+		self.teclas = ["enter", "tab", "space", "back", "delete", "home", "end", "pageUp", "pageDown", "up", "down", "left", "right", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+		label_tecla = wx.StaticText(self.dlg_editar_combinacion, wx.ID_ANY, _("&Selecciona una tecla para	la combinación"))
+		self.combo_tecla = wx.ComboBox(self.dlg_editar_combinacion, wx.ID_ANY, choices=self.teclas, style=wx.CB_DROPDOWN|wx.CB_READONLY)
+		texto=texto.split('+')
+		self.combo_tecla.SetValue(texto[-1])
+		self.editar= wx.Button(self.dlg_editar_combinacion, -1, _(u"&Aplicar nueva combinación de teclado"))
+		self.editar.Bind(wx.EVT_BUTTON, self.editarTeclas2)
+		self.editar.SetDefault()
+		close = wx.Button(self.dlg_editar_combinacion, wx.ID_CANCEL, _(u"&Cerrar"))
+		sizer_check.Add(self.check_ctrl, 0, wx.ALL, 5)
+		sizer_check.Add(self.check_alt, 0, wx.ALL, 5)
+		sizer_check.Add(self.check_shift, 0, wx.ALL, 5)
+		sizer_check.Add(self.check_win, 0, wx.ALL, 5)
+		sizer_groupbox.Add(sizer_check, 0, wx.ALL, 5)
+		sizer.Add(sizer_groupbox, 0, wx.ALL, 5)
+		firstSizer.Add(label_tecla, 0, wx.ALL, 5)
+		firstSizer.Add(self.combo_tecla, 0, wx.ALL, 5)
+		sizer_buttons.Add(self.editar, 0, wx.ALL, 5)
+		sizer_buttons.Add(close, 0, wx.ALL, 5)
+		sizer.Add(firstSizer, 0, wx.ALL, 5)
+		sizer.Add(sizer_buttons, 0, wx.ALL, 5)
+		self.dlg_editar_combinacion.SetSizer(sizer)
+		sizer.Fit(self.dlg_editar_combinacion)
+		self.dlg_editar_combinacion.Centre()
+		self.dlg_editar_combinacion.ShowModal()
+		self.dlg_editar_combinacion.Destroy()
+	def editarTeclas2(self, event):
+		indice=self.combinaciones.GetFocusedItem()
+		texto=self.combinaciones.GetItem(indice,1).GetText()
+		tecla=self.combo_tecla.GetValue()
+		ctrl=self.check_ctrl.GetValue()
+		alt=self.check_alt.GetValue()
+		shift=self.check_shift.GetValue()
+		win=self.check_win.GetValue()
+		nueva_combinacion=tecla
+		if shift: nueva_combinacion="shift+"+nueva_combinacion
+		if alt: nueva_combinacion="alt+"+nueva_combinacion
+		if ctrl: nueva_combinacion="control+"+nueva_combinacion
+		if win: nueva_combinacion="win+"+nueva_combinacion
+		if not ctrl and not alt and not win and not shift:
+			wx.MessageBox(_("Debe escoger al menos una tecla de las casillas de berificación"), "error.", wx.ICON_ERROR)
+			return
+		for busc in range(self.combinaciones.GetItemCount()):
+			if busc== indice: continue
+			if nueva_combinacion == self.combinaciones.GetItem(busc,1).GetText():
+				wx.MessageBox(_("esta combinación ya está siendo usada en la función %s") % mensaje_teclas[busc], "error.", wx.ICON_ERROR)
+				return
+		global mis_teclas
+		if self.dentro:
+			self.handler_keyboard.unregister_key(self.combinaciones.GetItem(indice,1).GetText(),mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
+			self.handler_keyboard.register_key(nueva_combinacion,mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
+		leerTeclas()
+		mis_teclas=mis_teclas.replace(self.combinaciones.GetItem(indice,1).GetText(),nueva_combinacion)
+		with open("keys.txt", "w") as fichero: fichero.write(mis_teclas)
+		self.combinaciones.SetItem(indice, 1, nueva_combinacion)
+		self.dlg_editar_combinacion.Close()
+		self.combinaciones.SetFocus()
+	def restaurarTeclas(self,event):
+		dlg_2 = wx.MessageDialog(self.dlg_teclado, _("Está apunto de restaurar las combinaciones a sus valores por defecto, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
+		if dlg_2.ShowModal()==wx.ID_YES:
+			remove("keys.txt")
+			leerTeclas()
+			global mis_teclas
+			mis_teclas=eval(mis_teclas)
+			c=0
+			for valor in mis_teclas:
+				self.combinaciones.SetItem(c, 1, valor)
+				c+=1
+			self.combinaciones.Focus(0)
+			self.combinaciones.SetFocus()
+			if self.dentro:
+				self.handler_keyboard.unregister_all_keys()
+				self.handler_keyboard.register_keys(mis_teclas)
 	def documentacion(self, evt): wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube/tree/master/doc/'+languageHandler.curLang[:2]+'/readme.md')
 	def pageMain(self, evt): wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube')
 	def donativo(self, evt): wx.LaunchDefaultBrowser('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
 	def appConfiguracion(self, event):			
 		idiomas_disponibles = [""]
-		language_dict = translator.LANGUAGES
-		for k in language_dict:
-			idiomas_disponibles.append(language_dict[k])
+		for k in translator.LANGUAGES: idiomas_disponibles.append(translator.LANGUAGES[k])
 		self.dialogo_2 = wx.Dialog(self, wx.ID_ANY, _("Configuración"))
 		sizer_5 = wx.BoxSizer(wx.VERTICAL)
-		# Sizer del arbol
 		labelConfic = wx.StaticText(self.dialogo_2, -1, _("Categorías"))
 		sizer_5.Add(labelConfic, 1, wx.EXPAND, 0)
 		self.tree_1 = wx.Treebook(self.dialogo_2, wx.ID_ANY)
@@ -327,11 +477,11 @@ class MyFrame(wx.Frame):
 		sizer_soniditos.Add(self.reproducir)
 		self.treeItem_4.SetSizer(sizer_soniditos)
 		self.tree_1.AddPage(self.treeItem_4, _('Sonidos'))
-		self.button_cansel = wx.Button(self.dialogo_2, wx.ID_CANCEL, _("&Cancelar"))
-		sizer_5.Add(self.button_cansel, 0, 0, 0)
 		self.button_6 = wx.Button(self.dialogo_2, wx.ID_OK, _("&Aceptar"))
 		self.button_6.SetDefault()
 		sizer_5.Add(self.button_6, 0, 0, 0)
+		self.button_cansel = wx.Button(self.dialogo_2, wx.ID_CANCEL, _("&Cancelar"))
+		sizer_5.Add(self.button_cansel, 0, 0, 0)
 		self.treeItem_1.SetSizer(sizer_4)
 		self.treeItem_2.SetSizer(sizer_6)
 		self.dialogo_2.SetSizer(sizer_5)		
@@ -407,6 +557,8 @@ class MyFrame(wx.Frame):
 				self.list_box_1 = wx.ListBox(self.dialog_mensaje, wx.ID_ANY, choices=[])
 				self.list_box_1.SetFocus()
 				self.list_box_1.Bind(wx.EVT_KEY_UP, self.historialItemsTeclas)
+				# poner un menú contextual
+				self.list_box_1.Bind(wx.EVT_CONTEXT_MENU, self.historialItemsMenu)
 				sizer_mensaje_1.Add(self.list_box_1, 1, wx.EXPAND | wx.ALL, 4)
 				self.boton_opciones = wx.Button(self.dialog_mensaje, wx.ID_ANY, _("&Opciones"))
 				self.boton_opciones.Bind(wx.EVT_BUTTON, self.opcionesChat)
@@ -426,28 +578,69 @@ class MyFrame(wx.Frame):
 				self.hilo2.start()
 				self.dialog_mensaje.ShowModal()
 			except Exception as e:
-				wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), "error.", wx.ICON_ERROR)
+				wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."+str(e)), "error.", wx.ICON_ERROR)
 				self.text_ctrl_1.SetFocus()
 		else:
 			wx.MessageBox(_("No se puede  acceder porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
 			self.text_ctrl_1.SetFocus()
+	def historialItemsMenu(self, event):
+		menu = wx.Menu()
+		menu.Append(5, _("&Traducir"))
+		menu.Bind(wx.EVT_MENU, self.traducirMenu, id=5)
+		menu.Append(0, _("&Mostrar el mensaje en un cuadro de texto."))
+		menu.Bind(wx.EVT_MENU, self.mostrarMensaje, id=0)
+
+		menu.Append(6, _("&Copiar mensaje al portapapeles"))
+		menu.Bind(wx.EVT_MENU, self.copiarMensaje,id=6)
+		menu.Append(7, _("&Archivar mensaje"))
+		menu.Bind(wx.EVT_MENU, self.addRecuerdo,id=7)
+		# if para comprobar si un elemento está seleccionado
+		if self.list_box_1.GetSelection() != -1: self.list_box_1.PopupMenu(menu)
+		else:
+			self.list_box_1.SetSelection(0)
+			self.list_box_1.PopupMenu(menu)
+		menu.Destroy()
+
+	def traducirMenu(self, event):
+		noti =	wx.adv.NotificationMessage(_("Mensaje traducido"), _("el mensaje se ha traducido al idioma del programa y se  a  copiado en el portapapeles."))
+		noti.Show(timeout=10)
+		copy(translator.translate(self.list_box_1.GetString(self.list_box_1.GetSelection()),target=languageHandler.curLang[:2]))
+	def copiarMensaje(self, event):
+		noti =	wx.adv.NotificationMessage(_("Mensaje copiado al portapapeles"), _("El mensaje seleccionado ha sido copiado al portapapeles."))
+		noti.Show(timeout=10)
+		copy(self.list_box_1.GetString(self.list_box_1.GetSelection()))
 	def opcionesChat(self, event):
 		menu = wx.Menu()
 		menu.Append(1, _("&Borrar historial de mensajes"))
 		menu.Append(2, _("&Exportar los mensajes en un archivo de texto"))
 		if self.chat.status!="upcoming": menu.Append(3, _("&Añadir este canal a favoritos"))
 		menu.Append(4, _("&Ver estadísticas del chat"))
+		menu.Append(8, _("&Copiar enlace del chat al portapapeles"))
+		menu.Append(9, _("&Reproducir video en el navegador"))
 		menu.Bind(wx.EVT_MENU, self.borrarHistorial, id=1)
 		menu.Bind(wx.EVT_MENU, self.guardarLista, id=2)
 		if self.chat.status!="upcoming": menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
 		menu.Bind(wx.EVT_MENU, self.estadisticas, id=4)
+		menu.Bind(wx.EVT_MENU, self.copiarEnlace, id=8)
+		menu.Bind(wx.EVT_MENU, self.reproducirVideo, id=9)
 		self.boton_opciones.PopupMenu(menu)
 		menu.Destroy()
+
+	def copiarEnlace(self, event):
+		noti =	wx.adv.NotificationMessage(_("Enlace copiado al portapapeles"), _("El enlace del chat ha sido copiado al portapapeles."))
+		noti.Show(timeout=10)
+		if not self.dentro: url=favorite[self.list_favorite.GetSelection()]['url']
+		else: url=self.text_ctrl_1.GetValue()
+		copy(url)
+	def reproducirVideo(self, event):
+		if not self.dentro: url=favorite[self.list_favorite.GetSelection()]['url']
+		else: url=self.text_ctrl_1.GetValue()
+		wx.LaunchDefaultBrowser(url)
 	def estadisticas(self, event):
 		for k in range(len(self.mensajes)-1):
 			for x in range(len(self.mensajes)-1-k):
 				if self.mensajes[x]<self.mensajes[x+1]:
-					aux1=self.mensajes[x]
+					aux1=self.mensajes[x]		
 					self.mensajes[x]=self.mensajes[x+1]
 					self.mensajes[x+1]=aux1
 					aux2=self.usuarios[x]
@@ -500,7 +693,6 @@ class MyFrame(wx.Frame):
 		dlg_mensaje = wx.MessageDialog(self.dialog_mensaje, _("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		if dlg_mensaje.ShowModal() == wx.ID_YES:
 			self.dentro=False
-			self.contador=0
 			yt=0
 			pos=[]
 			lista=[]
@@ -543,9 +735,10 @@ class MyFrame(wx.Frame):
 			if dlg.ShowModal()==wx.ID_YES: restart.restart_program()
 			else: dlg.Destroy()
 		if self.choice_traducir.GetStringSelection()!="":
-			self.language_dict = translator.LANGUAGES
-			for k in self.language_dict:
-				if self.language_dict[k] == self.choice_traducir.GetStringSelection(): self.dst = k
+			for k in translator.LANGUAGES:
+				if translator.LANGUAGES[k] == self.choice_traducir.GetStringSelection():
+					self.dst = k
+					break
 		self.dialogo_2.Destroy()
 	def borrarHistorial(self,event):
 		dlg_2 = wx.MessageDialog(self.dialog_mensaje, _("Está apunto de eliminar del historial aproximadamente ")+str(self.list_box_1.GetCount())+_(" elementos, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
@@ -575,7 +768,6 @@ class MyFrame(wx.Frame):
 		leer.set_voice(lista_voces[event.GetSelection()])
 	def historialItemsTeclas(self, event):
 		event.Skip()
-		if event.GetKeyCode() == 127: self.list_box_1.Delete(self.list_box_1.GetSelection())
 		if event.GetKeyCode() == 32:
 			leer.silence()
 			leer.speak(self.list_box_1.GetString(self.list_box_1.GetSelection()))
@@ -585,7 +777,9 @@ class MyFrame(wx.Frame):
 		with YoutubeDL(ydlop) as ydl: info_dict = ydl.extract_info(self.text_ctrl_1.GetValue(), download=False)
 		try: self.label_dialog.SetLabel(info_dict.get('title')+', '+str(info_dict["view_count"])+_(' reproducciones'))
 		except: pass
-		self.registrarTeclas()
+		try: self.handler_keyboard.register_keys(eval(mis_teclas))
+		except keyboard_handler.KeyboardHandlerError: wx.MessageBox(_("Hubo un error al registrar los atajos de teclado globales."), "Error", wx.ICON_ERROR)
+		except: self.handler_keyboard.register_keys(mis_teclas)
 		if 'yout' in self.text_ctrl_1.GetValue(): self.recibirYT()
 		elif 'twitch' in self.text_ctrl_1.GetValue(): self.recibirTwich()
 	def elementoAnterior(self):
@@ -594,8 +788,9 @@ class MyFrame(wx.Frame):
 			if lista[yt][0]=='General':
 				if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
 				else:
-					if self.contador>0: self.contador-=1
-					lector.speak(self.list_box_1.GetString(self.contador))
+					if self.list_box_1.GetSelection() == wx.NOT_FOUND: self.list_box_1.SetSelection(0)
+					if self.list_box_1.GetSelection() >0: self.list_box_1.SetSelection(self.list_box_1.GetSelection()-1)
+					lector.speak(self.list_box_1.GetString(self.list_box_1.GetSelection()))
 			else:
 				if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
 				else:
@@ -608,8 +803,9 @@ class MyFrame(wx.Frame):
 			if lista[yt][0]=='General':
 				if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
 				else:
-					if self.contador<self.list_box_1.GetCount()-1: self.contador+=1
-					lector.speak(self.list_box_1.GetString(self.contador))
+					if self.list_box_1.GetSelection() == wx.NOT_FOUND: self.list_box_1.SetSelection(0)
+					if self.list_box_1.GetSelection() <self.list_box_1.GetCount()-1: self.list_box_1.SetSelection(self.list_box_1.GetSelection()+1)
+					lector.speak(self.list_box_1.GetString(self.list_box_1.GetSelection()))
 			else:
 				if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
 				else:
@@ -621,7 +817,8 @@ class MyFrame(wx.Frame):
 			if lista[yt][0]=='General':
 				if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
 				else:
-					copy(self.list_box_1.GetString(self.contador))
+					if self.list_box_1.GetSelection() == wx.NOT_FOUND: self.list_box_1.SetSelection(0)
+					copy(self.list_box_1.GetString(self.list_box_1.GetSelection()))
 					lector.speak(_("¡Copiado!"))
 			else:
 				if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
@@ -634,8 +831,8 @@ class MyFrame(wx.Frame):
 			if lista[yt][0]=='General':
 				if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
 				else:
-					self.contador=0
-					lector.speak(self.list_box_1.GetString(self.contador))
+					self.list_box_1.SetSelection(0)
+					lector.speak(self.list_box_1.GetString(0))
 			else:
 				if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
 				else:
@@ -648,8 +845,8 @@ class MyFrame(wx.Frame):
 			if lista[yt][0]=='General':
 				if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
 				else:
-					self.contador=self.list_box_1.GetCount()-1
-					lector.speak(self.list_box_1.GetString(self.contador))
+					self.list_box_1.SetSelection(self.list_box_1.GetCount()-1)
+					lector.speak(self.list_box_1.GetString(self.list_box_1.GetCount()-1))
 			else:
 				if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
 				else:
@@ -667,62 +864,90 @@ class MyFrame(wx.Frame):
 		dialogo_cerrar = wx.MessageDialog(self, _("¿está seguro que desea salir del programa?"), _("¡atención!:"), wx.YES_NO | wx.ICON_ASTERISK)
 		if dialogo_cerrar.ShowModal()==wx.ID_YES: self.Destroy()
 	def retornarMensaje(self):
-		if self.list_box_1.GetCount()>0 and lista[yt][0]=='General': return self.list_box_1.GetString(self.contador)
+		if self.list_box_1.GetCount()>0 and lista[yt][0]=='General': return self.list_box_1.GetString(self.list_box_1.GetSelection())
 		if lista[yt][0]!='General' and len(lista[yt])>0: return lista[yt][pos[yt]]
-	def mostrarMensaje(self):
+	def mostrarMensaje(self,event=None):
+		idiomas_disponibles = []
+		for k in translator.LANGUAGES: 			idiomas_disponibles.append(translator.LANGUAGES[k])
 		if self.dentro and self.retornarMensaje():
 			my_dialog = wx.Dialog(self, wx.ID_ANY, _("mensaje"))
 			sizer_mensaje = wx.BoxSizer(wx.HORIZONTAL)
+			label_idioma = wx.StaticText(my_dialog, wx.ID_ANY, _("idioma a traducir:"))
+			self.choice_idiomas = wx.Choice(my_dialog, wx.ID_ANY, choices=idiomas_disponibles)
+			self.choice_idiomas.SetStringSelection(translator.LANGUAGES[languageHandler.curLang[:2]])
+			self.choice_idiomas.Bind(wx.EVT_CHOICE, self.cambiarTraducir)
+			self.label_mensaje_texto = wx.StaticText(my_dialog, wx.ID_ANY, label=_("Mensaje en ") +self.choice_idiomas.GetString(self.choice_idiomas.GetSelection()) + ":")
 			self.text_message = wx.TextCtrl(my_dialog, wx.ID_ANY, self.retornarMensaje(), style=wx.TE_CENTRE)
-			traducir = wx.Button(my_dialog, wx.ID_ANY, _("&traducir el mensaje al idioma del programa"))
-			traducir.Bind(wx.EVT_BUTTON, self.traducirMensaje)
+			self.text_message.SetFocus()
+			self.traducir = wx.Button(my_dialog, wx.ID_ANY, label=_("&traducir el mensaje al idioma del programa"))
+			self.traducir.Bind(wx.EVT_BUTTON, self.traducirMensaje)
 			cancelar = wx.Button(my_dialog, wx.ID_CLOSE, _("&Cerrar"))
 			sizer_mensaje.Add(self.text_message, 0, 0, 0)
-			sizer_mensaje.Add(traducir,0,0,0)
+			sizer_mensaje.Add(self.traducir,0,0,0)
 			sizer_mensaje.Add(cancelar,0,0,0)
 			my_dialog.SetSizer(sizer_mensaje)
 			sizer_mensaje.Fit(my_dialog)
 			my_dialog.Centre()
 			my_dialog.SetEscapeId(cancelar.GetId())
 			my_dialog.ShowModal()
+	def cambiarTraducir(self,event): self.traducir.SetLabel(_("&traducir el mensaje" if self.choice_idiomas.GetString(self.choice_idiomas.GetSelection()) != translator.LANGUAGES[languageHandler.curLang[:2]] else "&Traducir mensaje al idioma del programa"))
 	def traducirMensaje(self,event):
-		self.text_message.SetValue(translator.translate(self.text_message.GetValue(),target=languageHandler.curLang[:2]))
+		for k in translator.LANGUAGES:
+			if translator.LANGUAGES[k] == self.choice_idiomas.GetStringSelection():
+				self.text_message.SetValue(translator.translate(self.text_message.GetValue(),target=k))
+				break
+		self.label_mensaje_texto.SetLabel(_("Mensaje en ") +self.choice_idiomas.GetString(self.choice_idiomas.GetSelection()))
 		self.text_message.SetFocus()
 	def reproducirMsg(self):
 		if lista[yt][0]=='General':
-			if self.contador==0 or self.contador==self.list_box_1.GetCount()-1: playsound("sounds/orilla.mp3",False)
+			if self.list_box_1.GetSelection()==0 or self.list_box_1.GetSelection()==self.list_box_1.GetCount()-1: playsound("sounds/orilla.mp3",False)
 			else: playsound("sounds/msj.mp3",False)
 		else:
 			if pos[yt]<=1 or pos[yt]==len(lista[yt])-1: playsound("sounds/orilla.mp3",False)
 			else: playsound("sounds/msj.mp3",False)
 	def addFavoritos(self, event):
+		if self.list_favorite.GetStrings()==[_("Tus favoritos aparecerán aquí")]: self.list_favorite.Delete(0)
 		if len(favorite)<=0:
 			self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
 			favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
-			escribirFavorito()
-			lector.speak("Se a añadido el elemento a favoritos")
 		else:
 			encontrado=False
 			for dato in favorite:
 				if dato['titulo']==info_dict.get('title'):
 					encontrado=True
 					break
-			if encontrado: wx.MessageBox(_("al parecer ya tienes ese enlace en tus favoritos"), "error.", wx.ICON_ERROR)
+			if encontrado or self.list_favorite.GetStrings()==[info_dict.get('title')+': '+self.text_ctrl_1.GetValue()]:
+				wx.MessageBox(_("Ya se encuentra en favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
+				return
 			else:
 				self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
 				favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
-				escribirFavorito()
-				lector.speak(_("Se a añadido el elemento a favoritos"))
+		escribirJsonLista('favoritos.json',favorite)
+		wx.MessageBox(_("Se ha agregado a favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
 	def updater(self,event=None):
 		update = updater.do_update()
 		if update==False:
 			if self.GetTitle(): wx.MessageBox(_("Al parecer tienes la última versión del programa"), _("Información"), wx.ICON_INFORMATION)
 	def borrarFavorito(self, event=None):
-		if self.list_favorite.GetCount() <= 0: wx.MessageBox(_("No hay elementos que borrar"), "Error", wx.ICON_ERROR)
+		if self.list_favorite.GetCount()<=0 or self.list_favorite.GetStrings()[0]==_("Tus favoritos aparecerán aquí"):
+			wx.MessageBox(_("No hay favoritos que borrar"), _("Error"), wx.ICON_ERROR)
+			self.list_favorite.SetFocus()
 		else:
-			favorite.pop(self.list_favorite.GetSelection())
-			self.list_favorite.Delete(self.list_favorite.GetSelection())
-			escribirFavorito()
+			if self.borrar_todos_favs.GetValue():
+				# preguntar
+				if wx.MessageBox(_("¿Estás seguro de borrar todos los favoritos de la lista?"), _("¡Atención!"), wx.YES_NO|wx.ICON_QUESTION)==wx.YES:
+					self.list_favorite.Clear()
+					favorite.clear()
+					escribirJsonLista('favoritos.json',favorite)
+					self.list_favorite.SetFocus()
+			else:
+				self.list_favorite.Delete(self.list_favorite.GetSelection())
+				favorite.pop(self.list_favorite.GetSelection())
+				escribirJsonLista('favoritos.json',favorite)
+				lector.speak(_("Se a borrado el elemento de favoritos"))
+				self.list_favorite.SetFocus()
+		if self.list_favorite.GetCount()<=0: self.list_favorite.Append(_("Tus favoritos aparecerán aquí"))
+
 	def favoritoTeclas(self,event):
 		event.Skip()
 		if event.GetKeyCode() == 32: self.acceder(url=favorite[self.list_favorite.GetSelection()]['url'])
@@ -989,17 +1214,28 @@ class MyFrame(wx.Frame):
 		if yt<=0: yt=len(lista)-1
 		else: yt-=1
 		lector.speak(lista[yt][0])
+
 	def destacarMensaje(self):
 		global lista,pos
+		if lista[yt][0]=='Favoritos': lector.speak(_("no puedes agregar un Favorito del bufer de favoritos"))
 		encontrado=False
 		contador=0
 		for coso in lista:
 			if coso[0]=='Favoritos': encontrado=True
 		if not encontrado: lista.append([_('Favoritos')])
+		pos.append(1)
 		for contador in range(len(lista)):
 			if lista[contador]=='Favoritos': break
-		if lista[yt][0]=='General': lista[contador].append(self.list_box_1.GetString(self.contador))
-		else: lista[contador].append(lista[yt][pos[yt]])
+		if lista[yt][0]=='General':
+			if self.list_box_1.GetString(self.list_box_1.GetSelection()) in [x for x in lista[contador]]:
+				lector.speak(_("este mensaje ya se encuentra en el buffer de favoritos."))
+				return
+			else: lista[contador].append(self.list_box_1.GetString(self.list_box_1.GetSelection()))
+		else:
+			if lista[yt][pos[yt]] in [x for x in lista[contador]]:
+				lector.speak(_("este mensaje ya se encuentra en el buffer de favoritos."))
+				return
+			else: lista[contador].append(lista[yt][pos[yt]])
 		lector.speak(_('Se agregó el elemento a la lista de favoritos...'))
 	def reproducirSonidos(self,event): playsound(rutasonidos[self.soniditos.GetFocusedItem()], False)
 	def iniciarBusqueda(self):
@@ -1049,16 +1285,89 @@ class MyFrame(wx.Frame):
 		global sonidos
 		sonidos=False if sonidos else True
 		lector.speak(_("Sonidos activados.") if sonidos else _("Sonidos desactivados"))
-	def registrarTeclas(self):
-		leerTeclas()
-		try: self.handler_keyboard.register_keys(eval(mis_teclas))
-		except: lector.speak(_("hubo un error al registrar los atajos de teclado globales."))
 	def checarDonaciones(self,event):
 		global donations
 		donations=True if event.IsChecked() else False
 	def checarActualizaciones(self,event):
 		global updates
 		updates= True if event.IsChecked() else False
+
+	def addRecuerdo(self, event=None):
+		if self.list_mensajes.GetStrings()[0]==_("Tus mensajes archivados aparecerán aquí"): self.list_mensajes.Delete(0)
+		if len(mensajes_destacados)<=0:
+			# añadir un nuevo archivado
+			if lista[yt][0]=='General':
+				self.list_mensajes.Append(self.list_box_1.GetString(self.list_box_1.GetSelection())+': '+info_dict.get('title'))
+				mensajes_destacados.append({'mensaje': self.list_box_1.GetString(self.list_box_1.GetSelection()), 'titulo': info_dict.get('title')})
+			else:
+				self.list_mensajes.Append(lista[yt][pos[yt]]+': '+info_dict.get('title'))
+				mensajes_destacados.append({'mensaje': lista[yt][pos[yt]], 'titulo': info_dict.get('title')})
+		else:
+			if lista[yt][0]=='General':
+				if self.list_box_1.GetString(self.list_box_1.GetSelection()) in [x['mensaje'] for x in mensajes_destacados]:
+					wx.MessageBox(_("El mensaje ya está archivado."), _("error"), wx.ICON_ERROR)
+					return
+				else:
+					self.list_mensajes.Append(self.list_box_1.GetString(self.list_box_1.GetSelection())+': '+info_dict.get('title'))
+					mensajes_destacados.append({'mensaje': self.list_box_1.GetString(self.list_box_1.GetSelection()), 'titulo': info_dict.get('title')})
+			else:
+				if lista[yt][pos[yt]] in [x['mensaje'] for x in mensajes_destacados]:
+					wx.MessageBox(_("El mensaje ya está archivado."), _("error"), wx.ICON_ERROR)
+					return
+				else:
+					self.list_mensajes.Append(lista[yt][pos[yt]]+': '+info_dict.get('title'))
+					mensajes_destacados.append({'mensaje': lista[yt][pos[yt]], 'titulo': info_dict.get('title')})
+		escribirJsonLista('mensajes_destacados.json',mensajes_destacados)
+		lector.speak(_("se archivó el mensaje"))
+	def seleccionarTodos(self, event):
+		if self.check_borrar_todos.GetValue():
+			self.button_borrar_mensajes.SetLabel(_("&Borrar mensajes"))
+			self.button_borrar_mensajes.SetToolTip(_("Borrar todos los mensajes destacados"))
+			self.button_borrar_mensajes.SetFocus()
+		else:
+			self.button_borrar_mensajes.SetLabel(_("&Borrar mensaje"))
+			self.button_borrar_mensajes.SetToolTip(_("Borrar el mensaje destacado seleccionado"))
+			self.button_borrar_mensajes.SetFocus()
+
+	def borrarTodosFavoritos(self, event):
+		if self.borrar_todos_favs.GetValue():
+			self.button_borrar_favoritos.SetLabel(_("&Borrar favoritos"))
+			self.button_borrar_favoritos.SetToolTip(_("Borrar todos los favoritos"))
+			self.button_borrar_favoritos.SetFocus()
+		else:
+			self.button_borrar_favoritos.SetLabel(_("&Borrar favorito"))
+			self.button_borrar_favoritos.SetToolTip(_("Borrar el favorito seleccionado"))
+			self.button_borrar_favoritos.SetFocus()
+
+	def borraRecuerdo(self, event):
+		# si la casilla está desactivada
+		if not self.check_borrar_todos.GetValue():
+			if not	self.list_mensajes.GetStrings()[0]=='Tus mensajes archivados aparecerán aquí':
+				if len(mensajes_destacados)>0:
+					self.list_mensajes.Delete(self.list_mensajes.GetSelection())
+					mensajes_destacados.pop(self.list_mensajes.GetSelection())
+					escribirJsonLista('mensajes_destacados.json',mensajes_destacados)
+					lector.speak(_("se eliminó el mensaje de tus mensajes archivados"))
+					self.list_mensajes.SetFocus()
+				else: wx.MessageBox(_("No hay más elementos que borrar"), "Error.", wx.ICON_ERROR)
+			else:
+				wx.MessageBox(_("No hay mensajes que borrar"), "Error.", wx.ICON_ERROR)
+				self.list_mensajes.SetFocus()
+			if self.list_mensajes.GetCount()<=0: self.list_mensajes.Append(_("Tus mensajes archivados aparecerán aquí"))
+		else:
+			if len(mensajes_destacados)>0:
+				# preguntar
+				if wx.MessageBox(_("¿Estás seguro de que quieres borrar todos los mensajes?"), "Confirmación", wx.YES_NO|wx.ICON_QUESTION)==wx.YES:
+					mensajes_destacados.clear()
+					escribirJsonLista('mensajes_destacados.json',mensajes_destacados)
+					self.list_mensajes.Clear()
+					self.list_mensajes.Append(_("Tus mensajes archivados aparecerán aquí"))
+					lector.speak(_("se eliminaron los mensajes archivados"))
+					self.list_mensajes.SetFocus()
+			elif	len(mensajes_destacados)<=0:
+				wx.MessageBox(_("No hay mensajes que borrar"), "Error.", wx.ICON_ERROR)
+				self.list_mensajes.SetFocus()
+
 class MyApp(wx.App):
 	def OnInit(self):
 		self.frame = MyFrame(None, wx.ID_ANY, "")

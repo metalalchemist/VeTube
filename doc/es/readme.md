@@ -17,10 +17,12 @@ Lee y gestiona de manera accesible el chat de youtube y twitch en tus propios di
   - activa o desactiva el modo automático. 
   - configura el listado de los mensajes en la interfaz invisible.
   - Configura las preferencias de la voz sapy.
+  - personaliza los atajos de teclado globales
 - cambia de modalidad de lectura de chats fácilmente: decide si quieres leer todos los chats o solo los de alguna categoría en específico.
 - guarda tus envivos en una sección de favoritos. repite cuantas veces  desees el chat sin necesidad de ir a buscar el enlace nuevamente.
 - guarda un historial de los mensajes.
 - traduce el chat de un streaming al idiomma que  gustes.
+
 ## Atajos de teclado.
 ### Usando interfaz invisible.
 | acción                    | combinación de teclas |
@@ -44,7 +46,6 @@ Lee y gestiona de manera accesible el chat de youtube y twitch en tus propios di
 | acción                    | combinación de teclas |
 | ------------------------- | ----------- |
 | Reproducir mensaje seleccionado      | espacio           |
-| borrar mensaje seleccionado      | suprimir           |
 
 ### En la sección de favoritos:
 | acción                    | combinación de teclas |
