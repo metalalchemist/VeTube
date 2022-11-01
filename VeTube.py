@@ -298,7 +298,7 @@ class MyFrame(wx.Frame):
 		self.check_win = wx.CheckBox(self.dlg_editar_combinacion, wx.ID_ANY, _("&Windows"))
 		if 'win' in texto: self.check_win.SetValue(True)
 		self.teclas = ["enter", "tab", "space", "back", "delete", "home", "end", "pageUp", "pageDown", "up", "down", "left", "right", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-		label_tecla = wx.StaticText(self.dlg_editar_combinacion, wx.ID_ANY, _("&Selecciona una tecla para	la combinación"))
+		label_tecla = wx.StaticText(self.dlg_editar_combinacion, wx.ID_ANY, _("&Selecciona una tecla para la combinación"))
 		self.combo_tecla = wx.ComboBox(self.dlg_editar_combinacion, wx.ID_ANY, choices=self.teclas, style=wx.CB_DROPDOWN|wx.CB_READONLY)
 		texto=texto.split('+')
 		self.combo_tecla.SetValue(texto[-1])
@@ -890,7 +890,7 @@ class MyFrame(wx.Frame):
 			my_dialog.Centre()
 			my_dialog.SetEscapeId(cancelar.GetId())
 			my_dialog.ShowModal()
-	def cambiarTraducir(self,event): self.traducir.SetLabel(_("&traducir el mensaje" if self.choice_idiomas.GetString(self.choice_idiomas.GetSelection()) != translator.LANGUAGES[languageHandler.curLang[:2]] else "&Traducir mensaje al idioma del programa"))
+	def cambiarTraducir(self,event): self.traducir.SetLabel(_("&traducir el mensaje") if self.choice_idiomas.GetString(self.choice_idiomas.GetSelection()) != translator.LANGUAGES[languageHandler.curLang[:2]] else _("&Traducir mensaje al idioma del programa"))
 	def traducirMensaje(self,event):
 		for k in translator.LANGUAGES:
 			if translator.LANGUAGES[k] == self.choice_idiomas.GetStringSelection():
@@ -908,20 +908,36 @@ class MyFrame(wx.Frame):
 	def addFavoritos(self, event):
 		if self.list_favorite.GetStrings()==[_("Tus favoritos aparecerán aquí")]: self.list_favorite.Delete(0)
 		if len(favorite)<=0:
-			self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
-			favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
-		else:
-			encontrado=False
-			for dato in favorite:
-				if dato['titulo']==info_dict.get('title'):
-					encontrado=True
-					break
-			if encontrado or self.list_favorite.GetStrings()==[info_dict.get('title')+': '+self.text_ctrl_1.GetValue()]:
-				wx.MessageBox(_("Ya se encuentra en favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
-				return
+			if 'twitch' in self.text_ctrl_1.GetValue():
+				if not 'videos' in self.text_ctrl_1.GetValue():
+					self.list_favorite.Append(info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue())
+					favorite.append({'titulo': info_dict.get('uploader'), 'url': self.text_ctrl_1.GetValue()})
+				else:
+					self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
+					favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
 			else:
 				self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
 				favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
+		else:
+			encontrado=False
+			for dato in favorite:
+				if dato['titulo']==info_dict.get('title') or dato['titulo']==info_dict.get('uploader'):
+					encontrado=True
+					break
+			if encontrado or self.list_favorite.GetStrings()==[info_dict.get('title')+': '+self.text_ctrl_1.GetValue()] or self.list_favorite.GetStrings()==[info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue()]:
+				wx.MessageBox(_("Ya se encuentra en favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
+				return
+			else:
+				if 'twitch' in self.text_ctrl_1.GetValue():
+					if not 'videos' in self.text_ctrl_1.GetValue():
+						self.list_favorite.Append(info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue())
+						favorite.append({'titulo': info_dict.get('uploader'), 'url': self.text_ctrl_1.GetValue()})
+					else:
+						self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
+						favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
+				else:
+					self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
+					favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
 		escribirJsonLista('favoritos.json',favorite)
 		wx.MessageBox(_("Se ha agregado a favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
 	def updater(self,event=None):

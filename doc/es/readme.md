@@ -20,6 +20,7 @@ Lee y gestiona de manera accesible el chat de youtube y twitch en tus propios di
   - personaliza los atajos de teclado globales
 - cambia de modalidad de lectura de chats fácilmente: decide si quieres leer todos los chats o solo los de alguna categoría en específico.
 - guarda tus envivos en una sección de favoritos. repite cuantas veces  desees el chat sin necesidad de ir a buscar el enlace nuevamente.
+- archiva unmensaje: útil para tener recordatorios.
 - guarda un historial de los mensajes.
 - traduce el chat de un streaming al idiomma que  gustes.
 
@@ -34,6 +35,7 @@ Lee y gestiona de manera accesible el chat de youtube y twitch en tus propios di
 | Elemento siguiente      | alt shift flecha abajo           |
 | Elemento inicial      | alt shift inicio           |
 | Elemento final      | alt shift fin           |
+| archiva un mensaje      | alt shift a           |
 | Copia el mensaje actual      | alt shift c           |
 | Borra un buffer previamente creado      | alt shift d           |
 | añade el mensaje al buffer de favoritos      | alt shift f           |
