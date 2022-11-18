@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,wx.adv,threading,languageHandler,restart,translator,time,keyboard_handler
+import json,wx,wx.adv,threading,languageHandler,restart,translator,time,keyboard_handler,funciones,google_currency
 from keyboard_handler.wx_handler import WXKeyboardHandler
 from playsound import playsound
 from accessible_output2.outputs import auto, sapi5
@@ -26,12 +26,6 @@ rutasonidos=["sounds/chat.mp3","sounds/chatmiembro.mp3","sounds/miembros.mp3","s
 lector=auto.Auto()
 leer=sapi5.SAPI5()
 lista_voces=leer.list_voices()
-def escribirJsonLista(arch,lista=[]):
-	with open(arch, 'w+') as file: json.dump(lista, file)
-def leerJsonLista(arch):
-	if path.exists(arch):
-		with open (arch) as file: return json.load(file)
-	else: return []
 def asignarConfiguracion():
 	global voz,tono,volume,speed,sapi,sonidos,idioma,reader,categ,listasonidos,donations,updates
 	voz=0
@@ -50,12 +44,6 @@ def asignarConfiguracion():
 	leer.set_pitch(tono)
 	leer.set_voice(lista_voces[voz])
 	leer.set_volume(volume)
-def convertirLista(lista, val1, val2):
-	if len(lista)<=0: return []
-	else:
-		newlista=[]
-		for datos in lista: newlista.append(datos[val1]+': '+datos[val2])
-		return newlista
 def escribirConfiguracion():
 	data={'voz': voz,
 "tono": tono,
@@ -98,21 +86,21 @@ def leerTeclas():
 	else: escribirTeclas()
 pos=[]
 leerConfiguracion()
-favorite=leerJsonLista('favoritos.json')
-mensajes_destacados=leerJsonLista('mensajes_destacados.json')
+favorite=funciones.leerJsonLista('favoritos.json')
+mensajes_destacados=funciones.leerJsonLista('mensajes_destacados.json')
 leer.set_rate(speed)
 leer.set_pitch(tono)
 leer.set_voice(lista_voces[voz])
 leer.set_volume(volume)
-favs=convertirLista(favorite,'titulo','url')
-msjs=convertirLista(mensajes_destacados,'mensaje','titulo')
+favs=funciones.convertirLista(favorite,'titulo','url')
+msjs=funciones.convertirLista(mensajes_destacados,'mensaje','titulo')
 languageHandler.setLanguage(idioma)
 idiomas = languageHandler.getAvailableLanguages()
 langs = []
 [langs.append(i[1]) for i in idiomas]
 codes = []
 [codes.append(i[0]) for i in idiomas]
-mensaje_teclas=[_('Silencia la voz sapy'),_('Buffer anterior.'),_('Siguiente buffer.'),_('Mensaje anterior'),_('Mensaje siguiente'),_('Ir al comienzo del buffer'),_('Ir al final del buffer'),_('Destaca un mensaje en el buffer de  favoritos'),_('Copia el mensaje actual'),_('Activa o desactiva la lectura automática'),_('Busca una palabra en los mensajes actuales'),_('Muestra el mensaje actual en un cuadro de texto'),_('borra el buffer seleccionado'),_('activa o desactiva los sonidos del programa'),_('Invocar el editor de combinaciones de teclado')]
+mensaje_teclas=[_('Silencia la voz sapy'),_('Buffer anterior.'),_('Siguiente buffer.'),_('Mensaje anterior'),_('Mensaje siguiente'),_('Ir al comienzo del buffer'),_('Ir al final del buffer'),_('Destaca un mensaje en el buffer de  favoritos'),_('Copia el mensaje actual'),_('Activa o desactiva la lectura automática'),_('Busca una palabra en los mensajes actuales'),_('Muestra el mensaje actual en un cuadro de texto'),_('borra el buffer seleccionado'),_('activa o desactiva los sonidos del programa'),_('Invocar el editor de combinaciones de teclado'),_('Archivar un mensaje')]
 mensajes_categorias=[_('Miembros'),_('Donativos'),_('Moderadores'),_('Usuarios Verificados'),_('Favoritos')]
 mensajes_sonidos=[_('Sonido cuando llega un mensaje'),_('Sonido cuando habla un miembro'),_('Sonido cuando se conecta un miembro'),_('Sonido cuando llega un donativo'),_('Sonido cuando habla un moderador'),_('Sonido cuando habla un usuario verificado'),_('Sonido al ingresar al chat'),_('Sonido cuando habla el propietario del canal'),_('sonido al terminar la búsqueda de mensajes')]
 codes.reverse()
@@ -137,6 +125,7 @@ class MyFrame(wx.Frame):
 		if donations: update.donation()
 		self.dentro=False
 		self.dst =""
+		self.divisa='Por defecto'
 		leerTeclas()
 		kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
 		wx.Frame.__init__(self, *args, **kwds)
@@ -375,6 +364,8 @@ class MyFrame(wx.Frame):
 	def donativo(self, evt): wx.LaunchDefaultBrowser('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
 	def appConfiguracion(self, event):			
 		idiomas_disponibles = [""]
+		monedas=[_('Por defecto')]
+		for k in google_currency.CODES: monedas.append(f'{google_currency.CODES[k]}, ({k})')
 		for k in translator.LANGUAGES: idiomas_disponibles.append(translator.LANGUAGES[k])
 		self.dialogo_2 = wx.Dialog(self, wx.ID_ANY, _("Configuración"))
 		sizer_5 = wx.BoxSizer(wx.VERTICAL)
@@ -405,6 +396,11 @@ class MyFrame(wx.Frame):
 		self.choice_traducir.SetSelection(0)
 		boxSizer_1.Add(label_trans)
 		boxSizer_1.Add(self.choice_traducir)
+		label_monedas = wx.StaticText(self.treeItem_1, wx.ID_ANY, _("convertir las donaciones a la divisa: "))
+		self.choice_moneditas = wx.Choice(self.treeItem_1, wx.ID_ANY, choices=monedas)
+		self.choice_moneditas.SetSelection(0)
+		boxSizer_1.Add(label_monedas)
+		boxSizer_1.Add(self.choice_moneditas)
 		sizer_4.Add(boxSizer_1, 1, wx.EXPAND, 0)
 		self.treeItem_2 = wx.Panel(self.tree_1, wx.ID_ANY)
 		self.tree_1.AddPage(self.treeItem_2, _("Voz"))
@@ -739,6 +735,13 @@ class MyFrame(wx.Frame):
 				if translator.LANGUAGES[k] == self.choice_traducir.GetStringSelection():
 					self.dst = k
 					break
+		if self.choice_moneditas.GetStringSelection()!='Por defecto':
+			monedita=self.choice_moneditas.GetStringSelection().split(', (')
+			print(monedita[0])
+			for k in google_currency.CODES:
+				if google_currency.CODES[k] == monedita[0]:
+					self.divisa = k
+					break
 		self.dialogo_2.Destroy()
 	def borrarHistorial(self,event):
 		dlg_2 = wx.MessageDialog(self.dialog_mensaje, _("Está apunto de eliminar del historial aproximadamente ")+str(self.list_box_1.GetCount())+_(" elementos, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
@@ -908,37 +911,24 @@ class MyFrame(wx.Frame):
 	def addFavoritos(self, event):
 		if self.list_favorite.GetStrings()==[_("Tus favoritos aparecerán aquí")]: self.list_favorite.Delete(0)
 		if len(favorite)<=0:
-			if 'twitch' in self.text_ctrl_1.GetValue():
-				if not 'videos' in self.text_ctrl_1.GetValue():
+			if 'twitch' in self.text_ctrl_1.GetValue() and not 'videos' in self.text_ctrl_1.GetValue():
+				self.list_favorite.Append(info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue())
+				favorite.append({'titulo': info_dict.get('uploader'), 'url': self.text_ctrl_1.GetValue()})
+			else:
+				self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
+				favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
+		else:
+			if self.list_favorite.GetStrings()==[info_dict.get('title')+': '+self.text_ctrl_1.GetValue()] or self.list_favorite.GetStrings()==[info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue()]:
+				wx.MessageBox(_("Ya se encuentra en favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
+				return
+			else:
+				if 'twitch' in self.text_ctrl_1.GetValue() and not 'videos' in self.text_ctrl_1.GetValue():
 					self.list_favorite.Append(info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue())
 					favorite.append({'titulo': info_dict.get('uploader'), 'url': self.text_ctrl_1.GetValue()})
 				else:
 					self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
 					favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
-			else:
-				self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
-				favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
-		else:
-			encontrado=False
-			for dato in favorite:
-				if dato['titulo']==info_dict.get('title') or dato['titulo']==info_dict.get('uploader'):
-					encontrado=True
-					break
-			if encontrado or self.list_favorite.GetStrings()==[info_dict.get('title')+': '+self.text_ctrl_1.GetValue()] or self.list_favorite.GetStrings()==[info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue()]:
-				wx.MessageBox(_("Ya se encuentra en favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
-				return
-			else:
-				if 'twitch' in self.text_ctrl_1.GetValue():
-					if not 'videos' in self.text_ctrl_1.GetValue():
-						self.list_favorite.Append(info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue())
-						favorite.append({'titulo': info_dict.get('uploader'), 'url': self.text_ctrl_1.GetValue()})
-					else:
-						self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
-						favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
-				else:
-					self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
-					favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
-		escribirJsonLista('favoritos.json',favorite)
+		funciones.escribirJsonLista('favoritos.json',favorite)
 		wx.MessageBox(_("Se ha agregado a favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
 	def updater(self,event=None):
 		update = updater.do_update()
@@ -954,12 +944,12 @@ class MyFrame(wx.Frame):
 				if wx.MessageBox(_("¿Estás seguro de borrar todos los favoritos de la lista?"), _("¡Atención!"), wx.YES_NO|wx.ICON_QUESTION)==wx.YES:
 					self.list_favorite.Clear()
 					favorite.clear()
-					escribirJsonLista('favoritos.json',favorite)
+					remove('favoritos.json')
 					self.list_favorite.SetFocus()
 			else:
 				self.list_favorite.Delete(self.list_favorite.GetSelection())
 				favorite.pop(self.list_favorite.GetSelection())
-				escribirJsonLista('favoritos.json',favorite)
+				funciones.escribirJsonLista('favoritos.json',favorite)
 				lector.speak(_("Se a borrado el elemento de favoritos"))
 				self.list_favorite.SetFocus()
 		if self.list_favorite.GetCount()<=0: self.list_favorite.Append(_("Tus favoritos aparecerán aquí"))
@@ -982,6 +972,12 @@ class MyFrame(wx.Frame):
 						break
 					c+=1
 			if message['message_type']=='paid_message' or message['message_type']=='paid_sticker':
+				if self.divisa!='Por defecto':
+					moneda=json.loads(google_currency.convert(message['money']['currency'],self.divisa,message['money']['amount']) )
+					print(type(moneda))
+					if moneda['converted']:
+						message['money']['currency']=self.divisa
+						message['money']['amount']=moneda['amount']
 				if message['message']!=None:
 					if categ[1]:
 						for contador in range(len(lista)):
@@ -1098,6 +1094,7 @@ class MyFrame(wx.Frame):
 						break
 					c+=1
 			if 'Cheer' in message['message']:
+				#1 bit=1 cent dollar
 				divide=message['message'].split()
 				dinero=divide[0]
 				divide=" ".join(divide[1:])
@@ -1333,7 +1330,7 @@ class MyFrame(wx.Frame):
 				else:
 					self.list_mensajes.Append(lista[yt][pos[yt]]+': '+info_dict.get('title'))
 					mensajes_destacados.append({'mensaje': lista[yt][pos[yt]], 'titulo': info_dict.get('title')})
-		escribirJsonLista('mensajes_destacados.json',mensajes_destacados)
+		funciones.escribirJsonLista('mensajes_destacados.json',mensajes_destacados)
 		lector.speak(_("se archivó el mensaje"))
 	def seleccionarTodos(self, event):
 		if self.check_borrar_todos.GetValue():
@@ -1362,7 +1359,7 @@ class MyFrame(wx.Frame):
 				if len(mensajes_destacados)>0:
 					self.list_mensajes.Delete(self.list_mensajes.GetSelection())
 					mensajes_destacados.pop(self.list_mensajes.GetSelection())
-					escribirJsonLista('mensajes_destacados.json',mensajes_destacados)
+					funciones.escribirJsonLista('mensajes_destacados.json',mensajes_destacados)
 					lector.speak(_("se eliminó el mensaje de tus mensajes archivados"))
 					self.list_mensajes.SetFocus()
 				else: wx.MessageBox(_("No hay más elementos que borrar"), "Error.", wx.ICON_ERROR)
@@ -1375,7 +1372,7 @@ class MyFrame(wx.Frame):
 				# preguntar
 				if wx.MessageBox(_("¿Estás seguro de que quieres borrar todos los mensajes?"), "Confirmación", wx.YES_NO|wx.ICON_QUESTION)==wx.YES:
 					mensajes_destacados.clear()
-					escribirJsonLista('mensajes_destacados.json',mensajes_destacados)
+					remove('mensajes_destacados.json')
 					self.list_mensajes.Clear()
 					self.list_mensajes.Append(_("Tus mensajes archivados aparecerán aquí"))
 					lector.speak(_("se eliminaron los mensajes archivados"))

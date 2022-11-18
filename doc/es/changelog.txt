@@ -1,4 +1,5 @@
 v2.6
+se agrega un convertidor de divisas para convertir las donaciones a la moneda  que desees (válido de momento solo para youtube)
 se corrige un bug donde se agregaba el título al momento de agregar el enlace a tus favoritos del en vivo actual en twitch si el creador estaba strimeando. se debía agregar el nombre del canal en lugar del título del envivo.
 agregadas 2 opciones nuevas en el botón mas opciones. copiar enlace y reproducir en el navegador.
 correcciones de bugs con el buffer favoritos: no agregar mensajes duplicados ni tampoco poder agregar del mismo buffer de favoritos.

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: filmesfxx@gmail.com\n"
 "POT-Creation-Date: 2022-10-31 16:19-0700\n"
-"PO-Revision-Date: 2022-08-18 09:10-0700\n"
+"PO-Revision-Date: 2022-1-11 21:36\n"
 "Last-Translator: Eternal legend <filmesfxx@gmail.com>\n"
 "Language: pt_BR\n"
 "Language-Team: pt-BR <eternallegend.github.io>\n"
@@ -76,7 +76,7 @@ msgstr "ativar ou desativar os sons do programa"
 
 #: chat/VeTube.py:115
 msgid "Invocar el editor de combinaciones de teclado"
-msgstr ""
+msgstr "Chamar editor de atalhos de teclado"
 
 #: chat/VeTube.py:116 chat/VeTube.py:122
 msgid "Miembros"
@@ -180,7 +180,7 @@ msgstr "&Seus favoritos: "
 
 #: chat/VeTube.py:183 chat/VeTube.py:909 chat/VeTube.py:932 chat/VeTube.py:949
 msgid "Tus favoritos aparecerán aquí"
-msgstr ""
+msgstr "Seus favoritos aparecerão aqui"
 
 #: chat/VeTube.py:184 chat/VeTube.py:1338
 msgid "&Borrar favorito"
@@ -188,19 +188,19 @@ msgstr "&Excluir favorito"
 
 #: chat/VeTube.py:188 chat/VeTube.py:205
 msgid "&Seleccionar todos los elementos"
-msgstr ""
+msgstr "Selecionar todos os itens"
 
 #: chat/VeTube.py:193
 msgid "mensajes archivados"
-msgstr ""
+msgstr "mensagens arquivadas"
 
 #: chat/VeTube.py:195
 msgid "&Mensajes archivados: "
-msgstr ""
+msgstr "&Mensagens arquivadas:"
 
 #: chat/VeTube.py:201 chat/VeTube.py:1328
 msgid "&Borrar mensaje"
-msgstr ""
+msgstr "Apagar mensagem"
 
 #: chat/VeTube.py:221 chat/VeTube.py:563
 msgid "&Opciones"
@@ -469,7 +469,7 @@ msgstr ""
 
 #: chat/VeTube.py:588
 msgid "&Traducir"
-msgstr ""
+msgstr ¨&traduzir"
 
 #: chat/VeTube.py:590
 msgid "&Mostrar el mensaje en un cuadro de texto."
@@ -481,25 +481,25 @@ msgstr "Copie a mensagem atual"
 
 #: chat/VeTube.py:595
 msgid "&Archivar mensaje"
-msgstr ""
+msgstr "&Arquivar mensagem"
 
 #: chat/VeTube.py:605
 msgid "Mensaje traducido"
-msgstr ""
+msgstr "mensagem traduzida"
 
 #: chat/VeTube.py:605
 msgid ""
 "el mensaje se ha traducido al idioma del programa y se  a  copiado en el "
 "portapapeles."
-msgstr ""
+msgstr "a mensagem foi traduzida para o idioma do programa e foi copiada para a área de transferência"
 
 #: chat/VeTube.py:609
 msgid "Mensaje copiado al portapapeles"
-msgstr ""
+msgstr "Mensagem copiada para área de transferência"
 
 #: chat/VeTube.py:609
 msgid "El mensaje seleccionado ha sido copiado al portapapeles."
-msgstr ""
+msgstr "A mensagem selecionada foi copiada para área de transferência"
 
 #: chat/VeTube.py:614
 msgid "&Borrar historial de mensajes"
@@ -519,19 +519,19 @@ msgstr "&Ver estatísticas do bate-papo"
 
 #: chat/VeTube.py:618
 msgid "&Copiar enlace del chat al portapapeles"
-msgstr ""
+msgstr "&Copiar link de bate-papo para a área de transferência"
 
 #: chat/VeTube.py:619
 msgid "&Reproducir video en el navegador"
-msgstr ""
+msgstr "Reproduzir o vídeo no navegador esterno"
 
 #: chat/VeTube.py:630
 msgid "Enlace copiado al portapapeles"
-msgstr ""
+msgstr "Link copiado para a área de transferência"
 
 #: chat/VeTube.py:630
 msgid "El enlace del chat ha sido copiado al portapapeles."
-msgstr ""
+msgstr "O link do chat foi copiado para a área de transferência."
 
 #: chat/VeTube.py:649
 msgid "Estadísticas del canal:"
@@ -680,11 +680,11 @@ msgstr "mensagem"
 
 #: chat/VeTube.py:875
 msgid "idioma a traducir:"
-msgstr ""
+msgstr "Idioma para traduzir"
 
 #: chat/VeTube.py:879 chat/VeTube.py:899
 msgid "Mensaje en "
-msgstr ""
+msgstr "mensagem em"
 
 #: chat/VeTube.py:882
 msgid "&traducir el mensaje al idioma del programa"
@@ -692,19 +692,19 @@ msgstr "&traduzir a mensagem para o idioma do programa"
 
 #: chat/VeTube.py:893
 msgid "&traducir el mensaje"
-msgstr ""
+msgstr "&traduzir a mensagem"
 
 #: chat/VeTube.py:893
 msgid "&Traducir mensaje al idioma del programa"
-msgstr ""
+msgstr "&Traduzir mensagem para o idioma do programa"
 
 #: chat/VeTube.py:920
 msgid "Ya se encuentra en favoritos"
-msgstr ""
+msgstr "Já nos favoritos"
 
 #: chat/VeTube.py:920 chat/VeTube.py:926
 msgid "Aviso"
-msgstr ""
+msgstr "Aviso"
 
 #: chat/VeTube.py:926
 msgid "Se ha agregado a favoritos"
@@ -720,11 +720,11 @@ msgstr "Não há itens para excluir"
 
 #: chat/VeTube.py:933
 msgid "Error"
-msgstr ""
+msgstr "Erro, "
 
 #: chat/VeTube.py:938
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
-msgstr ""
+msgstr "Tem certeza de que deseja excluir todos os favoritos da lista?"
 
 #: chat/VeTube.py:938
 msgid "¡Atención!"
@@ -732,7 +732,7 @@ msgstr "Atenção!"
 
 #: chat/VeTube.py:947
 msgid "Se a borrado el elemento de favoritos"
-msgstr ""
+msgstr "O item que estava nos  favoritos foi excluído"
 
 #: chat/VeTube.py:998 chat/VeTube.py:1001 chat/VeTube.py:1004
 #: chat/VeTube.py:1005
@@ -814,11 +814,11 @@ msgstr "meses!"
 
 #: chat/VeTube.py:1220
 msgid "no puedes agregar un Favorito del bufer de favoritos"
-msgstr ""
+msgstr "você não pode adicionar um Favorito do buffer de favoritos"
 
 #: chat/VeTube.py:1231 chat/VeTube.py:1236
 msgid "este mensaje ya se encuentra en el buffer de favoritos."
-msgstr ""
+msgstr "esta mensagem já está no buffer de favoritos."
 
 #: chat/VeTube.py:1239
 msgid "Se agregó el elemento a la lista de favoritos..."
@@ -871,31 +871,31 @@ msgstr "Os Sons foram desativados"
 
 #: chat/VeTube.py:1296 chat/VeTube.py:1356 chat/VeTube.py:1364
 msgid "Tus mensajes archivados aparecerán aquí"
-msgstr ""
+msgstr "Suas mensagens arquivadas aparecerão aqui"
 
 #: chat/VeTube.py:1308 chat/VeTube.py:1315
 msgid "El mensaje ya está archivado."
-msgstr ""
+msgstr "A mensagem já foi arquivada."
 
 #: chat/VeTube.py:1308 chat/VeTube.py:1315
 msgid "error"
-msgstr ""
+msgstr "Erro,  "
 
 #: chat/VeTube.py:1321
 msgid "se archivó el mensaje"
-msgstr ""
+msgstr "a mensagem foi arquivada"
 
 #: chat/VeTube.py:1324
 msgid "&Borrar mensajes"
-msgstr ""
+msgstr "Apagar mensagens"
 
 #: chat/VeTube.py:1325
 msgid "Borrar todos los mensajes destacados"
-msgstr ""
+msgstr "Limpar todas as mensagens destacadas"
 
 #: chat/VeTube.py:1329
 msgid "Borrar el mensaje destacado seleccionado"
-msgstr ""
+msgstr "Excluir a mensagem destacada selecionada"
 
 #: chat/VeTube.py:1334
 msgid "&Borrar favoritos"
@@ -911,7 +911,7 @@ msgstr "Excluir favorito selecionado"
 
 #: chat/VeTube.py:1350
 msgid "se eliminó el mensaje de tus mensajes archivados"
-msgstr ""
+msgstr "a mensagem foi excluída de suas mensagens arquivadas"
 
 #: chat/VeTube.py:1352
 msgid "No hay más elementos que borrar"
@@ -923,11 +923,11 @@ msgstr "Não há itens para excluir"
 
 #: chat/VeTube.py:1360
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
-msgstr ""
+msgstr "Tem certeza de que deseja excluir todas as mensagens?"
 
 #: chat/VeTube.py:1365
 msgid "se eliminaron los mensajes archivados"
-msgstr ""
+msgstr "as mensagens arquivadas foram excluídas"
 
 #: chat/languageHandler.py:74
 msgid "Idioma del sistema"
@@ -1024,7 +1024,7 @@ msgid ""
 "La actualización se a descargado he instalado exitosamente. pulse en "
 "aceptar para continuar."
 msgstr ""
-"A atualização foi baixada e instalada com sucesso. Clique em aceito "
+"A atualização foi baixada e instalada com sucesso. Clique em ok "
 "continuar."
 
 #: chat/update/wxUpdater.py:34
