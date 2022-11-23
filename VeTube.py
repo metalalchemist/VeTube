@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,wx.adv,threading,languageHandler,restart,translator,time,keyboard_handler,funciones,google_currency
+import json,wx,wx.adv,threading,languageHandler,restart,translator,time,keyboard_handler,funciones,google_currency,re
 from keyboard_handler.wx_handler import WXKeyboardHandler
 from playsound import playsound
 from accessible_output2.outputs import auto, sapi5
@@ -737,7 +737,6 @@ class MyFrame(wx.Frame):
 					break
 		if self.choice_moneditas.GetStringSelection()!='Por defecto':
 			monedita=self.choice_moneditas.GetStringSelection().split(', (')
-			print(monedita[0])
 			for k in google_currency.CODES:
 				if google_currency.CODES[k] == monedita[0]:
 					self.divisa = k
@@ -972,9 +971,8 @@ class MyFrame(wx.Frame):
 						break
 					c+=1
 			if message['message_type']=='paid_message' or message['message_type']=='paid_sticker':
-				if self.divisa!='Por defecto':
+				if self.divisa!='Por defecto' or self.divisa!=message['money']['currency']:
 					moneda=json.loads(google_currency.convert(message['money']['currency'],self.divisa,message['money']['amount']) )
-					print(type(moneda))
 					if moneda['converted']:
 						message['money']['currency']=self.divisa
 						message['money']['amount']=moneda['amount']
@@ -1094,21 +1092,40 @@ class MyFrame(wx.Frame):
 						break
 					c+=1
 			if 'Cheer' in message['message']:
-				#1 bit=1 cent dollar
-				divide=message['message'].split()
-				dinero=divide[0]
-				divide=" ".join(divide[1:])
+				#si el convertidor de divisas está activo, se convierte los cheers a 1 sentabo de dólar cada uno y luego se convierte a la divisa que se requiere.
+				divide1=message['message'].split('Cheer')
+				if not divide1[0]:
+					if self.divisa!='Por defecto': divide1[0]=self.divisa
+					else: divide1[0]='Cheer'
+					final_msj=divide1[1].split()
+					if self.divisa!='Por defecto':
+						if self.divisa=='USD':final_msj[0]=int(final_msj[0])/100
+						else:
+							moneda=json.loads(google_currency.convert('USD',self.divisa,int(final_msj[0])/100) )
+							if moneda['converted']: final_msj[0]=moneda['amount']
+					dinero=divide1[0]+str(final_msj[0])
+					if len(final_msj)==1: divide1=''
+					else: divide1=' '.join(final_msj[1:])
+				else:
+					if self.divisa!='Por defecto':
+						if self.divisa=='USD': divide1[1]=int(divide1[1])/100
+						else:
+							moneda=json.loads(google_currency.convert('USD',self.divisa,int(divide1[1])/100) )
+							if moneda['converted']: divide1[1]=moneda['amount']
+					if self.divisa!='Por defecto': dinero=self.divisa+str(divide1[1])
+					else: dinero='Cheer '+str(divide1[1])
+					divide1=' '+divide1[0]
 				if categ[1]:
 					for contador in range(len(lista)):
 						if lista[contador][0]=='Donativos':
-							lista[contador].append(dinero+', '+message['author']['name']+': '+divide)
+							lista[contador].append(dinero+', '+message['author']['name']+': '+divide1)
 							break
 					if sonidos and self.chat.status!="past" and listasonidos[3]: playsound(rutasonidos[3],False)
-				self.list_box_1.Append(dinero+', '+message['author']['name']+': '+divide)
+				self.list_box_1.Append(dinero+', '+message['author']['name']+': '+divide1)
 				if lista[yt][0]=='Donativos':
 					if reader:
-						if sapi: leer.speak(dinero+', '+message['author']['name']+': '+divide)
-						else: lector.speak(dinero+', '+message['author']['name']+': '+divide)
+						if sapi: leer.speak(dinero+', '+message['author']['name']+': '+divide1)
+						else: lector.speak(dinero+', '+message['author']['name']+': '+divide1)
 				continue
 			if message['message_type']=='subscription':
 				if categ[0]:
