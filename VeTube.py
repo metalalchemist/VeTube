@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,wx.adv,threading,languageHandler,restart,translator,time,keyboard_handler,funciones,google_currency,re
+import json,wx,wx.adv,threading,languageHandler,restart,translator,time,keyboard_handler,funciones,google_currency
 from keyboard_handler.wx_handler import WXKeyboardHandler
 from playsound import playsound
 from accessible_output2.outputs import auto, sapi5
@@ -76,7 +76,23 @@ def leerConfiguracion():
 		listasonidos=resultado['listasonidos']
 	else: escribirConfiguracion()
 def escribirTeclas():
-	with open('keys.txt', 'w+') as arch: arch.write("""{"control+p": leer.silence,"alt+shift+up": self.elementoAnterior,"alt+shift+down": self.elementoSiguiente,"alt+shift+left": self.retrocederCategorias,"alt+shift+right": self.avanzarCategorias,"alt+shift+home": self.elementoInicial,"alt+shift+end": self.elementoFinal,"alt+shift+f": self.destacarMensaje,"alt+shift+c": self.copiar,"alt+shift+m": self.callar,"alt+shift+s": self.iniciarBusqueda,"alt+shift+v": self.mostrarMensaje,"alt+shift+d": self.borrarBuffer,"alt+shift+p": self.desactivarSonidos,"alt+shift+k": self.createEditor, "alt+shift+a": self.addRecuerdo}""")
+	with open('keys.txt', 'w+') as arch: arch.write("""{
+"control+p": leer.silence,
+"alt+shift+up": self.elementoAnterior,
+"alt+shift+down": self.elementoSiguiente,
+"alt+shift+left": self.retrocederCategorias,
+"alt+shift+right": self.avanzarCategorias,
+"alt+shift+home": self.elementoInicial,
+"alt+shift+end": self.elementoFinal,
+"alt+shift+f": self.destacarMensaje,
+"alt+shift+c": self.copiar,
+"alt+shift+m": self.callar,
+"alt+shift+s": self.iniciarBusqueda,
+"alt+shift+v": self.mostrarMensaje,
+"alt+shift+d": self.borrarBuffer,
+"alt+shift+p": self.desactivarSonidos,
+"alt+shift+k": self.createEditor,
+"alt+shift+a": self.addRecuerdo}""")
 	leerTeclas()
 def leerTeclas():
 	if path.exists("keys.txt"):
@@ -125,7 +141,8 @@ class MyFrame(wx.Frame):
 		if donations: update.donation()
 		self.dentro=False
 		self.dst =""
-		self.divisa='Por defecto'
+		self.nueva_combinacion=""
+		self.divisa="Por defecto"
 		leerTeclas()
 		kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
 		wx.Frame.__init__(self, *args, **kwds)
@@ -201,7 +218,6 @@ class MyFrame(wx.Frame):
 		self.Maximize()
 		self.Centre()
 		self.Show()
-
 	# Evento que hace aparecer las opciones del menú
 	def opcionesMenu(self, event):
 		menu1 = wx.Menu()
@@ -251,7 +267,7 @@ class MyFrame(wx.Frame):
 		editar.SetDefault()
 		restaurar=wx.Button(self.dlg_teclado, -1, _(u"&restaurar combinaciones por defecto"))
 		restaurar.Bind(wx.EVT_BUTTON, self.restaurarTeclas)
-		close = wx.Button(self.dlg_teclado, wx.ID_CANCEL, _(u"&Cerrar"))
+		close = wx.Button(self.dlg_teclado, wx.ID_CLOSE, _(u"&Cerrar"))
 		firstSizer = wx.BoxSizer(wx.HORIZONTAL)
 		firstSizer.Add(label_editor, 0, wx.ALL, 5)
 		firstSizer.Add(self.combinaciones, 0, wx.ALL, 5)
@@ -266,9 +282,9 @@ class MyFrame(wx.Frame):
 		self.dlg_teclado.Centre()
 		self.dlg_teclado.ShowModal()
 		self.dlg_teclado.Destroy()
-	def editarTeclas(self, event):
+	def editarTeclas(self, event=None):
 		indice=self.combinaciones.GetFocusedItem()
-		texto=self.combinaciones.GetItem(indice,1).GetText()
+		if not self.nueva_combinacion: self.texto=self.combinaciones.GetItem(indice,1).GetText()
 		self.dlg_editar_combinacion = wx.Dialog(self.dlg_teclado, wx.ID_ANY, _("Editando la combinación de teclas para %s") % mensaje_teclas[indice])
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		firstSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -279,17 +295,17 @@ class MyFrame(wx.Frame):
 		# el sizer para el agrupamiento
 		sizer_groupbox = wx.StaticBoxSizer(groupbox, wx.VERTICAL)
 		self.check_ctrl = wx.CheckBox(self.dlg_editar_combinacion, wx.ID_ANY, _("&Control"))
-		if 'control' in texto: self.check_ctrl.SetValue(True)
+		if 'control' in self.texto: self.check_ctrl.SetValue(True)
 		self.check_alt = wx.CheckBox(self.dlg_editar_combinacion, wx.ID_ANY, _("&Alt"))
-		if 'alt' in texto: self.check_alt.SetValue(True)
+		if 'alt' in self.texto: self.check_alt.SetValue(True)
 		self.check_shift = wx.CheckBox(self.dlg_editar_combinacion, wx.ID_ANY, _("&Shift"))
-		if 'shift' in texto: self.check_shift.SetValue(True)
+		if 'shift' in self.texto: self.check_shift.SetValue(True)
 		self.check_win = wx.CheckBox(self.dlg_editar_combinacion, wx.ID_ANY, _("&Windows"))
-		if 'win' in texto: self.check_win.SetValue(True)
+		if 'win' in self.texto: self.check_win.SetValue(True)
 		self.teclas = ["enter", "tab", "space", "back", "delete", "home", "end", "pageUp", "pageDown", "up", "down", "left", "right", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 		label_tecla = wx.StaticText(self.dlg_editar_combinacion, wx.ID_ANY, _("&Selecciona una tecla para la combinación"))
 		self.combo_tecla = wx.ComboBox(self.dlg_editar_combinacion, wx.ID_ANY, choices=self.teclas, style=wx.CB_DROPDOWN|wx.CB_READONLY)
-		texto=texto.split('+')
+		texto=self.texto.split('+')
 		self.combo_tecla.SetValue(texto[-1])
 		self.editar= wx.Button(self.dlg_editar_combinacion, -1, _(u"&Aplicar nueva combinación de teclado"))
 		self.editar.Bind(wx.EVT_BUTTON, self.editarTeclas2)
@@ -320,29 +336,42 @@ class MyFrame(wx.Frame):
 		alt=self.check_alt.GetValue()
 		shift=self.check_shift.GetValue()
 		win=self.check_win.GetValue()
-		nueva_combinacion=tecla
-		if shift: nueva_combinacion="shift+"+nueva_combinacion
-		if alt: nueva_combinacion="alt+"+nueva_combinacion
-		if ctrl: nueva_combinacion="control+"+nueva_combinacion
-		if win: nueva_combinacion="win+"+nueva_combinacion
+		self.nueva_combinacion=tecla
+		if shift: self.nueva_combinacion="shift+"+self.nueva_combinacion
+		if alt: self.nueva_combinacion="alt+"+self.nueva_combinacion
+		if ctrl: self.nueva_combinacion="control+"+self.nueva_combinacion
+		if win: self.nueva_combinacion="win+"+self.nueva_combinacion
 		if not ctrl and not alt and not win and not shift:
 			wx.MessageBox(_("Debe escoger al menos una tecla de las casillas de berificación"), "error.", wx.ICON_ERROR)
 			return
 		for busc in range(self.combinaciones.GetItemCount()):
 			if busc== indice: continue
-			if nueva_combinacion == self.combinaciones.GetItem(busc,1).GetText():
+			if self.nueva_combinacion == self.combinaciones.GetItem(busc,1).GetText():
 				wx.MessageBox(_("esta combinación ya está siendo usada en la función %s") % mensaje_teclas[busc], "error.", wx.ICON_ERROR)
 				return
 		global mis_teclas
 		if self.dentro:
 			self.handler_keyboard.unregister_key(self.combinaciones.GetItem(indice,1).GetText(),mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
-			self.handler_keyboard.register_key(nueva_combinacion,mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
+			self.handler_keyboard.register_key(self.nueva_combinacion,mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
+			wx.CallAfter(self.correccion)
 		leerTeclas()
-		mis_teclas=mis_teclas.replace(self.combinaciones.GetItem(indice,1).GetText(),nueva_combinacion)
+		mis_teclas=mis_teclas.replace(self.combinaciones.GetItem(indice,1).GetText(),self.nueva_combinacion)
 		with open("keys.txt", "w") as fichero: fichero.write(mis_teclas)
-		self.combinaciones.SetItem(indice, 1, nueva_combinacion)
+		mis_teclas=eval(mis_teclas)
+		self.combinaciones.SetItem(indice, 1, self.nueva_combinacion)
 		self.dlg_editar_combinacion.Close()
 		self.combinaciones.SetFocus()
+	def correccion(self):
+		if self.nueva_combinacion not in self.handler_keyboard.active_keys:
+			wx.MessageBox(_("esa combinación está siendo usada por el sistema"), "error.", wx.ICON_ERROR)
+			global mis_teclas
+			leerTeclas()
+			mis_teclas=mis_teclas.replace(self.combinaciones.GetItem(self.combinaciones.GetFocusedItem(),1).GetText(),self.texto)
+			self.combinaciones.SetItem(self.combinaciones.GetFocusedItem(), 1, self.texto)
+			with open("keys.txt", "w") as fichero: fichero.write(mis_teclas)
+			mis_teclas=eval(mis_teclas)
+			self.editarTeclas()
+		else: self.nueva_combinacion=""
 	def restaurarTeclas(self,event):
 		dlg_2 = wx.MessageDialog(self.dlg_teclado, _("Está apunto de restaurar las combinaciones a sus valores por defecto, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		if dlg_2.ShowModal()==wx.ID_YES:
@@ -780,7 +809,6 @@ class MyFrame(wx.Frame):
 		try: self.label_dialog.SetLabel(info_dict.get('title')+', '+str(info_dict["view_count"])+_(' reproducciones'))
 		except: pass
 		try: self.handler_keyboard.register_keys(eval(mis_teclas))
-		except keyboard_handler.KeyboardHandlerError: wx.MessageBox(_("Hubo un error al registrar los atajos de teclado globales."), "Error", wx.ICON_ERROR)
 		except: self.handler_keyboard.register_keys(mis_teclas)
 		if 'yout' in self.text_ctrl_1.GetValue(): self.recibirYT()
 		elif 'twitch' in self.text_ctrl_1.GetValue(): self.recibirTwich()
@@ -971,7 +999,7 @@ class MyFrame(wx.Frame):
 						break
 					c+=1
 			if message['message_type']=='paid_message' or message['message_type']=='paid_sticker':
-				if self.divisa!='Por defecto' or self.divisa!=message['money']['currency']:
+				if self.divisa!="Por defecto" and self.divisa!=message['money']['currency']:
 					moneda=json.loads(google_currency.convert(message['money']['currency'],self.divisa,message['money']['amount']) )
 					if moneda['converted']:
 						message['money']['currency']=self.divisa
@@ -1092,7 +1120,6 @@ class MyFrame(wx.Frame):
 						break
 					c+=1
 			if 'Cheer' in message['message']:
-				#si el convertidor de divisas está activo, se convierte los cheers a 1 sentabo de dólar cada uno y luego se convierte a la divisa que se requiere.
 				divide1=message['message'].split('Cheer')
 				if not divide1[0]:
 					if self.divisa!='Por defecto': divide1[0]=self.divisa

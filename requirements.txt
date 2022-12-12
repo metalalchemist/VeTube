@@ -8,4 +8,3 @@ pyperclip
 chat_downloader
 google-currency
 git+https://github.com/accessibleapps/accessible_output2
-git+https://github.com/accessibleapps/keyboard_handler
