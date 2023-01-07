@@ -116,7 +116,7 @@ langs = []
 [langs.append(i[1]) for i in idiomas]
 codes = []
 [codes.append(i[0]) for i in idiomas]
-mensaje_teclas=[_('Silencia la voz sapy'),_('Buffer anterior.'),_('Siguiente buffer.'),_('Mensaje anterior'),_('Mensaje siguiente'),_('Ir al comienzo del buffer'),_('Ir al final del buffer'),_('Destaca un mensaje en el buffer de  favoritos'),_('Copia el mensaje actual'),_('Activa o desactiva la lectura automática'),_('Busca una palabra en los mensajes actuales'),_('Muestra el mensaje actual en un cuadro de texto'),_('borra el buffer seleccionado'),_('activa o desactiva los sonidos del programa'),_('Invocar el editor de combinaciones de teclado'),_('Archivar un mensaje')]
+mensaje_teclas=[_('Silencia la voz sapy'),_('Mensaje anterior.'),_('Mensaje siguiente'),_('Buffer anterior'),_('Siguiente Buffer'),_('Ir al comienzo del buffer'),_('Ir al final del buffer'),_('Destaca un mensaje en el buffer de  favoritos'),_('Copia el mensaje actual'),_('Activa o desactiva la lectura automática'),_('Busca una palabra en los mensajes actuales'),_('Muestra el mensaje actual en un cuadro de texto'),_('borra el buffer seleccionado'),_('activa o desactiva los sonidos del programa'),_('Invocar el editor de combinaciones de teclado'),_('Archivar un mensaje')]
 mensajes_categorias=[_('Miembros'),_('Donativos'),_('Moderadores'),_('Usuarios Verificados'),_('Favoritos')]
 mensajes_sonidos=[_('Sonido cuando llega un mensaje'),_('Sonido cuando habla un miembro'),_('Sonido cuando se conecta un miembro'),_('Sonido cuando llega un donativo'),_('Sonido cuando habla un moderador'),_('Sonido cuando habla un usuario verificado'),_('Sonido al ingresar al chat'),_('Sonido cuando habla el propietario del canal'),_('sonido al terminar la búsqueda de mensajes')]
 codes.reverse()
@@ -267,7 +267,7 @@ class MyFrame(wx.Frame):
 		editar.SetDefault()
 		restaurar=wx.Button(self.dlg_teclado, -1, _(u"&restaurar combinaciones por defecto"))
 		restaurar.Bind(wx.EVT_BUTTON, self.restaurarTeclas)
-		close = wx.Button(self.dlg_teclado, wx.ID_CLOSE, _(u"&Cerrar"))
+		close = wx.Button(self.dlg_teclado, wx.ID_CANCEL, _(u"&Cerrar"))
 		firstSizer = wx.BoxSizer(wx.HORIZONTAL)
 		firstSizer.Add(label_editor, 0, wx.ALL, 5)
 		firstSizer.Add(self.combinaciones, 0, wx.ALL, 5)
@@ -302,7 +302,7 @@ class MyFrame(wx.Frame):
 		if 'shift' in self.texto: self.check_shift.SetValue(True)
 		self.check_win = wx.CheckBox(self.dlg_editar_combinacion, wx.ID_ANY, _("&Windows"))
 		if 'win' in self.texto: self.check_win.SetValue(True)
-		self.teclas = ["enter", "tab", "space", "back", "delete", "home", "end", "pageUp", "pageDown", "up", "down", "left", "right", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+		self.teclas = ["return", "tab", "space", "back", "delete", "home", "end", "pageup", "pagedown", "up", "down", "left", "right", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 		label_tecla = wx.StaticText(self.dlg_editar_combinacion, wx.ID_ANY, _("&Selecciona una tecla para la combinación"))
 		self.combo_tecla = wx.ComboBox(self.dlg_editar_combinacion, wx.ID_ANY, choices=self.teclas, style=wx.CB_DROPDOWN|wx.CB_READONLY)
 		texto=self.texto.split('+')
@@ -351,7 +351,7 @@ class MyFrame(wx.Frame):
 				return
 		global mis_teclas
 		if self.dentro:
-			self.handler_keyboard.unregister_key(self.combinaciones.GetItem(indice,1).GetText(),mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
+			if self.texto in self.handler_keyboard.active_keys: self.handler_keyboard.unregister_key(self.combinaciones.GetItem(indice,1).GetText(),mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
 			self.handler_keyboard.register_key(self.nueva_combinacion,mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
 			wx.CallAfter(self.correccion)
 		leerTeclas()
@@ -987,6 +987,7 @@ class MyFrame(wx.Frame):
 	def recibirYT(self):
 		global lista
 		for message in self.chat:
+			if message['message']==None: message['message']=''
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
 			if not message['author']['name'] in self.usuarios:
 				self.usuarios.append(message['author']['name'])
@@ -998,36 +999,6 @@ class MyFrame(wx.Frame):
 						self.mensajes[c]+=1
 						break
 					c+=1
-			if message['message_type']=='paid_message' or message['message_type']=='paid_sticker':
-				if self.divisa!="Por defecto" and self.divisa!=message['money']['currency']:
-					moneda=json.loads(google_currency.convert(message['money']['currency'],self.divisa,message['money']['amount']) )
-					if moneda['converted']:
-						message['money']['currency']=self.divisa
-						message['money']['amount']=moneda['amount']
-				if message['message']!=None:
-					if categ[1]:
-						for contador in range(len(lista)):
-							if lista[contador][0]=='Donativos':
-								lista[contador].append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
-								break
-						if sonidos and self.chat.status!="past" and listasonidos[3]: playsound(rutasonidos[3],False)
-					self.list_box_1.Append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
-					if lista[yt][0]=='Donativos':
-						if reader:
-							if sapi: leer.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
-							else: lector.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
-				else:
-					if categ[1]:
-						for contador in range(len(lista)):
-							if lista[contador][0]=='Donativos':
-								lista[contador].append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
-								break
-						if sonidos and self.chat.status!="past" and listasonidos[3]: playsound(rutasonidos[3],False)
-					self.list_box_1.Append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
-					if lista[yt][0]=='Donativos':
-						if reader:
-							if sapi: leer.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
-							else: lector.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'])
 			if 'header_secondary_text' in message:
 				for t in message['author']['badges']:
 					if categ[0]:
@@ -1068,19 +1039,17 @@ class MyFrame(wx.Frame):
 								if sapi: leer.speak(message['author']['name'] +': ' +message['message'])
 								else: lector.speak(message['author']['name'] +': ' +message['message'])
 					if 'Member' in t['title']:
-						if message['message'] == None: pass
-						else:
-							if categ[0]:
-								for contador in range(len(lista)):
-									if lista[contador][0]=='Miembros':
-										lista[contador].append(message['author']['name'] +': ' +message['message'])
-										break
-								if sonidos and self.chat.status!="past" and listasonidos[1]: playsound(rutasonidos[1],False)
-							self.list_box_1.Append(_('Miembro ')+message['author']['name'] +': ' +message['message'])
-							if lista[yt][0]=='Miembros':
-								if reader:
-									if sapi: leer.speak(message['author']['name'] +': ' +message['message'])
-									else: lector.speak(message['author']['name'] +': ' +message['message'])
+						if categ[0]:
+							for contador in range(len(lista)):
+								if lista[contador][0]=='Miembros':
+									lista[contador].append(message['author']['name'] +': ' +message['message'])
+									break
+							if sonidos and self.chat.status!="past" and listasonidos[1]: playsound(rutasonidos[1],False)
+						self.list_box_1.Append(_('Miembro ')+message['author']['name'] +': ' +message['message'])
+						if lista[yt][0]=='Miembros':
+							if reader:
+								if sapi: leer.speak(message['author']['name'] +': ' +message['message'])
+								else: lector.speak(message['author']['name'] +': ' +message['message'])
 					if 'Verified' in t['title']:
 						if categ[3]:
 							for contador in range(len(lista)):
@@ -1093,19 +1062,34 @@ class MyFrame(wx.Frame):
 							if reader:
 								if sapi: leer.speak(message['author']['name'] +': ' +message['message'])
 								else: lector.speak(message['author']['name'] +': ' +message['message'])
+			if message['message_type']=='paid_message' or message['message_type']=='paid_sticker':
+				if self.divisa!="Por defecto" and self.divisa!=message['money']['currency']:
+					moneda=json.loads(google_currency.convert(message['money']['currency'],self.divisa,message['money']['amount']) )
+					if moneda['converted']:
+						message['money']['currency']=self.divisa
+						message['money']['amount']=moneda['amount']
+				if categ[1]:
+					for contador in range(len(lista)):
+						if lista[contador][0]=='Donativos':
+							lista[contador].append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
+							break
+					if sonidos and self.chat.status!="past" and listasonidos[3]: playsound(rutasonidos[3],False)
+				self.list_box_1.Append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
+				if lista[yt][0]=='Donativos':
+					if reader:
+						if sapi: leer.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
+						else: lector.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
 			else:
-				if message['message_type']=='paid_message' or message['message_type']=='paid_sticker': pass
+				if self.dentro:
+					if lista[yt][0]=='General':
+						if reader:
+							if sapi: leer.speak(message['author']['name'] +': ' +message['message'])
+							else: lector.speak(message['author']['name'] +': ' +message['message'])
+					if sonidos and self.chat.status!="past" and listasonidos[0]: playsound(rutasonidos[0],False)
+					self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
 				else:
-					if self.dentro:
-						if lista[yt][0]=='General':
-							if reader:
-								if sapi: leer.speak(message['author']['name'] +': ' +message['message'])
-								else: lector.speak(message['author']['name'] +': ' +message['message'])
-						if sonidos and self.chat.status!="past" and listasonidos[0]: playsound(rutasonidos[0],False)
-						self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
-					else:
-						exit()
-						self.hilo2.join()
+					exit()
+					self.hilo2.join()
 	def recibirTwich(self):
 		for message in self.chat:
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)

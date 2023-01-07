@@ -1,4 +1,5 @@
 v2.6
+ya se deberían capturar los mensajes que tengan el valor None.
 se agrega un convertidor de divisas para convertir las donaciones a la moneda  que desees.
 se corrige un bug donde se agregaba el título al momento de agregar el enlace a tus favoritos del en vivo actual en twitch si el creador estaba strimeando. se debía agregar el nombre del canal en lugar del título del envivo.
 agregadas 2 opciones nuevas en el botón mas opciones. copiar enlace y reproducir en el navegador.
