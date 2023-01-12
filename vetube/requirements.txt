@@ -1,0 +1,8 @@
+wxPython
+playsound==1.2.2
+youtube_dl
+pyperclip
+chat_downloader
+google-currency
+git+https://github.com/StarkBotsIndustries/googletrans.git
+git+https://github.com/accessibleapps/accessible_output2

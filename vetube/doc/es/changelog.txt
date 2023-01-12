@@ -1,0 +1,79 @@
+v2.6
+ya se deberían capturar los mensajes que tengan el valor None.
+se agrega un convertidor de divisas para convertir las donaciones a la moneda  que desees.
+se corrige un bug donde se agregaba el título al momento de agregar el enlace a tus favoritos del en vivo actual en twitch si el creador estaba strimeando. se debía agregar el nombre del canal en lugar del título del envivo.
+agregadas 2 opciones nuevas en el botón mas opciones. copiar enlace y reproducir en el navegador.
+correcciones de bugs con el buffer favoritos: no agregar mensajes duplicados ni tampoco poder agregar del mismo buffer de favoritos.
+algunas optimisaciones menores al código.
+se agrega un menú contextual en la lista  del chat  donde aparecen obciones varias como traducir mensaje al idioma del  programa copiar mensaje y archivar mensaje. gracias Johan G
+sección archivar mensajes para cuando deseemos  agregar un mensaje importante. estos mensajes permanecerán en la aplicación hasta  que nosotros los borremos en la tercera pestaña que se agregó. gracias  Johan G
+se agrega el editor de teclado. ´para ello nos dirigimos al menú mas opciones y al submenú opciones.
+se pueden guardar las estadísticas del canal en un archivo de texto, gracias Joan G
+se agrega traducir mensaje cuando se muestra un mensaje.
+ahora es posible saber cuantos mensajes llegaron al chat y ver quien fue el que mas habló. se a creado una lista donde aparece en orden de mayor a menor quien habló y cuantos mensajes envió y luego está un cuadro de texto donde nos dice el total de mensajes y el total de usuarios.
+corrección de  bug donde se mezclaban los mensajes de los envivos pasados.
+corrección de bug donde no se  inicialisaba el chat.
+Se elimina la documentación. en cambio se crea una opción que permite acceder a la misma en línea. Para esto nos dirigimos al menú de mas opciones y luego al submenú ayuda.
+se corrige bug del traductor y se lo agrega a twich
+se agrupan varias opciones del chat en un menú contextual ,gracias Johan G.
+v2.5
+se mejora la función de buscar palabra entre los mensajes.
+se soluciona bug de los mensajes repetidos y cada uno se agregan a sus categorìas correspondientes
+ahora es posible traducir los mensajes de algún streaming ha  cualquier idioma.
+se crea un botón para guardar el historial de los mensajes en un archivo. gracias Johan G
+v2.2
+se cambia el actualizador. adaptado para VeTube de https://github.com/MCV-Software/TWBlue/tree/next-gen/src/update
+se agregan 2 opciones de configuración en la  categoría general del menú configuración
+se agrega un atajo para desactivar los sonidos temporalmente: alt shift p.
+se separa las teclas en un archivo independiente para en un futuro trabajar en un editor de combinaciones.
+(programadores): se quita keyboard para reemplazarla por keyboard_handler.
+se cambia la combinación para silenciar un mensaje entrante con sapi5: control p.
+agregado atajo para borrar los buffers de búsquedas y el buffer de favoritos:  alt shift d
+ahora es posible buscar mensajes por palabra o nombre de autor. se creará un buffer con el término de la búsqueda ingresada donde contendrá todas las coinsidencias (alt shift s)
+v2.1
+ahora se muestran los mensajes del propietario del canal.
+ahora puedes escoger ciertos sonidos habilitados desde la configuración del programa.
+VeTube ya no permite tener 2 instancias abiertas
+ahora puedes habilitar y desabilitar las  categorías desde la configuración del programa
+se corrige el bug de que se añadiera un enlace a favoritos el número de favoritos que tuvieras.
+si cambias a las diversas categorías el modo automático solo leerá los mensajes de dicha categoría.
+se agrega un atajo de teclado para destacar un mensaje, el mismo se irá a la categoría  de favoritos (se creará si no la tienes): alt shift f
+se añaden categorías por mensajes, estas son: miembros, donativos, moderadores, usuarios verificados, y favoritos.
+se corrige el no poder iniciar el chat automáticamente si no se consigue el título o las views de un envivo.
+v2.0
+se agrega twitch a la lista de streams soportados.
+se corrige un bug el cual podía hacer que el programa se cerraba si es que tenías sapy o lector leyendo el chat.
+se agrega una sección de favoritos, podrás guardar algún envivo que te  guste para poder repetir el chat cuantas veces gustes.
+se agrega portugués a los  idiomas traducidos, gracias eternal legend
+se aregla el cargar los idiomas correctamente.
+V1.2.1
+(programadores): se quita webbrowser para reemplazarlo por funciones nativas de wx-python. gracias hector
+se agrega el idioma inglés en el catálogo de idiomas soportados.
+se agrega la opción que permite leer tus mensajes con voz sapy o con tu lector de pantalla en automático. gracias a sus sugerencias
+se modifica una opción. ahora alt shift mas m activa o desactiva respectivamente la lectura de mensajes automáticamente. así mismo en ajustes se puede encontrar la casilla con el mismo nombre.
+se optimiza la optensión de datos tanto del título como de las reproducciones en el enlace pegado. gracias Hector.
+si cerrabas y abrías otro directo se abría otro hilo de la interfaz invisible dificultando la lectura del chat. esto ya no debería pasar
+V1.2
+(programadores): se agrega el catálogo de VeTube (lenguage original en españñol) para poderse traducir a varios idiomas. el archivo se llama VeTube.pot.
+(programadores): se quita pytchat para reemplazarlo con chat_downloader. esto para soporte de varias plataformas.
+ahora se escoge el idioma que tienes por defecto en tu configuración.
+si el programa está actualizado ahora VeTube avisará si tienes la última versión del mismo si buscas actualizaciones.
+se agregan sonidos que avisan cuando llega un chat tanto como de un miembro como un chat normal
+se agrega un actualizador. comprueba una actualización al iniciar. pero también se lo puede encontrar en mas opciones & ayuda.
+se quitó el límite de mensajes
+experimental: VeTube puede detectar el idioma del sistema y  si hay un catálogo disponible, lo cargará.
+el programa no iniciaba en algunas ocaciones por lo que cada ves que se abra el mismo se borran los archivos temporales de %temp/gempy
+corregido el que la interfaz invisible se congelara al momento de ingresar al chat.
+corregido el no poder ir al inicio del chat en la lista principal.
+agregado sonidos al navegar por el chat y al llegar  al borde, gracias Glein
+Agregamos un sonido para indicar que se a ingresado al chat. gracias Johan G.
+Agregado el fácil acceso a nuestra página de github para poder colaborar con nosotros desde github, así como también una opción de apoyo en la sección de ayuda. gracias Johan G
+VeTube ahora reconoce un link de YouTube Studio cuando es en vivo, por lo cual ya no es necesario sacar el link de youtube
+***
+v1.1
+agregado diálogo para el chat aparte, gracias Johan G
+Agregado poder mostrar el mensaje en un cuadro de  texto.
+Ahora VeTube reconoce cuando un enlace no está en vivo para hebitar la creación del chat.
+***
+v1.0
+primera versión del proyecto

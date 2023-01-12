@@ -1,0 +1,4 @@
+notas del cliente:
+1. algo a tener en cuenta es que hay ciertas funciones donde nos topamos con incombenientes.
+Es en el caso cuando descargamos una voz y enseguida nos dice que la descarga ha terminado, pero en realidad ha descargado un archivo html, creo yo. Si abrimos el archivo del supuesto modelo que se encuentra en el servidor/data con el bloc de notas, obtendremos un código html donde nos da una advertencia de análisis de virus de drive.
+He intentado buscar una solución, como la de obtener una UUID y darle más parámetros al enlace de descarga según ese código html, pero el problema aún persiste. Ver archivo include\voice downloader.au3 para analizar el proceso de descarga.
