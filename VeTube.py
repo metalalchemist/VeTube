@@ -9,6 +9,8 @@ from pyperclip import copy
 from chat_downloader import ChatDownloader
 from update import updater,update
 from os import path,remove
+from TikTokLive import TikTokLiveClient
+from TikTokLive.types.events import CommentEvent, ConnectEvent
 voz=0
 tono=0
 volume=100
@@ -557,10 +559,10 @@ class MyFrame(wx.Frame):
 		if not url: url=self.text_ctrl_1.GetValue()
 		if url:
 			if 'studio' in url:
-				pag=url
-				pag=pag.split("/")
-				pag=pag[-2]
-				url="https://www.youtube.com/watch?v="+pag
+				url=url.replace('https://studio.youtube.com/video/','https://www.youtube.com/watch?v=')
+				url=url.replace('/livestreaming','/')
+			if 'live' in url: url=url.replace('live/','watch?v=')
+			print(url)
 			try:
 				if 'yout' in url: self.chat=ChatDownloader().get_chat(url,message_groups=["messages", "superchat"])
 				elif 'twitch' in url: self.chat=ChatDownloader().get_chat(url,message_groups=["messages", "bits","subscriptions","upgrades"])
