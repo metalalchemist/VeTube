@@ -1,6 +1,7 @@
 wxPython
 playsound==1.2.2
-youtube_dl
+yt_dlp
+TikTokLive
 pyperclip
 chat_downloader
 git+https://github.com/metalalchemist/google-currency

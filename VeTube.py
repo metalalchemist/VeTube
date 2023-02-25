@@ -1,16 +1,17 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,wx.adv,threading,languageHandler,restart,translator,time,keyboard_handler,funciones,google_currency
+import json,wx,wx.adv,threading,languageHandler,restart,translator,time,funciones,google_currency
 from keyboard_handler.wx_handler import WXKeyboardHandler
 from playsound import playsound
 from accessible_output2.outputs import auto, sapi5
-from youtube_dl import YoutubeDL
+from yt_dlp import YoutubeDL
 from pyperclip import copy
 from chat_downloader import ChatDownloader
 from update import updater,update
 from os import path,remove
 from TikTokLive import TikTokLiveClient
 from TikTokLive.types.events import CommentEvent, ConnectEvent
+from menu_accesible import Accesible
 voz=0
 tono=0
 volume=100
@@ -153,11 +154,15 @@ class MyFrame(wx.Frame):
 		self.SetTitle("VeTube")
 		self.SetWindowStyle(wx.RESIZE_BORDER | wx.CAPTION | wx.CLOSE_BOX | wx.CLIP_CHILDREN)
 		self.handler_keyboard = WXKeyboardHandler(self)
+		self.Bind(wx.EVT_CLOSE, self.cerrarVentana)
 		self.panel_1 = wx.Panel(self, wx.ID_ANY)
+		self.panel_1.Bind(wx.EVT_CHAR_HOOK, self.OnCharHook)
 		sizer_1 = wx.BoxSizer(wx.VERTICAL)
 		self.menu_1 = wx.Button(self.panel_1, wx.ID_ANY, _("&Más opciones"))
 		self.menu_1.Bind(wx.EVT_BUTTON, self.opcionesMenu)
-		self.menu_1.SetToolTip(_(u"Pulse alt para abrir el menú"))
+		sizer_1.Add(self.menu_1, 0, wx.EXPAND, 0)
+		# aplicar la accesibilidad
+		self.menu_1.SetAccessible(Accesible(self.menu_1))
 		self.notebook_1 = wx.Notebook(self.panel_1, wx.ID_ANY)
 		sizer_1.Add(self.notebook_1, 1, wx.EXPAND, 0)
 		self.tap_1 = wx.Panel(self.notebook_1, wx.ID_ANY)
@@ -169,7 +174,6 @@ class MyFrame(wx.Frame):
 		self.label_1 = wx.StaticText(self.tap_1, wx.ID_ANY, _("Escriba o pegue una URL de youtube"), style=wx.ALIGN_CENTER_HORIZONTAL)
 		sizer_2.Add(self.label_1, 0, 0, 0)
 		self.text_ctrl_1 = wx.TextCtrl(self.tap_1, wx.ID_ANY, "", style=wx.TE_AUTO_URL | wx.TE_CENTRE | wx.TE_PROCESS_ENTER)
-		self.text_ctrl_1.SetToolTip(_("Escribe o pega una URL"))
 		self.text_ctrl_1.Bind(wx.EVT_TEXT, self.mostrarBoton)
 		self.text_ctrl_1.Bind(wx.EVT_TEXT_ENTER, self.acceder)
 		self.text_ctrl_1.SetFocus()
@@ -187,6 +191,10 @@ class MyFrame(wx.Frame):
 		sizer_favoritos.Add(label_favoritos)
 		self.list_favorite = wx.ListBox(self.tap_2, wx.ID_ANY, choices=favs)
 		self.list_favorite.Bind(wx.EVT_KEY_UP, self.favoritoTeclas)
+		# optener la cantidad de elementos
+		self.favoritos_num = self.list_favorite.GetCount()
+		# Meter la cantidad de favoritos en la segunda pestaña
+		self.notebook_1.SetPageText(1, _("Favoritos (%s)") % self.favoritos_num)
 		sizer_favoritos.Add(self.list_favorite)
 		if not favs or self.list_favorite.GetCount() == 0: self.list_favorite.Append(_("Tus favoritos aparecerán aquí"), 0)
 		self.button_borrar_favoritos = wx.Button(self.tap_2, wx.ID_ANY, _("&Borrar favorito"))
@@ -220,6 +228,7 @@ class MyFrame(wx.Frame):
 		self.Maximize()
 		self.Centre()
 		self.Show()
+
 	# Evento que hace aparecer las opciones del menú
 	def opcionesMenu(self, event):
 		menu1 = wx.Menu()
@@ -228,8 +237,6 @@ class MyFrame(wx.Frame):
 		menu1.AppendSubMenu(opciones, _(u"&Opciones"))
 		opcion_1 = opciones.Append(wx.ID_ANY, _("Configuración"))
 		self.Bind(wx.EVT_MENU, self.appConfiguracion, opcion_1)
-		opcion_2 = opciones.Append(wx.ID_ANY, _("Editor de combinaciones de teclado para VeTube"))
-		self.Bind(wx.EVT_MENU, self.createEditor, opcion_2)
 		opcion_3 = opciones.Append(wx.ID_ANY, _("Restablecer los ajustes"))
 		self.Bind(wx.EVT_MENU, self.restaurar, opcion_3)
 		menu1.AppendSubMenu(ayuda, _("&Ayuda"))
@@ -243,14 +250,22 @@ class MyFrame(wx.Frame):
 		self.Bind(wx.EVT_MENU, self.updater, actualizador)
 		acercade = menu1.Append(wx.ID_ANY, _("Acerca de"))
 		self.Bind(wx.EVT_MENU, self.infoApp, acercade)
-		salir = menu1.Append(wx.ID_EXIT)
+		salir = menu1.Append(wx.ID_EXIT, _("&Salir...\tAlt+F4"))
 		self.Bind(wx.EVT_MENU, self.cerrarVentana, salir)
 		self.PopupMenu(menu1, self.menu_1.GetPosition())
 		menu1.Destroy
+
+	# Evento para acer aparecer el menú con la tecla alt
+	def OnCharHook(self, event):
+		code = event.GetKeyCode()
+		# alt mas m
+		if code == 77 and event.AltDown():
+			self.opcionesMenu(event)
+		else:
+			event.Skip()
 	def createEditor(self,event=None):
 		global mis_teclas
-		try: mis_teclas=eval(mis_teclas)
-		except: pass
+		mis_teclas=eval(mis_teclas)
 		self.dlg_teclado = wx.Dialog(None, wx.ID_ANY, _("Editor de combinaciones de teclado para Vetube"))
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		label_editor = wx.StaticText(self.dlg_teclado, wx.ID_ANY, _("&Selecciona la combinación de teclado a editar"))
@@ -262,6 +277,7 @@ class MyFrame(wx.Frame):
 		for valor in mis_teclas:
 			self.combinaciones.SetItem(c, 1, valor)
 			c+=1
+		self.combinaciones.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.editarTeclas)
 		self.combinaciones.Focus(0)
 		self.combinaciones.SetFocus()
 		editar= wx.Button(self.dlg_teclado, -1, _(u"&Editar"))
@@ -279,12 +295,14 @@ class MyFrame(wx.Frame):
 		secondSizer.Add(close, 0, wx.ALL, 5)
 		sizer.Add(firstSizer, 0, wx.ALL, 5)
 		sizer.Add(secondSizer, 0, wx.ALL, 5)
-		self.dlg_teclado.SetSizer(sizer)
-		sizer.Fit(self.dlg_teclado)
+		self.dlg_teclado.SetSizerAndFit(sizer)
 		self.dlg_teclado.Centre()
 		self.dlg_teclado.ShowModal()
 		self.dlg_teclado.Destroy()
-	def editarTeclas(self, event=None):
+		wx.CallLater(100,self.comprobar)
+	def comprobar(self):
+		if bool(self.dlg_teclado): self.dlg_teclado.Destroy()
+	def editarTeclas(self, event):
 		indice=self.combinaciones.GetFocusedItem()
 		if not self.nueva_combinacion: self.texto=self.combinaciones.GetItem(indice,1).GetText()
 		self.dlg_editar_combinacion = wx.Dialog(self.dlg_teclado, wx.ID_ANY, _("Editando la combinación de teclas para %s") % mensaje_teclas[indice])
@@ -313,6 +331,7 @@ class MyFrame(wx.Frame):
 		self.editar.Bind(wx.EVT_BUTTON, self.editarTeclas2)
 		self.editar.SetDefault()
 		close = wx.Button(self.dlg_editar_combinacion, wx.ID_CANCEL, _(u"&Cerrar"))
+		close.Bind(wx.EVT_BUTTON,self.berifica)
 		sizer_check.Add(self.check_ctrl, 0, wx.ALL, 5)
 		sizer_check.Add(self.check_alt, 0, wx.ALL, 5)
 		sizer_check.Add(self.check_shift, 0, wx.ALL, 5)
@@ -325,8 +344,7 @@ class MyFrame(wx.Frame):
 		sizer_buttons.Add(close, 0, wx.ALL, 5)
 		sizer.Add(firstSizer, 0, wx.ALL, 5)
 		sizer.Add(sizer_buttons, 0, wx.ALL, 5)
-		self.dlg_editar_combinacion.SetSizer(sizer)
-		sizer.Fit(self.dlg_editar_combinacion)
+		self.dlg_editar_combinacion.SetSizerAndFit(sizer)
 		self.dlg_editar_combinacion.Centre()
 		self.dlg_editar_combinacion.ShowModal()
 		self.dlg_editar_combinacion.Destroy()
@@ -351,29 +369,27 @@ class MyFrame(wx.Frame):
 			if self.nueva_combinacion == self.combinaciones.GetItem(busc,1).GetText():
 				wx.MessageBox(_("esta combinación ya está siendo usada en la función %s") % mensaje_teclas[busc], "error.", wx.ICON_ERROR)
 				return
-		global mis_teclas
-		if self.dentro:
-			if self.texto in self.handler_keyboard.active_keys: self.handler_keyboard.unregister_key(self.combinaciones.GetItem(indice,1).GetText(),mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
-			self.handler_keyboard.register_key(self.nueva_combinacion,mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
-			wx.CallAfter(self.correccion)
-		leerTeclas()
-		mis_teclas=mis_teclas.replace(self.combinaciones.GetItem(indice,1).GetText(),self.nueva_combinacion)
-		with open("keys.txt", "w") as fichero: fichero.write(mis_teclas)
-		mis_teclas=eval(mis_teclas)
-		self.combinaciones.SetItem(indice, 1, self.nueva_combinacion)
-		self.dlg_editar_combinacion.Close()
-		self.combinaciones.SetFocus()
+		if self.texto in self.handler_keyboard.active_keys: self.handler_keyboard.unregister_key(self.combinaciones.GetItem(indice,1).GetText(),mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
+		self.handler_keyboard.register_key(self.nueva_combinacion,mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
+		self.dlg_editar_combinacion.Destroy()
+		wx.CallAfter(self.correccion)
 	def correccion(self):
+		global mis_teclas
 		if self.nueva_combinacion not in self.handler_keyboard.active_keys:
 			wx.MessageBox(_("esa combinación está siendo usada por el sistema"), "error.", wx.ICON_ERROR)
-			global mis_teclas
-			leerTeclas()
-			mis_teclas=mis_teclas.replace(self.combinaciones.GetItem(self.combinaciones.GetFocusedItem(),1).GetText(),self.texto)
-			self.combinaciones.SetItem(self.combinaciones.GetFocusedItem(), 1, self.texto)
-			with open("keys.txt", "w") as fichero: fichero.write(mis_teclas)
-			mis_teclas=eval(mis_teclas)
-			self.editarTeclas()
-		else: self.nueva_combinacion=""
+			self.handler_keyboard.register_key(self.texto,mis_teclas[self.combinaciones.GetItem(self.combinaciones.GetFocusedItem(),1).GetText()])
+		else:
+			self.texto=self.nueva_combinacion
+			self.nueva_combinacion=""
+		leerTeclas()
+		mis_teclas=mis_teclas.replace(self.combinaciones.GetItem(self.combinaciones.GetFocusedItem(),1).GetText(),self.texto)
+		with open("keys.txt", "w") as fichero: fichero.write(mis_teclas)
+		mis_teclas=eval(mis_teclas)
+		self.combinaciones.SetItem(self.combinaciones.GetFocusedItem(), 1, self.texto)
+		self.combinaciones.SetFocus()
+	def berifica(self, event):
+		self.nueva_combinacion=""
+		self.dlg_editar_combinacion.Destroy()
 	def restaurarTeclas(self,event):
 		dlg_2 = wx.MessageDialog(self.dlg_teclado, _("Está apunto de restaurar las combinaciones a sus valores por defecto, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		if dlg_2.ShowModal()==wx.ID_YES:
@@ -387,9 +403,8 @@ class MyFrame(wx.Frame):
 				c+=1
 			self.combinaciones.Focus(0)
 			self.combinaciones.SetFocus()
-			if self.dentro:
-				self.handler_keyboard.unregister_all_keys()
-				self.handler_keyboard.register_keys(mis_teclas)
+			self.handler_keyboard.unregister_all_keys()
+			self.handler_keyboard.register_keys(mis_teclas)
 	def documentacion(self, evt): wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube/tree/master/doc/'+languageHandler.curLang[:2]+'/readme.md')
 	def pageMain(self, evt): wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube')
 	def donativo(self, evt): wx.LaunchDefaultBrowser('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
@@ -562,7 +577,6 @@ class MyFrame(wx.Frame):
 				url=url.replace('https://studio.youtube.com/video/','https://www.youtube.com/watch?v=')
 				url=url.replace('/livestreaming','/')
 			if 'live' in url: url=url.replace('live/','watch?v=')
-			print(url)
 			try:
 				if 'yout' in url: self.chat=ChatDownloader().get_chat(url,message_groups=["messages", "superchat"])
 				elif 'twitch' in url: self.chat=ChatDownloader().get_chat(url,message_groups=["messages", "bits","subscriptions","upgrades"])
@@ -594,8 +608,7 @@ class MyFrame(wx.Frame):
 				button_mensaje_detener.Bind(wx.EVT_BUTTON,self.detenerLectura)
 				sizer_mensaje_2.Add(button_mensaje_detener, 10, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 0)
 				sizer_mensaje_2.Realize()
-				self.dialog_mensaje.SetSizer(sizer_mensaje_1)
-				sizer_mensaje_1.Fit(self.dialog_mensaje)
+				self.dialog_mensaje.SetSizerAndFit(sizer_mensaje_1)
 				self.dialog_mensaje.Centre()
 				self.dialog_mensaje.SetEscapeId(button_mensaje_detener.GetId())
 				if sonidos and listasonidos[6]: playsound(rutasonidos[6],False)
@@ -629,21 +642,23 @@ class MyFrame(wx.Frame):
 		menu.Destroy()
 
 	def traducirMenu(self, event):
-		noti =	wx.adv.NotificationMessage(_("Mensaje traducido"), _("el mensaje se ha traducido al idioma del programa y se  a  copiado en el portapapeles."))
+		noti =wx.adv.NotificationMessage(_("Mensaje traducido"), _("el mensaje se ha traducido al idioma del programa y se  a  copiado en el portapapeles."))
 		noti.Show(timeout=10)
 		copy(translator.translate(self.list_box_1.GetString(self.list_box_1.GetSelection()),target=languageHandler.curLang[:2]))
 	def copiarMensaje(self, event):
-		noti =	wx.adv.NotificationMessage(_("Mensaje copiado al portapapeles"), _("El mensaje seleccionado ha sido copiado al portapapeles."))
+		noti =wx.adv.NotificationMessage(_("Mensaje copiado al portapapeles"), _("El mensaje seleccionado ha sido copiado al portapapeles."))
 		noti.Show(timeout=10)
 		copy(self.list_box_1.GetString(self.list_box_1.GetSelection()))
 	def opcionesChat(self, event):
 		menu = wx.Menu()
+		menu.Append(10, _("Editor de combinaciones de teclado para VeTube"))
 		menu.Append(1, _("&Borrar historial de mensajes"))
 		menu.Append(2, _("&Exportar los mensajes en un archivo de texto"))
 		if self.chat.status!="upcoming": menu.Append(3, _("&Añadir este canal a favoritos"))
 		menu.Append(4, _("&Ver estadísticas del chat"))
 		menu.Append(8, _("&Copiar enlace del chat al portapapeles"))
 		menu.Append(9, _("&Reproducir video en el navegador"))
+		menu.Bind(wx.EVT_MENU, self.createEditor, id=10)
 		menu.Bind(wx.EVT_MENU, self.borrarHistorial, id=1)
 		menu.Bind(wx.EVT_MENU, self.guardarLista, id=2)
 		if self.chat.status!="upcoming": menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
@@ -655,7 +670,7 @@ class MyFrame(wx.Frame):
 
 	def copiarEnlace(self, event):
 		noti =	wx.adv.NotificationMessage(_("Enlace copiado al portapapeles"), _("El enlace del chat ha sido copiado al portapapeles."))
-		noti.Show(timeout=10)
+		noti.Show(timeout=5)
 		if not self.dentro: url=favorite[self.list_favorite.GetSelection()]['url']
 		else: url=self.text_ctrl_1.GetValue()
 		copy(url)
@@ -692,8 +707,7 @@ class MyFrame(wx.Frame):
 		button_estadisticas_descargar.Bind(wx.EVT_BUTTON, self.descargarEstadisticas)
 		sizer_estadisticas.Add(button_estadisticas_descargar, 0, wx.ALIGN_RIGHT | wx.ALL, 4)
 		button_estadisticas_cerrar = wx.Button(self.dlg_estadisticas, wx.ID_CANCEL, _("&Cerrar"))
-		self.dlg_estadisticas.SetSizer(sizer_estadisticas)
-		sizer_estadisticas.Fit(self.dlg_estadisticas)
+		self.dlg_estadisticas.SetSizerAndFit(sizer_estadisticas)
 		self.dlg_estadisticas.Centre()
 		self.dlg_estadisticas.ShowModal()
 		self.dlg_estadisticas.Destroy()
@@ -810,8 +824,7 @@ class MyFrame(wx.Frame):
 		with YoutubeDL(ydlop) as ydl: info_dict = ydl.extract_info(self.text_ctrl_1.GetValue(), download=False)
 		try: self.label_dialog.SetLabel(info_dict.get('title')+', '+str(info_dict["view_count"])+_(' reproducciones'))
 		except: pass
-		try: self.handler_keyboard.register_keys(eval(mis_teclas))
-		except: self.handler_keyboard.register_keys(mis_teclas)
+		self.handler_keyboard.register_keys(eval(mis_teclas))
 		if 'yout' in self.text_ctrl_1.GetValue(): self.recibirYT()
 		elif 'twitch' in self.text_ctrl_1.GetValue(): self.recibirTwich()
 	def elementoAnterior(self):
@@ -893,8 +906,8 @@ class MyFrame(wx.Frame):
 		else: reader=True
 		lector.speak(_("Lectura automática activada.")if reader else _("Lectura automática  desactivada."))
 	def cerrarVentana(self, event):
-		dialogo_cerrar = wx.MessageDialog(self, _("¿está seguro que desea salir del programa?"), _("¡atención!:"), wx.YES_NO | wx.ICON_ASTERISK)
-		if dialogo_cerrar.ShowModal()==wx.ID_YES: self.Destroy()
+		dialogo_cerrar = wx.MessageDialog(self, _("¿está seguro que desea salir del programa?"), _("¡atención!"), wx.YES_NO | wx.ICON_ASTERISK)
+		if dialogo_cerrar.ShowModal()==wx.ID_YES: wx.GetApp().ExitMainLoop()
 	def retornarMensaje(self):
 		if self.list_box_1.GetCount()>0 and lista[yt][0]=='General': return self.list_box_1.GetString(self.list_box_1.GetSelection())
 		if lista[yt][0]!='General' and len(lista[yt])>0: return lista[yt][pos[yt]]
@@ -913,14 +926,12 @@ class MyFrame(wx.Frame):
 			self.text_message.SetFocus()
 			self.traducir = wx.Button(my_dialog, wx.ID_ANY, label=_("&traducir el mensaje al idioma del programa"))
 			self.traducir.Bind(wx.EVT_BUTTON, self.traducirMensaje)
-			cancelar = wx.Button(my_dialog, wx.ID_CLOSE, _("&Cerrar"))
+			cancelar = wx.Button(my_dialog, wx.ID_CANCEL, _("&Cerrar"))
 			sizer_mensaje.Add(self.text_message, 0, 0, 0)
 			sizer_mensaje.Add(self.traducir,0,0,0)
 			sizer_mensaje.Add(cancelar,0,0,0)
-			my_dialog.SetSizer(sizer_mensaje)
-			sizer_mensaje.Fit(my_dialog)
+			my_dialog.SetSizerAndFit(sizer_mensaje)
 			my_dialog.Centre()
-			my_dialog.SetEscapeId(cancelar.GetId())
 			my_dialog.ShowModal()
 	def cambiarTraducir(self,event): self.traducir.SetLabel(_("&traducir el mensaje") if self.choice_idiomas.GetString(self.choice_idiomas.GetSelection()) != translator.LANGUAGES[languageHandler.curLang[:2]] else _("&Traducir mensaje al idioma del programa"))
 	def traducirMensaje(self,event):
@@ -1291,12 +1302,10 @@ class MyFrame(wx.Frame):
 		self.buttonbuscar = wx.Button(self.my_dialog, wx.ID_ANY, _("&Buscar"))
 		self.buttonbuscar.Bind(wx.EVT_BUTTON,self.buscar)
 		sizer_mensaje.Add(self.buttonbuscar,0,0,0)
-		cancelar = wx.Button(self.my_dialog, wx.ID_CLOSE, _("&Cerrar"))
+		cancelar = wx.Button(self.my_dialog, wx.ID_CANCEL, _("&Cerrar"))
 		sizer_mensaje.Add(cancelar,0,0,0)
-		self.my_dialog.SetSizer(sizer_mensaje)
-		sizer_mensaje.Fit(self.my_dialog)
+		self.my_dialog.SetSizerAndFit(sizer_mensaje)
 		self.my_dialog.Centre()
-		self.my_dialog.SetEscapeId(cancelar.GetId())
 		self.my_dialog.ShowModal()
 	def mostrarBuscar(self, event):
 		if self.text_box.GetValue() != "": self.buttonbuscar.Enable()
@@ -1410,7 +1419,8 @@ class MyFrame(wx.Frame):
 			elif	len(mensajes_destacados)<=0:
 				wx.MessageBox(_("No hay mensajes que borrar"), "Error.", wx.ICON_ERROR)
 				self.list_mensajes.SetFocus()
-
+	def cerrarTeclado(self, event):
+		self.dlg_teclado.Destroy()
 class MyApp(wx.App):
 	def OnInit(self):
 		self.frame = MyFrame(None, wx.ID_ANY, "")

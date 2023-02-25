@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from . import update
 from builtins import str
-import platform
 import logging
 from requests.exceptions import ConnectionError
 from .wxUpdater import *

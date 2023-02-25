@@ -95,7 +95,7 @@ class WXKeyboardHandler(BaseWXKeyboardHandler):
     def process_key (self, evt, id):
         evt.Skip()
         key_ids = self.key_ids.keys()
-        for i in key_ids:
+        for i in list(key_ids):
             if self.key_ids.get(i) == id:
                 self.handle_key(i)
 
