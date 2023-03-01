@@ -1,4 +1,5 @@
 v2.6
+solucionados problemas de ajustes: cuando cancelabas los ajustes se reflejaban. ya no debería pasar.
 si pegabas una url como: https://www.youtube.com/live/3wzD80Irf40?feature=share el programa no agarraba los chats. ya debería hacerlo.
 ya se deberían capturar los mensajes que tengan el valor None.
 se agrega un convertidor de divisas para convertir las donaciones a la moneda  que desees.
