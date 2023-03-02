@@ -1,4 +1,3 @@
-[submodule "tt4VeTube"]
-	path = plugins/tt4VeTube
+[submodule "plugins/tacotron2-for-VeTube"]
+	path = plugins/tacotron2-for-VeTube
 	url = https://github.com/rmcpantoja/tacotron2-for-VeTube
-	branch = main
