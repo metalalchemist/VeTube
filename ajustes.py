@@ -1,4 +1,4 @@
-import wx,languageHandler,fajustes,translator
+import wx,languageHandler,fajustes
 from google_currency import CODES
 from translator import LANGUAGES
 from accessible_output2.outputs import  sapi5
@@ -44,11 +44,11 @@ class configuracionDialog(wx.Dialog):
 		boxSizer_1.Add(self.choice_language)
 		self.check_donaciones = wx.CheckBox(self.treeItem_1, wx.ID_ANY, _("Activar diálogo de donaciones al inicio de la app."))
 		self.check_donaciones.SetValue(config['donations'])
-		self.check_donaciones.Bind(wx.EVT_CHECKBOX, self.checarDonaciones)
+		self.check_donaciones.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event,'donations'))
 		boxSizer_1.Add(self.check_donaciones)
 		self.check_actualizaciones = wx.CheckBox(self.treeItem_1, wx.ID_ANY, _("Comprobar si hay actualizaciones al iniciar la app"))
 		self.check_actualizaciones.SetValue(config['updates'])
-		self.check_actualizaciones.Bind(wx.EVT_CHECKBOX, self.checarActualizaciones)
+		self.check_actualizaciones.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event,'updates'))
 		boxSizer_1.Add(self.check_actualizaciones)
 		label_trans = wx.StaticText(self.treeItem_1, wx.ID_ANY, _("traducción de mensajes: "))
 		self.choice_traducir = wx.Choice(self.treeItem_1, wx.ID_ANY, choices=idiomas_disponibles)
@@ -68,11 +68,11 @@ class configuracionDialog(wx.Dialog):
 		boxSizer_2 = wx.StaticBoxSizer(box_2,wx.VERTICAL)
 		self.check_1 = wx.CheckBox(self.treeItem_2, wx.ID_ANY, _("Usar voz sapi en lugar de lector de pantalla."))
 		self.check_1.SetValue(config['sapi'])
-		self.check_1.Bind(wx.EVT_CHECKBOX, self.checar)
+		self.check_1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event,'sapi'))
 		boxSizer_2.Add(self.check_1)
 		self.chk1 = wx.CheckBox(self.treeItem_2, wx.ID_ANY, _("Activar lectura de mensajes automática"))
 		self.chk1.SetValue(config['reader'])
-		self.chk1.Bind(wx.EVT_CHECKBOX, self.checar1)
+		self.chk1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event,'reader'))
 		boxSizer_2.Add(self.chk1)
 		label_6 = wx.StaticText(self.treeItem_2, wx.ID_ANY, _("Voz: "))
 		boxSizer_2 .Add(label_6)
@@ -126,21 +126,20 @@ class configuracionDialog(wx.Dialog):
 		sizer_soniditos.Add(self.check_2)
 		sizer_soniditos.Add(self.soniditos, 1, wx.EXPAND)
 		self.reproducir= wx.Button(self.treeItem_4, wx.ID_ANY, _("&Reproducir"))
-		self.reproducir.Bind(wx.EVT_BUTTON, self.reproducirSonidos)
+		self.reproducir.Bind(wx.EVT_BUTTON, lambda event: playsound(rutasonidos[self.soniditos.GetFocusedItem()], False))
 		if config['sonidos']: self.reproducir.Enable()
 		else: self.reproducir.Disable()
 		sizer_soniditos.Add(self.reproducir)
 		self.treeItem_4.SetSizer(sizer_soniditos)
 		self.tree_1.AddPage(self.treeItem_4, _('Sonidos'))
-		self.button_6 = wx.Button(self, wx.ID_OK, _("&Aceptar"))
-		self.button_6.SetDefault()
-		sizer_5.Add(self.button_6, 0, 0, 0)
-		self.button_cansel = wx.Button(self, wx.ID_CANCEL, _("&Cancelar"))
-		sizer_5.Add(self.button_cansel, 0, 0, 0)
+		button_6 = wx.Button(self, wx.ID_OK, _("&Aceptar"))
+		button_6.SetDefault()
+		sizer_5.Add(button_6, 0, 0, 0)
+		button_cansel = wx.Button(self, wx.ID_CANCEL, _("&Cancelar"))
+		sizer_5.Add(button_cansel, 0, 0, 0)
 		self.treeItem_1.SetSizer(sizer_4)
 		self.treeItem_2.SetSizer(sizer_6)
 		self.SetSizer(sizer_5)		
-		self.SetEscapeId(self.button_cansel.GetId())
 		self.Center()
 	def reproducirPrueva(self, event):
 		prueba.silence()
@@ -165,11 +164,7 @@ class configuracionDialog(wx.Dialog):
 			config['sonidos']=False
 			self.soniditos.Disable()
 			self.reproducir.Disable()
-	def checar(self, event): config['sapi']=True if event.IsChecked() else False
-	def checar1(self, event): config['reader']=True if event.IsChecked() else False
+	def checar(self, event,key): config[key]=True if event.IsChecked() else False
 	def cambiarVoz(self, event):	
 		config['voz']=event.GetSelection()
 		prueba.set_voice(lista_voces[event.GetSelection()])
-	def checarDonaciones(self,event): config['donations']=True if event.IsChecked() else False
-	def checarActualizaciones(self,event): config['updates']= True if event.IsChecked() else False
-	def reproducirSonidos(self,event): playsound(rutasonidos[self.soniditos.GetFocusedItem()], False)

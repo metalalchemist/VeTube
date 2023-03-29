@@ -193,10 +193,9 @@ class MyFrame(wx.Frame):
 	def OnCharHook(self, event):
 		code = event.GetKeyCode()
 		# alt mas m
-		if code == 77 and event.AltDown():
-			self.opcionesMenu(event)
-		else:
-			event.Skip()
+		if code == 77 and event.AltDown(): self.opcionesMenu(event)
+		elif wx.GetKeyState(wx.WXK_F1): self.documentacion(event)
+		else: event.Skip()
 	def createEditor(self,event=None):
 		global mis_teclas
 		mis_teclas=eval(mis_teclas)
@@ -462,7 +461,7 @@ class MyFrame(wx.Frame):
 					aux2=self.usuarios[x]
 					self.usuarios[x]=self.usuarios[x+1]
 					self.usuarios[x+1]=aux2
-		self.dlg_estadisticas = wx.Dialog(self.dialog_mensaje, wx.ID_ANY, _("Estadísticas del canal:"))
+		self.dlg_estadisticas = wx.Dialog(self.dialog_mensaje, wx.ID_ANY, _("Estadísticas del chat:"))
 		sizer_estadisticas = wx.BoxSizer(wx.VERTICAL)
 		label_estadisticas = wx.StaticText(self.dlg_estadisticas, wx.ID_ANY, _("&Usuarios y mensajes:"))
 		sizer_estadisticas.Add(label_estadisticas, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 4)
