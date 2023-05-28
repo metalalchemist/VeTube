@@ -1,6 +1,6 @@
-﻿#vetube
+﻿# vetube
 Leia e gerencie de forma acessível o bate-papo do youtube e do twitch em suas próprias transmissões ou nas de seus criadores favoritos.
-[demonstração do produto em funcionamento](https://youtu.be/4XawJoBymPs)
+[demonstração do produto em funcionamento](https://www.youtube.com/watch?v=KljpMJNVYCw)
 ## Caracteristicas
 - Modo automático: leia mensagens de bate-papo em tempo real usando a voz sapy5
 - Interface invisível: gerencie chats de qualquer janela usando comandos simples do teclado. Você precisa ter um leitor de tela ativo.

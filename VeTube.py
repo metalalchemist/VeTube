@@ -176,11 +176,11 @@ class MyFrame(wx.Frame):
 		self.Bind(wx.EVT_MENU, self.restaurar, opcion_3)
 		menu1.AppendSubMenu(ayuda, _("&Ayuda"))
 		manual = ayuda.Append(wx.ID_ANY, _("¿Cómo usar vetube? (documentación en línea)"))
-		self.Bind(wx.EVT_MENU, self.documentacion, manual)
+		self.Bind(wx.EVT_MENU, lambda event: wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube/tree/master/doc/'+languageHandler.curLang[:2]+'/readme.md'), manual)
 		apoyo = ayuda.Append(wx.ID_ANY, _("Únete a nuestra &causa"))
-		self.Bind(wx.EVT_MENU, self.donativo, apoyo)
+		self.Bind(wx.EVT_MENU, lambda event: wx.LaunchDefaultBrowser('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U'), apoyo)
 		itemPageMain = ayuda.Append(wx.ID_ANY, _("&Visita nuestra página de github"))
-		self.Bind(wx.EVT_MENU, self.pageMain, itemPageMain)
+		self.Bind(wx.EVT_MENU, lambda event: wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube'), itemPageMain)
 		actualizador = ayuda.Append(wx.ID_ANY, _("&buscar actualizaciones"))
 		self.Bind(wx.EVT_MENU, self.updater, actualizador)
 		acercade = menu1.Append(wx.ID_ANY, _("Acerca de"))
@@ -194,11 +194,12 @@ class MyFrame(wx.Frame):
 		code = event.GetKeyCode()
 		# alt mas m
 		if code == 77 and event.AltDown(): self.opcionesMenu(event)
-		elif wx.GetKeyState(wx.WXK_F1): self.documentacion(event)
+		elif wx.GetKeyState(wx.WXK_F1): wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube/tree/master/doc/'+languageHandler.curLang[:2]+'/readme.md')
 		else: event.Skip()
 	def createEditor(self,event=None):
 		global mis_teclas
-		mis_teclas=eval(mis_teclas)
+		try: mis_teclas=eval(mis_teclas)
+		except: pass
 		self.dlg_teclado = wx.Dialog(None, wx.ID_ANY, _("Editor de combinaciones de teclado para Vetube"))
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		label_editor = wx.StaticText(self.dlg_teclado, wx.ID_ANY, _("&Selecciona la combinación de teclado a editar"))
@@ -338,9 +339,6 @@ class MyFrame(wx.Frame):
 			self.combinaciones.SetFocus()
 			self.handler_keyboard.unregister_all_keys()
 			self.handler_keyboard.register_keys(mis_teclas)
-	def documentacion(self, evt): wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube/tree/master/doc/'+languageHandler.curLang[:2]+'/readme.md')
-	def pageMain(self, evt): wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube')
-	def donativo(self, evt): wx.LaunchDefaultBrowser('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U')
 	def appConfiguracion(self, event):			
 		self.cf=ajustes.configuracionDialog(self)
 		if self.cf.ShowModal()==wx.ID_OK: self.guardar()
@@ -353,7 +351,7 @@ class MyFrame(wx.Frame):
 				url=url.replace('/livestreaming','/')
 			if 'live' in url: url=url.replace('live/','watch?v=')
 			try:
-				if 'yout' in url: self.chat=ChatDownloader(cookies="cook.txt").get_chat(url,message_groups=["messages", "superchat"])
+				if 'yout' in url: self.chat=ChatDownloader().get_chat(url,message_groups=["messages", "superchat"])
 				elif 'twitch' in url: self.chat=ChatDownloader().get_chat(url,message_groups=["messages", "bits","subscriptions","upgrades"])
 				else:
 					wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), "error.", wx.ICON_ERROR)
@@ -428,14 +426,15 @@ class MyFrame(wx.Frame):
 		menu.Append(10, _("&Editor de combinaciones de teclado para VeTube"))
 		menu.Append(1, _("&Borrar historial de mensajes"))
 		menu.Append(2, _("E&xportar los mensajes en un archivo de texto"))
-		if self.chat.status!="upcoming": menu.Append(3, _("&Añadir este canal a favoritos"))
+		if self.chat.status!="upcoming":
+			menu.Append(3, _("&Añadir este canal a favoritos"))
+			menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
 		menu.Append(4, _("&Ver estadísticas del chat"))
 		menu.Append(8, _("&Copiar enlace del chat al portapapeles"))
 		menu.Append(9, _("&Reproducir video en el navegador"))
 		menu.Bind(wx.EVT_MENU, self.createEditor, id=10)
 		menu.Bind(wx.EVT_MENU, self.borrarHistorial, id=1)
 		menu.Bind(wx.EVT_MENU, self.guardarLista, id=2)
-		if self.chat.status!="upcoming": menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
 		menu.Bind(wx.EVT_MENU, self.estadisticas, id=4)
 		menu.Bind(wx.EVT_MENU, self.copiarEnlace, id=8)
 		menu.Bind(wx.EVT_MENU, self.reproducirVideo, id=9)
@@ -468,8 +467,9 @@ class MyFrame(wx.Frame):
 		self.mayor_menor = wx.ListCtrl(self.dlg_estadisticas, wx.ID_ANY, style=wx.LC_REPORT)
 		self.mayor_menor.InsertColumn(0, _("Usuario: "))
 		self.mayor_menor.InsertColumn(1, _("Cantidad de mensajes: "))
-		for i in range(len(self.mensajes)): self.mayor_menor.InsertItem(i, self.usuarios[i])
-		for i in range(len(self.mensajes)): self.mayor_menor.SetItem(i, 1, str(self.mensajes[i]))
+		for i in range(len(self.mensajes)):
+			self.mayor_menor.InsertItem(i, self.usuarios[i])
+			self.mayor_menor.SetItem(i, 1, str(self.mensajes[i]))
 		sizer_estadisticas.Add(self.mayor_menor, 1, wx.EXPAND | wx.ALL, 4)
 		label_total = wx.StaticText(self.dlg_estadisticas, wx.ID_ANY, _("&Estadísticas totales:"))
 		sizer_estadisticas.Add(label_total, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 4)
@@ -675,8 +675,7 @@ class MyFrame(wx.Frame):
 		if self.list_box_1.GetCount()>0 and lista[yt][0]=='General': return self.list_box_1.GetString(self.list_box_1.GetSelection())
 		if lista[yt][0]!='General' and len(lista[yt])>0: return lista[yt][pos[yt]]
 	def mostrarMensaje(self,event=None):
-		idiomas_disponibles = []
-		for k in translator.LANGUAGES: 			idiomas_disponibles.append(translator.LANGUAGES[k])
+		idiomas_disponibles =[translator.LANGUAGES[k] for k in LANGUAGES]
 		if self.dentro and self.retornarMensaje():
 			my_dialog = wx.Dialog(self, wx.ID_ANY, _("mensaje"))
 			sizer_mensaje = wx.BoxSizer(wx.HORIZONTAL)
