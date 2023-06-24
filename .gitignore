@@ -1,5 +1,7 @@
 __pycache__/
 *.pyc
+*.onnx
+*.onnx.json
 piper/voices/*
 piper/voices/*/*
 data.json
