@@ -3,7 +3,7 @@ from google_currency import CODES
 from translator import LANGUAGES
 from accessible_output2.outputs import  sapi5
 from TTS.lector import configurar_tts, detect_onnx_models
-from TTS.list_voices import piper_list_voices
+from TTS.list_voices import piper_list_voices, install_piper_voice
 from TTS.Piper import Piper, speaker
 from os import path
 from playsound import playsound
@@ -86,6 +86,7 @@ class configuracionDialog(wx.Dialog):
 		label_tts = wx.StaticText(self.treeItem_2, wx.ID_ANY, _("Sistema TTS a usar: "))
 		boxSizer_2 .Add(label_tts)
 		self.seleccionar_TTS= wx.Choice(self.treeItem_2, wx.ID_ANY, choices=["auto", "piper", "sapi5"])
+		self.seleccionar_TTS.SetStringSelection(config['sistemaTTS'])
 		if config['sapi']:
 			self.seleccionar_TTS.Disable()
 		else:
@@ -102,6 +103,11 @@ class configuracionDialog(wx.Dialog):
 		self.choice_2.SetSelection(config['voz'])
 		self.choice_2.Bind(wx.EVT_CHOICE, self.cambiarVoz)
 		boxSizer_2 .Add(self.choice_2)
+		self.instala_voces = wx.Button(self.treeItem_2, wx.ID_ANY, label=_("Instalar un paquete de voz..."))
+		self.instala_voces.Bind(wx.EVT_BUTTON, self.instalar_voz_piper)
+		boxSizer_2.Add(self.instala_voces)
+		if config['sistemaTTS'] == "piper":
+			self.instala_voces.Disable()
 		label_8 = wx.StaticText(self.treeItem_2, wx.ID_ANY, _("Tono: "))
 		boxSizer_2 .Add(label_8)
 		self.slider_1 = wx.Slider(self.treeItem_2, wx.ID_ANY, config['tono']+10, 0, 20)
@@ -175,10 +181,15 @@ class configuracionDialog(wx.Dialog):
 		if config['sistemaTTS'] == "piper":
 			if not lista_voces_piper is None:
 				lista_voces = lista_voces_piper
+			self.instala_voces.Enable()
 		else:
 			lista_voces = prueba.list_voices()
+			self.instala_voces.Disable()
 		self.choice_2.Clear()
 		self.choice_2.AppendItems(lista_voces)
+	def instalar_voz_piper(self, event):
+		global config, prueba_piper
+		config, prueba_piper = install_piper_voice(config, prueba_piper)
 	def reproducirPrueva(self, event):
 		if not ".onnx" in self.choice_2.GetStringSelection():
 			prueba.silence()

@@ -4,7 +4,7 @@ import json,wx,wx.adv,threading,languageHandler,restart,translator,time,funcione
 from keyboard_handler.wx_handler import WXKeyboardHandler
 from playsound import playsound
 from TTS.lector import configurar_tts, detect_onnx_models
-from TTS.Piper import speaker
+from TTS.list_voices import install_piper_voice
 from yt_dlp import YoutubeDL
 from pyperclip import copy
 from chat_downloader import ChatDownloader
@@ -13,43 +13,23 @@ from os import path,remove,getcwd, makedirs
 #from TikTokLive import TikTokLiveClient
 #from TikTokLive.types.events import CommentEvent, ConnectEvent
 from menu_accesible import Accesible
-import tarfile
+
 yt=0
 # revisar la configuración primero, ya que necesitamos determinar el sistema TTS a través de ella.
 if not path.exists("data.json"): fajustes.escribirConfiguracion()
 config=fajustes.leerConfiguracion()
 lector=configurar_tts(config['sistemaTTS'])
 leer=configurar_tts("sapi5")
-def extraer_tar(archivo, destino):
-	if not path.exists(destino):
-		makedirs(destino)
-	with tarfile.open(archivo, 'r:gz') as tar:
-		tar.extractall(destino)
-
-def instalar_voz_piper():
-	global config, lector
-	abrir_tar = wx.FileDialog(None, _("Selecciona un paquete de voz"), wildcard=_("Archivos tar.gz (*.tar.gz)|*.tar.gz"), style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
-	if abrir_tar.ShowModal() == wx.ID_CANCEL:
-		wx.MessageBox(_('Para usar piper como sistema TTS, necesitas tener al menos una voz. Si quieres hacerlo de forma manual, extrae el paquete de voz en la carpeta "piper/voices/voice-nombre_de_paquete" en VeTube.'), _("No se instaló ninguna voz"), wx.ICON_ERROR)
-		return
-	paquete = abrir_tar.GetPath()
-	abrir_tar.Destroy()
-	nombre_paquete = path.splitext(path.basename(paquete))[0]
-	destino = path.join(getcwd(), "piper", "voices", nombre_paquete[:-3])
-	extraer_tar(paquete, destino)
-	wx.MessageBox(_("¡Voz instalada satosfactoriamente! esta será establecida en VeTube ahora. Para cambiar de modelo de voz, puedes hacerlo a través de las configuraciones."), _("Listo"), wx.ICON_INFORMATION)
-	lector=speaker.piperSpeak(f"{destino}/{nombre_paquete}.onnx")
-	config['voz'] = 0
-	return config
 
 def configurar_piper(carpeta_voces):
+	global config, lector
 	onnx_models = detect_onnx_models(carpeta_voces)
 	if onnx_models is None:
 		sinvoces = wx.MessageDialog(None, _('Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Quieres abrir nuestra carpeta de Drive para descargar algunos modelos? Si pulsas sí, se abrirá nuestra carpeta seguido de una ventana para instalar una una vez la descargues.'), _("No hay voces instaladas"), wx.YES_NO | wx.ICON_QUESTION)
 		abrir_modelos = sinvoces.ShowModal()
 		if abrir_modelos == wx.ID_YES:
 			wx.LaunchDefaultBrowser("https://drive.google.com/drive/folders/1zFJRTI6CpVw9NkrTiNYOKGga0yn4JXzv?usp=drive_link")
-			instalar_voz_piper()
+			config, lector = install_piper_voice(config, lector)
 		sinvoces.Destroy()
 	elif isinstance(onnx_models, str):
 		config['voz'] = onnx_models
