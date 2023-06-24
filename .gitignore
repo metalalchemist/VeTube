@@ -1,5 +1,6 @@
 __pycache__/
 *.pyc
 piper/voices/*
+piper/voices/*/*
 data.json
 keys.txt
