@@ -3,6 +3,7 @@ __pycache__/
 *.onnx
 *.onnx.json
 piper/voices/*
-piper/voices/*/*
+piper/voices/*/*.onnx
+piper/voices/*/*.onnx.json
 data.json
 keys.txt
