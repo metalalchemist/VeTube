@@ -3,18 +3,37 @@
 import json,wx,wx.adv,threading,languageHandler,restart,translator,time,funciones,google_currency,fajustes,ajustes
 from keyboard_handler.wx_handler import WXKeyboardHandler
 from playsound import playsound
-from accessible_output2.outputs import auto, sapi5
+from TTS.lector import configurar_tts, detect_onnx_models
 from yt_dlp import YoutubeDL
 from pyperclip import copy
 from chat_downloader import ChatDownloader
 from update import updater,update
-from os import path,remove
+from os import path,remove,getcwd
 #from TikTokLive import TikTokLiveClient
 #from TikTokLive.types.events import CommentEvent, ConnectEvent
 from menu_accesible import Accesible
 yt=0
-lector=auto.Auto()
-leer=sapi5.SAPI5()
+# revisar la configuración primero, ya que necesitamos determinar el sistema TTS a través de ella.
+if not path.exists("data.json"): fajustes.escribirConfiguracion()
+config=fajustes.leerConfiguracion()
+lector=configurar_tts(config['sistemaTTS'])
+leer=configurar_tts("sapi5")
+
+def configurar_piper(carpeta_voces):
+	onnx_models = detect_onnx_models(carpeta_voces)
+	if onnx_models is None:
+		sinvoces = wx.MessageDialog(None, _('Necesitas al menos una voz para poder usar el sintetizador. ¿Quieres abrir nuestra carpeta de Drive para descargar algunos modelos?'), _("No hay voces instaladas"), wx.YES_NO | wx.ICON_QUESTION)
+		abrir_modelos = sinvoces.ShowModal()
+		if abrir_modelos == wx.ID_YES:
+			wx.LaunchDefaultBrowser("https://drive.google.com/drive/folders/1zFJRTI6CpVw9NkrTiNYOKGga0yn4JXzv?usp=drive_link")
+		sinvoces.Destroy()
+	elif isinstance(onnx_models, str):
+		config['voz'] = onnx_models
+	else:
+		config['voz'] = onnx_models[0]
+
+carpeta_voces = path.join(getcwd(), "piper", "voices")
+
 def escribirTeclas():
 	with open('keys.txt', 'w+') as arch: arch.write("""{
 "control+p": leer.silence,
@@ -40,17 +59,20 @@ def leerTeclas():
 		with open ("keys.txt",'r') as arch:
 			mis_teclas=arch.read()
 	else: escribirTeclas()
-if not path.exists("data.json"): fajustes.escribirConfiguracion()
-config=fajustes.leerConfiguracion()
 pos=[]
 favorite=funciones.leerJsonLista('favoritos.json')
 mensajes_destacados=funciones.leerJsonLista('mensajes_destacados.json')
 leer.set_rate(config['speed'])
 leer.set_pitch(config['tono'])
-leer.set_voice(ajustes.lista_voces[config['voz']])
+if not isinstance(config['voz'], int):
+	leer=configurar_tts("piper")
+	leer=leer.piperSpeak(f"piper/voices/voice-{ajustes.lista_voces[config['voz']][:-4]}/{ajustes.lista_voces[config['voz']]}")
+else:
+	leer.set_voice(leer.list_voices()[0])
 leer.set_volume(config['volume'])
 favs=funciones.convertirLista(favorite,'titulo','url')
 msjs=funciones.convertirLista(mensajes_destacados,'mensaje','titulo')
+# establecer idiomas:
 languageHandler.setLanguage(config['idioma'])
 idiomas = languageHandler.getAvailableLanguages()
 langs = []
@@ -77,6 +99,9 @@ class MyFrame(wx.Frame):
 		if self.instance.IsAnotherRunning():
 			wx.MessageBox(_('VeTube ya se encuentra en ejecución. Cierra la otra instancia antes de iniciar esta.'), 'Error', wx.ICON_ERROR)
 			return False
+		# configurar TTS:
+		if config['sistemaTTS'] == "piper":
+			configurar_piper(carpeta_voces)
 		if config['donations']: update.donation()
 		self.dentro=False
 		self.dst =""
