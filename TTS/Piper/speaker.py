@@ -24,11 +24,12 @@ class piperSpeak:
 
     def set_speaker(self, sid):
         self.speaker_id = sid
+
     def is_multispeaker(self):
         return self.voice.config.num_speakers > 1
     def speak(self, text):
         self.synthesize = self.load_model()
-        if self.speaker_id is None and self.is_multispeaker:
+        if self.speaker_id is None and self.is_multispeaker == True:
             self.set_speaker(0)
         audio_norm, sample_rate = self.voice.synthesize(
             text,

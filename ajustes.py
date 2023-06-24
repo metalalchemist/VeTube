@@ -7,17 +7,21 @@ from TTS.list_voices import piper_list_voices
 from TTS.Piper import Piper, speaker
 from os import path
 from playsound import playsound
+if not path.exists("data.json"): fajustes.escribirConfiguracion()
+config=fajustes.leerConfiguracion()
+
 prueba=configurar_tts("sapi5")
 prueba_piper=configurar_tts("piper")
 lista_voces=prueba.list_voices()
 lista_voces_piper = piper_list_voices()
 rutasonidos=["sounds/chat.mp3","sounds/chatmiembro.mp3","sounds/miembros.mp3","sounds/donar.mp3","sounds/moderators.mp3","sounds/verified.mp3","sounds/abrirchat.wav","sounds/propietario.mp3","sounds/buscar.wav"]
+if config['sistemaTTS'] == "piper":
+	if not lista_voces_piper is None:
+		lista_voces = lista_voces_piper
 
 class configuracionDialog(wx.Dialog):
 	def __init__(self, parent):
 		global config, lista_voces
-		if not path.exists("data.json"): fajustes.escribirConfiguracion()
-		config=fajustes.leerConfiguracion()
 		# idioma:
 		languageHandler.setLanguage(config['idioma'])
 		idiomas = languageHandler.getAvailableLanguages()
@@ -33,9 +37,6 @@ class configuracionDialog(wx.Dialog):
 		for k in LANGUAGES: idiomas_disponibles.append(LANGUAGES[k])
 		# voces:
 		# establecer piper a la lista general si el sistema TTS es Piper, de lo contrario habrá interferencia con sapi:
-		if config['sistemaTTS'] == "piper":
-			if not lista_voces_piper is None:
-				lista_voces = lista_voces_piper
 		mensajes_categorias=[_('Miembros'),_('Donativos'),_('Moderadores'),_('Usuarios Verificados'),_('Favoritos')]
 		mensajes_sonidos=[_('Sonido cuando llega un mensaje'),_('Sonido cuando habla un miembro'),_('Sonido cuando se conecta un miembro'),_('Sonido cuando llega un donativo'),_('Sonido cuando habla un moderador'),_('Sonido cuando habla un usuario verificado'),_('Sonido al ingresar al chat'),_('Sonido cuando habla el propietario del canal'),_('sonido al terminar la búsqueda de mensajes')]
 		super().__init__(parent, title=_("Configuración"))

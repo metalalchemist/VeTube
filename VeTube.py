@@ -69,9 +69,12 @@ if not isinstance(config['voz'], int):
 	leer=leer.piperSpeak(f"piper/voices/voice-{ajustes.lista_voces[config['voz']][:-4]}/{ajustes.lista_voces[config['voz']]}")
 else:
 	leer.set_voice(leer.list_voices()[0])
-leer.set_volume(config['volume'])
+	leer.set_volume(config['volume'])
 favs=funciones.convertirLista(favorite,'titulo','url')
 msjs=funciones.convertirLista(mensajes_destacados,'mensaje','titulo')
+# establecer la voz del lector en piper:
+if config['sistemaTTS'] == "piper":
+	lector=lector.piperSpeak(f"piper/voices/voice-{ajustes.lista_voces[config['voz']][:-4]}/{ajustes.lista_voces[config['voz']]}")
 # establecer idiomas:
 languageHandler.setLanguage(config['idioma'])
 idiomas = languageHandler.getAvailableLanguages()
