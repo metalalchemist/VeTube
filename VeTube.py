@@ -585,6 +585,9 @@ class MyFrame(wx.Frame):
 				if google_currency.CODES[k] == monedita[0]:
 					self.divisa = k
 					break
+		# verificar voces:
+		if config['sistemaTTS'] == "piper":
+			configurar_piper(carpeta_voces)
 		leer=ajustes.prueba
 	def borrarHistorial(self,event):
 		dlg_2 = wx.MessageDialog(self.dialog_mensaje, _("Está apunto de eliminar del historial aproximadamente ")+str(self.list_box_1.GetCount())+_(" elementos, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
