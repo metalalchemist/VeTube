@@ -24,6 +24,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install --upgrade pip wheel setuptools
           pip install -r requirements.txt
           pip install pyinstaller
           git clone https://github.com/mush42/espeak-phonemizer-windows
@@ -40,7 +41,7 @@ jobs:
 
       - name: Create zip
         run: |
-          7z a ../VeTube-x64.zip VeTube
+          7z a ../VeTube-x64.zip VeTube/
           cd ..
 
       - name: Upload zip
