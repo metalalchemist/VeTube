@@ -42,7 +42,7 @@ jobs:
         run: |
           cd dist
           7z a ../VeTube-x64.zip VeTube/
-cd ..
+          cd ..
 
       - name: Upload zip
         uses: actions/upload-artifact@v3
