@@ -32,17 +32,16 @@ jobs:
       - name: Compiling
         run: |
           pyinstaller VeTube.py
-          cd dist
-          cp -R ../doc VeTube/
-          cp -R ../locales VeTube/
-          cp -R ../readme VeTube/
-          cp -R ../sounds VeTube/
-          cp -R ../espeak-phonemizer-windows/espeak_phonemizer VeTube/
+          cp -R doc dist/VeTube/
+          cp -R locales dist/VeTube/
+          cp -R readme dist/VeTube/
+          cp -R sounds dist/VeTube/
+          cp -R espeak-phonemizer-windows/espeak_phonemizer dist/VeTube/
 
       - name: Create zip
         run: |
-          7z a ../VeTube-x64.zip VeTube/
-          cd ..
+          cd dist
+          7z a VeTube-x64.zip VeTube/
 
       - name: Upload zip
         uses: actions/upload-artifact@v3
