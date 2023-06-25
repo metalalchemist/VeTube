@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Configure Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.10
           architecture: x86
@@ -38,7 +38,7 @@ jobs:
           cp -R espeak-phonemizer-windows/espeak_phonemizer dist/
 
       - name: Create zip
-        run: zip -r vetube-x86.zip dist/
+        run: 7z a vetube-x86.zip dist
 
       - name: Upload zip
         uses: actions/upload-artifact@v3
