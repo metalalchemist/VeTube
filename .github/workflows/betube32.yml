@@ -1,4 +1,4 @@
-name: Vetube-x86
+name: VeTube-x86
 
 on:
   push:
@@ -41,12 +41,13 @@ jobs:
       - name: Create zip
         run: |
           cd dist
-          7z a VeTube-x86.zip VeTube/
+          7z a ../VeTube-x86.zip VeTube/
+          cd ..
 
       - name: Upload zip
         uses: actions/upload-artifact@v3
         with:
-          name: VeTube
+          name: VeTube-x86
           path: dist
           if-no-files-found: error
 
