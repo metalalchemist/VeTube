@@ -3,13 +3,9 @@ name: Vetube-x64
 on:
   push:
     tags: ["*"]
-    branches:
-      - master
-      piper
+    branches: [ master , piper ]
   pull_request:
-    branches:
-      - master
-      piper
+    branches: [ master , piper ]
   workflow_dispatch:
 
 jobs:
