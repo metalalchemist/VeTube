@@ -30,21 +30,25 @@ jobs:
 
       - name: Compiling
         run: |
-          pyinstaller vetube.py
-          cp -R doc dist/
-          cp -R locales dist/
-          cp -R readme dist/
-          cp -R sounds dist/
-          cp -R espeak-phonemizer-windows/espeak_phonemizer dist/
+          pyinstaller VeTube.py
+          cd dist
+          cp -R ../doc VeTube/
+          cp -R ../locales VeTube/
+          cp -R ../readme VeTube/
+          cp -R ../sounds VeTube/
+          cp -R ../espeak-phonemizer-windows/espeak_phonemizer VeTube/
 
       - name: Create zip
-        run: 7z a vetube-x64.zip dist
+        run: |
+          7z a ../VeTube-x64.zip VeTube
+          cd ..
 
       - name: Upload zip
         uses: actions/upload-artifact@v3
         with:
-          name: vetube
-          path: vetube-x64.zip
+          name: VeTube
+          path: dist
+          if-no-files-found: error
 
   vetube_release:
     runs-on: windows-latest
@@ -57,6 +61,6 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: vetube-x64.zip
+        files: VeTube-x64.zip
         fail_on_unmatched_files: true
         prerelease: ${{ contains(github.ref, '-') }}
