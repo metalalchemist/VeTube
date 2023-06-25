@@ -27,7 +27,7 @@ jobs:
           pip install --upgrade pip wheel setuptools
           pip install -r requirements.txt
           pip install pyinstaller
-          pip install --upgrade pyzmq httpx httpcore
+          pip install --upgrade pyzmq httpx httpcore future
           git clone https://github.com/mush42/espeak-phonemizer-windows
 
       - name: Compiling
