@@ -5,10 +5,11 @@ on:
     tags: ["*"]
     branches:
       - master
+      piper
   pull_request:
     branches:
       - master
-
+      piper
   workflow_dispatch:
 
 jobs:
@@ -29,9 +30,16 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install pyinstaller
+          git clone https://github.com/mush42/espeak-phonemizer-windows
 
       - name: Compiling
-        run: pyinstaller vetube.py
+        run: |
+          pyinstaller vetube.py
+          cp -R doc dist/
+          cp -R locales dist/
+          cp -R readme dist/
+          cp -R sounds dist/
+          cp -R espeak-phonemizer-windows/espeak_phonemizer dist/
 
       - name: Create zip
         run: zip -r vetube-x64.zip dist/
