@@ -19,7 +19,7 @@ jobs:
       - name: Configure Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: 3.10
           architecture: x64
 
       - name: Install dependencies
@@ -27,7 +27,7 @@ jobs:
           pip install --upgrade pip wheel setuptools
           pip install -r requirements.txt
           pip install pyinstaller
-          pip install --upgrade pyzmq
+          pip install --upgrade pyzmq httpx httpcore
           git clone https://github.com/mush42/espeak-phonemizer-windows
 
       - name: Compiling
