@@ -26,13 +26,14 @@ jobs:
         run: |
           pip install --upgrade pip wheel setuptools
           pip install -r requirements.txt
-          pip install pyinstaller
+          pip install pyinstaller gdown
           pip install --upgrade pyzmq httpx httpcore future
           git clone https://github.com/mush42/espeak-phonemizer-windows
 
       - name: Compiling
         run: |
           pyinstaller VeTube.py
+          gdown 1ZtF6zus0A7kC9Lwr_kTUbw0MiOoZq29H -O dist/VeTube/bootstrap.exe
           cp -R doc dist/VeTube/
           cp -R locales dist/VeTube/
           cp -R readme dist/VeTube/
