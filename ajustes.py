@@ -17,7 +17,7 @@ lista_voces_piper = piper_list_voices()
 rutasonidos=["sounds/chat.mp3","sounds/chatmiembro.mp3","sounds/miembros.mp3","sounds/donar.mp3","sounds/moderators.mp3","sounds/verified.mp3","sounds/abrirchat.wav","sounds/propietario.mp3","sounds/buscar.wav"]
 class configuracionDialog(wx.Dialog):
 	def __init__(self, parent):
-		global config, lista_voces
+		global config, lista_voces, prueba_piper
 		# idioma:
 		languageHandler.setLanguage(config['idioma'])
 		idiomas = languageHandler.getAvailableLanguages()
@@ -103,6 +103,10 @@ class configuracionDialog(wx.Dialog):
 		self.choice_2.SetSelection(config['voz'])
 		self.choice_2.Bind(wx.EVT_CHOICE, self.cambiarVoz)
 		boxSizer_2 .Add(self.choice_2)
+		if config['sistemaTTS'] == "piper":
+			if len(lista_voces) == 1:
+				prueba_piper = speaker.piperSpeak(f"piper/voices/voice-{lista_voces[0][:-4]}/{lista_voces[0]}")
+				config['voz'] = 0
 		self.instala_voces = wx.Button(self.treeItem_2, wx.ID_ANY, label=_("Instalar un paquete de voz..."))
 		self.instala_voces.Bind(wx.EVT_BUTTON, self.instalar_voz_piper)
 		boxSizer_2.Add(self.instala_voces)

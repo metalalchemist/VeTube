@@ -32,9 +32,9 @@ def configurar_piper(carpeta_voces):
 			config, lector = install_piper_voice(config, lector)
 		sinvoces.Destroy()
 	elif isinstance(onnx_models, str):
-		config['voz'] = onnx_models
+		config['voz'] = 0
 	else:
-		config['voz'] = onnx_models[0]
+		config['voz'] = 0
 
 carpeta_voces = path.join(getcwd(), "piper", "voices")
 
