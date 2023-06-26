@@ -29,7 +29,7 @@ class piperSpeak:
 		return self.voice.config.num_speakers > 1
 
 	def list_speakers(self):
-		if self.is_multispeaker()
+		if self.is_multispeaker():
 			return self.voice.config.speaker_id_map
 		else:
 			raise Exception("This is not a multispeaker model!")
