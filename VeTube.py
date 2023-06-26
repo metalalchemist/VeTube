@@ -31,9 +31,7 @@ def configurar_piper(carpeta_voces):
 			wx.LaunchDefaultBrowser("https://drive.google.com/drive/folders/1zFJRTI6CpVw9NkrTiNYOKGga0yn4JXzv?usp=drive_link")
 			config, lector = install_piper_voice(config, lector)
 		sinvoces.Destroy()
-	elif isinstance(onnx_models, str):
-		config['voz'] = 0
-	else:
+	elif isinstance(onnx_models, str) or isinstance(onnx_models, list):
 		config['voz'] = 0
 
 carpeta_voces = path.join(getcwd(), "piper", "voices")

@@ -30,7 +30,7 @@ class piperSpeak:
 
     def speak(self, text):
         self.synthesize = self.load_model()
-        if self.speaker_id is None and self.voice.config.num_speakers > 1:
+        if self.speaker_id is None and self.is_multispeaker():
             self.set_speaker(0)
         audio_norm, sample_rate = self.voice.synthesize(
             text,
