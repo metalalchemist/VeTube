@@ -1,9 +1,13 @@
 wxPython
-playsound==1.2.2
+git+https://github.com/t1nky/playsound
 yt_dlp
 TikTokLive
 pyperclip
 chat_downloader
 git+https://github.com/metalalchemist/google-currency
 git+https://github.com/accessibleapps/accessible_output2
-git+https://github.com/StarkBotsIndustries/googletrans.git
+git+https://github.com/rmcpantoja/googletrans.git
+numpy
+onnxruntime==1.14.1
+git+https://github.com/mush42/espeak-phonemizer-windows
+sounddevice

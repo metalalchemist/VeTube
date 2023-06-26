@@ -2,16 +2,23 @@ import wx,languageHandler,fajustes
 from google_currency import CODES
 from translator import LANGUAGES
 from accessible_output2.outputs import  sapi5
+from TTS.lector import configurar_tts, detect_onnx_models
+from TTS.list_voices import piper_list_voices, install_piper_voice
+from TTS.Piper import Piper, speaker
 from os import path
 from playsound import playsound
-prueba=sapi5.SAPI5()
+if not path.exists("data.json"): fajustes.escribirConfiguracion()
+config=fajustes.leerConfiguracion()
+
+prueba=configurar_tts("sapi5")
+prueba_piper=configurar_tts("piper")
 lista_voces=prueba.list_voices()
+lista_voces_piper = piper_list_voices()
 rutasonidos=["sounds/chat.mp3","sounds/chatmiembro.mp3","sounds/miembros.mp3","sounds/donar.mp3","sounds/moderators.mp3","sounds/verified.mp3","sounds/abrirchat.wav","sounds/propietario.mp3","sounds/buscar.wav"]
 class configuracionDialog(wx.Dialog):
 	def __init__(self, parent):
-		global config
-		if not path.exists("data.json"): fajustes.escribirConfiguracion()
-		config=fajustes.leerConfiguracion()
+		global config, lista_voces, prueba_piper
+		# idioma:
 		languageHandler.setLanguage(config['idioma'])
 		idiomas = languageHandler.getAvailableLanguages()
 		langs = []
@@ -24,6 +31,12 @@ class configuracionDialog(wx.Dialog):
 		monedas=[_('Por defecto')]
 		for k in CODES: monedas.append(f'{CODES[k]}, ({k})')
 		for k in LANGUAGES: idiomas_disponibles.append(LANGUAGES[k])
+		# voces:
+		if config['sistemaTTS'] == "piper":
+			if not lista_voces_piper is None:
+				lista_voces = lista_voces_piper
+			else:
+				lista_voces = [_("No hay voces instaladas")]
 		mensajes_categorias=[_('Miembros'),_('Donativos'),_('Moderadores'),_('Usuarios Verificados'),_('Favoritos')]
 		mensajes_sonidos=[_('Sonido cuando llega un mensaje'),_('Sonido cuando habla un miembro'),_('Sonido cuando se conecta un miembro'),_('Sonido cuando llega un donativo'),_('Sonido cuando habla un moderador'),_('Sonido cuando habla un usuario verificado'),_('Sonido al ingresar al chat'),_('Sonido cuando habla el propietario del canal'),_('sonido al terminar la búsqueda de mensajes')]
 		super().__init__(parent, title=_("Configuración"))
@@ -68,8 +81,18 @@ class configuracionDialog(wx.Dialog):
 		boxSizer_2 = wx.StaticBoxSizer(box_2,wx.VERTICAL)
 		self.check_1 = wx.CheckBox(self.treeItem_2, wx.ID_ANY, _("Usar voz sapi en lugar de lector de pantalla."))
 		self.check_1.SetValue(config['sapi'])
-		self.check_1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event,'sapi'))
+		self.check_1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar_sapi(event))
 		boxSizer_2.Add(self.check_1)
+		label_tts = wx.StaticText(self.treeItem_2, wx.ID_ANY, _("Sistema TTS a usar: "))
+		boxSizer_2 .Add(label_tts)
+		self.seleccionar_TTS= wx.Choice(self.treeItem_2, wx.ID_ANY, choices=["auto", "piper", "sapi5"])
+		self.seleccionar_TTS.SetStringSelection(config['sistemaTTS'])
+		if config['sapi']:
+			self.seleccionar_TTS.Disable()
+		else:
+			self.seleccionar_TTS.Enable()
+		self.seleccionar_TTS.Bind(wx.EVT_CHOICE, self.cambiar_sintetizador)
+		boxSizer_2 .Add(self.seleccionar_TTS)
 		self.chk1 = wx.CheckBox(self.treeItem_2, wx.ID_ANY, _("Activar lectura de mensajes automática"))
 		self.chk1.SetValue(config['reader'])
 		self.chk1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event,'reader'))
@@ -80,6 +103,15 @@ class configuracionDialog(wx.Dialog):
 		self.choice_2.SetSelection(config['voz'])
 		self.choice_2.Bind(wx.EVT_CHOICE, self.cambiarVoz)
 		boxSizer_2 .Add(self.choice_2)
+		if config['sistemaTTS'] == "piper":
+			if len(lista_voces) == 1:
+				prueba_piper = speaker.piperSpeak(f"piper/voices/voice-{lista_voces[0][:-4]}/{lista_voces[0]}")
+				config['voz'] = 0
+		self.instala_voces = wx.Button(self.treeItem_2, wx.ID_ANY, label=_("Instalar un paquete de voz..."))
+		self.instala_voces.Bind(wx.EVT_BUTTON, self.instalar_voz_piper)
+		boxSizer_2.Add(self.instala_voces)
+		if config['sistemaTTS'] == "piper":
+			self.instala_voces.Disable()
 		label_8 = wx.StaticText(self.treeItem_2, wx.ID_ANY, _("Tono: "))
 		boxSizer_2 .Add(label_8)
 		self.slider_1 = wx.Slider(self.treeItem_2, wx.ID_ANY, config['tono']+10, 0, 20)
@@ -90,6 +122,12 @@ class configuracionDialog(wx.Dialog):
 		self.slider_2 = wx.Slider(self.treeItem_2, wx.ID_ANY, config['volume'], 0, 100)
 		self.slider_2.Bind(wx.EVT_SLIDER, self.cambiarVolumen)
 		boxSizer_2 .Add(self.slider_2)
+		# desactivar tono/volumen para piper, por ahora no soportados:
+		if config['sistemaTTS'] == "piper":
+			label_8.Disable()
+			self.slider_1.Disable()
+			label_9.Disable()
+			self.slider_2.Disable()
 		label_10 = wx.StaticText(self.treeItem_2, wx.ID_ANY, _("Velocidad: "))
 		boxSizer_2 .Add(label_10)
 		self.slider_3 = wx.Slider(self.treeItem_2, wx.ID_ANY, config['speed']+10, 0, 20)
@@ -141,12 +179,39 @@ class configuracionDialog(wx.Dialog):
 		self.treeItem_2.SetSizer(sizer_6)
 		self.SetSizer(sizer_5)		
 		self.Center()
+	def cambiar_sintetizador(self, event):
+		global lista_voces
+		config['sistemaTTS']=self.seleccionar_TTS.GetStringSelection()
+		if config['sistemaTTS'] == "piper":
+			if not lista_voces_piper is None:
+				lista_voces = lista_voces_piper
+			else:
+				lista_voces = [_("No hay voces instaladas")]
+			self.instala_voces.Enable()
+		else:
+			lista_voces = prueba.list_voices()
+			self.instala_voces.Disable()
+		self.choice_2.Clear()
+		self.choice_2.AppendItems(lista_voces)
+	def instalar_voz_piper(self, event):
+		global config, prueba_piper
+		config, prueba_piper = install_piper_voice(config, prueba_piper)
 	def reproducirPrueva(self, event):
-		prueba.silence()
-		prueba.speak(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
+		if not ".onnx" in self.choice_2.GetStringSelection():
+			prueba.silence()
+			prueba.speak(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
+		else:
+			prueba_piper.speak(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
+	def porcentaje_a_escala(self, porcentaje):
+		scale = 2.00 + (1 - ((porcentaje - -10) / (10 - -10))) * (0.50 - 2.00)
+		return scale
+
 	def cambiarVelocidad(self, event):
 		value=self.slider_3.GetValue()-10
-		prueba.set_rate(value)
+		if not ".onnx" in lista_voces[self.choice_2.GetSelection()]:
+			prueba.set_rate(value)
+		else:
+			prueba_piper.set_rate(self.porcentaje_a_escala(value))
 		config['speed']=value
 	def cambiarTono(self, event):
 		value=self.slider_1.GetValue()-10
@@ -165,6 +230,14 @@ class configuracionDialog(wx.Dialog):
 			self.soniditos.Disable()
 			self.reproducir.Disable()
 	def checar(self, event,key): config[key]=True if event.IsChecked() else False
+	def checar_sapi(self, event):
+		config['sapi']=True if event.IsChecked() else False
+		self.seleccionar_TTS.Enable(not event.IsChecked())
+
 	def cambiarVoz(self, event):	
-		config['voz']=event.GetSelection()
-		prueba.set_voice(lista_voces[event.GetSelection()])
+		global prueba_piper, lista_voces
+		config['voz']=self.choice_2.GetSelection()
+		if config['sistemaTTS'] == "piper":
+			prueba_piper = speaker.piperSpeak(f"piper/voices/voice-{lista_voces[config['voz']][:-4]}/{lista_voces[config['voz']]}")
+		else:
+			prueba.set_voice(lista_voces[config['voz']])
