@@ -26,19 +26,19 @@ def seconds_to_string(seconds, precision=0):
     sec_string = sec.__format__(sec_spec)
     string = ""
     if day == 1:
-        string += _(u"%d day, ") % day
+        string += _(u"%d día, ") % day
     elif day >= 2:
-        string += _(u"%d days, ") % day
+        string += _(u"%d días, ") % day
     if (hour == 1):
-        string += _(u"%d hour, ") % hour
+        string += _(u"%d hora, ") % hour
     elif (hour >= 2):
-        string += _("%d hours, ") % hour
+        string += _("%d horas, ") % hour
     if (min == 1):
-        string += _(u"%d minute, ") % min
+        string += _(u"%d minuto, ") % min
     elif (min >= 2):
-        string += _(u"%d minutes, ") % min
+        string += _(u"%d minutos, ") % min
     if sec >= 0 and sec <= 2:
-        string += _(u"%s second") % sec_string
+        string += _(u"%s segundo") % sec_string
     else:
-        string += _(u"%s seconds") % sec_string
+        string += _(u"%s segundos") % sec_string
     return string

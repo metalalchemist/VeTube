@@ -1,4 +1,10 @@
 v2.6
+gracias a mateo celillo.
+Agregado un cuadro combinado en las opciones de voz para elegir entre sistemas de texto a voz, este solo aparecerá si la casilla de usar sapi está desactivada.
+Agregado el motor de texto a voz piper.
+Actualizado el sistema de sonido.
+se agrega un nuevo valor en la configuración en data.json (sistemaTTS) por lo que creo que es mejor empezar desde una configuración de cero para evitar problemas.
+metalalchemist & Johan G.
 solucionados problemas de ajustes: cuando cancelabas los ajustes se reflejaban. ya no debería pasar.
 si pegabas una url como: https://www.youtube.com/live/3wzD80Irf40?feature=share el programa no agarraba los chats. ya debería hacerlo.
 ya se deberían capturar los mensajes que tengan el valor None.
