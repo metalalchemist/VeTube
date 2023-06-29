@@ -42,8 +42,8 @@ jobs:
 
       - name: Create zip
         run: |
-          cd dist
-          7z a ../VeTube-x86.zip VeTube/
+          cd dist/VeTube
+          7z a ../VeTube-x86.zip ./
           cd ..
 
       - name: Upload zip
