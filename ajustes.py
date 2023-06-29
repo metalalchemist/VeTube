@@ -194,8 +194,12 @@ class configuracionDialog(wx.Dialog):
 		self.choice_2.Clear()
 		self.choice_2.AppendItems(lista_voces)
 	def instalar_voz_piper(self, event):
-		global config, prueba_piper
+		global config, prueba_piper,lista_voces
 		config, prueba_piper = install_piper_voice(config, prueba_piper)
+		lista_voces = piper_list_voices()
+		if lista_voces:
+			self.choice_2.Clear()
+			self.choice_2.AppendItems(lista_voces)
 	def reproducirPrueva(self, event):
 		if not ".onnx" in self.choice_2.GetStringSelection():
 			prueba.silence()
