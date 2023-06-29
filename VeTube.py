@@ -72,7 +72,7 @@ favs=funciones.convertirLista(favorite,'titulo','url')
 msjs=funciones.convertirLista(mensajes_destacados,'mensaje','titulo')
 # establecer la voz del lector en piper:
 if config['sistemaTTS'] == "piper":
-	lector=lector.piperSpeak(f"piper/voices/voice-{ajustes.lista_voces[config['voz']][:-4]}/{ajustes.lista_voces[config['voz']]}")
+	lector=lector.piperSpeak(f"piper/voices/voice-{ajustes.lista_voces_piper[config['voz']][:-5]}/{ajustes.lista_voces_piper[config['voz']]}")
 # establecer idiomas:
 languageHandler.setLanguage(config['idioma'])
 idiomas = languageHandler.getAvailableLanguages()
@@ -133,7 +133,7 @@ class MyFrame(wx.Frame):
 		self.tap_2 = wx.Panel(self.notebook_1, wx.ID_ANY)
 		self.notebook_1.AddPage(self.tap_2, _("Favoritos"))
 		sizer_favoritos = wx.BoxSizer(wx.VERTICAL)
-		self.label_1 = wx.StaticText(self.tap_1, wx.ID_ANY, _("Escriba o pegue una URL de twich o youtube"), style=wx.ALIGN_CENTER_HORIZONTAL)
+		self.label_1 = wx.StaticText(self.tap_1, wx.ID_ANY, _("Escriba o pegue una URL de youtube"), style=wx.ALIGN_CENTER_HORIZONTAL)
 		sizer_2.Add(self.label_1, 0, 0, 0)
 		self.text_ctrl_1 = wx.TextCtrl(self.tap_1, wx.ID_ANY, "", style=wx.TE_AUTO_URL | wx.TE_CENTRE | wx.TE_PROCESS_ENTER)
 		self.text_ctrl_1.Bind(wx.EVT_TEXT, self.mostrarBoton)

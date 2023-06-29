@@ -37,7 +37,6 @@ jobs:
           cp -R chat_downloader dist/VeTube/
           cp -R doc dist/VeTube/
           cp -R locales dist/VeTube/
-          cp -R readme dist/VeTube/
           cp -R sounds dist/VeTube/
           cp -R espeak-phonemizer-windows/espeak_phonemizer dist/VeTube/
 
