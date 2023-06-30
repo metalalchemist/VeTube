@@ -40,11 +40,11 @@ jobs:
           cp -R sounds dist/VeTube/
           cp -R espeak-phonemizer-windows/espeak_phonemizer dist/VeTube/
 
-        uses: actions/upload-artifact@v3
-        with:
-          name: VeTube-x64
-          path: dist/VeTube
-          if-no-files-found: error
+      uses: actions/upload-artifact@v3
+      with:
+        name: VeTube-x64
+        path: dist/VeTube
+        if-no-files-found: error
 
       - name: zip packaging
         run: |
