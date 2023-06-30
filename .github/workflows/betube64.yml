@@ -49,8 +49,7 @@ jobs:
           cd dist/VeTube
           7z a ../../VeTube-x64.zip .
           cd ../../
-
-      - name: vetube_release:
+      - name: vetube_release
         uses: softprops/action-gh-release@v1
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
         with:
