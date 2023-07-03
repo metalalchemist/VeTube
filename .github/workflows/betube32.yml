@@ -39,31 +39,19 @@ jobs:
           cp -R locales dist/VeTube/
           cp -R sounds dist/VeTube/
           cp -R espeak-phonemizer-windows/espeak_phonemizer dist/VeTube/
-
-      - name: Create zip
-        run: |
-          cd dist
-          7z a ../VeTube-x86.zip VeTube/
-          cd ..
-
-      - name: Upload zip
-        uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v3
         with:
           name: VeTube-x86
-          path: dist
+          path: dist/VeTube
           if-no-files-found: error
-
-  vetube_release:
-    runs-on: windows-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/') }}
-    needs: ["build"]
-    steps:
-    - uses: actions/checkout@v3
-    - name: download
-      uses: actions/download-artifact@v3
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: VeTube-x86.zip
-        fail_on_unmatched_files: true
-        prerelease: ${{ contains(github.ref, '-') }}
+      - name: zip packaging
+        run: |
+          cd dist/VeTube
+          7z a ../../VeTube-x86.zip .
+          cd ../../
+      - name: vetube_release
+        uses: softprops/action-gh-release@v1
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        with:
+          files: VeTube-x86.zip
+          prerelease: ${{ contains(github.ref, '-') }}
