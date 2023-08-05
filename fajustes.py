@@ -10,7 +10,7 @@ def escribirConfiguracion():
 		'sonidos': True,
 		'idioma': "system",
 		'categorias': [True, True, False, False, False],
-		'listasonidos': [True, True, True, True, True, True, True, True, True],
+		'listasonidos': [True, True, True, True, True, True, True, True, True,True,True],
 		'reader': True,
 		'donations': True,
 		'updates': True

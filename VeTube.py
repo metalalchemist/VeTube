@@ -10,8 +10,8 @@ from pyperclip import copy
 from chat_downloader import ChatDownloader
 from update import updater,update
 from os import path,remove,getcwd, makedirs
-#from TikTokLive import TikTokLiveClient
-#from TikTokLive.types.events import CommentEvent, ConnectEvent
+from TikTokLive import TikTokLiveClient
+from TikTokLive.types.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent,LikeEvent,JoinEvent,FollowEvent
 from menu_accesible import Accesible
 
 yt=0
@@ -372,13 +372,20 @@ class MyFrame(wx.Frame):
 	def acceder(self, event=None,url=""):
 		if not url: url=self.text_ctrl_1.GetValue()
 		if url:
-			if 'studio' in url:
-				url=url.replace('https://studio.youtube.com/video/','https://www.youtube.com/watch?v=')
-				url=url.replace('/livestreaming','/')
-			if 'live' in url: url=url.replace('live/','watch?v=')
+			if 'yout' in url: 
+				if 'studio' in url:
+					url=url.replace('https://studio.youtube.com/video/','https://www.youtube.com/watch?v=')
+					url=url.replace('/livestreaming','/')
+				if 'live' in url: url=url.replace('live/','watch?v=')
 			try:
 				if 'yout' in url: self.chat=ChatDownloader().get_chat(url,message_groups=["messages", "superchat"])
 				elif 'twitch' in url: self.chat=ChatDownloader().get_chat(url,message_groups=["messages", "bits","subscriptions","upgrades"])
+				elif 'tiktok' in url:
+					start_index = url.find('@')
+					end_index = url.find('/', start_index)
+					if start_index != -1:
+						if end_index != -1: self.chat=TikTokLiveClient(unique_id=url[start_index:end_index])
+						else: self.chat=TikTokLiveClient(unique_id=url[start_index:])
 				else:
 					wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), "error.", wx.ICON_ERROR)
 					return
@@ -411,8 +418,10 @@ class MyFrame(wx.Frame):
 				self.dialog_mensaje.SetSizerAndFit(sizer_mensaje_1)
 				self.dialog_mensaje.Centre()
 				self.dialog_mensaje.SetEscapeId(button_mensaje_detener.GetId())
-				if config['sonidos'] and config['listasonidos'][6]: playsound(ajustes.rutasonidos[6],False)
-				leer.speak(_("Ingresando al chat."))
+				if not isinstance(self.chat,TikTokLiveClient):
+					leer.speak(_("Ingresando al chat."))
+					if config['sonidos'] and config['listasonidos'][6]: playsound(ajustes.rutasonidos[6],False)
+				else: leer.speak(_("cargando..."))
 				self.hilo2 = threading.Thread(target=self.iniciarChat)
 				self.hilo2.daemon = True
 				self.hilo2.start()
@@ -452,9 +461,10 @@ class MyFrame(wx.Frame):
 		menu.Append(10, _("&Editor de combinaciones de teclado para VeTube"))
 		menu.Append(1, _("&Borrar historial de mensajes"))
 		menu.Append(2, _("E&xportar los mensajes en un archivo de texto"))
-		if self.chat.status!="upcoming":
-			menu.Append(3, _("&Añadir este canal a favoritos"))
-			menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
+		if not isinstance(self.chat, TikTokLiveClient):
+			if self.chat.status!="upcoming":
+				menu.Append(3, _("&Añadir este canal a favoritos"))
+				menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
 		menu.Append(4, _("&Ver estadísticas del chat"))
 		menu.Append(8, _("&Copiar enlace del chat al portapapeles"))
 		menu.Append(9, _("&Reproducir video en el navegador"))
@@ -530,6 +540,7 @@ class MyFrame(wx.Frame):
 		dlg_mensaje = wx.MessageDialog(self.dialog_mensaje, _("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		if dlg_mensaje.ShowModal() == wx.ID_YES:
 			self.dentro=False
+			if isinstance(self.chat, TikTokLiveClient): self.chat.stop()
 			yt=0
 			pos=[]
 			lista=[]
@@ -620,6 +631,8 @@ class MyFrame(wx.Frame):
 		self.handler_keyboard.register_keys(eval(mis_teclas))
 		if 'yout' in self.text_ctrl_1.GetValue(): self.recibirYT()
 		elif 'twitch' in self.text_ctrl_1.GetValue(): self.recibirTwich()
+		elif 'tiktok' in self.text_ctrl_1.GetValue(): self.recibirTiktok()
+
 	def elementoAnterior(self):
 		global pos
 		if self.dentro:
@@ -704,7 +717,7 @@ class MyFrame(wx.Frame):
 		if self.list_box_1.GetCount()>0 and lista[yt][0]=='General': return self.list_box_1.GetString(self.list_box_1.GetSelection())
 		if lista[yt][0]!='General' and len(lista[yt])>0: return lista[yt][pos[yt]]
 	def mostrarMensaje(self,event=None):
-		idiomas_disponibles =[translator.LANGUAGES[k] for k in LANGUAGES]
+		idiomas_disponibles =[translator.LANGUAGES[k] for k in translator.LANGUAGES]
 		if self.dentro and self.retornarMensaje():
 			my_dialog = wx.Dialog(self, wx.ID_ANY, _("mensaje"))
 			sizer_mensaje = wx.BoxSizer(wx.HORIZONTAL)
@@ -893,6 +906,75 @@ class MyFrame(wx.Frame):
 				else:
 					exit()
 					self.hilo2.join()
+	def recibirTiktok(self):
+		global lista
+		def on_connect(event: ConnectEvent):
+			leer.speak(_("Ingresando al chat"))
+			if config['sonidos'] and config['listasonidos'][6]: playsound(ajustes.rutasonidos[6],False)
+		def on_comment(event: CommentEvent):
+			if not event.user.nickname in self.usuarios:
+				self.usuarios.append(event.user.nickname)
+				self.mensajes.append(1)
+			else:
+				c=0
+				for a in self.usuarios:
+					if a==event.user.nickname:
+						self.mensajes[c]+=1
+						break
+					c+=1
+			if lista[yt][0]=='General':
+				if config['reader']:
+					if config['sapi']: leer.speak(event.user.nickname + ": " + event.comment if event.comment is not None else '')
+					else: lector.speak(event.user.nickname + ": " + event.comment if event.comment is not None else '')
+			self.list_box_1.Append(event.user.nickname + ": " + event.comment if event.comment is not None else '')
+			if config['sonidos'] and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
+		def on_follow(event: FollowEvent):
+			if lista[yt][0]=='General':
+				if config['reader']:
+					if config['sapi']: leer.speak(event.user.nickname + _(" comenzó a seguirte!"))
+					else: lector.speak(event.user.nickname + _(" comenzó a seguirte!"))
+			self.list_box_1.Append(event.user.nickname + _(" comenzó a seguirte!"))
+			if config['sonidos'] and config['listasonidos'][10]: playsound(ajustes.rutasonidos[10],False)
+		def on_gift(event: GiftEvent):
+			mensajito=''
+			if event.gift.streakable and not event.gift.streaking: mensajito=event.user.nickname + _(' te ha enviado la cantidad de ')+str(event.gift.count)+event.gift.info.name+_(' que vale ')+str(event.gift.info.diamond_count)+_('diamante')
+			elif not event.gift.streakable: mensajito=event.user.nickname + _(' te ha enviado ')+event.gift.info.name+_(' que vale ')+str(event.gift.info.diamond_count)+_(' diamante')
+			if config['categorias'][1]:
+				for contador in range(len(lista)):
+					if lista[contador][0]=='Donativos':
+						lista[contador].append(mensajito)
+						break
+			self.list_box_1.Append(mensajito)
+			if lista[yt][0]=='Donativos':
+				if config['reader']:
+					if config['sapi']: leer.speak(mensajito)
+					else: lector.speak(mensajito)
+			if config['sonidos'] and config['listasonidos'][3]: playsound(ajustes.rutasonidos[3],False)
+		def on_join(event: JoinEvent):
+			if lista[yt][0]=='General':
+				if config['reader']:
+					if config['sapi']: leer.speak(event.user.nickname + _(" se ha unido  a tu en vivo."))
+					else: lector.speak(event.user.nickname + _(" se ha unido a tu en vivo."))
+			self.list_box_1.Append(event.user.nickname + _(" se ha unido a tu en vivo."))
+			if config['sonidos'] and config['listasonidos'][2]: playsound(ajustes.rutasonidos[2],False)
+		def on_like(event: LikeEvent):
+			if lista[yt][0]=='General':
+				if config['reader']:
+					if config['sapi']: leer.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+					else: lector.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+			self.list_box_1.Append(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+			if config['sonidos'] and config['listasonidos'][9]: playsound(ajustes.rutasonidos[9],False)
+
+		def on_disconnect(event: DisconnectEvent):
+			if self.dentro: self.chat.run()
+		self.chat.add_listener("connect", on_connect)
+		self.chat.add_listener("comment", on_comment)
+		self.chat.add_listener("follow", on_follow)
+		self.chat.add_listener("gift", on_gift)
+		self.chat.add_listener("join", on_join)
+		self.chat.add_listener("like", on_like)
+		self.chat.add_listener("disconnect", on_disconnect)
+		self.chat.run()
 	def recibirTwich(self):
 		for message in self.chat:
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
@@ -1111,7 +1193,7 @@ class MyFrame(wx.Frame):
 				pos.pop()
 				wx.MessageBox(_("No hay ningún criterio de búsqueda que coincida con el término ingresado."), _("información"), wx.ICON_INFORMATION)
 			else:
-				if listasonidos[8]: playsound(ajustes.rutasonidos[8],False)
+				if config['sonidos'] and config['listasonidos'][8]: playsound(ajustes.rutasonidos[8],False)
 				leer.speak(_("se encontraron %s resultados") % str(len(lista[-1])-1))
 		else:
 			wx.MessageBox(_("No hay nada que buscar porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
