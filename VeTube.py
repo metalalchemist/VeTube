@@ -11,7 +11,7 @@ from chat_downloader import ChatDownloader
 from update import updater,update
 from os import path,remove,getcwd, makedirs
 from TikTokLive import TikTokLiveClient
-from TikTokLive.types.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent,LikeEvent,JoinEvent,FollowEvent
+from TikTokLive.types.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent,LikeEvent,JoinEvent,FollowEvent,ShareEvent,ViewerUpdateEvent,EnvelopeEvent, EmoteEvent
 from menu_accesible import Accesible
 
 yt=0
@@ -58,8 +58,7 @@ def escribirTeclas():
 def leerTeclas():
 	if path.exists("keys.txt"):
 		global mis_teclas
-		with open ("keys.txt",'r') as arch:
-			mis_teclas=arch.read()
+		with open ("keys.txt",'r') as arch: mis_teclas=arch.read()
 	else: escribirTeclas()
 pos=[]
 favorite=funciones.leerJsonLista('favoritos.json')
@@ -626,7 +625,8 @@ class MyFrame(wx.Frame):
 		global info_dict
 		ydlop = {'ignoreerrors': True, 'extract_flat': 'in_playlist', 'dump_single_json': True, 'quiet': True}
 		with YoutubeDL(ydlop) as ydl: info_dict = ydl.extract_info(self.text_ctrl_1.GetValue(), download=False)
-		try: self.label_dialog.SetLabel(info_dict.get('title')+', '+str(info_dict["view_count"])+_(' reproducciones'))
+		try:
+			if not isinstance(self.chat, TikTokLiveClient): self.label_dialog.SetLabel(info_dict.get('title')+', '+str(info_dict["view_count"])+_(' reproducciones'))
 		except: pass
 		self.handler_keyboard.register_keys(eval(mis_teclas))
 		if 'yout' in self.text_ctrl_1.GetValue(): self.recibirYT()
@@ -928,6 +928,25 @@ class MyFrame(wx.Frame):
 					else: lector.speak(event.user.nickname + ": " + event.comment if event.comment is not None else '')
 			self.list_box_1.Append(event.user.nickname + ": " + event.comment if event.comment is not None else '')
 			if config['sonidos'] and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
+		def on_emote(event: EmoteEvent):
+			if config['categorias'][0]:
+				for contador in range(len(lista)):
+					if lista[contador][0]=='Miembros':
+						lista[contador].append(event.user.nickname + _(' envió un emogi.'))
+						break
+			self.list_box_1.Append(event.user.nickname + _(" envió un emogi."))
+			if lista[yt][0]=='Miembros':
+				if config['reader']:
+					if config['sapi']: leer.speak(event.user.nickname + _(" envió un emogi."))
+					else: lector.speak(event.user.nickname + _(" envió un emogi."))
+			if config['sonidos'] and config['listasonidos'][1]: playsound(ajustes.rutasonidos[1],False)
+		def on_chest(event: EnvelopeEvent):
+			if lista[yt][0]=='General':
+				if config['reader']:
+					if config['sapi']: leer.speak(event.user.nickname + _("ha enviado un cofre!"))
+					else: lector.speak(event.user.nickname + _(" ha enviado un cofre!"))
+			self.list_box_1.Append(event.user.nickname + _(" ha enviado un cofre!"))
+			if config['sonidos'] and config['listasonidos'][12]: playsound(ajustes.rutasonidos[12],False)
 		def on_follow(event: FollowEvent):
 			if lista[yt][0]=='General':
 				if config['reader']:
@@ -936,20 +955,21 @@ class MyFrame(wx.Frame):
 			self.list_box_1.Append(event.user.nickname + _(" comenzó a seguirte!"))
 			if config['sonidos'] and config['listasonidos'][10]: playsound(ajustes.rutasonidos[10],False)
 		def on_gift(event: GiftEvent):
-			mensajito=''
-			if event.gift.streakable and not event.gift.streaking: mensajito=event.user.nickname + _(' te ha enviado la cantidad de ')+str(event.gift.count)+event.gift.info.name+_(' que vale ')+str(event.gift.info.diamond_count)+_('diamante')
-			elif not event.gift.streakable: mensajito=event.user.nickname + _(' te ha enviado ')+event.gift.info.name+_(' que vale ')+str(event.gift.info.diamond_count)+_(' diamante')
-			if config['categorias'][1]:
-				for contador in range(len(lista)):
-					if lista[contador][0]=='Donativos':
-						lista[contador].append(mensajito)
-						break
-			self.list_box_1.Append(mensajito)
-			if lista[yt][0]=='Donativos':
-				if config['reader']:
-					if config['sapi']: leer.speak(mensajito)
-					else: lector.speak(mensajito)
-			if config['sonidos'] and config['listasonidos'][3]: playsound(ajustes.rutasonidos[3],False)
+			if event.gift.streakable and not event.gift.streaking: mensajito=_('%s ha enviado %s %s que vale %s') % (event.user.nickname,str(event.gift.count),event.gift.info.name,str(event.gift.info.diamond_count))
+			elif not event.gift.streakable: mensajito=_('%s ha enviado %s ha %s que vale %s') % (event.user.nickname,event.gift.info.name,str(event.gift.info.diamond_count))
+			try:
+				if config['categorias'][1]:
+					for contador in range(len(lista)):
+						if lista[contador][0]=='Donativos':
+							lista[contador].append(mensajito)
+							break
+				self.list_box_1.Append(mensajito)
+				if lista[yt][0]=='Donativos':
+					if config['reader']:
+						if config['sapi']: leer.speak(mensajito)
+						else: lector.speak(mensajito)
+				if config['sonidos'] and config['listasonidos'][3]: playsound(ajustes.rutasonidos[3],False)
+			except: pass #if we asigng value to mensajito the client added a blank line.
 		def on_join(event: JoinEvent):
 			if lista[yt][0]=='General':
 				if config['reader']:
@@ -964,15 +984,26 @@ class MyFrame(wx.Frame):
 					else: lector.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
 			self.list_box_1.Append(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
 			if config['sonidos'] and config['listasonidos'][9]: playsound(ajustes.rutasonidos[9],False)
-
+		def on_share(event: ShareEvent):
+			if lista[yt][0]=='General':
+				if config['reader']:
+					if config['sapi']: leer.speak(event.user.nickname + _(" ha compartido tu en vivo!"))
+					else: lector.speak(event.user.nickname + _(" ha compartido el en vivo!"))
+			self.list_box_1.Append(event.user.nickname + _(" ha compartido tu en vivo!"))
+			if config['sonidos'] and config['listasonidos'][11]: playsound(ajustes.rutasonidos[11],False)
+		def on_view(event: ViewerUpdateEvent): self.label_dialog.SetLabel(self.chat.unique_id+_(' en vivo, actualmente ')+str(event.viewer_count)+_(' viendo ahora'))
 		def on_disconnect(event: DisconnectEvent):
 			if self.dentro: self.chat.run()
 		self.chat.add_listener("connect", on_connect)
 		self.chat.add_listener("comment", on_comment)
+		self.chat.add_listener("emote", on_emote)
+		self.chat.add_listener("envelope", on_chest)
 		self.chat.add_listener("follow", on_follow)
 		self.chat.add_listener("gift", on_gift)
 		self.chat.add_listener("join", on_join)
 		self.chat.add_listener("like", on_like)
+		self.chat.add_listener("share", on_share)
+		self.chat.add_listener("viewer_update", on_view)
 		self.chat.add_listener("disconnect", on_disconnect)
 		self.chat.run()
 	def recibirTwich(self):

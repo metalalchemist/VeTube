@@ -1,12 +1,12 @@
 # Portuguese translations for PROJECT.
-# Copyright (C) 2023 ORGANIZATION: eternal legend
+# Copyright (C) 2022 ORGANIZATION: eternal legend
 # This file is distributed under the same license as the PROJECT project.
-# FIRST translator  Eternal Legend <contato.eternallegend@gmail.com>, 2023.
+# FIRST translator  Eternal Legend <filmesfxx@gmail.com>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: contato.eternallegend@gmail.com\n"
+"Report-Msgid-Bugs-To: filmesfxx@gmail.com\n"
 "POT-Creation-Date: 2023-06-27 11:48-0700\n"
 "PO-Revision-Date: 2022-08-18 09:10-0700\n"
 "Last-Translator: Eternal legend <filmesfxx@gmail.com>\n"
@@ -24,18 +24,15 @@ msgid ""
 "¿Quieres abrir nuestra carpeta de Drive para descargar algunos modelos? "
 "Si pulsas sí, se abrirá nuestra carpeta seguido de una ventana para "
 "instalar una una vez la descargues."
-msgstr ""Você precisa de pelo menos uma voz para poder usar o sintetizador Piper."
-"Deseja abrir nossa pasta do Drive para baixar alguns modelos?"
-"Se você clicar em sim, nossa pasta será aberta seguida por uma janela para "
-"instalar depois de baixá-lo."
+msgstr ""
 
 #: chat/VeTube.py:28 chat/ajustes.py:39 chat/ajustes.py:189
 msgid "No hay voces instaladas"
-msgstr "Não a vozes instaladas"
+msgstr ""
 
 #: chat/VeTube.py:85
 msgid "Silencia la voz sapy"
-msgstr "Silenciar  a voz sapy"
+msgstr "Silencie  a voz sapy"
 
 #: chat/VeTube.py:85
 msgid "Mensaje anterior."
@@ -220,7 +217,7 @@ msgstr "Sobre"
 
 #: chat/VeTube.py:214
 msgid "&Salir...\tAlt+F4"
-msgstr "&Salir...\tAlt+F4"
+msgstr ""
 
 #: chat/VeTube.py:229
 msgid "Editor de combinaciones de teclado para Vetube"
@@ -295,7 +292,7 @@ msgstr "esta combinação já está a ser usada na função %s"
 
 #: chat/VeTube.py:339
 msgid "esa combinación está siendo usada por el sistema"
-msgstr "essa combinação está sendo usada pelo sistema"
+msgstr ""
 
 #: chat/VeTube.py:354
 msgid ""
@@ -373,7 +370,7 @@ msgstr "exibir a mensagem atual em uma janela de texto."
 
 #: chat/VeTube.py:432
 msgid "&Copiar mensaje al portapapeles"
-msgstr "&Copiar mensagem para a área de transferência"
+msgstr ""
 
 #: chat/VeTube.py:434
 msgid "&Archivar mensaje"
@@ -438,7 +435,7 @@ msgstr "O link do chat foi copiado para a área de transferência."
 #: chat/VeTube.py:489
 #, fuzzy
 msgid "Estadísticas del chat:"
-msgstr "estatísticas do bate-papo"
+msgstr "&Ver estatísticas do bate-papo"
 
 #: chat/VeTube.py:491
 msgid "&Usuarios y mensajes:"
@@ -446,11 +443,11 @@ msgstr "&usuário e mensagens"
 
 #: chat/VeTube.py:494
 msgid "Usuario: "
-msgstr "usuário"
+msgstr "suário"
 
 #: chat/VeTube.py:495
 msgid "Cantidad de mensajes: "
-msgstr "número de mensagens:"
+msgstr "úmero de mensagens:"
 
 #: chat/VeTube.py:500
 msgid "&Estadísticas totales:"
@@ -639,7 +636,7 @@ msgstr "O item que estava nos  favoritos foi excluído"
 
 #: chat/VeTube.py:810 chat/VeTube.py:813 chat/VeTube.py:816 chat/VeTube.py:817
 msgid " se a conectado al chat. "
-msgstr "você está conectado ao bate-papo"
+msgstr "se conectou ao bate-papo."
 
 #: chat/VeTube.py:827
 msgid "Propietario "
@@ -686,7 +683,7 @@ msgstr " assinaturas!"
 
 #: chat/VeTube.py:974 chat/VeTube.py:977 chat/VeTube.py:980 chat/VeTube.py:981
 msgid " a regalado una suscripción a "
-msgstr " deu uma assinatura a "
+msgstr " deu uma assinatura para "
 
 #: chat/VeTube.py:974 chat/VeTube.py:977 chat/VeTube.py:980 chat/VeTube.py:981
 msgid " en el nivel "
@@ -823,7 +820,7 @@ msgstr "as mensagens arquivadas foram excluídas"
 
 #: chat/ajustes.py:31
 msgid "Por defecto"
-msgstr "Por padrão"
+msgstr ""
 
 #: chat/ajustes.py:41
 msgid "Sonido cuando llega un mensaje"
@@ -843,7 +840,7 @@ msgstr "som quando chegou uma doação"
 
 #: chat/ajustes.py:41
 msgid "Sonido cuando habla un moderador"
-msgstr "som quando um moderador fala"
+msgstr "som quando um moderador falou"
 
 #: chat/ajustes.py:41
 msgid "Sonido cuando habla un usuario verificado"
@@ -887,7 +884,7 @@ msgstr "tradução de mensagens:"
 
 #: chat/ajustes.py:71
 msgid "convertir las donaciones a la divisa: "
-msgstr "converter doações em moeda:"
+msgstr ""
 
 #: chat/ajustes.py:78
 msgid "Voz"
@@ -903,7 +900,7 @@ msgstr "Use a voz sapy em vez do leitor de tela."
 
 #: chat/ajustes.py:86
 msgid "Sistema TTS a usar: "
-msgstr "Sistema TTS ao usar:"
+msgstr ""
 
 #: chat/ajustes.py:96
 msgid "Activar lectura de mensajes automática"
@@ -915,7 +912,7 @@ msgstr "Voz: "
 
 #: chat/ajustes.py:110
 msgid "Instalar un paquete de voz..."
-msgstr "Instalar um pacote de voz..."
+msgstr ""
 
 #: chat/ajustes.py:115
 msgid "Tono: "
@@ -963,36 +960,34 @@ msgstr "idioma do sistema"
 
 #: chat/TTS/list_voices.py:13
 msgid "Selecciona un paquete de voz"
-msgstr "Selecione um pacote de voz"
+msgstr ""
 
 #: chat/TTS/list_voices.py:13
 msgid "Archivos tar.gz (*.tar.gz)|*.tar.gz"
-msgstr "arquivos tar.gz (*.tar.gz)|*.tar.gz"
+msgstr ""
 
 #: chat/TTS/list_voices.py:15
 msgid ""
 "Para usar piper como sistema TTS, necesitas tener al menos una voz. Si "
 "quieres hacerlo de forma manual, extrae el paquete de voz en la carpeta "
 "\"piper/voices/voice-nombre_de_paquete\" en VeTube."
-msgstr "Para usar o piper como um sistema TTS, você precisa ter pelo menos uma voz. Se "
-"deseja fazer manualmente, extraia o pacote de voz na pasta"
-"\"piper/voices/voice-package_name\" no VeTube."
+msgstr ""
 
 #: chat/TTS/list_voices.py:15
 msgid "No se instaló ninguna voz"
-msgstr "Nenhuma voz instalada"
+msgstr ""
 
 #: chat/TTS/list_voices.py:21
 msgid ""
 "¡Voz instalada satosfactoriamente! esta será establecida en VeTube ahora."
 " Para cambiar de modelo de voz, puedes hacerlo a través de las "
 "configuraciones."
-msgstr "Voz instalada com sucesso! isso será configurado no VeTube agora."
-" Para alterar o modelo de voz, você pode fazê-lo através das configurações do programa"
+msgstr ""
 
 #: chat/TTS/list_voices.py:21
+#, fuzzy
 msgid "Listo"
-msgstr "pronto"
+msgstr "Atenção!"
 
 #: chat/update/update.py:124
 msgid ""
@@ -1007,42 +1002,42 @@ msgid "Hubo un error al actualizar VeTube."
 msgstr "Ocorreu um erro ao atualizar o VeTube."
 
 #: chat/update/utils.py:29
-#, python-format
+#, fuzzy, python-format
 msgid "%d día, "
 msgstr "%d dia,"
 
 #: chat/update/utils.py:31
-#, python-format
+#, fuzzy, python-format
 msgid "%d días, "
 msgstr "%d dias,"
 
 #: chat/update/utils.py:33
-#, python-format
+#, fuzzy, python-format
 msgid "%d hora, "
 msgstr "%d hora,"
 
 #: chat/update/utils.py:35
-#, python-format
+#, fuzzy, python-format
 msgid "%d horas, "
 msgstr "%d horas,"
 
 #: chat/update/utils.py:37
-#, python-format
+#, fuzzy, python-format
 msgid "%d minuto, "
 msgstr "%d minuto, "
 
 #: chat/update/utils.py:39
-#, python-format
+#, fuzzy, python-format
 msgid "%d minutos, "
 msgstr "%d Minutos,"
 
 #: chat/update/utils.py:41
-#, python-format
+#, fuzzy, python-format
 msgid "%s segundo"
 msgstr "%s segundo,"
 
 #: chat/update/utils.py:43
-#, python-format
+#, fuzzy, python-format
 msgid "%s segundos"
 msgstr "%s segundos"
 
@@ -1086,7 +1081,7 @@ msgid ""
 "aceptar para continuar."
 msgstr ""
 "A atualização foi baixada e instalada com sucesso. Clique em aceito "
-"para continuar."
+"continuar."
 
 #: chat/update/wxUpdater.py:30
 msgid "¡Hecho!"
