@@ -1,3 +1,6 @@
+v2.7
+agregado soporte a tiktok.
+se corrigen varios errores menores.
 v2.6
 gracias a mateo celillo.
 Agregado un cuadro combinado en las opciones de voz para elegir entre sistemas de texto a voz, este solo aparecerá si la casilla de usar sapi está desactivada.
