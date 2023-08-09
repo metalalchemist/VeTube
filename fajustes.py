@@ -1,6 +1,6 @@
 import json
 def escribirConfiguracion():
-	data={
+	data={"salir": True,
 		"sistemaTTS": "auto",
 		'voz': 0,
 		"tono": 0,

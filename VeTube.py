@@ -582,6 +582,9 @@ class MyFrame(wx.Frame):
 			dlg = wx.MessageDialog(None, _("Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea reiniciarlo ahora?"), _("¡Atención!"), wx.YES_NO | wx.ICON_ASTERISK)
 			if dlg.ShowModal()==wx.ID_YES: restart.restart_program()
 			else: dlg.Destroy()
+		# verificar voces:
+		if config['sistemaTTS'] == "piper": configurar_piper(carpeta_voces)
+		leer=ajustes.prueba
 		if self.cf.choice_traducir.GetStringSelection()!="":
 			for k in translator.LANGUAGES:
 				if translator.LANGUAGES[k] == self.cf.choice_traducir.GetStringSelection():
@@ -593,10 +596,6 @@ class MyFrame(wx.Frame):
 				if google_currency.CODES[k] == monedita[0]:
 					self.divisa = k
 					break
-		# verificar voces:
-		if config['sistemaTTS'] == "piper":
-			configurar_piper(carpeta_voces)
-		leer=ajustes.prueba
 	def borrarHistorial(self,event):
 		dlg_2 = wx.MessageDialog(self.dialog_mensaje, _("Está apunto de eliminar del historial aproximadamente ")+str(self.list_box_1.GetCount())+_(" elementos, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		dlg_2.SetYesNoLabels(_("&Eliminar"), _("&Cancelar"))
@@ -711,8 +710,10 @@ class MyFrame(wx.Frame):
 		else: config['reader']=True
 		lector.speak(_("Lectura automática activada.")if config['reader'] else _("Lectura automática  desactivada."))
 	def cerrarVentana(self, event):
-		dialogo_cerrar = wx.MessageDialog(self, _("¿está seguro que desea salir del programa?"), _("¡atención!"), wx.YES_NO | wx.ICON_ASTERISK)
-		if dialogo_cerrar.ShowModal()==wx.ID_YES: wx.GetApp().ExitMainLoop()
+		if config['salir']:
+			dialogo_cerrar = wx.MessageDialog(self, _("¿está seguro que desea salir del programa?"), _("¡atención!"), wx.YES_NO | wx.ICON_ASTERISK)
+			if dialogo_cerrar.ShowModal()==wx.ID_YES: wx.GetApp().ExitMainLoop()
+		else: wx.GetApp().ExitMainLoop()
 	def retornarMensaje(self):
 		if self.list_box_1.GetCount()>0 and lista[yt][0]=='General': return self.list_box_1.GetString(self.list_box_1.GetSelection())
 		if lista[yt][0]!='General' and len(lista[yt])>0: return lista[yt][pos[yt]]

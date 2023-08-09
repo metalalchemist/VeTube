@@ -1,4 +1,6 @@
 v2.7
+agregado el poder desactivar la  confirmación al salir.
+se corrige la captura de mensajes de twitch y se intenta no capturar información repetida en la lista general.
 agregado soporte a tiktok.
 se corrigen varios errores menores.
 v2.6
