@@ -11,6 +11,7 @@ def escribirConfiguracion():
 		'idioma': "system",
 		'categorias': [True, True, False, False, False],
 		'listasonidos': [True, True, True, True, True, True, True, True,True,True,True,True,True],
+		'eventos': [True,True,True,True,True,True,True,True,True],
 		'reader': True,
 		'donations': True,
 		'updates': True}

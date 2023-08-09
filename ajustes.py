@@ -39,6 +39,7 @@ class configuracionDialog(wx.Dialog):
 				lista_voces = [_("No hay voces instaladas")]
 		mensajes_categorias=[_('Miembros'),_('Donativos'),_('Moderadores'),_('Usuarios Verificados'),_('Favoritos')]
 		mensajes_sonidos=[_('Sonido cuando llega un mensaje'),_('Sonido cuando habla un miembro'),_('Sonido cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok'),_('Sonido cuando llega un donativo'),_('Sonido cuando habla un moderador'),_('Sonido cuando habla un usuario verificado'),_('Sonido al ingresar al chat'),_('Sonido cuando habla el propietario del canal'),_('sonido al terminar la búsqueda de mensajes'),_('sonido cuando le dan me gusta al en vivo (solo para tiktok)'),_('Sonido cuando alguien empieza a seguirte en tiktok'),_('Sonido cuando alguien comparte el enlace de tu envivo en  tiktok'),_('Sonido cuando alguien envía un cofre  en tiktok')]
+		eventos_lista=[_('Cuando habla un miembro'),_('Cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok'),_('Cuando llega un donativo'),_('Cuando habla un moderador'),_('Cuando habla un usuario verificado'),_('Cuando le dan me gusta al en vivo (solo para tiktok)'),_('Cuando alguien empieza a seguirte en tiktok'),_('Cuando alguien comparte el enlace de tu envivo en  tiktok'),_('Cuando alguien envía un cofre  en tiktok')]
 		super().__init__(parent, title=_("Configuración"))
 		sizer_5 = wx.BoxSizer(wx.VERTICAL)
 		labelConfic = wx.StaticText(self, -1, _("Categorías"))
@@ -173,6 +174,17 @@ class configuracionDialog(wx.Dialog):
 		sizer_soniditos.Add(self.reproducir)
 		self.treeItem_4.SetSizer(sizer_soniditos)
 		self.tree_1.AddPage(self.treeItem_4, _('Sonidos'))
+		self.treeItem_5 = wx.Panel(self.tree_1, wx.ID_ANY)
+		self.eventos=wx.ListCtrl(self.treeItem_5, wx.ID_ANY)
+		self.eventos.EnableCheckBoxes()
+		for contador in range(len(config['eventos'])):
+			self.eventos.InsertItem(contador,eventos_lista[contador])
+			self.eventos.CheckItem(contador,check=config['eventos'][contador])
+		self.eventos.Focus(0)
+		sizer_eventos = wx.BoxSizer()
+		sizer_eventos.Add(self.eventos, 1, wx.EXPAND)
+		self.treeItem_5.SetSizer(sizer_eventos)
+		self.tree_1.AddPage(self.treeItem_5, _('Eventos del chat.'))
 		button_6 = wx.Button(self, wx.ID_OK, _("&Aceptar"))
 		button_6.SetDefault()
 		sizer_5.Add(button_6, 0, 0, 0)

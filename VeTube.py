@@ -567,12 +567,16 @@ class MyFrame(wx.Frame):
 		config=ajustes.config
 		config['categorias']=[]
 		config['listasonidos']=[]
+		config['eventos']=[]
 		for contador in range(self.cf.categoriza.GetItemCount()):
 			if self.cf.categoriza.IsItemChecked(contador): config['categorias'].append(True)
 			else: config['categorias'].append(False)
 		for contador in range(self.cf.soniditos.GetItemCount()):
 			if self.cf.soniditos.IsItemChecked(contador): config['listasonidos'].append(True)
 			else: config['listasonidos'].append(False)
+		for contador in range(self.cf.eventos.GetItemCount()):
+			if self.cf.eventos.IsItemChecked(contador): config['eventos'].append(True)
+			else: config['eventos'].append(False)
 		lista=retornarCategorias()
 		if config['idioma']!=codes[self.cf.choice_language.GetSelection()]:
 			config['idioma']=codes[self.cf.choice_language.GetSelection()]
@@ -997,13 +1001,13 @@ class MyFrame(wx.Frame):
 			if self.dentro: self.chat.run()
 		self.chat.add_listener("connect", on_connect)
 		self.chat.add_listener("comment", on_comment)
-		self.chat.add_listener("emote", on_emote)
-		self.chat.add_listener("envelope", on_chest)
-		self.chat.add_listener("follow", on_follow)
-		self.chat.add_listener("gift", on_gift)
-		self.chat.add_listener("join", on_join)
-		self.chat.add_listener("like", on_like)
-		self.chat.add_listener("share", on_share)
+		if config['eventos'][0]: self.chat.add_listener("emote", on_emote)
+		if config['eventos'][8]: self.chat.add_listener("envelope", on_chest)
+		if config['eventos'][6]: self.chat.add_listener("follow", on_follow)
+		if config['eventos'][2]: self.chat.add_listener("gift", on_gift)
+		if config['eventos'][1]: self.chat.add_listener("join", on_join)
+		if config['eventos'][5]: self.chat.add_listener("like", on_like)
+		if config['eventos'][7]: self.chat.add_listener("share", on_share)
 		self.chat.add_listener("viewer_update", on_view)
 		self.chat.add_listener("disconnect", on_disconnect)
 		self.chat.run()
