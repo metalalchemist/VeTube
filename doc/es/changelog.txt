@@ -4,6 +4,7 @@ agregado el poder desactivar la  confirmación al salir.
 se corrige la captura de mensajes de twitch y se intenta no capturar información repetida en la lista general.
 agregado soporte a tiktok.
 se corrigen varios errores menores.
+se  corrigen errores relacionados con las rutas de las voces al momento de acceder al sintetizador piper.
 v2.6
 gracias a mateo celillo.
 Agregado un cuadro combinado en las opciones de voz para elegir entre sistemas de texto a voz, este solo aparecerá si la casilla de usar sapi está desactivada.
