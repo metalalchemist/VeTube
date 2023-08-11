@@ -1,4 +1,5 @@
 v2.7
+Se agrega la capacidad de actualizar configuraciones, para corregir errores inesperados en caso de que alguna no esté establecida.
 podemos ignorar ciertos eventos del chat. nos dirigimos ha mas opciones, opciones, configuración, y en la categoría eventos.
 agregado el poder desactivar la  confirmación al salir.
 se corrige la captura de mensajes de twitch y se intenta no capturar información repetida en la lista general.

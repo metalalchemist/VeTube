@@ -1,20 +1,37 @@
 import json
+
+configuraciones ={
+	"salir": True,
+	"sistemaTTS": "auto",
+	'voz': 0,
+	"tono": 0,
+	"volume": 100,
+	"speed": 0,
+	'sapi':True,
+	'sonidos': True,
+	'idioma': "system",
+	'categorias': [True, True, False, False, False],
+	'listasonidos': [True, True, True, True, True, True, True, True,True,True,True,True,True],
+	'eventos': [True,True,True,True,True,True,True,True,True],
+	'reader': True,
+	'donations': True,
+	'updates': True
+}
+actualizar_configuracion = False
+
 def escribirConfiguracion():
-	data={"salir": True,
-		"sistemaTTS": "auto",
-		'voz': 0,
-		"tono": 0,
-		"volume": 100,
-		"speed": 0,
-		'sapi':True,
-		'sonidos': True,
-		'idioma': "system",
-		'categorias': [True, True, False, False, False],
-		'listasonidos': [True, True, True, True, True, True, True, True,True,True,True,True,True],
-		'eventos': [True,True,True,True,True,True,True,True,True],
-		'reader': True,
-		'donations': True,
-		'updates': True}
-	with open('data.json', 'w+') as file: json.dump(data, file)
+	global configuraciones
+	with open('data.json', 'w+') as file: json.dump(configuraciones, file)
+
 def leerConfiguracion():
-	with open ("data.json") as file: return json.load(file)
+	global configuraciones, actualizar_configuracion
+	with open ("data.json") as file:
+		configs = json.load(file)
+	for clave, valor_pred in configuraciones.items():
+		if clave not in configs:
+			configs[clave] = valor_pred
+			actualizar_configuracion = True
+	# actualizar al archivo en caso de ser necesario:
+	if actualizar_configuracion:
+		with open('data.json', 'w+') as file: json.dump(configs, file)
+	return configs
