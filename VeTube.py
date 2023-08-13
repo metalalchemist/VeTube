@@ -919,105 +919,104 @@ class MyFrame(wx.Frame):
 				else:
 					exit()
 					self.hilo2.join()
-	def recibirTiktok(self):
-		global lista
-		def on_connect(event: ConnectEvent):
-			leer.speak(_("Ingresando al chat"))
-			if config['sonidos'] and config['listasonidos'][6]: playsound(ajustes.rutasonidos[6],False)
-		def on_comment(event: CommentEvent):
-			if not event.user.nickname in self.usuarios:
-				self.usuarios.append(event.user.nickname)
-				self.mensajes.append(1)
-			else:
-				c=0
-				for a in self.usuarios:
-					if a==event.user.nickname:
-						self.mensajes[c]+=1
-						break
-					c+=1
-			if lista[yt][0]=='General':
-				if config['reader']:
-					if config['sapi']: leer.speak(event.user.nickname + ": " + event.comment if event.comment is not None else '')
-					else: lector.speak(event.user.nickname + ": " + event.comment if event.comment is not None else '')
-			self.list_box_1.Append(event.user.nickname + ": " + event.comment if event.comment is not None else '')
-			if config['sonidos'] and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
-		def on_emote(event: EmoteEvent):
-			if config['categorias'][0]:
+	async def on_connect(self,event: ConnectEvent):
+		leer.speak(_("Ingresando al chat"))
+		if config['sonidos'] and config['listasonidos'][6]: playsound(ajustes.rutasonidos[6],False)
+	async def on_comment(self,event: CommentEvent):
+		if not event.user.nickname in self.usuarios:
+			self.usuarios.append(event.user.nickname)
+			self.mensajes.append(1)
+		else:
+			c=0
+			for a in self.usuarios:
+				if a==event.user.nickname:
+					self.mensajes[c]+=1
+					break
+				c+=1
+		if lista[yt][0]=='General':
+			if config['reader']:
+				if config['sapi']: leer.speak(event.user.nickname + ": " + event.comment if event.comment is not None else '')
+				else: lector.speak(event.user.nickname + ": " + event.comment if event.comment is not None else '')
+		self.list_box_1.Append(event.user.nickname + ": " + event.comment if event.comment is not None else '')
+		if config['sonidos'] and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
+	async def on_emote(self,event: EmoteEvent):
+		if config['categorias'][0]:
+			for contador in range(len(lista)):
+				if lista[contador][0]=='Miembros':
+					lista[contador].append(event.user.nickname + _(' envió un emogi.'))
+					break
+		self.list_box_1.Append(event.user.nickname + _(" envió un emogi."))
+		if lista[yt][0]=='Miembros':
+			if config['reader']:
+				if config['sapi']: leer.speak(event.user.nickname + _(" envió un emogi."))
+				else: lector.speak(event.user.nickname + _(" envió un emogi."))
+		if config['sonidos'] and config['listasonidos'][1]: playsound(ajustes.rutasonidos[1],False)
+	async def on_chest(self,event: EnvelopeEvent):
+		if lista[yt][0]=='General':
+			if config['reader']:
+				if config['sapi']: leer.speak(event.user.nickname + _("ha enviado un cofre!"))
+				else: lector.speak(event.user.nickname + _(" ha enviado un cofre!"))
+		self.list_box_1.Append(event.user.nickname + _(" ha enviado un cofre!"))
+		if config['sonidos'] and config['listasonidos'][12]: playsound(ajustes.rutasonidos[12],False)
+	async def on_follow(self,event: FollowEvent):
+		if lista[yt][0]=='General':
+			if config['reader']:
+				if config['sapi']: leer.speak(event.user.nickname + _(" comenzó a seguirte!"))
+				else: lector.speak(event.user.nickname + _(" comenzó a seguirte!"))
+		self.list_box_1.Append(event.user.nickname + _(" comenzó a seguirte!"))
+		if config['sonidos'] and config['listasonidos'][10]: playsound(ajustes.rutasonidos[10],False)
+	async def on_gift(self,event: GiftEvent):
+		if event.gift.streakable and not event.gift.streaking: mensajito=_('%s ha enviado %s %s que vale %s') % (event.user.nickname,str(event.gift.count),event.gift.info.name,str(event.gift.info.diamond_count))
+		elif not event.gift.streakable: mensajito=_('%s ha enviado %s ha %s que vale %s') % (event.user.nickname,event.gift.info.name,str(event.gift.info.diamond_count))
+		try:
+			if config['categorias'][1]:
 				for contador in range(len(lista)):
-					if lista[contador][0]=='Miembros':
-						lista[contador].append(event.user.nickname + _(' envió un emogi.'))
+					if lista[contador][0]=='Donativos':
+						lista[contador].append(mensajito)
 						break
-			self.list_box_1.Append(event.user.nickname + _(" envió un emogi."))
-			if lista[yt][0]=='Miembros':
+			self.list_box_1.Append(mensajito)
+			if lista[yt][0]=='Donativos':
 				if config['reader']:
-					if config['sapi']: leer.speak(event.user.nickname + _(" envió un emogi."))
-					else: lector.speak(event.user.nickname + _(" envió un emogi."))
-			if config['sonidos'] and config['listasonidos'][1]: playsound(ajustes.rutasonidos[1],False)
-		def on_chest(event: EnvelopeEvent):
-			if lista[yt][0]=='General':
-				if config['reader']:
-					if config['sapi']: leer.speak(event.user.nickname + _("ha enviado un cofre!"))
-					else: lector.speak(event.user.nickname + _(" ha enviado un cofre!"))
-			self.list_box_1.Append(event.user.nickname + _(" ha enviado un cofre!"))
-			if config['sonidos'] and config['listasonidos'][12]: playsound(ajustes.rutasonidos[12],False)
-		def on_follow(event: FollowEvent):
-			if lista[yt][0]=='General':
-				if config['reader']:
-					if config['sapi']: leer.speak(event.user.nickname + _(" comenzó a seguirte!"))
-					else: lector.speak(event.user.nickname + _(" comenzó a seguirte!"))
-			self.list_box_1.Append(event.user.nickname + _(" comenzó a seguirte!"))
-			if config['sonidos'] and config['listasonidos'][10]: playsound(ajustes.rutasonidos[10],False)
-		def on_gift(event: GiftEvent):
-			if event.gift.streakable and not event.gift.streaking: mensajito=_('%s ha enviado %s %s que vale %s') % (event.user.nickname,str(event.gift.count),event.gift.info.name,str(event.gift.info.diamond_count))
-			elif not event.gift.streakable: mensajito=_('%s ha enviado %s ha %s que vale %s') % (event.user.nickname,event.gift.info.name,str(event.gift.info.diamond_count))
-			try:
-				if config['categorias'][1]:
-					for contador in range(len(lista)):
-						if lista[contador][0]=='Donativos':
-							lista[contador].append(mensajito)
-							break
-				self.list_box_1.Append(mensajito)
-				if lista[yt][0]=='Donativos':
-					if config['reader']:
-						if config['sapi']: leer.speak(mensajito)
-						else: lector.speak(mensajito)
-				if config['sonidos'] and config['listasonidos'][3]: playsound(ajustes.rutasonidos[3],False)
-			except: pass #if we asigng value to mensajito the client added a blank line.
-		def on_join(event: JoinEvent):
-			if lista[yt][0]=='General':
-				if config['reader']:
-					if config['sapi']: leer.speak(event.user.nickname + _(" se ha unido  a tu en vivo."))
-					else: lector.speak(event.user.nickname + _(" se ha unido a tu en vivo."))
-			self.list_box_1.Append(event.user.nickname + _(" se ha unido a tu en vivo."))
-			if config['sonidos'] and config['listasonidos'][2]: playsound(ajustes.rutasonidos[2],False)
-		def on_like(event: LikeEvent):
-			if lista[yt][0]=='General':
-				if config['reader']:
-					if config['sapi']: leer.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
-					else: lector.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
-			self.list_box_1.Append(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
-			if config['sonidos'] and config['listasonidos'][9]: playsound(ajustes.rutasonidos[9],False)
-		def on_share(event: ShareEvent):
-			if lista[yt][0]=='General':
-				if config['reader']:
-					if config['sapi']: leer.speak(event.user.nickname + _(" ha compartido tu en vivo!"))
-					else: lector.speak(event.user.nickname + _(" ha compartido el en vivo!"))
-			self.list_box_1.Append(event.user.nickname + _(" ha compartido tu en vivo!"))
-			if config['sonidos'] and config['listasonidos'][11]: playsound(ajustes.rutasonidos[11],False)
-		def on_view(event: ViewerUpdateEvent): self.label_dialog.SetLabel(self.chat.unique_id+_(' en vivo, actualmente ')+str(event.viewer_count)+_(' viendo ahora'))
-		def on_disconnect(event: DisconnectEvent):
-			if self.dentro: self.chat.run()
-		self.chat.add_listener("connect", on_connect)
-		self.chat.add_listener("comment", on_comment)
-		if config['eventos'][0]: self.chat.add_listener("emote", on_emote)
-		if config['eventos'][8]: self.chat.add_listener("envelope", on_chest)
-		if config['eventos'][6]: self.chat.add_listener("follow", on_follow)
-		if config['eventos'][2]: self.chat.add_listener("gift", on_gift)
-		if config['eventos'][1]: self.chat.add_listener("join", on_join)
-		if config['eventos'][5]: self.chat.add_listener("like", on_like)
-		if config['eventos'][7]: self.chat.add_listener("share", on_share)
-		self.chat.add_listener("viewer_update", on_view)
-		self.chat.add_listener("disconnect", on_disconnect)
+					if config['sapi']: leer.speak(mensajito)
+					else: lector.speak(mensajito)
+			if config['sonidos'] and config['listasonidos'][3]: playsound(ajustes.rutasonidos[3],False)
+		except: pass #if we asigng value to mensajito the client added a blank line.
+	async def on_join(self,event: JoinEvent):
+		if lista[yt][0]=='General':
+			if config['reader']:
+				if config['sapi']: leer.speak(event.user.nickname if event.user.nickname is not None else ''+ _(" se ha unido  a tu en vivo."))
+				else: lector.speak(event.user.nickname if event.user.nickname is not None else ''+ _(" se ha unido a tu en vivo."))
+		self.list_box_1.Append(event.user.nickname if event.user.nickname is not None else ''+ _(" se ha unido a tu en vivo."))
+		if config['sonidos'] and config['listasonidos'][2]: playsound(ajustes.rutasonidos[2],False)
+	async def on_like(self,event: LikeEvent):
+		if lista[yt][0]=='General':
+			if config['reader']:
+				if config['sapi']: leer.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+				else: lector.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+		self.list_box_1.Append(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+		if config['sonidos'] and config['listasonidos'][9]: playsound(ajustes.rutasonidos[9],False)
+	async def on_share(self,event: ShareEvent):
+		if lista[yt][0]=='General':
+			if config['reader']:
+				if config['sapi']: leer.speak(event.user.nickname + _(" ha compartido tu en vivo!"))
+				else: lector.speak(event.user.nickname + _(" ha compartido el en vivo!"))
+		self.list_box_1.Append(event.user.nickname + _(" ha compartido tu en vivo!"))
+		if config['sonidos'] and config['listasonidos'][11]: playsound(ajustes.rutasonidos[11],False)
+	async def on_view(self,event: ViewerUpdateEvent): self.label_dialog.SetLabel(self.chat.unique_id+_(' en vivo, actualmente ')+str(event.viewer_count)+_(' viendo ahora'))
+	async def on_disconnect(self,event: DisconnectEvent):
+		if self.dentro: self.chat.run()
+	def recibirTiktok(self):
+		self.chat.add_listener("connect", self.on_connect)
+		self.chat.add_listener("comment", self.on_comment)
+		if config['eventos'][0]: self.chat.add_listener("emote", self.on_emote)
+		if config['eventos'][8]: self.chat.add_listener("envelope", self.on_chest)
+		if config['eventos'][6]: self.chat.add_listener("follow", self.on_follow)
+		if config['eventos'][2]: self.chat.add_listener("gift", self.on_gift)
+		if config['eventos'][1]: self.chat.add_listener("join", self.on_join)
+		if config['eventos'][5]: self.chat.add_listener("like", self.on_like)
+		if config['eventos'][7]: self.chat.add_listener("share", self.on_share)
+		self.chat.add_listener("viewer_update", self.on_view)
+		self.chat.add_listener("disconnect", self.on_disconnect)
 		self.chat.run()
 	def recibirTwich(self):
 		for message in self.chat:
