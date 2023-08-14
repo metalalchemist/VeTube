@@ -419,7 +419,12 @@ class MyFrame(wx.Frame):
 				if not isinstance(self.chat,TikTokLiveClient):
 					leer.speak(_("Ingresando al chat."))
 					if config['sonidos'] and config['listasonidos'][6]: playsound(ajustes.rutasonidos[6],False)
-				else: leer.speak(_("cargando..."))
+				else:
+					leer.speak(_("cargando..."))
+					self.megusta=0
+					self.seguidores=0
+					self.unidos=0
+					self.compartidas=0
 				self.hilo2 = threading.Thread(target=self.iniciarChat)
 				self.hilo2.daemon = True
 				self.hilo2.start()
@@ -509,6 +514,7 @@ class MyFrame(wx.Frame):
 		sizer_estadisticas.Add(label_total, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 4)
 		self.text_ctrl_estadisticas = wx.TextCtrl(self.dlg_estadisticas, wx.ID_ANY, style=wx.TE_MULTILINE | wx.TE_READONLY)
 		self.text_ctrl_estadisticas.SetValue(_("Total de usuarios: %s\nTotal de mensajes: %s") % (len(self.usuarios), sum(self.mensajes)))
+		if isinstance(self.chat,TikTokLiveClient): self.text_ctrl_estadisticas.SetValue(self.text_ctrl_estadisticas.GetValue()+_('\nnuevos me gusta en el en vivo: ')+str(self.megusta)+_('\ntotal de usuarios que compartieron el en vivo: ')+str(self.compartidas)+_('\nnuevos usuarios que siguen al moderador del en vivo: ')+str(self.seguidores)+_('\nnuevos usuarios que  se unieron al en vivo: ')+str(self.unidos))
 		sizer_estadisticas.Add(self.text_ctrl_estadisticas, 1, wx.EXPAND | wx.ALL, 4)
 		button_estadisticas_descargar = wx.Button(self.dlg_estadisticas, wx.ID_ANY, _("&Guardar las estadísticas en un archivo de texto"))
 		button_estadisticas_descargar.Bind(wx.EVT_BUTTON, self.descargarEstadisticas)
@@ -959,6 +965,7 @@ class MyFrame(wx.Frame):
 		self.list_box_1.Append(event.user.nickname + _(" ha enviado un cofre!"))
 		if config['sonidos'] and config['listasonidos'][12]: playsound(ajustes.rutasonidos[12],False)
 	async def on_follow(self,event: FollowEvent):
+		self.seguidores+=1
 		if lista[yt][0]=='General':
 			if config['reader']:
 				if config['sapi']: leer.speak(event.user.nickname + _(" comenzó a seguirte!"))
@@ -982,6 +989,7 @@ class MyFrame(wx.Frame):
 			if config['sonidos'] and config['listasonidos'][3]: playsound(ajustes.rutasonidos[3],False)
 		except: pass #if we asigng value to mensajito the client added a blank line.
 	async def on_join(self,event: JoinEvent):
+		self.unidos+=1
 		if lista[yt][0]=='General':
 			if config['reader']:
 				if config['sapi']: leer.speak(event.user.nickname if event.user.nickname is not None else ''+ _(" se ha unido  a tu en vivo."))
@@ -989,6 +997,7 @@ class MyFrame(wx.Frame):
 		self.list_box_1.Append(event.user.nickname if event.user.nickname is not None else ''+ _(" se ha unido a tu en vivo."))
 		if config['sonidos'] and config['listasonidos'][2]: playsound(ajustes.rutasonidos[2],False)
 	async def on_like(self,event: LikeEvent):
+		self.megusta+=1
 		if lista[yt][0]=='General':
 			if config['reader']:
 				if config['sapi']: leer.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
@@ -996,6 +1005,7 @@ class MyFrame(wx.Frame):
 		self.list_box_1.Append(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
 		if config['sonidos'] and config['listasonidos'][9]: playsound(ajustes.rutasonidos[9],False)
 	async def on_share(self,event: ShareEvent):
+		self.compartidas+=1
 		if lista[yt][0]=='General':
 			if config['reader']:
 				if config['sapi']: leer.speak(event.user.nickname + _(" ha compartido tu en vivo!"))
