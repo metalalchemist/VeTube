@@ -25,6 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip wheel setuptools
+          pip install Pillow==9.5.0
           pip install -r requirements.txt
           pip install pyinstaller gdown
           pip install --upgrade pyzmq httpx httpcore future
