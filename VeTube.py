@@ -425,6 +425,7 @@ class MyFrame(wx.Frame):
 					self.seguidores=0
 					self.unidos=0
 					self.compartidas=0
+					self.gustados=[]
 				self.hilo2 = threading.Thread(target=self.iniciarChat)
 				self.hilo2.daemon = True
 				self.hilo2.start()
@@ -546,7 +547,9 @@ class MyFrame(wx.Frame):
 		dlg_mensaje = wx.MessageDialog(self.dialog_mensaje, _("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		if dlg_mensaje.ShowModal() == wx.ID_YES:
 			self.dentro=False
-			if isinstance(self.chat, TikTokLiveClient): self.chat.stop()
+			if isinstance(self.chat, TikTokLiveClient):
+				self.chat.stop()
+				self.gustados=[]
 			yt=0
 			pos=[]
 			lista=[]
@@ -769,10 +772,10 @@ class MyFrame(wx.Frame):
 				self.list_favorite.Append(info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue())
 				favorite.append({'titulo': info_dict.get('uploader'), 'url': self.text_ctrl_1.GetValue()})
 			else:
-				self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
-				favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
+				self.list_favorite.Append(self.chat.title+': '+self.text_ctrl_1.GetValue())
+				favorite.append({'titulo': self.chat.title, 'url': self.text_ctrl_1.GetValue()})
 		else:
-			if self.list_favorite.GetStrings()==[info_dict.get('title')+': '+self.text_ctrl_1.GetValue()] or self.list_favorite.GetStrings()==[info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue()]:
+			if self.list_favorite.GetStrings()==[self.chat.title+': '+self.text_ctrl_1.GetValue()] or self.list_favorite.GetStrings()==[info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue()]:
 				wx.MessageBox(_("Ya se encuentra en favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
 				return
 			else:
@@ -780,8 +783,8 @@ class MyFrame(wx.Frame):
 					self.list_favorite.Append(info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue())
 					favorite.append({'titulo': info_dict.get('uploader'), 'url': self.text_ctrl_1.GetValue()})
 				else:
-					self.list_favorite.Append(info_dict.get('title')+': '+self.text_ctrl_1.GetValue())
-					favorite.append({'titulo': info_dict.get('title'), 'url': self.text_ctrl_1.GetValue()})
+					self.list_favorite.Append(self.chat.title+': '+self.text_ctrl_1.GetValue())
+					favorite.append({'titulo': self.chat.title, 'url': self.text_ctrl_1.GetValue()})
 		funciones.escribirJsonLista('favoritos.json',favorite)
 		wx.MessageBox(_("Se ha agregado a favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
 	def updater(self,event=None):
@@ -974,7 +977,7 @@ class MyFrame(wx.Frame):
 		if config['sonidos'] and config['listasonidos'][10]: playsound(ajustes.rutasonidos[10],False)
 	async def on_gift(self,event: GiftEvent):
 		if event.gift.streakable and not event.gift.streaking: mensajito=_('%s ha enviado %s %s que vale %s') % (event.user.nickname,str(event.gift.count),event.gift.info.name,str(event.gift.info.diamond_count))
-		elif not event.gift.streakable: mensajito=_('%s ha enviado %s ha %s que vale %s') % (event.user.nickname,event.gift.info.name,str(event.gift.info.diamond_count))
+		elif not event.gift.streakable: mensajito=_('%s ha enviado %s %s que vale %s') % (event.user.nickname,str(event.gift.count),event.gift.info.name,str(event.gift.info.diamond_count))
 		try:
 			if config['categorias'][1]:
 				for contador in range(len(lista)):
@@ -992,16 +995,18 @@ class MyFrame(wx.Frame):
 		self.unidos+=1
 		if lista[yt][0]=='General':
 			if config['reader']:
-				if config['sapi']: leer.speak(event.user.nickname if event.user.nickname is not None else ''+ _(" se ha unido  a tu en vivo."))
-				else: lector.speak(event.user.nickname if event.user.nickname is not None else ''+ _(" se ha unido a tu en vivo."))
-		self.list_box_1.Append(event.user.nickname if event.user.nickname is not None else ''+ _(" se ha unido a tu en vivo."))
+				if config['sapi']: leer.speak(event.user.nickname+_(" se ha unido a tu en vivo."))
+				else: lector.speak(event.user.nickname+_(" se ha unido a tu en vivo."))
+		self.list_box_1.Append(event.user.nickname+_(" se ha unido a tu en vivo."))
 		if config['sonidos'] and config['listasonidos'][2]: playsound(ajustes.rutasonidos[2],False)
 	async def on_like(self,event: LikeEvent):
 		self.megusta+=1
 		if lista[yt][0]=='General':
 			if config['reader']:
-				if config['sapi']: leer.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
-				else: lector.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+				if event.user.nickname not in self.gustados:
+					if config['sapi']: leer.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+					else: lector.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+					self.gustados.append(event.user.nickname)
 		self.list_box_1.Append(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
 		if config['sonidos'] and config['listasonidos'][9]: playsound(ajustes.rutasonidos[9],False)
 	async def on_share(self,event: ShareEvent):
