@@ -934,6 +934,7 @@ class MyFrame(wx.Frame):
 					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
 					self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
 				else:
+					self.chat.close()
 					exit()
 					self.hilo2.join()
 	async def on_connect(self,event: ConnectEvent):
@@ -1271,6 +1272,7 @@ class MyFrame(wx.Frame):
 					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
 					self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
 				else:
+					self.chat.close()
 					exit()
 					self.hilo2.join()
 	def avanzarCategorias(self):
