@@ -83,11 +83,12 @@ langs.reverse()
 mensaje_teclas=[_('Silencia la voz sapy'),_('Mensaje anterior.'),_('Mensaje siguiente'),_('Buffer anterior'),_('Siguiente Buffer'),_('Ir al comienzo del buffer'),_('Ir al final del buffer'),_('Destaca un mensaje en el buffer de  favoritos'),_('Copia el mensaje actual'),_('Activa o desactiva la lectura automática'),_('Busca una palabra en los mensajes actuales'),_('Muestra el mensaje actual en un cuadro de texto'),_('borra el buffer seleccionado'),_('activa o desactiva los sonidos del programa'),_('Invocar el editor de combinaciones de teclado'),_('Archivar un mensaje')]
 def retornarCategorias():
 	lista=[[_('General')]]
-	if config['categorias'][0]: lista.append([_('Miembros')])
-	if config['categorias'][1]: lista.append([_('Donativos')])
-	if config['categorias'][2]: lista.append([_('Moderadores')])
-	if config['categorias'][3]: lista.append([_('Usuarios Verificados')])
-	if config['categorias'][4]: lista.append([_('Favoritos')])
+	if config['categorias'][0]: lista.append([_('Mensajes')])
+	if config['categorias'][1]: lista.append([_('Miembros')])
+	if config['categorias'][2]: lista.append([_('Donativos')])
+	if config['categorias'][3]: lista.append([_('Moderadores')])
+	if config['categorias'][4]: lista.append([_('Usuarios Verificados')])
+	if config['categorias'][5]: lista.append([_('Favoritos')])
 	return lista
 lista=retornarCategorias()
 for temporal in lista: pos.append(1)
@@ -444,6 +445,8 @@ class MyFrame(wx.Frame):
 		menu.Bind(wx.EVT_MENU, self.mostrarMensaje, id=0)
 		menu.Append(6, _("&Copiar mensaje al portapapeles"))
 		menu.Bind(wx.EVT_MENU, self.copiarMensaje,id=6)
+		menu.Append(11, _("&Listado de Urls."))
+		menu.Bind(wx.EVT_MENU, self.listaUrls,id=11)
 		menu.Append(7, _("&Archivar mensaje"))
 		menu.Bind(wx.EVT_MENU, self.addRecuerdo,id=7)
 		# if para comprobar si un elemento está seleccionado
@@ -832,7 +835,7 @@ class MyFrame(wx.Frame):
 				for t in message['author']['badges']:
 					mensajito=message['author']['name']+ _(' se a conectado al chat. ')+t['title']
 					break
-				if config['categorias'][0]:
+				if config['categorias'][1]:
 					for contador in range(len(lista)):
 						if lista[contador][0]=='Miembros':
 							lista[contador].append(mensajito)
@@ -847,7 +850,7 @@ class MyFrame(wx.Frame):
 			if 'badges' in message['author']:
 				for t in message['author']['badges']:
 					if 'Owner' in t['title']:
-						if config['categorias'][2]:
+						if config['categorias'][3]:
 							for contador in range(len(lista)):
 								if lista[contador][0]=='Moderadores':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
@@ -860,7 +863,7 @@ class MyFrame(wx.Frame):
 						self.list_box_1.Append(_('Propietario ')+message['author']['name'] +': ' +message['message'])
 						break
 					if 'Moderator' in t['title'] and config['eventos'][3]:
-						if config['categorias'][2]:
+						if config['categorias'][3]:
 							for contador in range(len(lista)):
 								if lista[contador][0]=='Moderadores':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
@@ -873,7 +876,7 @@ class MyFrame(wx.Frame):
 						self.list_box_1.Append(_('Moderador ')+message['author']['name'] +': ' +message['message'])
 						break
 					if 'member' in t['title'].lower() and config['eventos'][0]:
-						if config['categorias'][0]:
+						if config['categorias'][1]:
 							for contador in range(len(lista)):
 								if lista[contador][0]=='Miembros':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
@@ -886,7 +889,7 @@ class MyFrame(wx.Frame):
 						self.list_box_1.Append(_('Miembro ')+message['author']['name'] +': ' +message['message'])
 						break
 					if 'Verified' in t['title'] and config['eventos'][4]:
-						if config['categorias'][3]:
+						if config['categorias'][4]:
 							for contador in range(len(lista)):
 								if lista[contador][0]=='Usuarios Verificados':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
@@ -905,7 +908,7 @@ class MyFrame(wx.Frame):
 						if moneda['converted']:
 							message['money']['currency']=self.divisa
 							message['money']['amount']=moneda['amount']
-					if config['categorias'][1]:
+					if config['categorias'][2]:
 						for contador in range(len(lista)):
 							if lista[contador][0]=='Donativos':
 								lista[contador].append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
@@ -919,7 +922,12 @@ class MyFrame(wx.Frame):
 					continue
 			else:
 				if self.dentro:
-					if lista[yt][0]=='General':
+					if config['categorias'][0]:
+						for contador in range(len(lista)):
+							if lista[contador][0]=='Mensajes':
+								lista[contador].append(message['author']['name'] +': ' +message['message'])
+								break
+					if lista[yt][0]=='General' or lista[yt][0]=='Mensajes':
 						if config['reader']:
 							if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
 							else: lector.speak(message['author']['name'] +': ' +message['message'])
@@ -942,14 +950,19 @@ class MyFrame(wx.Frame):
 					self.mensajes[c]+=1
 					break
 				c+=1
-		if lista[yt][0]=='General':
+		if config['categorias'][0]:
+			for contador in range(len(lista)):
+				if lista[contador][0]=='Mensajes':
+					lista[contador].append(event.user.nickname + ": " + event.comment if event.comment is not None else '')
+					break
+		if lista[yt][0]=='General' or lista[yt][0]=='Mensajes':
 			if config['reader']:
 				if config['sapi']: leer.speak(event.user.nickname + ": " + event.comment if event.comment is not None else '')
 				else: lector.speak(event.user.nickname + ": " + event.comment if event.comment is not None else '')
 		self.list_box_1.Append(event.user.nickname + ": " + event.comment if event.comment is not None else '')
 		if config['sonidos'] and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
 	async def on_emote(self,event: EmoteEvent):
-		if config['categorias'][0]:
+		if config['categorias'][1]:
 			for contador in range(len(lista)):
 				if lista[contador][0]=='Miembros':
 					lista[contador].append(event.user.nickname + _(' envió un emogi.'))
@@ -976,21 +989,35 @@ class MyFrame(wx.Frame):
 		self.list_box_1.Append(event.user.nickname + _(" comenzó a seguirte!"))
 		if config['sonidos'] and config['listasonidos'][10]: playsound(ajustes.rutasonidos[10],False)
 	async def on_gift(self,event: GiftEvent):
-		if event.gift.streakable and not event.gift.streaking: mensajito=_('%s ha enviado %s %s que vale %s') % (event.user.nickname,str(event.gift.count),event.gift.info.name,str(event.gift.info.diamond_count))
-		elif not event.gift.streakable: mensajito=_('%s ha enviado %s %s que vale %s') % (event.user.nickname,str(event.gift.count),event.gift.info.name,str(event.gift.info.diamond_count))
+		if event.gift.streakable and not event.gift.streaking:
+			if self.divisa!="Por defecto":
+				if self.divisa=='USD': total=float((event.gift.info.diamond_count*event.gift.count)/100)
+				else:
+					moneda = json.loads(google_currency.convert('USD', self.divisa, int((event.gift.info.diamond_count * event.gift.count) / 100)))
+					if moneda['converted']: total=moneda['amount']
+				mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.gift.count),event.gift.info.name,str(total),self.divisa)
+			else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.gift.count),event.gift.info.name,str(event.gift.info.diamond_count))
+		elif not event.gift.streakable:
+			if self.divisa!="Por defecto":
+				if self.divisa=='USD': total=int((event.gift.info.diamond_count*event.gift.count)/100)
+				else:
+					moneda = json.loads(google_currency.convert('USD', self.divisa, int((event.gift.info.diamond_count * event.gift.count) / 100)))
+					if moneda['converted']: total=moneda['amount']
+				mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.gift.count),event.gift.info.name,str(total),self.divisa)
+			else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.gift.count),event.gift.info.name,str(event.gift.info.diamond_count))
 		try:
-			if config['categorias'][1]:
+			if config['categorias'][2]:
 				for contador in range(len(lista)):
 					if lista[contador][0]=='Donativos':
 						lista[contador].append(mensajito)
 						break
 			self.list_box_1.Append(mensajito)
-			if lista[yt][0]=='Donativos':
+			if lista[yt][0]=='Donativos' or lista[yt][0]=='General':
 				if config['reader']:
 					if config['sapi']: leer.speak(mensajito)
 					else: lector.speak(mensajito)
 			if config['sonidos'] and config['listasonidos'][3]: playsound(ajustes.rutasonidos[3],False)
-		except: pass #if we asigng value to mensajito the client added a blank line.
+		except Exception as e: pass
 	async def on_join(self,event: JoinEvent):
 		self.unidos+=1
 		if lista[yt][0]=='General':
@@ -1047,7 +1074,7 @@ class MyFrame(wx.Frame):
 						break
 					c+=1
 			if message['message_type']=='resubscription' and config['eventos'][1]:
-				if config['categorias'][0]:
+				if config['categorias'][1]:
 					for contador in range(len(lista)):
 						if lista[contador][0]=='Miembros':
 							lista[contador].append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses! '))
@@ -1060,7 +1087,7 @@ class MyFrame(wx.Frame):
 				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: playsound(ajustes.rutasonidos[2],False)
 				continue
 			if message['message_type']=='subscription' and config['eventos'][1]:
-				if config['categorias'][0]:
+				if config['categorias'][1]:
 					for contador in range(len(lista)):
 						if lista[contador][0]=='Miembros':
 							lista[contador].append(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
@@ -1095,7 +1122,7 @@ class MyFrame(wx.Frame):
 					if self.divisa!='Por defecto': dinero=self.divisa+str(divide1[1])
 					else: dinero='Cheer '+str(divide1[1])
 					divide1=' '+divide1[0]
-				if config['categorias'][1]:
+				if config['categorias'][2]:
 					for contador in range(len(lista)):
 						if lista[contador][0]=='Donativos':
 							lista[contador].append(dinero+', '+message['author']['name']+': '+divide1)
@@ -1108,7 +1135,7 @@ class MyFrame(wx.Frame):
 				self.list_box_1.Append(dinero+', '+message['author']['name']+': '+divide1)
 				continue
 			if message['message_type']=='mystery_subscription_gift':
-				if config['categorias'][0]:
+				if config['categorias'][1]:
 					for contador in range(len(lista)):
 						if lista[contador][0]=='Miembros':
 							lista[contador].append(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
@@ -1121,7 +1148,7 @@ class MyFrame(wx.Frame):
 				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: playsound(ajustes.rutasonidos[2],False)
 				continue
 			if message['message_type']=='subscription_gift':
-				if config['categorias'][0]:
+				if config['categorias'][1]:
 					for contador in range(len(lista)):
 						if lista[contador][0]=='Miembros':
 							lista[contador].append(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
@@ -1136,7 +1163,7 @@ class MyFrame(wx.Frame):
 			if message['message_type']=='resubscription' and config['eventos'][1]:
 				mssg=message['message'].split('! ')
 				mssg=str(mssg[1:])
-				if config['categorias'][0]:
+				if config['categorias'][1]:
 					for contador in range(len(lista)):
 						if lista[contador][0]=='Miembros':
 							lista[contador].append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses! ')+mssg)
@@ -1150,7 +1177,7 @@ class MyFrame(wx.Frame):
 				continue
 			try:
 				if message['author']['is_subscriber'] and config['eventos'][0]:
-					if config['categorias'][0]:
+					if config['categorias'][1]:
 						for contador in range(len(lista)):
 							if lista[contador][0]=='Miembros':
 								lista[contador].append(message['author']['name'] +': ' +message['message'])
@@ -1163,7 +1190,7 @@ class MyFrame(wx.Frame):
 					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][1]: playsound(ajustes.rutasonidos[1],False)
 					continue
 				elif message['author']['is_moderator'] and config['eventos'][3]:
-					if config['categorias'][2]:
+					if config['categorias'][3]:
 						for contador in range(len(lista)):
 							if lista[contador][0]=='Moderadores':
 								lista[contador].append(message['author']['name'] +': ' +message['message'])
@@ -1179,7 +1206,7 @@ class MyFrame(wx.Frame):
 			if 'badges' in message['author']:
 				for t in message['author']['badges']:
 					if 'Subscriber' in t['title'] and config['eventos'][0]:
-						if config['categorias'][0]:
+						if config['categorias'][1]:
 							for contador in range(len(lista)):
 								if lista[contador][0]=='Miembros':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
@@ -1192,7 +1219,7 @@ class MyFrame(wx.Frame):
 								else: lector.speak(message['author']['name'] +': ' +message['message'])
 						break
 					elif 'Moderator' in t['title'] and config['eventos'][3]:
-						if config['categorias'][2]:
+						if config['categorias'][3]:
 							for contador in range(len(lista)):
 								if lista[contador][0]=='Moderadores':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
@@ -1205,7 +1232,7 @@ class MyFrame(wx.Frame):
 								else: lector.speak(message['author']['name'] +': ' +message['message'])
 						break
 					elif 'Verified' in t['title'] and config['eventos'][4]:
-						if config['categorias'][3]:
+						if config['categorias'][4]:
 							for contador in range(len(lista)):
 								if lista[contador][0]=='Usuarios Verificados':
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
@@ -1219,7 +1246,12 @@ class MyFrame(wx.Frame):
 						break
 					if 'Subscriber' in t['title'] and 'Moderator' in t['title'] and 'Verified' in t['title']: break
 				else:
-					if lista[yt][0]=='General':
+					if config['categorias'][1]:
+						for contador in range(len(lista)):
+							if lista[contador][0]=='Mensajes':
+								lista[contador].append(message['author']['name'] +': ' +message['message'])
+								break
+					if lista[yt][0]=='General' or lista[yt][0]=='Mensajes':
 						if config['reader']:
 							if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
 							else: lector.speak(message['author']['name'] +': ' +message['message'])
@@ -1227,7 +1259,12 @@ class MyFrame(wx.Frame):
 					self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
 			else:
 				if self.dentro:
-					if lista[yt][0]=='General':
+					if config['categorias'][1]:
+						for contador in range(len(lista)):
+							if lista[contador][0]=='Mensajes':
+								lista[contador].append(message['author']['name'] +': ' +message['message'])
+								break
+					if lista[yt][0]=='General' or lista[yt][0]=='Mensajes':
 						if config['reader']:
 							if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
 							else: lector.speak(message['author']['name'] +': ' +message['message'])
@@ -1386,6 +1423,25 @@ class MyFrame(wx.Frame):
 			elif	len(mensajes_destacados)<=0:
 				wx.MessageBox(_("No hay mensajes que borrar"), "Error.", wx.ICON_ERROR)
 				self.list_mensajes.SetFocus()
+	def listaUrls(self,event):
+		urls=funciones.extract_urls(self.list_box_1.GetString(self.list_box_1.GetSelection()))
+		if urls:
+			dialog_urls = wx.Dialog(self.dialog_mensaje, wx.ID_ANY, _("Lista de URLS"))
+			sizer_urls = wx.BoxSizer(wx.VERTICAL)
+			list_urls = wx.ListCtrl(dialog_urls, wx.ID_ANY,style=wx.LC_REPORT | wx.LC_SINGLE_SEL)
+			list_urls.InsertColumn(0, "URLs")
+			for i in range(len(urls)): list_urls.InsertItem(i, urls[i])
+			list_urls.Focus(0)
+			list_urls.SetFocus()
+			list_urls.Bind(wx.EVT_LIST_ITEM_ACTIVATED, lambda event: wx.LaunchDefaultBrowser(list_urls.GetItem(list_urls.GetFocusedItem(), 0).GetText()))
+			sizer_urls.Add(list_urls)
+			button_cerrar = wx.Button(dialog_urls, wx.ID_CANCEL, _("&Cerrar"))
+			sizer_urls.Add(button_cerrar)
+			dialog_urls.SetSizerAndFit(sizer_urls)
+			dialog_urls.Centre()
+			dialog_urls.ShowModal()
+			dialog_urls.Destroy()
+		else: wx.MessageBox(_("No hay URLS en este  mensaje"), "Error", wx.ICON_ERROR)
 class MyApp(wx.App):
 	def OnInit(self):
 		self.frame = MyFrame(None, wx.ID_ANY, "")

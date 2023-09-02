@@ -10,7 +10,7 @@ configuraciones ={
 	'sapi':True,
 	'sonidos': True,
 	'idioma': "system",
-	'categorias': [True, True, False, False, False],
+	'categorias': [True,True, True, False, False, False],
 	'listasonidos': [True, True, True, True, True, True, True, True,True,True,True,True,True],
 	'eventos': [True,True,True,True,True,True,True,True,True],
 	'reader': True,

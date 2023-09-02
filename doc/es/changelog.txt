@@ -1,3 +1,7 @@
+v2.8
+se agrega en el menú contextual de un mensaje una opción llamada lista  de URLS. para acceder rápidamente a las urls de los que mandaron el mensaje.
+se agrega nuevo buffer, este se llama mensajes. solo llegan los mensajes de chat, útil para que no se mesclen en la lista general en los envivos de tiktok.
+conversor de divisas ya está disponible para envivos en tiktok.
 v2.7
 se agregan mas datos en las estadísticas del chat si es que el en vivo es de  tiktok.
 Se agrega la capacidad de actualizar configuraciones, para corregir errores inesperados en caso de que alguna no esté establecida.
