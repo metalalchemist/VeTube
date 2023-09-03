@@ -1,14 +1,12 @@
-# -*- coding: utf-8 -*-
-from googletrans import Translator, LANGUAGES
+from googletrans import Translator
 
+class TranslatorWrapper:
+    def __init__(self):
+        self.translator = Translator()
 
-# create a single translator instance
-# see https://github.com/ssut/py-googletrans/issues/234
-t = None
+    def translate(self, text="", target="en"):
+        return self.translator.translate(text, dest=target).text
 
-def translate(text="", target="en"):
-    global t
-    if t == None:
-        t = Translator()
-    vars = dict(text=text, dest=target)
-    return t.translate(**vars).text
+    @property
+    def LANGUAGES(self):
+        return LANGUAGES
