@@ -400,7 +400,7 @@ msgstr "View chat statistics"
 
 #: chat/VeTube.py:472
 msgid "&Copiar enlace del chat al portapapeles"
-msgstr "&Copy chat link to clipboard"
+msgstr "&Copy live stream link to clipboard"
 
 #: chat/VeTube.py:473
 msgid "&Reproducir video en el navegador"
