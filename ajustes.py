@@ -31,7 +31,7 @@ class configuracionDialog(wx.Dialog):
 		idiomas_disponibles = [""]
 		monedas=[_('Por defecto')]
 		for k in CODES: monedas.append(f'{CODES[k]}, ({k})')
-		for k in translator.LANGUAGES: idiomas_disponibles.append(LANGUAGES[k])
+		for k in translator.LANGUAGES: idiomas_disponibles.append(translator.LANGUAGES[k])
 		# voces:
 		if config['sistemaTTS'] == "piper":
 			if not lista_voces_piper is None:
