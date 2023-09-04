@@ -26,7 +26,7 @@ jobs:
       - name: Source checkout
         uses: actions/checkout@v3
         with:
-          repository: rhasspy/espeak-ng
+          repository: rmcpantoja/espeak-ng
           path: espeak-ng
       - name: configure-espeak
         run: cd espeak-ng && cmake -Bbuild -DUSE_ASYNC:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=${{ matrix.shlib }} -A ${{ matrix.arch }} -DUSE_MBROLA:BOOL=OFF -DUSE_LIBSONIC:BOOL=OFF -DUSE_LIBPCAUDIO:BOOL=OFF -DUSE_KLATT:BOOL=OFF -DUSE_SPEECHPLAYER:BOOL=OFF -DEXTRA_cmn:BOOL=ON -DEXTRA_ru:BOOL=ON
