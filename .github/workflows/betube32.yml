@@ -32,6 +32,9 @@ jobs:
         run: cd espeak-ng && cmake -Bbuild -DUSE_ASYNC:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=${{ matrix.shlib }} -A ${{ matrix.arch }} -DUSE_MBROLA:BOOL=OFF -DUSE_LIBSONIC:BOOL=OFF -DUSE_LIBPCAUDIO:BOOL=OFF -DUSE_KLATT:BOOL=OFF -DUSE_SPEECHPLAYER:BOOL=OFF -DEXTRA_cmn:BOOL=ON -DEXTRA_ru:BOOL=ON
       - name: make-espeak
         run: cd espeak-ng && cmake --build build --config ${{ matrix.config }}
+      - uses: actions/checkout@v3
+        with:
+          path: VeTube
       - name: Configure Python
         uses: actions/setup-python@v4
         with:
@@ -45,18 +48,18 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller gdown
           pip install --upgrade pyzmq httpx httpcore future
-          git clone https://github.com/mush42/espeak-phonemizer-windows
 
       - name: Compiling
         run: |
-          dir
           pyinstaller VeTube.py --windowed
           gdown 1ZtF6zus0A7kC9Lwr_kTUbw0MiOoZq29H -O dist/VeTube/bootstrap.exe
           cp -R chat_downloader dist/VeTube/
           cp -R doc dist/VeTube/
           cp -R locales dist/VeTube/
           cp -R sounds dist/VeTube/
-          cp -R espeak-phonemizer-windows/espeak_phonemizer dist/VeTube/
+          mkdir dist/VeTube/espeak-ng
+          cp -R espeak-ng/build/src/release/espeak-ng.dll dist/VeTube/espeak-ng
+          cp -R espeak-ng/build/espeak-ng-data dist/VeTube/espeak-ng
       - uses: actions/upload-artifact@v3
         with:
           name: VeTube-x86
