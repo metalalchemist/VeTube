@@ -1,3 +1,4 @@
+import ctypes
 import io
 import json
 import logging
@@ -8,7 +9,6 @@ from typing import List, Mapping, Optional, Sequence, Union
 
 import numpy as np
 import onnxruntime
-from espeak_phonemizer import Phonemizer
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -16,6 +16,17 @@ _BOS = "^"
 _EOS = "$"
 _PAD = "_"
 
+EE_OK = 0
+AUDIO_OUTPUT_SYNCHRONOUS = 0x02
+espeakPHONEMES_IPA = 0x02
+espeakCHARS_AUTO = 0
+
+CLAUSE_INTONATION_FULL_STOP = 0x00000000
+CLAUSE_INTONATION_COMMA = 0x00001000
+CLAUSE_INTONATION_QUESTION = 0x00002000
+CLAUSE_INTONATION_EXCLAMATION = 0x00003000
+
+CLAUSE_TYPE_SENTENCE = 0x00080000
 
 @dataclass
 class PiperConfig:
@@ -28,6 +39,62 @@ class PiperConfig:
     noise_w: float
     phoneme_id_map: Mapping[str, Sequence[int]]
 
+class CustomPhonemizer(object):
+    """ A modified Phonemizer that keeps the punctuation.
+        Needs a patched libespeak-ng.so from https://github.com/rhasspy/espeak-ng """
+    def __init__(self, voice):
+        # Set voice
+        ret = forked_lib.espeak_SetVoiceByName(voice.encode("utf-8"))
+        assert ret == EE_OK, ret
+
+    def phonemize(self, text):
+        text_pointer = ctypes.c_char_p(text.encode("utf-8"))
+
+        phoneme_flags = espeakPHONEMES_IPA
+        text_flags = espeakCHARS_AUTO
+
+        phonemes = ""
+        while text_pointer:
+            terminator = ctypes.c_int(0)
+            clause_phonemes = forked_lib.espeak_TextToPhonemesWithTerminator(
+                ctypes.pointer(text_pointer),
+                text_flags,
+                phoneme_flags,
+                ctypes.pointer(terminator),
+            )
+            if isinstance(clause_phonemes, bytes):
+                phonemes += clause_phonemes.decode()
+
+            # Check for punctuation.
+            # The testing order here is critical.
+            if (terminator.value & CLAUSE_INTONATION_EXCLAMATION) == CLAUSE_INTONATION_EXCLAMATION:
+                phonemes += "!"
+            elif (terminator.value & CLAUSE_INTONATION_QUESTION) == CLAUSE_INTONATION_QUESTION:
+                phonemes += "?"
+            elif (terminator.value & CLAUSE_INTONATION_COMMA) == CLAUSE_INTONATION_COMMA:
+                phonemes += ","
+            elif (terminator.value & CLAUSE_INTONATION_FULL_STOP) == CLAUSE_INTONATION_FULL_STOP:
+                phonemes += "."
+
+            # Check for end of sentence
+            if (terminator.value & CLAUSE_TYPE_SENTENCE) == CLAUSE_TYPE_SENTENCE:
+                phonemes += "\n"
+            else:
+                phonemes += " "
+        return phonemes
+
+
+# Check if we have the patched lib needed to use the CustomPhonemizer
+forked_lib_available = False
+try:
+    forked_lib = ctypes.cdll.LoadLibrary("espeak-ng/espeak-ng.dll")
+    # Will fail if custom function is missing
+    forked_lib.espeak_TextToPhonemesWithTerminator.restype = ctypes.c_char_p
+    # Initialize
+    forked_lib_available = forked_lib.espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS, 0, None, 0) > 0
+    Phonemizer = CustomPhonemizer
+except ValueError:
+    from espeak_phonemizer import Phonemizer
 
 class Piper:
     def __init__(

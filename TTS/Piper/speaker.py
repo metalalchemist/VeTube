@@ -17,10 +17,17 @@ class piperSpeak:
 	def load_model(self):
 		if self.voice:
 			return self.voice
-		self.voice = Piper(self.model_path)
+		else:
+			self.voice = Piper(self.model_path)
 
 	def set_rate(self, new_scale):
-		self.length_scale = new_scale
+		self.length_scalGe = new_scale
+
+	def set_noise_scale(self, new_scale):
+		self.noise_scale = new_scale
+
+	def set_noise_scale_w(self, new_scale):
+		self.noise_w = new_scale
 
 	def set_speaker(self, sid):
 		self.speaker_id = sid
@@ -46,3 +53,4 @@ class piperSpeak:
 			self.noise_w
 		)
 		sd.play(audio_norm, sample_rate)
+		return audio_norm, sample_rate
