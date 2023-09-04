@@ -64,13 +64,13 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: VeTube-x86
-          path: dist/VeTube
+          path: VeTube/dist/VeTube
           if-no-files-found: error
       - name: zip packaging
         run: |
-          cd dist/VeTube
-          7z a ../../VeTube-x86.zip .
-          cd ../../
+          cd VeTube/dist/VeTube
+          7z a ../../../VeTube-x86.zip .
+          cd ../../../
       - name: vetube_release
         uses: softprops/action-gh-release@v1
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
