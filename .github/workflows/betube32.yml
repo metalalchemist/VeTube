@@ -45,12 +45,13 @@ jobs:
         run: |
           pip install --upgrade pip wheel setuptools
           pip install Pillow==9.5.0
-          pip install -r requirements.txt
+          pip install -r VeTube/requirements.txt
           pip install pyinstaller gdown
           pip install --upgrade pyzmq httpx httpcore future
 
       - name: Compiling
         run: |
+          cd VeTube
           pyinstaller VeTube.py --windowed
           gdown 1ZtF6zus0A7kC9Lwr_kTUbw0MiOoZq29H -O dist/VeTube/bootstrap.exe
           cp -R chat_downloader dist/VeTube/
@@ -58,8 +59,8 @@ jobs:
           cp -R locales dist/VeTube/
           cp -R sounds dist/VeTube/
           mkdir dist/VeTube/espeak-ng
-          cp -R espeak-ng/build/src/release/espeak-ng.dll dist/VeTube/espeak-ng
-          cp -R espeak-ng/build/espeak-ng-data dist/VeTube/espeak-ng
+          cp -R ../espeak-ng/build/src/release/espeak-ng.dll dist/VeTube/espeak-ng
+          cp -R ../espeak-ng/build/espeak-ng-data dist/VeTube/espeak-ng
       - uses: actions/upload-artifact@v3
         with:
           name: VeTube-x86
