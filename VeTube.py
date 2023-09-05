@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,wx.adv,threading,languageHandler,restart,translator,time,funciones,google_currency,fajustes,ajustes
+import json,wx,wx.adv,threading,languageHandler,restart,time,funciones,google_currency,fajustes,ajustes
 from keyboard_handler.wx_handler import WXKeyboardHandler
 from playsound import playsound
 from TTS.lector import configurar_tts, detect_onnx_models
@@ -12,6 +12,7 @@ from os import path,remove,getcwd, makedirs
 from TikTokLive import TikTokLiveClient
 from TikTokLive.types.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent,LikeEvent,JoinEvent,FollowEvent,ShareEvent,ViewerUpdateEvent,EnvelopeEvent, EmoteEvent
 from menu_accesible import Accesible
+from translator import TranslatorWrapper
 
 yt=0
 # revisar la configuración primero, ya que necesitamos determinar el sistema TTS a través de ella.
@@ -456,6 +457,7 @@ class MyFrame(wx.Frame):
 			self.list_box_1.PopupMenu(menu)
 		menu.Destroy()
 	def traducirMenu(self, event):
+		translator = TranslatorWrapper()
 		noti =wx.adv.NotificationMessage(_("Mensaje traducido"), _("el mensaje se ha traducido al idioma del programa y se  a  copiado en el portapapeles."))
 		noti.Show(timeout=10)
 		copy(translator.translate(self.list_box_1.GetString(self.list_box_1.GetSelection()),target=languageHandler.curLang[:2]))
@@ -578,6 +580,7 @@ class MyFrame(wx.Frame):
 	def guardar(self):
 		global lista,config,leer
 		rest=False
+		translator = TranslatorWrapper()
 		config=ajustes.config
 		config['categorias']=[]
 		config['listasonidos']=[]
@@ -734,6 +737,7 @@ class MyFrame(wx.Frame):
 		if self.list_box_1.GetCount()>0 and lista[yt][0]=='General': return self.list_box_1.GetString(self.list_box_1.GetSelection())
 		if lista[yt][0]!='General' and len(lista[yt])>0: return lista[yt][pos[yt]]
 	def mostrarMensaje(self,event=None):
+		translator = TranslatorWrapper()
 		idiomas_disponibles =[translator.LANGUAGES[k] for k in translator.LANGUAGES]
 		if self.dentro and self.retornarMensaje():
 			my_dialog = wx.Dialog(self, wx.ID_ANY, _("mensaje"))
@@ -756,6 +760,7 @@ class MyFrame(wx.Frame):
 			my_dialog.ShowModal()
 	def cambiarTraducir(self,event): self.traducir.SetLabel(_("&traducir el mensaje") if self.choice_idiomas.GetString(self.choice_idiomas.GetSelection()) != translator.LANGUAGES[languageHandler.curLang[:2]] else _("&Traducir mensaje al idioma del programa"))
 	def traducirMensaje(self,event):
+		translator = TranslatorWrapper()
 		for k in translator.LANGUAGES:
 			if translator.LANGUAGES[k] == self.choice_idiomas.GetStringSelection():
 				self.text_message.SetValue(translator.translate(self.text_message.GetValue(),target=k))
@@ -819,6 +824,7 @@ class MyFrame(wx.Frame):
 		if event.GetKeyCode() == 32: self.acceder(url=favorite[self.list_favorite.GetSelection()]['url'])
 	def recibirYT(self):
 		global lista
+		translator = TranslatorWrapper()
 		for message in self.chat:
 			if message['message']==None: message['message']=''
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
@@ -1062,6 +1068,7 @@ class MyFrame(wx.Frame):
 		self.chat.add_listener("disconnect", self.on_disconnect)
 		self.chat.run()
 	def recibirTwich(self):
+		translator = TranslatorWrapper()
 		for message in self.chat:
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
 			if not message['author']['name'] in self.usuarios:

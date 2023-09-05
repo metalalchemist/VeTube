@@ -1,6 +1,6 @@
 import wx,languageHandler,fajustes
 from google_currency import CODES
-from translator import LANGUAGES
+from translator import TranslatorWrapper
 from accessible_output2.outputs import  sapi5
 from TTS.lector import configurar_tts, detect_onnx_models
 from TTS.list_voices import piper_list_voices, install_piper_voice
@@ -19,6 +19,7 @@ class configuracionDialog(wx.Dialog):
 	def __init__(self, parent):
 		global config, lista_voces, prueba_piper
 		# idioma:
+		translator = TranslatorWrapper()
 		languageHandler.setLanguage(config['idioma'])
 		idiomas = languageHandler.getAvailableLanguages()
 		langs = []
@@ -30,7 +31,7 @@ class configuracionDialog(wx.Dialog):
 		idiomas_disponibles = [""]
 		monedas=[_('Por defecto')]
 		for k in CODES: monedas.append(f'{CODES[k]}, ({k})')
-		for k in LANGUAGES: idiomas_disponibles.append(LANGUAGES[k])
+		for k in translator.LANGUAGES: idiomas_disponibles.append(translator.LANGUAGES[k])
 		# voces:
 		if config['sistemaTTS'] == "piper":
 			if not lista_voces_piper is None:
