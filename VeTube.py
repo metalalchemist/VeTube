@@ -550,12 +550,13 @@ class MyFrame(wx.Frame):
 		dlg_mensaje = wx.MessageDialog(self.dialog_mensaje, _("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		if dlg_mensaje.ShowModal() == wx.ID_YES:
 			self.dentro=False
+			self.usuarios=self.mensajes=[]
 			if isinstance(self.chat, TikTokLiveClient):
 				self.chat.stop()
 				self.gustados=[]
+				self.megusta=self.unidos=self.seguidores=self.compartidas=0
 			yt=0
-			pos=[]
-			lista=[]
+			pos=lista=[]
 			lista=retornarCategorias()				
 			for temporal in lista: pos.append(1)
 			leer.silence()
@@ -934,7 +935,6 @@ class MyFrame(wx.Frame):
 					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
 					self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
 				else:
-					self.chat.close()
 					exit()
 					self.hilo2.join()
 	async def on_connect(self,event: ConnectEvent):
@@ -1272,7 +1272,6 @@ class MyFrame(wx.Frame):
 					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
 					self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
 				else:
-					self.chat.close()
 					exit()
 					self.hilo2.join()
 	def avanzarCategorias(self):
