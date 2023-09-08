@@ -1,5 +1,5 @@
 wxPython
-playsound==1.2.2
+git+https://github.com/t1nky/playsound
 TikTokLive
 pyperclip
 chat_downloader

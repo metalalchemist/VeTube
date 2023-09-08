@@ -570,7 +570,7 @@ class MyFrame(wx.Frame):
 			self.handler_keyboard.unregister_all_keys()
 	def guardarLista(self, event):
 		if self.list_box_1.GetCount()>0:
-			dlg_mensaje = wx.FileDialog(self.dialog_mensaje, _("Guardar lista de mensajes"), "", info_dict.get('title'), "*.txt", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+			dlg_mensaje = wx.FileDialog(self.dialog_mensaje, _("Guardar lista de mensajes"), "", self.chat.unique_id if isinstance(self.chat,TikTokLiveClient) else self.chat.title, "*.txt", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
 			if dlg_mensaje.ShowModal() == wx.ID_OK:
 				with open(dlg_mensaje.GetPath(), "w") as archivo:
 					for escribe in range(self.list_box_1.GetCount()): archivo.write(self.list_box_1.GetString(escribe)+ "\n")
@@ -642,10 +642,7 @@ class MyFrame(wx.Frame):
 			leer.silence()
 			leer.speak(self.list_box_1.GetString(self.list_box_1.GetSelection()))
 	def iniciarChat(self):
-		global info_dict
-		try:
-			if not isinstance(self.chat, TikTokLiveClient): self.label_dialog.SetLabel(self.chat.title)
-		except: pass
+		if not isinstance(self.chat, TikTokLiveClient): self.label_dialog.SetLabel(self.chat.title)
 		self.handler_keyboard.register_keys(eval(mis_teclas))
 		if 'yout' in self.text_ctrl_1.GetValue(): self.recibirYT()
 		elif 'twitch' in self.text_ctrl_1.GetValue(): self.recibirTwich()
