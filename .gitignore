@@ -7,3 +7,4 @@ piper/voices/*/*.onnx
 piper/voices/*/*.onnx.json
 data.json
 keys.txt
+.vscode
