@@ -49,6 +49,7 @@ def get_playroom_handle():
 class PlayroomHelper:
     textarea_handler = None
     doc_range = None
+    username = ""
 
     def __init__(self):
         try:
@@ -57,8 +58,11 @@ class PlayroomHelper:
             if playroom_handle is None:
                 raise Exception('proceso playroom no abierto')
 
-
             playroom_controls = uiautomation.ControlFromHandle(playroom_handle)
+            # get window title and find the first string inside []
+            self.username = getWindowTitleByHandle(playroom_handle).split('[')[1].split(']')[0]
+            print(self.username)
+
             # Find richedit control (document control)
             self.textarea_handler: uiautomation.DocumentControl = playroom_controls.DocumentControl(ClassName='RICHEDIT50W')
 
