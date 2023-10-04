@@ -59,16 +59,13 @@ class PlayroomHelper:
                 raise Exception('proceso playroom no abierto')
 
             playroom_controls = uiautomation.ControlFromHandle(playroom_handle)
-            # get window title and find the first string inside []
+            
             self.username = getWindowTitleByHandle(playroom_handle).split('[')[1].split(']')[0]
-            print(self.username)
 
-            # Find richedit control (document control)
             self.textarea_handler: uiautomation.DocumentControl = playroom_controls.DocumentControl(ClassName='RICHEDIT50W')
 
-            # Get the document range, start and end points
             self.doc_range = self.textarea_handler.GetTextPattern().DocumentRange
-            
+
         except Exception as e:
             raise e
 
@@ -76,5 +73,10 @@ class PlayroomHelper:
         new_range = self.textarea_handler.GetTextPattern().DocumentRange
         new_range.MoveEndpointByRange(uiautomation.TextPatternRangeEndpoint.Start, self.doc_range, uiautomation.TextPatternRangeEndpoint.End)
         new_lines = new_range.GetText(-1).split('\r\n')
+
+        if new_lines == []:
+            print("empty")
+        else:
+            for line in new_lines: print("line " + line)
 
         self.doc_range = new_range
