@@ -6,6 +6,7 @@ from playsound import playsound
 from TTS.lector import configurar_tts, detect_onnx_models
 from TTS.list_voices import install_piper_voice
 from pyperclip import copy
+from helpers.timer import Timer
 from chat_downloader import ChatDownloader
 from update import updater,update
 from os import path,remove,getcwd, makedirs
@@ -13,6 +14,7 @@ from TikTokLive import TikTokLiveClient
 from TikTokLive.types.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent,LikeEvent,JoinEvent,FollowEvent,ShareEvent,ViewerUpdateEvent,EnvelopeEvent, EmoteEvent
 from menu_accesible import Accesible
 from translator import TranslatorWrapper
+from helpers.playroom_helper import PlayroomHelper
 
 yt=0
 # revisar la configuración primero, ya que necesitamos determinar el sistema TTS a través de ella.
@@ -144,10 +146,16 @@ class MyFrame(wx.Frame):
 		self.button_1.Bind(wx.EVT_BUTTON, self.acceder)
 		self.button_1.Disable()
 		sizer_2.Add(self.button_1, 0, 0, 0)
+
 		self.button_2 = wx.Button(self.tap_1, wx.ID_ANY, _("&Borrar"))
 		self.button_2.Bind(wx.EVT_BUTTON, self.borrarContenido)
 		self.button_2.Disable()
 		sizer_2.Add(self.button_2, 0, 0, 0)
+
+		self.button_playroom = wx.Button(self.tap_1, wx.ID_ANY, _("capturar chat de la &Sala de Juegos"))
+		self.button_playroom.Bind(wx.EVT_BUTTON, self.capturar_sala)
+		sizer_2.Add(self.button_playroom, 0, 0, 0)
+
 		self.tap_1.SetSizer(sizer_2)
 		label_favoritos = wx.StaticText(self.tap_2, wx.ID_ANY, _("&Tus favoritos: "))
 		sizer_favoritos.Add(label_favoritos)
@@ -369,6 +377,51 @@ class MyFrame(wx.Frame):
 		self.cf=ajustes.configuracionDialog(self)
 		if self.cf.ShowModal()==wx.ID_OK: self.guardar()
 	def infoApp(self, event): wx.MessageBox(_("Creadores del proyecto:")+"\nCésar Verástegui & Johan G.\n"+_("Descripción:\n Lee en voz alta los mensajes de los directos en youtube y twitch, ajusta tus preferencias como quieras y disfruta más tus canales favoritos."), _("Información"), wx.ICON_INFORMATION)
+
+	def capturar_sala(self, event):
+		try:
+			self.chat = PlayroomHelper()
+
+			self.dentro=True
+			self.usuarios = []
+			self.mensajes = []
+			self.dialog_mensaje = wx.Dialog(self, wx.ID_ANY, _("Chat en vivo"))
+			sizer_mensaje_1 = wx.BoxSizer(wx.VERTICAL)
+			self.label_dialog = wx.StaticText(self.dialog_mensaje, wx.ID_ANY, _("Lectura del chat en vivo..."))
+			sizer_mensaje_1.Add(self.label_dialog, 0, 0, 0)
+			sizer_mensaje_2 = wx.StdDialogButtonSizer()
+			sizer_mensaje_1.Add(sizer_mensaje_2, 0, wx.ALIGN_RIGHT | wx.ALL, 4)
+			self.label_mensaje = wx.StaticText(self.dialog_mensaje, wx.ID_ANY, _("historial  de mensajes: "))
+			sizer_mensaje_2.Add(self.label_mensaje, 20, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 0)
+			self.list_box_1 = wx.ListBox(self.dialog_mensaje, wx.ID_ANY, choices=[])
+			self.list_box_1.SetFocus()
+			self.list_box_1.Bind(wx.EVT_KEY_UP, self.historialItemsTeclas)
+			# poner un menú contextual
+			self.list_box_1.Bind(wx.EVT_CONTEXT_MENU, self.historialItemsMenu)
+			sizer_mensaje_1.Add(self.list_box_1, 1, wx.EXPAND | wx.ALL, 4)
+			self.boton_opciones = wx.Button(self.dialog_mensaje, wx.ID_ANY, _("&Opciones"))
+			self.boton_opciones.Bind(wx.EVT_BUTTON, self.opcionesChat)
+			self.boton_opciones.SetAccessible(Accesible(self.boton_opciones))
+			sizer_mensaje_1.Add(self.boton_opciones, 0, wx.ALIGN_RIGHT | wx.ALL, 4)
+			button_mensaje_detener = wx.Button(self.dialog_mensaje, wx.ID_ANY, _("&Detener chat"))
+			button_mensaje_detener.Bind(wx.EVT_BUTTON,self.detenerLectura)
+			sizer_mensaje_2.Add(button_mensaje_detener, 10, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 0)
+			sizer_mensaje_2.Realize()
+			self.dialog_mensaje.SetSizerAndFit(sizer_mensaje_1)
+			self.dialog_mensaje.Centre()
+			self.dialog_mensaje.SetEscapeId(button_mensaje_detener.GetId())
+
+			self.megusta=0
+			self.seguidores=0
+			self.unidos=0
+			self.compartidas=0
+			self.gustados=[]
+			self.iniciar_captura_sala()
+			self.dialog_mensaje.ShowModal()
+		except Exception as e:
+			wx.MessageBox(_("No ha sido posible engancharse al proceso de la sala de juegos. Debe estar ejecutándose antes de empezar a capturar chats. Si tienes dudas, por favor ponte en contacto con nosotros. Código de error: ") +str(e), "error.", wx.ICON_ERROR)
+			self.button_playroom.SetFocus()
+
 	def acceder(self, event=None,url=""):
 		if not url: url=self.text_ctrl_1.GetValue()
 		if url:
@@ -641,6 +694,14 @@ class MyFrame(wx.Frame):
 		if event.GetKeyCode() == 32:
 			leer.silence()
 			leer.speak(self.list_box_1.GetString(self.list_box_1.GetSelection()))
+
+	def iniciar_captura_sala(self):
+		self.label_dialog.SetLabel(_("Captura Sala de Juegos"))
+		self.handler_keyboard.register_keys(eval(mis_teclas))
+		self.hilo2 = Timer(3, self.chat.get_new_lines)
+		self.hilo2.daemon = True
+		self.hilo2.start()
+
 	def iniciarChat(self):
 		if not isinstance(self.chat, TikTokLiveClient): self.label_dialog.SetLabel(self.chat.title)
 		self.handler_keyboard.register_keys(eval(mis_teclas))
