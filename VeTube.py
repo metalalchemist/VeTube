@@ -523,7 +523,7 @@ class MyFrame(wx.Frame):
 		menu.Append(10, _("&Editor de combinaciones de teclado para VeTube"))
 		menu.Append(1, _("&Borrar historial de mensajes"))
 		menu.Append(2, _("E&xportar los mensajes en un archivo de texto"))
-		if not isinstance(self.chat, TikTokLiveClient):
+		if not isinstance(self.chat, TikTokLiveClient) or not isinstance(self.chat, PlayroomHelper):
 			if self.chat.status!="upcoming":
 				menu.Append(3, _("&Añadir este canal a favoritos"))
 				menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
@@ -698,9 +698,57 @@ class MyFrame(wx.Frame):
 	def iniciar_captura_sala(self):
 		self.label_dialog.SetLabel(_("Captura Sala de Juegos"))
 		self.handler_keyboard.register_keys(eval(mis_teclas))
-		self.hilo2 = Timer(3, self.chat.get_new_lines)
+		self.hilo2 = Timer(0.5, self.recibir_sala)
 		self.hilo2.daemon = True
 		self.hilo2.start()
+
+	def recibir_sala(self):
+		global lista
+		translator = TranslatorWrapper()
+
+		self.chat.get_new_messages()
+
+		for message in self.chat.new_messages:
+			if message['message']==None: message['message']=''
+			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
+			if not message['author'] in self.usuarios:
+				self.usuarios.append(message['author'])
+				self.mensajes.append(1)
+			else:
+				c=0
+				for a in self.usuarios:
+					if a==message['author']:
+						self.mensajes[c]+=1
+						break
+					c+=1
+
+			if self.dentro:
+				if config['categorias'][0]:
+					for contador in range(len(lista)):
+						if lista[contador][0]=='Mensajes':
+							if message['type'] == 'public':
+								lista[contador].append(message['author'] +': ' +message['message'])
+								break
+							if message['type'] == 'private':
+								lista[contador].append(_('privado de ') + message['author'] +': ' +message['message'])
+								break
+
+				if lista[yt][0]=='General' or lista[yt][0]=='Mensajes':
+					# I hate this code but the code is messy anyway so let's just add one more spagheti in the pile
+					if (message['type'] == 'private'):
+						if config['reader']:
+							if config['sapi']: leer.speak(_('privado de ') + message['author'] +': ' +message['message'])
+							else: lector.speak(_('privado de ') + message['author'] +': ' +message['message'])
+					else: # Not fucking private
+						if config['sapi']: leer.speak(message['author'] +': ' +message['message'])
+						else: lector.speak(message['author'] +': ' +message['message'])
+				if config['sonidos'] and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
+				self.list_box_1.Append(message['author'] +': ' +message['message'])
+			else:
+				exit()
+				self.hilo2.join()
+
+
 
 	def iniciarChat(self):
 		if not isinstance(self.chat, TikTokLiveClient): self.label_dialog.SetLabel(self.chat.title)

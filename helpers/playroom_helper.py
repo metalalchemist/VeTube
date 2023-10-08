@@ -50,6 +50,7 @@ class PlayroomHelper:
     textarea_handler = None
     doc_range = None
     username = ""
+    new_messages = []
 
     def __init__(self):
         try:
@@ -69,14 +70,34 @@ class PlayroomHelper:
         except Exception as e:
             raise e
 
-    def get_new_lines(self):
+    def get_new_messages(self):
+        new_messages = []
+
         new_range = self.textarea_handler.GetTextPattern().DocumentRange
         new_range.MoveEndpointByRange(uiautomation.TextPatternRangeEndpoint.Start, self.doc_range, uiautomation.TextPatternRangeEndpoint.End)
         new_lines = new_range.GetText(-1).split('\r\n')
 
         if new_lines == []:
-            print("empty")
+            return []
         else:
-            for line in new_lines: print("line " + line)
+            for line in new_lines:
+                # Replace carriage returns with spaces, we don't need those in the message
+                line = line.replace('\r', ' ') 
+                if not line == '':
+
+                    # to find private messages, we take our username which we found in the title bar. In order to avoid using language specific strings from playroom we will use the username and use it as a marker for privates.
+                    if self.username + ':' in line:
+                        processed_message = line[(line.find(self.username + ':') + len(self.username + ':')):]
+                        # Find the first word and use it as author name (playroom disallows using spaces in usernames)
+                        author = line.split(' ')[0]
+                        new_messages.append({'type': 'private', 'message': processed_message, 'author': author})
+                    elif ':' in line:
+                        # If there is a colon in the message, it means it's public. There are very few other lines with colons (couldn't find any).
+                        processed_message = line[(line.find(':') + len(':')):]
+                        # Find the first word and use it as author name (playroom disallows using spaces in usernames)
+                        author = line.split(' ')[0]
+                        new_messages.append({'type': 'public', 'message': processed_message, 'author': author})
 
         self.doc_range = new_range
+        
+        self.new_messages = new_messages
