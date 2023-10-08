@@ -2,3 +2,9 @@ Sala
 Desactivar ciertas categorías
 Mirar que todo se integra bien, nombre de usuario, mensajes, chats
 TRADUCCIONES!
+mirar esto de copiar chats		menu.Append(8, _("&Copiar enlace del chat al portapapeles"))
+
+tests
+@oriol_gomez92 dice a oriol_gomez92: hola
+dice: hola
+arreglar el append de los privados en los buffers y en la lista de la UI
