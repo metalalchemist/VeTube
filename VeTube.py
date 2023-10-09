@@ -523,7 +523,7 @@ class MyFrame(wx.Frame):
 		menu.Append(10, _("&Editor de combinaciones de teclado para VeTube"))
 		menu.Append(1, _("&Borrar historial de mensajes"))
 		menu.Append(2, _("E&xportar los mensajes en un archivo de texto"))
-		if not isinstance(self.chat, TikTokLiveClient) or not isinstance(self.chat, PlayroomHelper):
+		if not isinstance(self.chat, TikTokLiveClient) and not isinstance(self.chat, PlayroomHelper):
 			if self.chat.status!="upcoming":
 				menu.Append(3, _("&Añadir este canal a favoritos"))
 				menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
