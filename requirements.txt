@@ -10,3 +10,5 @@ numpy
 onnxruntime
 git+https://github.com/mush42/espeak-phonemizer-windows
 sounddevice
+uiautomation
+psutil
