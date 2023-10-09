@@ -743,7 +743,10 @@ class MyFrame(wx.Frame):
 						if config['sapi']: leer.speak(message['author'] +': ' +message['message'])
 						else: lector.speak(message['author'] +': ' +message['message'])
 				if config['sonidos'] and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
-				self.list_box_1.Append(message['author'] +': ' +message['message'])
+				if (message['type'] == 'private'):
+					self.list_box_1.Append(_('privado de ') + message['author'] +': ' +message['message'])
+				else:
+					self.list_box_1.Append(message['author'] +': ' +message['message'])
 			else:
 				exit()
 				self.hilo2.join()
