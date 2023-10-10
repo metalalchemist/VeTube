@@ -525,7 +525,7 @@ class MyFrame(wx.Frame):
 				menu.Append(3, _("&Añadir este canal a favoritos"))
 				menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
 		menu.Append(4, _("&Ver estadísticas del chat"))
-		if not isinstance(self.chat, PlayroomHelper)
+		if not isinstance(self.chat, PlayroomHelper):
 			menu.Append(8, _("&Copiar enlace del chat al portapapeles"))
 			menu.Append(9, _("&Reproducir video en el navegador"))
 			menu.Bind(wx.EVT_MENU, self.copiarEnlace, id=8)
