@@ -1,3 +1,5 @@
+v2.72
+se agrega soporte para lectura del chat de la sala de juegos, gracias oriol gomez.
 v2.71
 Se agrega en el menú contextual de un mensaje una opción llamada lista  de URLS. Esto permitirá acceder rápidamente a las urls de los que mandaron el mensaje.
 Se agrega nuevo buffer, este se llama mensajes. solo llegan los mensajes de chat, útil para que no se mesclen en la lista general en los en vivos de tiktok.

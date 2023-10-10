@@ -1,6 +1,6 @@
 wxPython
 git+https://github.com/t1nky/playsound
-TikTokLive
+git+https://github.com/isaackogan/TikTokLive
 pyperclip
 chat_downloader
 git+https://github.com/metalalchemist/google-currency

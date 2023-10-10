@@ -107,6 +107,7 @@ class MyFrame(wx.Frame):
 			configurar_piper(carpeta_voces)
 		if config['donations']: update.donation()
 		self.dentro=False
+		self.sala=False
 		self.dst =""
 		self.nueva_combinacion=""
 		self.divisa="Por defecto"
@@ -411,11 +412,7 @@ class MyFrame(wx.Frame):
 			self.dialog_mensaje.Centre()
 			self.dialog_mensaje.SetEscapeId(button_mensaje_detener.GetId())
 
-			self.megusta=0
-			self.seguidores=0
-			self.unidos=0
-			self.compartidas=0
-			self.gustados=[]
+			self.sala=True
 			self.iniciar_captura_sala()
 			self.dialog_mensaje.ShowModal()
 		except Exception as e:
@@ -528,14 +525,15 @@ class MyFrame(wx.Frame):
 				menu.Append(3, _("&Añadir este canal a favoritos"))
 				menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
 		menu.Append(4, _("&Ver estadísticas del chat"))
-		menu.Append(8, _("&Copiar enlace del chat al portapapeles"))
-		menu.Append(9, _("&Reproducir video en el navegador"))
+		if not isinstance(self.chat, PlayroomHelper)
+			menu.Append(8, _("&Copiar enlace del chat al portapapeles"))
+			menu.Append(9, _("&Reproducir video en el navegador"))
+			menu.Bind(wx.EVT_MENU, self.copiarEnlace, id=8)
+			menu.Bind(wx.EVT_MENU, self.reproducirVideo, id=9)
 		menu.Bind(wx.EVT_MENU, self.createEditor, id=10)
 		menu.Bind(wx.EVT_MENU, self.borrarHistorial, id=1)
 		menu.Bind(wx.EVT_MENU, self.guardarLista, id=2)
 		menu.Bind(wx.EVT_MENU, self.estadisticas, id=4)
-		menu.Bind(wx.EVT_MENU, self.copiarEnlace, id=8)
-		menu.Bind(wx.EVT_MENU, self.reproducirVideo, id=9)
 		self.boton_opciones.PopupMenu(menu)
 		menu.Destroy()
 	def copiarEnlace(self, event):
@@ -604,7 +602,7 @@ class MyFrame(wx.Frame):
 		global yt,pos,lista
 		dlg_mensaje = wx.MessageDialog(self.dialog_mensaje, _("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		if dlg_mensaje.ShowModal() == wx.ID_YES:
-			self.dentro=False
+			self.dentro=self.sala=False
 			self.usuarios=self.mensajes=[]
 			if isinstance(self.chat, TikTokLiveClient):
 				self.chat.stop()
@@ -623,7 +621,7 @@ class MyFrame(wx.Frame):
 			self.handler_keyboard.unregister_all_keys()
 	def guardarLista(self, event):
 		if self.list_box_1.GetCount()>0:
-			dlg_mensaje = wx.FileDialog(self.dialog_mensaje, _("Guardar lista de mensajes"), "", self.chat.unique_id if isinstance(self.chat,TikTokLiveClient) else self.chat.title, "*.txt", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+			dlg_mensaje = wx.FileDialog(self.dialog_mensaje, _("Guardar lista de mensajes"), "", self.chat.unique_id if isinstance(self.chat,TikTokLiveClient) else "" if isinstance(self.chat, PlayroomHelper) else self.chat.title, "*.txt", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
 			if dlg_mensaje.ShowModal() == wx.ID_OK:
 				with open(dlg_mensaje.GetPath(), "w") as archivo:
 					for escribe in range(self.list_box_1.GetCount()): archivo.write(self.list_box_1.GetString(escribe)+ "\n")
@@ -740,8 +738,9 @@ class MyFrame(wx.Frame):
 							if config['sapi']: leer.speak(_('privado de ') + message['author'] +': ' +message['message'])
 							else: lector.speak(_('privado de ') + message['author'] +': ' +message['message'])
 					else: # Not fucking private
-						if config['sapi']: leer.speak(message['author'] +': ' +message['message'])
-						else: lector.speak(message['author'] +': ' +message['message'])
+						if config['reader']:
+							if config['sapi']: leer.speak(message['author'] +': ' +message['message'])
+							else: lector.speak(message['author'] +': ' +message['message'])
 				if config['sonidos'] and config['listasonidos'][0]: playsound(ajustes.rutasonidos[0],False)
 				if (message['type'] == 'private'):
 					self.list_box_1.Append(_('privado de ') + message['author'] +': ' +message['message'])
@@ -867,7 +866,9 @@ class MyFrame(wx.Frame):
 			my_dialog.SetSizerAndFit(sizer_mensaje)
 			my_dialog.Centre()
 			my_dialog.ShowModal()
-	def cambiarTraducir(self,event): self.traducir.SetLabel(_("&traducir el mensaje") if self.choice_idiomas.GetString(self.choice_idiomas.GetSelection()) != translator.LANGUAGES[languageHandler.curLang[:2]] else _("&Traducir mensaje al idioma del programa"))
+	def cambiarTraducir(self,event):
+		translator = TranslatorWrapper()
+		self.traducir.SetLabel(_("&traducir el mensaje") if self.choice_idiomas.GetString(self.choice_idiomas.GetSelection()) != translator.LANGUAGES[languageHandler.curLang[:2]] else _("&Traducir mensaje al idioma del programa"))
 	def traducirMensaje(self,event):
 		translator = TranslatorWrapper()
 		for k in translator.LANGUAGES:
