@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,wx.adv,threading,languageHandler,restart,time,funciones,google_currency,fajustes,ajustes
+import json,wx,wx.adv,threading,languageHandler,restart,time,funciones,google_currency,fajustes,ajustes,mostrarchat
 from keyboard_handler.wx_handler import WXKeyboardHandler
 from playsound import playsound
 from TTS.lector import configurar_tts, detect_onnx_models
@@ -844,39 +844,7 @@ class MyFrame(wx.Frame):
 	def retornarMensaje(self):
 		if self.list_box_1.GetCount()>0 and lista[yt][0]=='General': return self.list_box_1.GetString(self.list_box_1.GetSelection())
 		if lista[yt][0]!='General' and len(lista[yt])>0: return lista[yt][pos[yt]]
-	def mostrarMensaje(self,event=None):
-		translator = TranslatorWrapper()
-		idiomas_disponibles =[translator.LANGUAGES[k] for k in translator.LANGUAGES]
-		if self.dentro and self.retornarMensaje():
-			my_dialog = wx.Dialog(self, wx.ID_ANY, _("mensaje"))
-			sizer_mensaje = wx.BoxSizer(wx.HORIZONTAL)
-			label_idioma = wx.StaticText(my_dialog, wx.ID_ANY, _("idioma a traducir:"))
-			self.choice_idiomas = wx.Choice(my_dialog, wx.ID_ANY, choices=idiomas_disponibles)
-			self.choice_idiomas.SetStringSelection(translator.LANGUAGES[languageHandler.curLang[:2]])
-			self.choice_idiomas.Bind(wx.EVT_CHOICE, self.cambiarTraducir)
-			self.label_mensaje_texto = wx.StaticText(my_dialog, wx.ID_ANY, label=_("Mensaje en ") +self.choice_idiomas.GetString(self.choice_idiomas.GetSelection()) + ":")
-			self.text_message = wx.TextCtrl(my_dialog, wx.ID_ANY, self.retornarMensaje(), style=wx.TE_CENTRE)
-			self.text_message.SetFocus()
-			self.traducir = wx.Button(my_dialog, wx.ID_ANY, label=_("&traducir el mensaje al idioma del programa"))
-			self.traducir.Bind(wx.EVT_BUTTON, self.traducirMensaje)
-			cancelar = wx.Button(my_dialog, wx.ID_CANCEL, _("&Cerrar"))
-			sizer_mensaje.Add(self.text_message, 0, 0, 0)
-			sizer_mensaje.Add(self.traducir,0,0,0)
-			sizer_mensaje.Add(cancelar,0,0,0)
-			my_dialog.SetSizerAndFit(sizer_mensaje)
-			my_dialog.Centre()
-			my_dialog.ShowModal()
-	def cambiarTraducir(self,event):
-		translator = TranslatorWrapper()
-		self.traducir.SetLabel(_("&traducir el mensaje") if self.choice_idiomas.GetString(self.choice_idiomas.GetSelection()) != translator.LANGUAGES[languageHandler.curLang[:2]] else _("&Traducir mensaje al idioma del programa"))
-	def traducirMensaje(self,event):
-		translator = TranslatorWrapper()
-		for k in translator.LANGUAGES:
-			if translator.LANGUAGES[k] == self.choice_idiomas.GetStringSelection():
-				self.text_message.SetValue(translator.translate(self.text_message.GetValue(),target=k))
-				break
-		self.label_mensaje_texto.SetLabel(_("Mensaje en ") +self.choice_idiomas.GetString(self.choice_idiomas.GetSelection()))
-		self.text_message.SetFocus()
+	def mostrarMensaje(self,event=None): mostrarchat.showComment(self,self.retornarMensaje)
 	def reproducirMsg(self):
 		if lista[yt][0]=='General':
 			if self.list_box_1.GetSelection()==0 or self.list_box_1.GetSelection()==self.list_box_1.GetCount()-1: playsound("sounds/orilla.mp3",False)
