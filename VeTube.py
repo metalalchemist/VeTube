@@ -493,7 +493,7 @@ class MyFrame(wx.Frame):
 		menu.Append(5, _("&Traducir"))
 		menu.Bind(wx.EVT_MENU, self.traducirMenu, id=5)
 		menu.Append(0, _("&Mostrar el mensaje en un cuadro de texto."))
-		menu.Bind(wx.EVT_MENU, self.mostrarMensaje, id=0)
+		menu.Bind(wx.EVT_MENU, lambda event: mostrarchat.showComment(self,self.list_box_1.GetString(self.list_box_1.GetSelection())).ShowModal(), id=0)
 		menu.Append(6, _("&Copiar mensaje al portapapeles"))
 		menu.Bind(wx.EVT_MENU, self.copiarMensaje,id=6)
 		menu.Append(11, _("&Listado de Urls."))
@@ -844,7 +844,7 @@ class MyFrame(wx.Frame):
 	def retornarMensaje(self):
 		if self.list_box_1.GetCount()>0 and lista[yt][0]=='General': return self.list_box_1.GetString(self.list_box_1.GetSelection())
 		if lista[yt][0]!='General' and len(lista[yt])>0: return lista[yt][pos[yt]]
-	def mostrarMensaje(self,event=None): mostrarchat.showComment(self,self.retornarMensaje)
+	def mostrarMensaje(self): mostrarchat.showComment(self,self.retornarMensaje()).ShowModal()
 	def reproducirMsg(self):
 		if lista[yt][0]=='General':
 			if self.list_box_1.GetSelection()==0 or self.list_box_1.GetSelection()==self.list_box_1.GetCount()-1: playsound("sounds/orilla.mp3",False)
