@@ -1,1 +1,8 @@
-{"current_version": "2.8", "description": "soporte a la sala de juegos", "downloads": {"Windows32": "https://github.com/metalalchemist/VeTube/releases/download/v2.8/VeTube-x86.zip", "Windows64": "https://github.com/metalalchemist/VeTube/releases/download/v2.8/VeTube-x64.zip"} }
+{
+    "current_version": "2.8",
+    "description": "soporte a la sala de juegos",
+    "downloads": {
+        "Windows32": "https://github.com/metalalchemist/VeTube/releases/download/v2.8/VeTube-x86.zip",
+        "Windows64": "https://github.com/metalalchemist/VeTube/releases/download/v2.8/VeTube-x64.zip"
+    }
+}
