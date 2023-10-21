@@ -1,6 +1,11 @@
 # vetube
-Lee y gestiona de manera accesible el chat de youtube y twitch en tus propios directos o en los de tus creadores favoritos.
+Lee y gestiona de manera accesible el chat de tus propios directos o en los de tus creadores favoritos.
 [demostración del producto en funcionamiento](https://youtu.be/4XawJoBymPs)
+## sitios soportados:
+- youtube (extrenos y directos en curso y pasados)
+- twich.tv(directos en curso y pasados)
+- tiktok(directos en curso)
+- la sala dejuegos(chat de las diversas mesas)
 ## Características
 - Modo automático: Lee los mensajes de chat en tiempo real utilizando la voz sapy5
 - Interfaz invisible: Gestiona los chats desde cualquier ventana utilizando simples comandos de teclado. Es necesario tener un lector de pantalla activo.
@@ -43,6 +48,7 @@ Lee y gestiona de manera accesible el chat de youtube y twitch en tus propios di
 | desactiva los sonidos del programa      | alt shift p           |
 | buscar una palabra entre  los mensajes      | alt shift s           |
 | muestra el mensaje actual en un cuadro de texto      | alt shift v           |
+| invocar el editor de teclado de vetube      | alt shift k           |
 
 ### En el historial  del chat:
 | acción                    | combinación de teclas |
@@ -79,6 +85,3 @@ cesar.verastegui17@gmail.com
 Con tu apoyo contribuyes a que este programa siga en crecimiento.
 
 [¿Te unes a nuestra causa?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
-
-[descarga el programa para 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v2.5/vetube64v2.5.zip)
-[descarga el programa para 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v2.5/vetube32v2.5.zip)

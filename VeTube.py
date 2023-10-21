@@ -154,7 +154,7 @@ class MyFrame(wx.Frame):
 		sizer_2.Add(self.button_2, 0, 0, 0)
 
 		self.button_playroom = wx.Button(self.tap_1, wx.ID_ANY, _("capturar chat de la &Sala de Juegos"))
-		self.button_playroom.Bind(wx.EVT_BUTTON, self.capturar_sala)
+		self.button_playroom.Bind(wx.EVT_BUTTON, lambda event: self.acceder(url="sala"))
 		sizer_2.Add(self.button_playroom, 0, 0, 0)
 
 		self.tap_1.SetSizer(sizer_2)
@@ -378,47 +378,6 @@ class MyFrame(wx.Frame):
 		self.cf=ajustes.configuracionDialog(self)
 		if self.cf.ShowModal()==wx.ID_OK: self.guardar()
 	def infoApp(self, event): wx.MessageBox(_("Creadores del proyecto:")+"\nCésar Verástegui & Johan G.\n"+_("Descripción:\n Lee en voz alta los mensajes de los directos en youtube y twitch, ajusta tus preferencias como quieras y disfruta más tus canales favoritos."), _("Información"), wx.ICON_INFORMATION)
-
-	def capturar_sala(self, event):
-		try:
-			self.chat = PlayroomHelper()
-
-			self.dentro=True
-			self.usuarios = []
-			self.mensajes = []
-			self.dialog_mensaje = wx.Dialog(self, wx.ID_ANY, _("Chat en vivo"))
-			sizer_mensaje_1 = wx.BoxSizer(wx.VERTICAL)
-			self.label_dialog = wx.StaticText(self.dialog_mensaje, wx.ID_ANY, _("Lectura del chat en vivo..."))
-			sizer_mensaje_1.Add(self.label_dialog, 0, 0, 0)
-			sizer_mensaje_2 = wx.StdDialogButtonSizer()
-			sizer_mensaje_1.Add(sizer_mensaje_2, 0, wx.ALIGN_RIGHT | wx.ALL, 4)
-			self.label_mensaje = wx.StaticText(self.dialog_mensaje, wx.ID_ANY, _("historial  de mensajes: "))
-			sizer_mensaje_2.Add(self.label_mensaje, 20, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 0)
-			self.list_box_1 = wx.ListBox(self.dialog_mensaje, wx.ID_ANY, choices=[])
-			self.list_box_1.SetFocus()
-			self.list_box_1.Bind(wx.EVT_KEY_UP, self.historialItemsTeclas)
-			# poner un menú contextual
-			self.list_box_1.Bind(wx.EVT_CONTEXT_MENU, self.historialItemsMenu)
-			sizer_mensaje_1.Add(self.list_box_1, 1, wx.EXPAND | wx.ALL, 4)
-			self.boton_opciones = wx.Button(self.dialog_mensaje, wx.ID_ANY, _("&Opciones"))
-			self.boton_opciones.Bind(wx.EVT_BUTTON, self.opcionesChat)
-			self.boton_opciones.SetAccessible(Accesible(self.boton_opciones))
-			sizer_mensaje_1.Add(self.boton_opciones, 0, wx.ALIGN_RIGHT | wx.ALL, 4)
-			button_mensaje_detener = wx.Button(self.dialog_mensaje, wx.ID_ANY, _("&Detener chat"))
-			button_mensaje_detener.Bind(wx.EVT_BUTTON,self.detenerLectura)
-			sizer_mensaje_2.Add(button_mensaje_detener, 10, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 0)
-			sizer_mensaje_2.Realize()
-			self.dialog_mensaje.SetSizerAndFit(sizer_mensaje_1)
-			self.dialog_mensaje.Centre()
-			self.dialog_mensaje.SetEscapeId(button_mensaje_detener.GetId())
-
-			self.sala=True
-			self.iniciar_captura_sala()
-			self.dialog_mensaje.ShowModal()
-		except Exception as e:
-			wx.MessageBox(_("No ha sido posible engancharse al proceso de la sala de juegos. Debe estar ejecutándose antes de empezar a capturar chats. Si tienes dudas, por favor ponte en contacto con nosotros. Código de error: ") +str(e), "error.", wx.ICON_ERROR)
-			self.button_playroom.SetFocus()
-
 	def acceder(self, event=None,url=""):
 		if not url: url=self.text_ctrl_1.GetValue()
 		if url:
@@ -436,6 +395,7 @@ class MyFrame(wx.Frame):
 					if start_index != -1:
 						if end_index != -1: self.chat=TikTokLiveClient(unique_id=url[start_index:end_index])
 						else: self.chat=TikTokLiveClient(unique_id=url[start_index:])
+				elif url=="sala": self.chat = PlayroomHelper()
 				else:
 					wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), "error.", wx.ICON_ERROR)
 					return
@@ -473,18 +433,26 @@ class MyFrame(wx.Frame):
 					if config['sonidos'] and config['listasonidos'][6]: playsound(ajustes.rutasonidos[6],False)
 				else:
 					leer.speak(_("cargando..."))
-					self.megusta=0
-					self.seguidores=0
-					self.unidos=0
-					self.compartidas=0
+					self.megusta=self.seguidores=self.unidos=self.compartidas=0
 					self.gustados=[]
-				self.hilo2 = threading.Thread(target=self.iniciarChat)
-				self.hilo2.daemon = True
-				self.hilo2.start()
+				if url!="sala":
+					self.hilo2 = threading.Thread(target=self.iniciarChat)
+					self.hilo2.daemon = True
+					self.hilo2.start()
+				else:
+					self.handler_keyboard.register_keys(eval(mis_teclas))
+					self.hilo2 = Timer(0.5, self.recibir_sala)
+					self.hilo2.daemon = True
+					self.hilo2.start()
 				self.dialog_mensaje.ShowModal()
 			except Exception as e:
-				wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."+str(e)), "error.", wx.ICON_ERROR)
-				self.text_ctrl_1.SetFocus()
+				if url!="sala":
+					wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."+str(e)), "error.", wx.ICON_ERROR)
+					self.text_ctrl_1.SetFocus()
+				else:
+					wx.MessageBox(_("No ha sido posible engancharse al proceso de la sala de juegos. Debe estar ejecutándose antes de empezar a capturar chats. Si tienes dudas, por favor ponte en contacto con nosotros. Código de error: ") +str(e), "error.", wx.ICON_ERROR)
+					self.button_playroom.SetFocus()
+				self.text_ctrl_1.SetValue("")
 		else:
 			wx.MessageBox(_("No se puede  acceder porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
 			self.text_ctrl_1.SetFocus()
@@ -602,7 +570,7 @@ class MyFrame(wx.Frame):
 		global yt,pos,lista
 		dlg_mensaje = wx.MessageDialog(self.dialog_mensaje, _("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		if dlg_mensaje.ShowModal() == wx.ID_YES:
-			self.dentro=self.sala=False
+			self.dentro=False
 			self.usuarios=self.mensajes=[]
 			if isinstance(self.chat, TikTokLiveClient):
 				self.chat.stop()
@@ -693,13 +661,6 @@ class MyFrame(wx.Frame):
 			leer.silence()
 			leer.speak(self.list_box_1.GetString(self.list_box_1.GetSelection()))
 
-	def iniciar_captura_sala(self):
-		self.label_dialog.SetLabel(_("Captura Sala de Juegos"))
-		self.handler_keyboard.register_keys(eval(mis_teclas))
-		self.hilo2 = Timer(0.5, self.recibir_sala)
-		self.hilo2.daemon = True
-		self.hilo2.start()
-
 	def recibir_sala(self):
 		global lista
 		translator = TranslatorWrapper()
@@ -709,17 +670,7 @@ class MyFrame(wx.Frame):
 		for message in self.chat.new_messages:
 			if message['message']==None: message['message']=''
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
-			if not message['author'] in self.usuarios:
-				self.usuarios.append(message['author'])
-				self.mensajes.append(1)
-			else:
-				c=0
-				for a in self.usuarios:
-					if a==message['author']:
-						self.mensajes[c]+=1
-						break
-					c+=1
-
+			self.agregarUsuario(message['author'])
 			if self.dentro:
 				if config['categorias'][0]:
 					for contador in range(len(lista)):
@@ -749,8 +700,6 @@ class MyFrame(wx.Frame):
 			else:
 				exit()
 				self.hilo2.join()
-
-
 
 	def iniciarChat(self):
 		if not isinstance(self.chat, TikTokLiveClient): self.label_dialog.SetLabel(self.chat.title)
@@ -906,16 +855,7 @@ class MyFrame(wx.Frame):
 		for message in self.chat:
 			if message['message']==None: message['message']=''
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
-			if not message['author']['name'] in self.usuarios:
-				self.usuarios.append(message['author']['name'])
-				self.mensajes.append(1)
-			else:
-				c=0
-				for a in self.usuarios:
-					if a==message['author']['name']:
-						self.mensajes[c]+=1
-						break
-					c+=1
+			self.agregarUsuario(message['author']['name'])
 			if 'header_secondary_text' in message and config['eventos'][1]:
 				for t in message['author']['badges']:
 					mensajito=message['author']['name']+ _(' se a conectado al chat. ')+t['title']
@@ -1025,16 +965,7 @@ class MyFrame(wx.Frame):
 		leer.speak(_("Ingresando al chat"))
 		if config['sonidos'] and config['listasonidos'][6]: playsound(ajustes.rutasonidos[6],False)
 	async def on_comment(self,event: CommentEvent):
-		if not event.user.nickname in self.usuarios:
-			self.usuarios.append(event.user.nickname)
-			self.mensajes.append(1)
-		else:
-			c=0
-			for a in self.usuarios:
-				if a==event.user.nickname:
-					self.mensajes[c]+=1
-					break
-				c+=1
+		self.agregarUsuario(event.user.nickname)
 		if config['categorias'][0]:
 			for contador in range(len(lista)):
 				if lista[contador][0]=='Mensajes':
@@ -1149,16 +1080,7 @@ class MyFrame(wx.Frame):
 		translator = TranslatorWrapper()
 		for message in self.chat:
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
-			if not message['author']['name'] in self.usuarios:
-				self.usuarios.append(message['author']['name'])
-				self.mensajes.append(1)
-			else:
-				c=0
-				for a in self.usuarios:
-					if a==message['author']['name']:
-						self.mensajes[c]+=1
-						break
-					c+=1
+			self.agregarUsuario(message['author']['name'])
 			if message['message_type']=='resubscription' and config['eventos'][1]:
 				if config['categorias'][1]:
 					for contador in range(len(lista)):
@@ -1528,6 +1450,17 @@ class MyFrame(wx.Frame):
 			dialog_urls.ShowModal()
 			dialog_urls.Destroy()
 		else: wx.MessageBox(_("No hay URLS en este  mensaje"), "Error", wx.ICON_ERROR)
+	def agregarUsuario(self, param):
+		if not param in self.usuarios:
+			self.usuarios.append(param)
+			self.mensajes.append(1)
+		else:
+			c=0
+			for a in self.usuarios:
+				if a==param:
+					self.mensajes[c]+=1
+					break
+				c+=1
 class MyApp(wx.App):
 	def OnInit(self):
 		self.frame = MyFrame(None, wx.ID_ANY, "")
