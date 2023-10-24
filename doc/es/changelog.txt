@@ -1,4 +1,6 @@
-v2.72
+v2.81
+se agrega el intentar traducir las actualizaciones con el traductor de google para personas que elijan diferente al español.
+v2.8
 se agrega soporte para lectura del chat de la sala de juegos, gracias oriol gomez.
 v2.71
 Se agrega en el menú contextual de un mensaje una opción llamada lista  de URLS. Esto permitirá acceder rápidamente a las urls de los que mandaron el mensaje.

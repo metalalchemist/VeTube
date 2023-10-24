@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
+import wx,json
 from builtins import str
-import wx
 from . import utils
 
 progress_dialog = None
 
-def available_update_dialog(version, description, date):
+def available_update_dialog(version, description):
     dialog = wx.MessageDialog(None, _(u"Hay una nueva versión de VeTube. Te gustaría descargarla ahora?\n\n VeTube versión: %s\n\nCambios:\n%s") % (version, description), _(u"Nueva versión de VeTube"), style=wx.YES|wx.NO|wx.ICON_WARNING)
     if dialog.ShowModal() == wx.ID_YES:
         return True

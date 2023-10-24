@@ -15,7 +15,8 @@ configuraciones ={
 	'eventos': [True,True,True,True,True,True,True,True,True],
 	'reader': True,
 	'donations': True,
-	'updates': True
+	'updates': True,
+	'traducir': False
 }
 actualizar_configuracion = False
 
