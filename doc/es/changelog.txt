@@ -1,4 +1,8 @@
 v2.81
+corrección de errores: estadísticas y exportación se guardan correctamente. no lo hacían por el nuevo agregado de la sala de juegos.
+corrección de errores: el chat debería finalizar correctamente en todas las seciones.
+se agrega pestaña eventos. esta pestaña sirve para ignorar cierto tipo de eventos en el programa
+se agregan eventos leídos. esa pestaña nos permite ignorar eventos que sean verbalisados con el lector de pantalla. mas si serán procesados por el programa.
 se agrega el intentar traducir las actualizaciones con el traductor de google para personas que elijan diferente al español.
 v2.8
 se agrega soporte para lectura del chat de la sala de juegos, gracias oriol gomez.
