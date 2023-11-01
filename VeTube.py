@@ -710,74 +710,40 @@ class MyFrame(wx.Frame):
 
 	def elementoAnterior(self):
 		global pos
-		if self.dentro:
-			if lista[yt][0]=='General':
-				if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
-				else:
-					if self.list_box_1.GetSelection() == wx.NOT_FOUND: self.list_box_1.SetSelection(0)
-					if self.list_box_1.GetSelection() >0: self.list_box_1.SetSelection(self.list_box_1.GetSelection()-1)
-					lector.speak(self.list_box_1.GetString(self.list_box_1.GetSelection()))
-			else:
-				if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
-				else:
-					if pos[yt]>1: pos[yt]-=1
-					lector.speak(lista[yt][pos[yt]])
+		if lista[yt][0]=='General':
+			if self.list_box_1.GetSelection() == wx.NOT_FOUND and self.list_box_1.GetCount()>0: self.list_box_1.SetSelection(0)
+			if self.list_box_1.GetSelection() >0: self.list_box_1.SetSelection(self.list_box_1.GetSelection()-1)
+		else:
+			if pos[yt]>1: pos[yt]-=1
+		lector.speak(self.retornarMensaje)
 		if config['sonidos']: self.reproducirMsg()
 	def elementoSiguiente(self):
 		global pos
-		if self.dentro:
-			if lista[yt][0]=='General':
-				if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
-				else:
-					if self.list_box_1.GetSelection() == wx.NOT_FOUND: self.list_box_1.SetSelection(0)
-					if self.list_box_1.GetSelection() <self.list_box_1.GetCount()-1: self.list_box_1.SetSelection(self.list_box_1.GetSelection()+1)
-					lector.speak(self.list_box_1.GetString(self.list_box_1.GetSelection()))
-			else:
-				if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
-				else:
-					if pos[yt]<len(lista[yt])-1: pos[yt]+=1
-					lector.speak(lista[yt][pos[yt]])
+		if lista[yt][0]=='General':
+			if self.list_box_1.GetSelection() == wx.NOT_FOUND and self.list_box_1.GetCount()>0: self.list_box_1.SetSelection(0)
+			if self.list_box_1.GetSelection() <self.list_box_1.GetCount()-1: self.list_box_1.SetSelection(self.list_box_1.GetSelection()+1)
+		else:
+			if pos[yt]<len(lista[yt])-1: pos[yt]+=1
+		lector.speak(self.retornarMensaje)
 		if config['sonidos']: self.reproducirMsg()
 	def copiar(self):
-		if self.dentro:
-			if lista[yt][0]=='General':
-				if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
-				else:
-					if self.list_box_1.GetSelection() == wx.NOT_FOUND: self.list_box_1.SetSelection(0)
-					copy(self.list_box_1.GetString(self.list_box_1.GetSelection()))
-					lector.speak(_("¡Copiado!"))
-			else:
-				if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
-				else:
-					copy(lista[yt][pos[yt]])
-					lector.speak(_("¡Copiado!"))
+		if lista[yt][0]=='General':
+			if self.list_box_1.GetSelection() == wx.NOT_FOUND and self.list_box_1.GetCount()>0: self.list_box_1.SetSelection(0)
+		copy(self.retornarMensaje)
+		lector.speak(_("¡Copiado!"))
 	def elementoInicial(self):
 		global pos
-		if self.dentro:
-			if lista[yt][0]=='General':
-				if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
-				else:
-					self.list_box_1.SetSelection(0)
-					lector.speak(self.list_box_1.GetString(0))
-			else:
-				if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
-				else:
-					pos[yt]=1
-					lector.speak(lista[yt][pos[yt]])
+		if lista[yt][0]=='General':
+			if self.list_box_1.GetCount()>0: self.list_box_1.SetSelection(0)
+		else: pos[yt]=1
+		lector.speak(self.retornarMensaje)
 		if config['sonidos']: self.reproducirMsg()
 	def elementoFinal(self):
 		global pos
-		if self.dentro:
-			if lista[yt][0]=='General':
-				if self.list_box_1.GetCount() <= 0: lector.speak(_("no hay elementos en el historial"))
-				else:
-					self.list_box_1.SetSelection(self.list_box_1.GetCount()-1)
-					lector.speak(self.list_box_1.GetString(self.list_box_1.GetCount()-1))
-			else:
-				if len(lista[yt]) <= 1: lector.speak(_("no hay elementos en el historial"))
-				else:
-					pos[yt]=len(lista[yt])-1
-					lector.speak(lista[yt][pos[yt]])
+		if lista[yt][0]=='General':
+			if self.list_box_1.GetCount()>0: self.list_box_1.SetSelection(self.list_box_1.GetCount()-1)
+		else: pos[yt]=len(lista[yt])-1
+		lector.speak(self.retornarMensaje)
 		if config['sonidos']: self.reproducirMsg()
 	def callar(self):
 		if config['reader']:
@@ -792,8 +758,12 @@ class MyFrame(wx.Frame):
 		else: wx.GetApp().ExitMainLoop()
 	@property
 	def retornarMensaje(self):
-		if self.list_box_1.GetCount()>0 and lista[yt][0]=='General': return self.list_box_1.GetString(self.list_box_1.GetSelection())
-		if lista[yt][0]!='General' and len(lista[yt])>0: return lista[yt][pos[yt]]
+		if lista[yt][0]=='General':
+			if self.list_box_1.GetCount() <= 0: return _("no hay elementos en el historial")
+			else: return self.list_box_1.GetString(self.list_box_1.GetSelection())
+		else:
+			if len(lista[yt]) <= 1: return _("no hay elementos en el historial")
+			else: return lista[yt][pos[yt]]
 	def mostrarMensaje(self): mostrarchat.showComment(self,self.retornarMensaje).ShowModal()
 	def reproducirMsg(self):
 		if lista[yt][0]=='General':
