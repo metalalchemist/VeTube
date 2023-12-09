@@ -107,7 +107,6 @@ class MyFrame(wx.Frame):
 			configurar_piper(carpeta_voces)
 		if config['donations']: update.donation()
 		self.dentro=False
-		self.sala=False
 		self.dst =""
 		self.nueva_combinacion=""
 		self.divisa="Por defecto"
@@ -1008,7 +1007,7 @@ class MyFrame(wx.Frame):
 		except Exception as e: pass
 	async def on_join(self,event: JoinEvent):
 		self.unidos+=1
-		if config['read'] or config['unread'][1]:
+		if config['reader'] and config['unread'][1]:
 			if lista[yt][0]=='General':
 				if config['sapi']: leer.speak(event.user.nickname+_(" se ha unido a tu en vivo."))
 				else: lector.speak(event.user.nickname+_(" se ha unido a tu en vivo."))

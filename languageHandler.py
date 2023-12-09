@@ -1,6 +1,4 @@
 from __future__ import unicode_literals
-from future import standard_library
-standard_library.install_aliases()
 from builtins import zip
 from builtins import str
 import builtins
