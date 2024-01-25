@@ -20,3 +20,12 @@ def extract_urls(text):
 		parts = urlsplit(word)
 		if parts.scheme and parts.netloc: urls.append(parts.geturl())
 	return urls
+def extractUser(url):
+	start_index = url.find('@')
+	end_index = url.find('/', start_index)
+	if start_index == -1: 
+		start_index = url.find('tv/')
+		if start_index != -1: 
+			start_index+=3
+			end_index = url.find('/', start_index)
+	return url[start_index:end_index] if end_index != -1 else url[start_index:]

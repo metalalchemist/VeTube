@@ -1,23 +1,23 @@
 # Translations template for PROJECT.
-# Copyright (C) 2023 ORGANIZATION
+# Copyright (C) 2024 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-10-09 05:31+0200\n"
+"POT-Creation-Date: 2024-01-24 16:17-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.14.0\n"
 
-#: VeTube.py:30
+#: vetube/VeTube.py:30
 msgid ""
 "Necesitas al menos una voz para poder usar el sintetizador Piper. "
 "¿Quieres abrir nuestra carpeta de Drive para descargar algunos modelos? "
@@ -25,1173 +25,1205 @@ msgid ""
 "instalar una una vez la descargues."
 msgstr ""
 
-#: VeTube.py:30 ajustes.py:40 ajustes.py:205
+#: vetube/VeTube.py:30 vetube/ajustes.py:40 vetube/ajustes.py:219
 msgid "No hay voces instaladas"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Silencia la voz sapy"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Mensaje anterior."
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Mensaje siguiente"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Buffer anterior"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Siguiente Buffer"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Ir al comienzo del buffer"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Ir al final del buffer"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Destaca un mensaje en el buffer de  favoritos"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Copia el mensaje actual"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Activa o desactiva la lectura automática"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Busca una palabra en los mensajes actuales"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Muestra el mensaje actual en un cuadro de texto"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "borra el buffer seleccionado"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "activa o desactiva los sonidos del programa"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Invocar el editor de combinaciones de teclado"
 msgstr ""
 
-#: VeTube.py:86
+#: vetube/VeTube.py:86
 msgid "Archivar un mensaje"
 msgstr ""
 
-#: VeTube.py:88 ajustes.py:51
+#: vetube/VeTube.py:88 vetube/ajustes.py:51
 msgid "General"
 msgstr ""
 
-#: VeTube.py:89 ajustes.py:41
+#: vetube/VeTube.py:89 vetube/ajustes.py:41
 msgid "Mensajes"
 msgstr ""
 
-#: VeTube.py:90 ajustes.py:41
+#: vetube/VeTube.py:90 vetube/ajustes.py:41
 msgid "Miembros"
 msgstr ""
 
-#: VeTube.py:91 ajustes.py:41
+#: vetube/VeTube.py:91 vetube/ajustes.py:41
 msgid "Donativos"
 msgstr ""
 
-#: VeTube.py:92 ajustes.py:41
+#: vetube/VeTube.py:92 vetube/ajustes.py:41
 msgid "Moderadores"
 msgstr ""
 
-#: VeTube.py:93 ajustes.py:41
+#: vetube/VeTube.py:93 vetube/ajustes.py:41
 msgid "Usuarios Verificados"
 msgstr ""
 
-#: VeTube.py:94 VeTube.py:136 VeTube.py:1410 ajustes.py:41
+#: vetube/VeTube.py:94 vetube/VeTube.py:136 vetube/VeTube.py:1261
+#: vetube/ajustes.py:41
 msgid "Favoritos"
 msgstr ""
 
-#: VeTube.py:103
+#: vetube/VeTube.py:103
 msgid ""
 "VeTube ya se encuentra en ejecución. Cierra la otra instancia antes de "
 "iniciar esta."
 msgstr ""
 
-#: VeTube.py:125
+#: vetube/VeTube.py:125
 msgid "&Más opciones"
 msgstr ""
 
-#: VeTube.py:133
+#: vetube/VeTube.py:133
 msgid "Inicio"
 msgstr ""
 
-#: VeTube.py:138
+#: vetube/VeTube.py:138
 msgid "Escriba o pegue una URL de youtube"
 msgstr ""
 
-#: VeTube.py:145
+#: vetube/VeTube.py:145
 msgid "&Acceder"
 msgstr ""
 
-#: VeTube.py:150
+#: vetube/VeTube.py:150
 msgid "&Borrar"
 msgstr ""
 
-#: VeTube.py:155
+#: vetube/VeTube.py:155
 msgid "capturar chat de la &Sala de Juegos"
 msgstr ""
 
-#: VeTube.py:160
+#: vetube/VeTube.py:160
 msgid "&Tus favoritos: "
 msgstr ""
 
-#: VeTube.py:167
+#: vetube/VeTube.py:167
 #, python-format
 msgid "Favoritos (%s)"
 msgstr ""
 
-#: VeTube.py:169 VeTube.py:887 VeTube.py:913 VeTube.py:930
+#: vetube/VeTube.py:169 vetube/VeTube.py:772 vetube/VeTube.py:790
+#: vetube/VeTube.py:807
 msgid "Tus favoritos aparecerán aquí"
 msgstr ""
 
-#: VeTube.py:170 VeTube.py:1512
+#: vetube/VeTube.py:170 vetube/VeTube.py:1363
 msgid "&Borrar favorito"
 msgstr ""
 
-#: VeTube.py:174 VeTube.py:191
+#: vetube/VeTube.py:174 vetube/VeTube.py:191
 msgid "&Seleccionar todos los elementos"
 msgstr ""
 
-#: VeTube.py:179
+#: vetube/VeTube.py:179
 msgid "mensajes archivados"
 msgstr ""
 
-#: VeTube.py:181
+#: vetube/VeTube.py:181
 msgid "&Mensajes archivados: "
 msgstr ""
 
-#: VeTube.py:187 VeTube.py:1503
+#: vetube/VeTube.py:187 vetube/VeTube.py:1354
 msgid "&Borrar mensaje"
 msgstr ""
 
-#: VeTube.py:206 VeTube.py:402 VeTube.py:463
+#: vetube/VeTube.py:206 vetube/VeTube.py:414
 msgid "&Opciones"
 msgstr ""
 
-#: VeTube.py:207 ajustes.py:44
+#: vetube/VeTube.py:207 vetube/ajustes.py:44
 msgid "Configuración"
 msgstr ""
 
-#: VeTube.py:209
+#: vetube/VeTube.py:209
 msgid "Restablecer los ajustes"
 msgstr ""
 
-#: VeTube.py:211
+#: vetube/VeTube.py:211
 msgid "&Ayuda"
 msgstr ""
 
-#: VeTube.py:212
+#: vetube/VeTube.py:212
 msgid "¿Cómo usar vetube? (documentación en línea)"
 msgstr ""
 
-#: VeTube.py:214
+#: vetube/VeTube.py:214
 msgid "Únete a nuestra &causa"
 msgstr ""
 
-#: VeTube.py:216
+#: vetube/VeTube.py:216
 msgid "&Visita nuestra página de github"
 msgstr ""
 
-#: VeTube.py:218
+#: vetube/VeTube.py:218
 msgid "&buscar actualizaciones"
 msgstr ""
 
-#: VeTube.py:220
+#: vetube/VeTube.py:220
 msgid "Acerca de"
 msgstr ""
 
-#: VeTube.py:222
+#: vetube/VeTube.py:222
 msgid "&Salir...\tAlt+F4"
 msgstr ""
 
-#: VeTube.py:237
+#: vetube/VeTube.py:237
 msgid "Editor de combinaciones de teclado para Vetube"
 msgstr ""
 
-#: VeTube.py:239
+#: vetube/VeTube.py:239
 msgid "&Selecciona la combinación de teclado a editar"
 msgstr ""
 
-#: VeTube.py:241
+#: vetube/VeTube.py:241
 msgid "acción: "
 msgstr ""
 
-#: VeTube.py:242
+#: vetube/VeTube.py:242
 msgid "combinación de teclas: "
 msgstr ""
 
-#: VeTube.py:251
+#: vetube/VeTube.py:251
 msgid "&Editar"
 msgstr ""
 
-#: VeTube.py:254
+#: vetube/VeTube.py:254
 msgid "&restaurar combinaciones por defecto"
 msgstr ""
 
-#: VeTube.py:256 VeTube.py:301 VeTube.py:581 VeTube.py:863 VeTube.py:1436
-#: VeTube.py:1555
+#: vetube/VeTube.py:256 vetube/VeTube.py:301 vetube/VeTube.py:543
+#: vetube/VeTube.py:1287 vetube/VeTube.py:1406
 msgid "&Cerrar"
 msgstr ""
 
-#: VeTube.py:276
+#: vetube/VeTube.py:276
 #, python-format
 msgid "Editando la combinación de teclas para %s"
 msgstr ""
 
-#: VeTube.py:282
+#: vetube/VeTube.py:282
 msgid "Selecciona las teclas que quieres usar"
 msgstr ""
 
-#: VeTube.py:285
+#: vetube/VeTube.py:285
 msgid "&Control"
 msgstr ""
 
-#: VeTube.py:287
+#: vetube/VeTube.py:287
 msgid "&Alt"
 msgstr ""
 
-#: VeTube.py:289
+#: vetube/VeTube.py:289
 msgid "&Shift"
 msgstr ""
 
-#: VeTube.py:291
+#: vetube/VeTube.py:291
 msgid "&Windows"
 msgstr ""
 
-#: VeTube.py:294
+#: vetube/VeTube.py:294
 msgid "&Selecciona una tecla para la combinación"
 msgstr ""
 
-#: VeTube.py:298
+#: vetube/VeTube.py:298
 msgid "&Aplicar nueva combinación de teclado"
 msgstr ""
 
-#: VeTube.py:333
+#: vetube/VeTube.py:333
 msgid "Debe escoger al menos una tecla de las casillas de berificación"
 msgstr ""
 
-#: VeTube.py:338
+#: vetube/VeTube.py:338
 #, python-format
 msgid "esta combinación ya está siendo usada en la función %s"
 msgstr ""
 
-#: VeTube.py:347
+#: vetube/VeTube.py:347
 msgid "esa combinación está siendo usada por el sistema"
 msgstr ""
 
-#: VeTube.py:362
+#: vetube/VeTube.py:362
 msgid ""
 "Está apunto de restaurar las combinaciones a sus valores por defecto, "
 "¿desea proceder? Esta acción no se puede desacer."
 msgstr ""
 
-#: VeTube.py:362 VeTube.py:605 VeTube.py:674 VeTube.py:681 update/update.py:124
+#: vetube/VeTube.py:362 vetube/VeTube.py:564 vetube/VeTube.py:636
+#: vetube/VeTube.py:643 vetube/update/update.py:130
 msgid "Atención:"
 msgstr ""
 
-#: VeTube.py:379
+#: vetube/VeTube.py:379
 msgid "Creadores del proyecto:"
 msgstr ""
 
-#: VeTube.py:379
+#: vetube/VeTube.py:379
 msgid ""
 "Descripción:\n"
 " Lee en voz alta los mensajes de los directos en youtube y twitch, ajusta"
 " tus preferencias como quieras y disfruta más tus canales favoritos."
 msgstr ""
 
-#: VeTube.py:379 VeTube.py:911
+#: vetube/VeTube.py:379 vetube/VeTube.py:788
 msgid "Información"
 msgstr ""
 
-#: VeTube.py:388 VeTube.py:449
+#: vetube/VeTube.py:394 vetube/VeTube.py:444
+msgid ""
+"¡Parece que el enlace al cual está intentando acceder no es un enlace "
+"válido."
+msgstr ""
+
+#: vetube/VeTube.py:400
 msgid "Chat en vivo"
 msgstr ""
 
-#: VeTube.py:390 VeTube.py:451
+#: vetube/VeTube.py:402
 msgid "Lectura del chat en vivo..."
 msgstr ""
 
-#: VeTube.py:394 VeTube.py:455
+#: vetube/VeTube.py:406
 msgid "historial  de mensajes: "
 msgstr ""
 
-#: VeTube.py:406 VeTube.py:467
+#: vetube/VeTube.py:418
 msgid "&Detener chat"
 msgstr ""
 
-#: VeTube.py:422
+#: vetube/VeTube.py:426
+msgid "Ingresando al chat."
+msgstr ""
+
+#: vetube/VeTube.py:429
+msgid "cargando..."
+msgstr ""
+
+#: vetube/VeTube.py:447
 msgid ""
 "No ha sido posible engancharse al proceso de la sala de juegos. Debe "
 "estar ejecutándose antes de empezar a capturar chats. Si tienes dudas, "
 "por favor ponte en contacto con nosotros. Código de error: "
 msgstr ""
 
-#: VeTube.py:443 VeTube.py:489
-msgid ""
-"¡Parece que el enlace al cual está intentando acceder no es un enlace "
-"válido."
-msgstr ""
-
-#: VeTube.py:475
-msgid "Ingresando al chat."
-msgstr ""
-
-#: VeTube.py:478
-msgid "cargando..."
-msgstr ""
-
-#: VeTube.py:492
+#: vetube/VeTube.py:451
 msgid ""
 "No se puede  acceder porque el campo de  texto está vacío, debe escribir"
 "  algo."
 msgstr ""
 
-#: VeTube.py:496
+#: vetube/VeTube.py:455
 msgid "&Traducir"
 msgstr ""
 
-#: VeTube.py:498
+#: vetube/VeTube.py:457
 msgid "&Mostrar el mensaje en un cuadro de texto."
 msgstr ""
 
-#: VeTube.py:500
+#: vetube/VeTube.py:459
 msgid "&Copiar mensaje al portapapeles"
 msgstr ""
 
-#: VeTube.py:502
+#: vetube/VeTube.py:461
 msgid "&Listado de Urls."
 msgstr ""
 
-#: VeTube.py:504
+#: vetube/VeTube.py:463
 msgid "&Archivar mensaje"
 msgstr ""
 
-#: VeTube.py:514
+#: vetube/VeTube.py:473
 msgid "Mensaje traducido"
 msgstr ""
 
-#: VeTube.py:514
+#: vetube/VeTube.py:473
 msgid ""
 "el mensaje se ha traducido al idioma del programa y se  a  copiado en el "
 "portapapeles."
 msgstr ""
 
-#: VeTube.py:518
+#: vetube/VeTube.py:477
 msgid "Mensaje copiado al portapapeles"
 msgstr ""
 
-#: VeTube.py:518
+#: vetube/VeTube.py:477
 msgid "El mensaje seleccionado ha sido copiado al portapapeles."
 msgstr ""
 
-#: VeTube.py:523
+#: vetube/VeTube.py:482
 msgid "&Editor de combinaciones de teclado para VeTube"
 msgstr ""
 
-#: VeTube.py:524
+#: vetube/VeTube.py:483
 msgid "&Borrar historial de mensajes"
 msgstr ""
 
-#: VeTube.py:525
+#: vetube/VeTube.py:484
 msgid "E&xportar los mensajes en un archivo de texto"
 msgstr ""
 
-#: VeTube.py:528
+#: vetube/VeTube.py:488 vetube/VeTube.py:489
 msgid "&Añadir este canal a favoritos"
 msgstr ""
 
-#: VeTube.py:530
+#: vetube/VeTube.py:491
 msgid "&Ver estadísticas del chat"
 msgstr ""
 
-#: VeTube.py:531
+#: vetube/VeTube.py:493
 msgid "&Copiar enlace del chat al portapapeles"
 msgstr ""
 
-#: VeTube.py:532
+#: vetube/VeTube.py:494
 msgid "&Reproducir video en el navegador"
 msgstr ""
 
-#: VeTube.py:542
+#: vetube/VeTube.py:504
 msgid "Enlace copiado al portapapeles"
 msgstr ""
 
-#: VeTube.py:542
+#: vetube/VeTube.py:504
 msgid "El enlace del chat ha sido copiado al portapapeles."
 msgstr ""
 
-#: VeTube.py:561
+#: vetube/VeTube.py:523
 msgid "Estadísticas del chat:"
 msgstr ""
 
-#: VeTube.py:563
+#: vetube/VeTube.py:525
 msgid "&Usuarios y mensajes:"
 msgstr ""
 
-#: VeTube.py:566
+#: vetube/VeTube.py:528
 msgid "Usuario: "
 msgstr ""
 
-#: VeTube.py:567
+#: vetube/VeTube.py:529
 msgid "Cantidad de mensajes: "
 msgstr ""
 
-#: VeTube.py:572
+#: vetube/VeTube.py:534
 msgid "&Estadísticas totales:"
 msgstr ""
 
-#: VeTube.py:575
+#: vetube/VeTube.py:537
 #, python-format
 msgid ""
 "Total de usuarios: %s\n"
 "Total de mensajes: %s"
 msgstr ""
 
-#: VeTube.py:576
+#: vetube/VeTube.py:538
 msgid ""
 "\n"
 "nuevos me gusta en el en vivo: "
 msgstr ""
 
-#: VeTube.py:576
+#: vetube/VeTube.py:538
 msgid ""
 "\n"
 "total de usuarios que compartieron el en vivo: "
 msgstr ""
 
-#: VeTube.py:576
+#: vetube/VeTube.py:538
 msgid ""
 "\n"
 "nuevos usuarios que siguen al moderador del en vivo: "
 msgstr ""
 
-#: VeTube.py:576
+#: vetube/VeTube.py:538
 msgid ""
 "\n"
 "nuevos usuarios que  se unieron al en vivo: "
 msgstr ""
 
-#: VeTube.py:578
+#: vetube/VeTube.py:540
 msgid "&Guardar las estadísticas en un archivo de texto"
 msgstr ""
 
-#: VeTube.py:587
+#: vetube/VeTube.py:549
 msgid "Guardar archivo de texto"
 msgstr ""
 
-#: VeTube.py:587
-msgid "Archivos de texto (*.txt)|*.txt"
-msgstr ""
-
-#: VeTube.py:588 VeTube.py:589
+#: vetube/VeTube.py:549
 #, python-format
 msgid "estadísticas %s %s.txt"
 msgstr ""
 
-#: VeTube.py:594 VeTube.py:595
+#: vetube/VeTube.py:549
+#, python-format
+msgid "estadísticas %s.txt"
+msgstr ""
+
+#: vetube/VeTube.py:549
+msgid "Archivos de texto (*.txt)|*.txt"
+msgstr ""
+
+#: vetube/VeTube.py:554
 #, python-format
 msgid "Estadísticas del canal: %s"
 msgstr ""
 
-#: VeTube.py:597
+#: vetube/VeTube.py:554
+msgid "estadísticas de la sala de juegos"
+msgstr ""
+
+#: vetube/VeTube.py:556
 msgid "Usuarios y mensajes:"
 msgstr ""
 
-#: VeTube.py:605
+#: vetube/VeTube.py:564
 msgid "¿Desea salir de esta ventana y detener la lectura de los mensajes?"
 msgstr ""
 
-#: VeTube.py:618
+#: vetube/VeTube.py:577
 msgid "ha finalizado la lectura del chat."
 msgstr ""
 
-#: VeTube.py:626
+#: vetube/VeTube.py:585
 msgid "Guardar lista de mensajes"
 msgstr ""
 
-#: VeTube.py:630
+#: vetube/VeTube.py:589
 msgid "Lista de mensajes guardada correctamente."
 msgstr ""
 
-#: VeTube.py:632
+#: vetube/VeTube.py:591
 msgid "No hay mensajes para guardar."
 msgstr ""
 
-#: VeTube.py:656
+#: vetube/VeTube.py:618
 msgid ""
 "Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea "
 "reiniciarlo ahora?"
 msgstr ""
 
-#: VeTube.py:656 VeTube.py:919
+#: vetube/VeTube.py:618 vetube/VeTube.py:796
 msgid "¡Atención!"
 msgstr ""
 
-#: VeTube.py:674
+#: vetube/VeTube.py:636
 msgid "Está apunto de eliminar del historial aproximadamente "
 msgstr ""
 
-#: VeTube.py:674
+#: vetube/VeTube.py:636
 msgid " elementos, ¿desea proceder? Esta acción no se puede desacer."
 msgstr ""
 
-#: VeTube.py:675
+#: vetube/VeTube.py:637
 msgid "&Eliminar"
 msgstr ""
 
-#: VeTube.py:675 ajustes.py:192 update/update.py:125
+#: vetube/VeTube.py:637 vetube/ajustes.py:206 vetube/update/update.py:131
 msgid "&Cancelar"
 msgstr ""
 
-#: VeTube.py:676
+#: vetube/VeTube.py:638
 msgid "No hay elementos que borrar"
 msgstr ""
 
-#: VeTube.py:681
+#: vetube/VeTube.py:643
 msgid ""
 "Estás apunto de reiniciar la configuración a sus valores predeterminados,"
 " ¿Deseas proceder?"
 msgstr ""
 
-#: VeTube.py:699
-msgid "Captura Sala de Juegos"
-msgstr ""
-
-#: VeTube.py:733 VeTube.py:740 VeTube.py:741 VeTube.py:747
+#: vetube/VeTube.py:678 vetube/VeTube.py:685 vetube/VeTube.py:686
+#: vetube/VeTube.py:693
 msgid "privado de "
 msgstr ""
 
-#: VeTube.py:767 VeTube.py:773 VeTube.py:782 VeTube.py:788 VeTube.py:796
-#: VeTube.py:802 VeTube.py:810 VeTube.py:815 VeTube.py:824 VeTube.py:829
-msgid "no hay elementos en el historial"
-msgstr ""
-
-#: VeTube.py:800 VeTube.py:805
+#: vetube/VeTube.py:729
 msgid "¡Copiado!"
 msgstr ""
 
-#: VeTube.py:839
+#: vetube/VeTube.py:749
 msgid "Lectura automática activada."
 msgstr ""
 
-#: VeTube.py:839
+#: vetube/VeTube.py:749
 msgid "Lectura automática  desactivada."
 msgstr ""
 
-#: VeTube.py:842
+#: vetube/VeTube.py:752
 msgid "¿está seguro que desea salir del programa?"
 msgstr ""
 
-#: VeTube.py:842
+#: vetube/VeTube.py:752
 msgid "¡atención!"
 msgstr ""
 
-#: VeTube.py:852
-msgid "mensaje"
+#: vetube/VeTube.py:758 vetube/VeTube.py:761
+msgid "no hay elementos en el historial"
 msgstr ""
 
-#: VeTube.py:854
-msgid "idioma a traducir:"
-msgstr ""
-
-#: VeTube.py:858 VeTube.py:877
-msgid "Mensaje en "
-msgstr ""
-
-#: VeTube.py:861
-msgid "&traducir el mensaje al idioma del programa"
-msgstr ""
-
-#: VeTube.py:870
-msgid "&traducir el mensaje"
-msgstr ""
-
-#: VeTube.py:870
-msgid "&Traducir mensaje al idioma del programa"
-msgstr ""
-
-#: VeTube.py:897
+#: vetube/VeTube.py:778
 msgid "Ya se encuentra en favoritos"
 msgstr ""
 
-#: VeTube.py:897 VeTube.py:907
+#: vetube/VeTube.py:778 vetube/VeTube.py:784
 msgid "Aviso"
 msgstr ""
 
-#: VeTube.py:907
+#: vetube/VeTube.py:784
 msgid "Se ha agregado a favoritos"
 msgstr ""
 
-#: VeTube.py:911
+#: vetube/VeTube.py:788
 msgid "Al parecer tienes la última versión del programa"
 msgstr ""
 
-#: VeTube.py:914
+#: vetube/VeTube.py:791
 msgid "No hay favoritos que borrar"
 msgstr ""
 
-#: VeTube.py:914
+#: vetube/VeTube.py:791
 msgid "Error"
 msgstr ""
 
-#: VeTube.py:919
+#: vetube/VeTube.py:796
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr ""
 
-#: VeTube.py:928
+#: vetube/VeTube.py:805
 msgid "Se a borrado el elemento de favoritos"
 msgstr ""
 
-#: VeTube.py:952
+#: vetube/VeTube.py:823
 msgid " se a conectado al chat. "
 msgstr ""
 
-#: VeTube.py:979
+#: vetube/VeTube.py:850
 msgid "Propietario "
 msgstr ""
 
-#: VeTube.py:992
+#: vetube/VeTube.py:863
 msgid "Moderador "
 msgstr ""
 
-#: VeTube.py:1005
+#: vetube/VeTube.py:876
 msgid "Miembro "
 msgstr ""
 
-#: VeTube.py:1018
+#: vetube/VeTube.py:889
 msgid " (usuario verificado): "
 msgstr ""
 
-#: VeTube.py:1056
+#: vetube/VeTube.py:925
 msgid "Ingresando al chat"
 msgstr ""
 
-#: VeTube.py:1084 VeTube.py:1086 VeTube.py:1089 VeTube.py:1090
+#: vetube/VeTube.py:944 vetube/VeTube.py:946 vetube/VeTube.py:949
+#: vetube/VeTube.py:950
 msgid " envió un emogi."
 msgstr ""
 
-#: VeTube.py:1095
+#: vetube/VeTube.py:955
 msgid "ha enviado un cofre!"
 msgstr ""
 
-#: VeTube.py:1096 VeTube.py:1097
+#: vetube/VeTube.py:956 vetube/VeTube.py:957
 msgid " ha enviado un cofre!"
 msgstr ""
 
-#: VeTube.py:1103 VeTube.py:1104 VeTube.py:1105
+#: vetube/VeTube.py:963 vetube/VeTube.py:964 vetube/VeTube.py:965
 msgid " comenzó a seguirte!"
 msgstr ""
 
-#: VeTube.py:1114 VeTube.py:1122
+#: vetube/VeTube.py:974 vetube/VeTube.py:982
 #, python-format
 msgid "%s ha enviado %s %s (%s %s)"
 msgstr ""
 
-#: VeTube.py:1115 VeTube.py:1123
+#: vetube/VeTube.py:975 vetube/VeTube.py:983
 #, python-format
 msgid "%s ha enviado %s %s (%s diamante)"
 msgstr ""
 
-#: VeTube.py:1141 VeTube.py:1142 VeTube.py:1143
+#: vetube/VeTube.py:1001 vetube/VeTube.py:1002 vetube/VeTube.py:1003
 msgid " se ha unido a tu en vivo."
 msgstr ""
 
-#: VeTube.py:1150 VeTube.py:1151 VeTube.py:1153
+#: vetube/VeTube.py:1010 vetube/VeTube.py:1011 vetube/VeTube.py:1013
 msgid " le ha dado me gusta a tu en vivo."
 msgstr ""
 
-#: VeTube.py:1159 VeTube.py:1161
+#: vetube/VeTube.py:1019 vetube/VeTube.py:1021
 msgid " ha compartido tu en vivo!"
 msgstr ""
 
-#: VeTube.py:1160
+#: vetube/VeTube.py:1020
 msgid " ha compartido el en vivo!"
 msgstr ""
 
-#: VeTube.py:1163
+#: vetube/VeTube.py:1023
 msgid " en vivo, actualmente "
 msgstr ""
 
-#: VeTube.py:1163
+#: vetube/VeTube.py:1023
 msgid " viendo ahora"
 msgstr ""
 
-#: VeTube.py:1197 VeTube.py:1199 VeTube.py:1202 VeTube.py:1203 VeTube.py:1286
-#: VeTube.py:1288 VeTube.py:1291 VeTube.py:1292
+#: vetube/VeTube.py:1051 vetube/VeTube.py:1053 vetube/VeTube.py:1056
+#: vetube/VeTube.py:1057 vetube/VeTube.py:1140 vetube/VeTube.py:1142
+#: vetube/VeTube.py:1145 vetube/VeTube.py:1146
 msgid " ha renovado su suscripción en el nivel "
 msgstr ""
 
-#: VeTube.py:1197 VeTube.py:1199 VeTube.py:1202 VeTube.py:1203 VeTube.py:1286
-#: VeTube.py:1288 VeTube.py:1291 VeTube.py:1292
+#: vetube/VeTube.py:1051 vetube/VeTube.py:1053 vetube/VeTube.py:1056
+#: vetube/VeTube.py:1057 vetube/VeTube.py:1140 vetube/VeTube.py:1142
+#: vetube/VeTube.py:1145 vetube/VeTube.py:1146
 msgid ". lleva suscrito por"
 msgstr ""
 
-#: VeTube.py:1197 VeTube.py:1199 VeTube.py:1286 VeTube.py:1288
+#: vetube/VeTube.py:1051 vetube/VeTube.py:1053 vetube/VeTube.py:1140
+#: vetube/VeTube.py:1142
 msgid " meses! "
 msgstr ""
 
-#: VeTube.py:1202 VeTube.py:1203 VeTube.py:1210 VeTube.py:1212 VeTube.py:1215
-#: VeTube.py:1216 VeTube.py:1271 VeTube.py:1273 VeTube.py:1276 VeTube.py:1277
-#: VeTube.py:1291 VeTube.py:1292
+#: vetube/VeTube.py:1056 vetube/VeTube.py:1057 vetube/VeTube.py:1064
+#: vetube/VeTube.py:1066 vetube/VeTube.py:1069 vetube/VeTube.py:1070
+#: vetube/VeTube.py:1125 vetube/VeTube.py:1127 vetube/VeTube.py:1130
+#: vetube/VeTube.py:1131 vetube/VeTube.py:1145 vetube/VeTube.py:1146
 msgid " meses!"
 msgstr ""
 
-#: VeTube.py:1210 VeTube.py:1212 VeTube.py:1215 VeTube.py:1216
+#: vetube/VeTube.py:1064 vetube/VeTube.py:1066 vetube/VeTube.py:1069
+#: vetube/VeTube.py:1070
 msgid " se ha suscrito en el nivel "
 msgstr ""
 
-#: VeTube.py:1210 VeTube.py:1212 VeTube.py:1215 VeTube.py:1216 VeTube.py:1271
-#: VeTube.py:1273 VeTube.py:1276 VeTube.py:1277
+#: vetube/VeTube.py:1064 vetube/VeTube.py:1066 vetube/VeTube.py:1069
+#: vetube/VeTube.py:1070 vetube/VeTube.py:1125 vetube/VeTube.py:1127
+#: vetube/VeTube.py:1130 vetube/VeTube.py:1131
 msgid " por "
 msgstr ""
 
-#: VeTube.py:1258 VeTube.py:1260 VeTube.py:1263 VeTube.py:1264
+#: vetube/VeTube.py:1112 vetube/VeTube.py:1114 vetube/VeTube.py:1117
+#: vetube/VeTube.py:1118
 msgid " regaló una suscripción de nivel "
 msgstr ""
 
-#: VeTube.py:1258 VeTube.py:1260 VeTube.py:1263 VeTube.py:1264
+#: vetube/VeTube.py:1112 vetube/VeTube.py:1114 vetube/VeTube.py:1117
+#: vetube/VeTube.py:1118
 msgid " a la  comunidad, ha regalado un total de "
 msgstr ""
 
-#: VeTube.py:1258 VeTube.py:1260 VeTube.py:1263 VeTube.py:1264
+#: vetube/VeTube.py:1112 vetube/VeTube.py:1114 vetube/VeTube.py:1117
+#: vetube/VeTube.py:1118
 msgid " suscripciones!"
 msgstr ""
 
-#: VeTube.py:1271 VeTube.py:1273 VeTube.py:1276 VeTube.py:1277
+#: vetube/VeTube.py:1125 vetube/VeTube.py:1127 vetube/VeTube.py:1130
+#: vetube/VeTube.py:1131
 msgid " a regalado una suscripción a "
 msgstr ""
 
-#: VeTube.py:1271 VeTube.py:1273 VeTube.py:1276 VeTube.py:1277
+#: vetube/VeTube.py:1125 vetube/VeTube.py:1127 vetube/VeTube.py:1130
+#: vetube/VeTube.py:1131
 msgid " en el nivel "
 msgstr ""
 
-#: VeTube.py:1405
+#: vetube/VeTube.py:1256
 msgid "no puedes agregar un Favorito del bufer de favoritos"
 msgstr ""
 
-#: VeTube.py:1416 VeTube.py:1421
+#: vetube/VeTube.py:1267 vetube/VeTube.py:1272
 msgid "este mensaje ya se encuentra en el buffer de favoritos."
 msgstr ""
 
-#: VeTube.py:1424
+#: vetube/VeTube.py:1275
 msgid "Se agregó el elemento a la lista de favoritos..."
 msgstr ""
 
-#: VeTube.py:1427
+#: vetube/VeTube.py:1278
 msgid "escriba el término de su búsqueda"
 msgstr ""
 
-#: VeTube.py:1433
+#: vetube/VeTube.py:1284
 msgid "&Buscar"
 msgstr ""
 
-#: VeTube.py:1454
+#: vetube/VeTube.py:1305
 msgid "No hay ningún criterio de búsqueda que coincida con el término ingresado."
 msgstr ""
 
-#: VeTube.py:1454
+#: vetube/VeTube.py:1305
 msgid "información"
 msgstr ""
 
-#: VeTube.py:1457
+#: vetube/VeTube.py:1308
 #, python-format
 msgid "se encontraron %s resultados"
 msgstr ""
 
-#: VeTube.py:1459
+#: vetube/VeTube.py:1310
 msgid ""
 "No hay nada que buscar porque el campo de  texto está vacío, debe "
 "escribir  algo."
 msgstr ""
 
-#: VeTube.py:1465
+#: vetube/VeTube.py:1316
 msgid "Se eliminó el buffer"
 msgstr ""
 
-#: VeTube.py:1466
+#: vetube/VeTube.py:1317
 msgid "No es posible borrar este buffer"
 msgstr ""
 
-#: VeTube.py:1469
+#: vetube/VeTube.py:1320
 msgid "Sonidos activados."
 msgstr ""
 
-#: VeTube.py:1469
+#: vetube/VeTube.py:1320
 msgid "Sonidos desactivados"
 msgstr ""
 
-#: VeTube.py:1471 VeTube.py:1529 VeTube.py:1537
+#: vetube/VeTube.py:1322 vetube/VeTube.py:1380 vetube/VeTube.py:1388
 msgid "Tus mensajes archivados aparecerán aquí"
 msgstr ""
 
-#: VeTube.py:1483 VeTube.py:1490
+#: vetube/VeTube.py:1334 vetube/VeTube.py:1341
 msgid "El mensaje ya está archivado."
 msgstr ""
 
-#: VeTube.py:1483 VeTube.py:1490
+#: vetube/VeTube.py:1334 vetube/VeTube.py:1341
 msgid "error"
 msgstr ""
 
-#: VeTube.py:1496
+#: vetube/VeTube.py:1347
 msgid "se archivó el mensaje"
 msgstr ""
 
-#: VeTube.py:1499
+#: vetube/VeTube.py:1350
 msgid "&Borrar mensajes"
 msgstr ""
 
-#: VeTube.py:1500
+#: vetube/VeTube.py:1351
 msgid "Borrar todos los mensajes destacados"
 msgstr ""
 
-#: VeTube.py:1504
+#: vetube/VeTube.py:1355
 msgid "Borrar el mensaje destacado seleccionado"
 msgstr ""
 
-#: VeTube.py:1508
+#: vetube/VeTube.py:1359
 msgid "&Borrar favoritos"
 msgstr ""
 
-#: VeTube.py:1509
+#: vetube/VeTube.py:1360
 msgid "Borrar todos los favoritos"
 msgstr ""
 
-#: VeTube.py:1513
+#: vetube/VeTube.py:1364
 msgid "Borrar el favorito seleccionado"
 msgstr ""
 
-#: VeTube.py:1523
+#: vetube/VeTube.py:1374
 msgid "se eliminó el mensaje de tus mensajes archivados"
 msgstr ""
 
-#: VeTube.py:1525
+#: vetube/VeTube.py:1376
 msgid "No hay más elementos que borrar"
 msgstr ""
 
-#: VeTube.py:1527 VeTube.py:1541
+#: vetube/VeTube.py:1378 vetube/VeTube.py:1392
 msgid "No hay mensajes que borrar"
 msgstr ""
 
-#: VeTube.py:1533
+#: vetube/VeTube.py:1384
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr ""
 
-#: VeTube.py:1538
+#: vetube/VeTube.py:1389
 msgid "se eliminaron los mensajes archivados"
 msgstr ""
 
-#: VeTube.py:1546
+#: vetube/VeTube.py:1397
 msgid "Lista de URLS"
 msgstr ""
 
-#: VeTube.py:1561
+#: vetube/VeTube.py:1412
 msgid "No hay URLS en este  mensaje"
 msgstr ""
 
-#: ajustes.py:32
+#: vetube/ajustes.py:32
 msgid "Por defecto"
 msgstr ""
 
-#: ajustes.py:42
+#: vetube/ajustes.py:42
 msgid "Sonido cuando llega un mensaje"
 msgstr ""
 
-#: ajustes.py:42
+#: vetube/ajustes.py:42
 msgid "Sonido cuando habla un miembro"
 msgstr ""
 
-#: ajustes.py:42
+#: vetube/ajustes.py:42
 msgid ""
 "Sonido cuando se conecta un miembro o cuando alguien se une a tu en vivo "
 "en tiktok"
 msgstr ""
 
-#: ajustes.py:42
+#: vetube/ajustes.py:42
 msgid "Sonido cuando llega un donativo"
 msgstr ""
 
-#: ajustes.py:42
+#: vetube/ajustes.py:42
 msgid "Sonido cuando habla un moderador"
 msgstr ""
 
-#: ajustes.py:42
+#: vetube/ajustes.py:42
 msgid "Sonido cuando habla un usuario verificado"
 msgstr ""
 
-#: ajustes.py:42
+#: vetube/ajustes.py:42
 msgid "Sonido al ingresar al chat"
 msgstr ""
 
-#: ajustes.py:42
+#: vetube/ajustes.py:42
 msgid "Sonido cuando habla el propietario del canal"
 msgstr ""
 
-#: ajustes.py:42
+#: vetube/ajustes.py:42
 msgid "sonido al terminar la búsqueda de mensajes"
 msgstr ""
 
-#: ajustes.py:42
+#: vetube/ajustes.py:42
 msgid "sonido cuando le dan me gusta al en vivo (solo para tiktok)"
 msgstr ""
 
-#: ajustes.py:42
+#: vetube/ajustes.py:42
 msgid "Sonido cuando alguien empieza a seguirte en tiktok"
 msgstr ""
 
-#: ajustes.py:42
+#: vetube/ajustes.py:42
 msgid "Sonido cuando alguien comparte el enlace de tu envivo en  tiktok"
 msgstr ""
 
-#: ajustes.py:42
+#: vetube/ajustes.py:42
 msgid "Sonido cuando alguien envía un cofre  en tiktok"
 msgstr ""
 
-#: ajustes.py:43
+#: vetube/ajustes.py:43
 msgid "Cuando habla un miembro"
 msgstr ""
 
-#: ajustes.py:43
+#: vetube/ajustes.py:43
 msgid ""
 "Cuando se conecta un miembro o cuando alguien se une a tu en vivo en "
 "tiktok"
 msgstr ""
 
-#: ajustes.py:43
+#: vetube/ajustes.py:43
 msgid "Cuando llega un donativo"
 msgstr ""
 
-#: ajustes.py:43
+#: vetube/ajustes.py:43
 msgid "Cuando habla un moderador"
 msgstr ""
 
-#: ajustes.py:43
+#: vetube/ajustes.py:43
 msgid "Cuando habla un usuario verificado"
 msgstr ""
 
-#: ajustes.py:43
+#: vetube/ajustes.py:43
 msgid "Cuando le dan me gusta al en vivo (solo para tiktok)"
 msgstr ""
 
-#: ajustes.py:43
+#: vetube/ajustes.py:43
 msgid "Cuando alguien empieza a seguirte en tiktok"
 msgstr ""
 
-#: ajustes.py:43
+#: vetube/ajustes.py:43
 msgid "Cuando alguien comparte el enlace de tu envivo en  tiktok"
 msgstr ""
 
-#: ajustes.py:43
+#: vetube/ajustes.py:43
 msgid "Cuando alguien envía un cofre  en tiktok"
 msgstr ""
 
-#: ajustes.py:46 ajustes.py:155
+#: vetube/ajustes.py:46 vetube/ajustes.py:160
 msgid "Categorías"
 msgstr ""
 
-#: ajustes.py:53
+#: vetube/ajustes.py:53
 msgid "Opciones de la app"
 msgstr ""
 
-#: ajustes.py:55
+#: vetube/ajustes.py:55
 msgid "Idioma de VeTube (Requiere reiniciar)"
 msgstr ""
 
-#: ajustes.py:60
+#: vetube/ajustes.py:60
 msgid "Activar diálogo de donaciones al inicio de la app."
 msgstr ""
 
-#: ajustes.py:64
+#: vetube/ajustes.py:64
 msgid "preguntar si desea salir de la app al cerrar."
 msgstr ""
 
-#: ajustes.py:67
+#: vetube/ajustes.py:68
 msgid "Comprobar si hay actualizaciones al iniciar la app"
 msgstr ""
 
-#: ajustes.py:71
+#: vetube/ajustes.py:72
+msgid "intentar traducir las novedades cuando salga una actualización."
+msgstr ""
+
+#: vetube/ajustes.py:76
 msgid "traducción de mensajes: "
 msgstr ""
 
-#: ajustes.py:76
+#: vetube/ajustes.py:81
 msgid "convertir las donaciones a la divisa: "
 msgstr ""
 
-#: ajustes.py:83
+#: vetube/ajustes.py:88
 msgid "Voz"
 msgstr ""
 
-#: ajustes.py:85
+#: vetube/ajustes.py:90
 msgid "Opciones del habla"
 msgstr ""
 
-#: ajustes.py:87
+#: vetube/ajustes.py:92
 msgid "Usar voz sapi en lugar de lector de pantalla."
 msgstr ""
 
-#: ajustes.py:91
+#: vetube/ajustes.py:96
 msgid "Sistema TTS a usar: "
 msgstr ""
 
-#: ajustes.py:101
+#: vetube/ajustes.py:106
 msgid "Activar lectura de mensajes automática"
 msgstr ""
 
-#: ajustes.py:105
+#: vetube/ajustes.py:110
 msgid "Voz: "
 msgstr ""
 
-#: ajustes.py:115
+#: vetube/ajustes.py:120
 msgid "Instalar un paquete de voz..."
 msgstr ""
 
-#: ajustes.py:120
+#: vetube/ajustes.py:125
 msgid "Tono: "
 msgstr ""
 
-#: ajustes.py:125
+#: vetube/ajustes.py:130
 msgid "Volumen: "
 msgstr ""
 
-#: ajustes.py:136
+#: vetube/ajustes.py:141
 msgid "Velocidad: "
 msgstr ""
 
-#: ajustes.py:141
+#: vetube/ajustes.py:146
 msgid "&Reproducir prueba."
 msgstr ""
 
-#: ajustes.py:157
+#: vetube/ajustes.py:162
 msgid "Reproducir sonidos."
 msgstr ""
 
-#: ajustes.py:171
+#: vetube/ajustes.py:176
 msgid "&Reproducir"
 msgstr ""
 
-#: ajustes.py:177
+#: vetube/ajustes.py:182
 msgid "Sonidos"
 msgstr ""
 
-#: ajustes.py:188
-msgid "Eventos del chat."
+#: vetube/ajustes.py:184
+msgid "procesados: "
 msgstr ""
 
-#: ajustes.py:189 update/update.py:125
+#: vetube/ajustes.py:190
+msgid "leídos"
+msgstr ""
+
+#: vetube/ajustes.py:202
+msgid "Eventos"
+msgstr ""
+
+#: vetube/ajustes.py:203 vetube/update/update.py:131
 msgid "&Aceptar"
 msgstr ""
 
-#: ajustes.py:222 ajustes.py:224
+#: vetube/ajustes.py:236 vetube/ajustes.py:238
 msgid ""
 "Hola, soy la voz que te acompañará de ahora en adelante a leer los "
 "mensajes de tus canales favoritos."
 msgstr ""
 
-#: languageHandler.py:74
+#: vetube/languageHandler.py:72
 msgid "Idioma del sistema"
 msgstr ""
 
-#: TTS/list_voices.py:13
+#: vetube/mostrarchat.py:6
+msgid "Mensaje"
+msgstr ""
+
+#: vetube/mostrarchat.py:8
+msgid "Idioma a traducir"
+msgstr ""
+
+#: vetube/mostrarchat.py:12
+msgid "mensaje: "
+msgstr ""
+
+#: vetube/mostrarchat.py:16 vetube/mostrarchat.py:24
+msgid "&Traducir al idioma del programa"
+msgstr ""
+
+#: vetube/mostrarchat.py:24
+msgid "&Traducir mensaje"
+msgstr ""
+
+#: vetube/mostrarchat.py:30
+msgid "mensaje en "
+msgstr ""
+
+#: vetube/TTS/list_voices.py:13
 msgid "Selecciona un paquete de voz"
 msgstr ""
 
-#: TTS/list_voices.py:13
+#: vetube/TTS/list_voices.py:13
 msgid "Archivos tar.gz (*.tar.gz)|*.tar.gz"
 msgstr ""
 
-#: TTS/list_voices.py:15
+#: vetube/TTS/list_voices.py:15
 msgid ""
 "Para usar piper como sistema TTS, necesitas tener al menos una voz. Si "
 "quieres hacerlo de forma manual, extrae el paquete de voz en la carpeta "
 "\"piper/voices/voice-nombre_de_paquete\" en VeTube."
 msgstr ""
 
-#: TTS/list_voices.py:15
+#: vetube/TTS/list_voices.py:15
 msgid "No se instaló ninguna voz"
 msgstr ""
 
-#: TTS/list_voices.py:21
+#: vetube/TTS/list_voices.py:21
 msgid ""
 "¡Voz instalada satosfactoriamente! esta será establecida en VeTube ahora."
 " Para cambiar de modelo de voz, puedes hacerlo a través de las "
 "configuraciones."
 msgstr ""
 
-#: TTS/list_voices.py:21
+#: vetube/TTS/list_voices.py:21
 msgid "Listo"
 msgstr ""
 
-#: update/update.py:124
+#: vetube/update/update.py:130
 msgid ""
 "Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te "
 "unes a nuestra causa?"
 msgstr ""
 
-#: update/updater.py:12
+#: vetube/update/updater.py:13
 msgid "Hubo un error al actualizar VeTube."
 msgstr ""
 
-#: update/utils.py:29
+#: vetube/update/utils.py:29
 #, python-format
 msgid "%d día, "
 msgstr ""
 
-#: update/utils.py:31
+#: vetube/update/utils.py:31
 #, python-format
 msgid "%d días, "
 msgstr ""
 
-#: update/utils.py:33
+#: vetube/update/utils.py:33
 #, python-format
 msgid "%d hora, "
 msgstr ""
 
-#: update/utils.py:35
+#: vetube/update/utils.py:35
 #, python-format
 msgid "%d horas, "
 msgstr ""
 
-#: update/utils.py:37
+#: vetube/update/utils.py:37
 #, python-format
 msgid "%d minuto, "
 msgstr ""
 
-#: update/utils.py:39
+#: vetube/update/utils.py:39
 #, python-format
 msgid "%d minutos, "
 msgstr ""
 
-#: update/utils.py:41
+#: vetube/update/utils.py:41
 #, python-format
 msgid "%s segundo"
 msgstr ""
 
-#: update/utils.py:43
+#: vetube/update/utils.py:43
 #, python-format
 msgid "%s segundos"
 msgstr ""
 
-#: update/wxUpdater.py:9
+#: vetube/update/wxUpdater.py:9
 #, python-format
 msgid ""
 "Hay una nueva versión de VeTube. Te gustaría descargarla ahora?\n"
@@ -1202,30 +1234,30 @@ msgid ""
 "%s"
 msgstr ""
 
-#: update/wxUpdater.py:9
+#: vetube/update/wxUpdater.py:9
 msgid "Nueva versión de VeTube"
 msgstr ""
 
-#: update/wxUpdater.py:17
+#: vetube/update/wxUpdater.py:17
 msgid "Descarga en progreso"
 msgstr ""
 
-#: update/wxUpdater.py:17
+#: vetube/update/wxUpdater.py:17
 msgid "Descargando la actualización"
 msgstr ""
 
-#: update/wxUpdater.py:27
+#: vetube/update/wxUpdater.py:27
 #, python-format
 msgid "Actualizando... %s de %s"
 msgstr ""
 
-#: update/wxUpdater.py:30
+#: vetube/update/wxUpdater.py:30
 msgid ""
 "La actualización se a descargado he instalado exitosamente. pulse en "
 "aceptar para continuar."
 msgstr ""
 
-#: update/wxUpdater.py:30
+#: vetube/update/wxUpdater.py:30
 msgid "¡Hecho!"
 msgstr ""
 

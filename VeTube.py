@@ -388,12 +388,7 @@ class MyFrame(wx.Frame):
 			try:
 				if 'yout' in url: self.chat=ChatDownloader().get_chat(url,message_groups=["messages", "superchat"])
 				elif 'twitch' in url: self.chat=ChatDownloader().get_chat(url,message_groups=["messages", "bits","subscriptions","upgrades"])
-				elif 'tiktok' in url:
-					start_index = url.find('@')
-					end_index = url.find('/', start_index)
-					if start_index != -1:
-						if end_index != -1: self.chat=TikTokLiveClient(unique_id=url[start_index:end_index])
-						else: self.chat=TikTokLiveClient(unique_id=url[start_index:])
+				elif 'tiktok' in url: self.chat=TikTokLiveClient(unique_id=funciones.extractUser(url))
 				elif url=="sala": self.chat = PlayroomHelper()
 				else:
 					wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), "error.", wx.ICON_ERROR)
@@ -487,10 +482,12 @@ class MyFrame(wx.Frame):
 		menu.Append(10, _("&Editor de combinaciones de teclado para VeTube"))
 		menu.Append(1, _("&Borrar historial de mensajes"))
 		menu.Append(2, _("E&xportar los mensajes en un archivo de texto"))
-		if not isinstance(self.chat, TikTokLiveClient) and not isinstance(self.chat, PlayroomHelper):
-			if self.chat.status!="upcoming":
-				menu.Append(3, _("&Añadir este canal a favoritos"))
-				menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
+		if not isinstance(self.chat, PlayroomHelper):
+			try:
+				if self.chat.status!="past":
+					if 'yout' in self.text_ctrl_1.GetValue and '/live' in self.text_ctrl_1.GetValue or 'twitch' in self.text_ctrl_1.GetValue: menu.Append(3, _("&Añadir este canal a favoritos"))
+			except: menu.Append(3, _("&Añadir este canal a favoritos")) #is a tiktok live.
+			menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
 		menu.Append(4, _("&Ver estadísticas del chat"))
 		if not isinstance(self.chat, PlayroomHelper):
 			menu.Append(8, _("&Copiar enlace del chat al portapapeles"))
@@ -774,23 +771,15 @@ class MyFrame(wx.Frame):
 	def addFavoritos(self, event):
 		if self.list_favorite.GetStrings()==[_("Tus favoritos aparecerán aquí")]: self.list_favorite.Delete(0)
 		if len(favorite)<=0:
-			if 'twitch' in self.text_ctrl_1.GetValue() and not 'videos' in self.text_ctrl_1.GetValue():
-				self.list_favorite.Append(info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue())
-				favorite.append({'titulo': info_dict.get('uploader'), 'url': self.text_ctrl_1.GetValue()})
-			else:
-				self.list_favorite.Append(self.chat.title+': '+self.text_ctrl_1.GetValue())
-				favorite.append({'titulo': self.chat.title, 'url': self.text_ctrl_1.GetValue()})
+			self.list_favorite.Append(funciones.extractUser(self.text_ctrl_1.GetValue())+': '+self.text_ctrl_1.GetValue())
+			favorite.append({'titulo': funciones.extractUser(self.text_ctrl_1.GetValue()), 'url': self.text_ctrl_1.GetValue()})
 		else:
-			if self.list_favorite.GetStrings()==[self.chat.title+': '+self.text_ctrl_1.GetValue()] or self.list_favorite.GetStrings()==[info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue()]:
+			if any(funciones.extractUser(self.text_ctrl_1.GetValue())+': '+self.text_ctrl_1.GetValue() == item for item in self.list_favorite.GetStrings()):
 				wx.MessageBox(_("Ya se encuentra en favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
 				return
 			else:
-				if 'twitch' in self.text_ctrl_1.GetValue() and not 'videos' in self.text_ctrl_1.GetValue():
-					self.list_favorite.Append(info_dict.get('uploader')+': '+self.text_ctrl_1.GetValue())
-					favorite.append({'titulo': info_dict.get('uploader'), 'url': self.text_ctrl_1.GetValue()})
-				else:
-					self.list_favorite.Append(self.chat.title+': '+self.text_ctrl_1.GetValue())
-					favorite.append({'titulo': self.chat.title, 'url': self.text_ctrl_1.GetValue()})
+				self.list_favorite.Append(funciones.extractUser(self.text_ctrl_1.GetValue())+': '+self.text_ctrl_1.GetValue())
+				favorite.append({'titulo': funciones.extractUser(self.text_ctrl_1.GetValue()), 'url': self.text_ctrl_1.GetValue()})
 		funciones.escribirJsonLista('favoritos.json',favorite)
 		wx.MessageBox(_("Se ha agregado a favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
 	def updater(self,event=None):
