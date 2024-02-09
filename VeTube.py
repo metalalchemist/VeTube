@@ -386,7 +386,7 @@ class MyFrame(wx.Frame):
 					url=url.replace('/livestreaming','/')
 				if 'live' in url: url=url.replace('live/','watch?v=')
 			try:
-				if 'yout' in url: self.chat=ChatDownloader().get_chat(url,message_groups=["messages", "superchat"])
+				if 'yout' in url: self.chat=ChatDownloader().get_chat(url,message_groups=["messages", "superchat"],interruptible_retry=False)
 				elif 'twitch' in url: self.chat=ChatDownloader().get_chat(url,message_groups=["messages", "bits","subscriptions","upgrades"])
 				elif 'tiktok' in url: self.chat=TikTokLiveClient(unique_id=funciones.extractUser(url))
 				elif url=="sala": self.chat = PlayroomHelper()
@@ -485,7 +485,7 @@ class MyFrame(wx.Frame):
 		if not isinstance(self.chat, PlayroomHelper):
 			try:
 				if self.chat.status!="past":
-					if 'yout' in self.text_ctrl_1.GetValue and '/live' in self.text_ctrl_1.GetValue or 'twitch' in self.text_ctrl_1.GetValue: menu.Append(3, _("&Añadir este canal a favoritos"))
+					if 'yout' in self.text_ctrl_1.GetValue() and '/live' in self.text_ctrl_1.GetValue() or 'twitch' in self.text_ctrl_1.GetValue() and not 'video' in self.text_ctrl_1.GetValue(): menu.Append(3, _("&Añadir este canal a favoritos"))
 			except: menu.Append(3, _("&Añadir este canal a favoritos")) #is a tiktok live.
 			menu.Bind(wx.EVT_MENU, self.addFavoritos, id=3)
 		menu.Append(4, _("&Ver estadísticas del chat"))
