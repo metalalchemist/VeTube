@@ -535,7 +535,7 @@ class MyFrame(wx.Frame):
 		sizer_estadisticas.Add(label_total, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 4)
 		self.text_ctrl_estadisticas = wx.TextCtrl(self.dlg_estadisticas, wx.ID_ANY, style=wx.TE_MULTILINE | wx.TE_READONLY)
 		self.text_ctrl_estadisticas.SetValue(_("Total de usuarios: %s\nTotal de mensajes: %s") % (len(self.usuarios), sum(self.mensajes)))
-		if isinstance(self.chat,TikTokLiveClient): self.text_ctrl_estadisticas.SetValue(self.text_ctrl_estadisticas.GetValue()+_('\nnuevos me gusta en el en vivo: ')+str(self.megusta)+_('\ntotal de usuarios que compartieron el en vivo: ')+str(self.compartidas)+_('\nnuevos usuarios que siguen al moderador del en vivo: ')+str(self.seguidores)+_('\nnuevos usuarios que  se unieron al en vivo: ')+str(self.unidos))
+		if isinstance(self.chat,TikTokLiveClient): self.text_ctrl_estadisticas.SetValue(self.text_ctrl_estadisticas.GetValue()+_('\ntotal de megusta del en vivo: ')+str(self.megusta)+_('\ntotal de usuarios que compartieron el en vivo: ')+str(self.compartidas)+_('\nnuevos usuarios que siguen al moderador del en vivo: ')+str(self.seguidores)+_('\nnuevos usuarios que  se unieron al en vivo: ')+str(self.unidos))
 		sizer_estadisticas.Add(self.text_ctrl_estadisticas, 1, wx.EXPAND | wx.ALL, 4)
 		button_estadisticas_descargar = wx.Button(self.dlg_estadisticas, wx.ID_ANY, _("&Guardar las estadísticas en un archivo de texto"))
 		button_estadisticas_descargar.Bind(wx.EVT_BUTTON, self.descargarEstadisticas)
@@ -1003,7 +1003,7 @@ class MyFrame(wx.Frame):
 		self.list_box_1.Append(event.user.nickname+_(" se ha unido a tu en vivo."))
 		if config['sonidos'] and config['listasonidos'][2]: playsound(ajustes.rutasonidos[2],False)
 	async def on_like(self,event: LikeEvent):
-		self.megusta+=1
+		self.megusta=event.total_likes
 		if config['reader'] and config['unread'][5]:
 			if lista[yt][0]=='General':
 				if event.user.nickname not in self.gustados:
