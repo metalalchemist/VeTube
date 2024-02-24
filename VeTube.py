@@ -74,10 +74,13 @@ leer.set_voice(leer.list_voices()[0])
 leer.set_volume(config['volume'])
 favs=funciones.convertirLista(favorite,'titulo','url')
 msjs=funciones.convertirLista(mensajes_destacados,'mensaje','titulo')
+dispositivos = player.devicenames
 # establecer la voz del lector en piper:
 if config['sistemaTTS'] == "piper":
 	lector=lector.piperSpeak(f"piper/voices/voice-{ajustes.lista_voces_piper[config['voz']][:-5]}/{ajustes.lista_voces_piper[config['voz']]}")
-	#lector.set_device(config["dispositivo"]+1)
+	lector_Salidas = lector.get_devices()
+	salida_actual = lector.find_device_id(dispositivos[config["dispositivo"]-1])
+	lector.set_device(salida_actual)
 # establecer idiomas:
 languageHandler.setLanguage(config['idioma'])
 idiomas = languageHandler.getAvailableLanguages()

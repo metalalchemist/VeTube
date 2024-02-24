@@ -9,8 +9,8 @@ class playsound:
 		except BassError as e:
 			#print(e)
 			if e.code == 14:
-				print("Already initialized.")
-				print(Output.free())
+				#print("Already initialized.")
+				Output.free()
 				output = Output(device=-1)
 			else:
 				pass

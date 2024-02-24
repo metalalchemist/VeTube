@@ -14,6 +14,7 @@ config=fajustes.leerConfiguracion()
 player.setdevice(int(config["dispositivo"]))
 prueba=configurar_tts("sapi5")
 prueba_piper=configurar_tts("piper")
+dispositivos_piper = None
 lista_voces=prueba.list_voices()
 lista_voces_piper = piper_list_voices()
 rutasonidos=[
@@ -34,7 +35,7 @@ rutasonidos=[
 
 class configuracionDialog(wx.Dialog):
 	def __init__(self, parent):
-		global config, lista_voces, prueba_piper
+		global config, lista_voces, prueba_piper, dispositivos_piper
 		# idioma:
 		translator = TranslatorWrapper()
 		languageHandler.setLanguage(config['idioma'])
@@ -128,11 +129,11 @@ class configuracionDialog(wx.Dialog):
 		boxSizer_1.Add(self.choice_moneditas)
 		sizer_4.Add(boxSizer_1, 1, wx.EXPAND, 0)
 		self.treeItem_audio = wx.Panel(self.tree_1, wx.ID_ANY)
-		dispositivos = player.devicenames
+		self.dispositivos = player.devicenames
 		label_dispositivo = wx.StaticText(self.treeItem_audio, wx.ID_ANY, _("Seleccionar dispositivo de audio"))
-		self.dispositivos= wx.Choice(self.treeItem_audio, wx.ID_ANY, choices=dispositivos)
-		self.dispositivos.SetSelection(config['dispositivo']-1)
-		self.dispositivos.Bind(wx.EVT_CHOICE, self.alternar_dispositivo)
+		self.lista_dispositivos= wx.Choice(self.treeItem_audio, wx.ID_ANY, choices=self.dispositivos)
+		self.lista_dispositivos.SetSelection(config['dispositivo']-1)
+		self.lista_dispositivos.Bind(wx.EVT_CHOICE, self.alternar_dispositivo)
 		self.tree_1.AddPage(self.treeItem_audio, _("audio"))
 		self.treeItem_2 = wx.Panel(self.tree_1, wx.ID_ANY)
 		self.tree_1.AddPage(self.treeItem_2, _("Voz"))
@@ -166,6 +167,7 @@ class configuracionDialog(wx.Dialog):
 		if config['sistemaTTS'] == "piper":
 			if len(lista_voces) == 1:
 				prueba_piper = speaker.piperSpeak(f"piper/voices/voice-{lista_voces[0][:-4]}/{lista_voces[0]}")
+				dispositivos_piper = prueba_piper.get_devices()
 				config['voz'] = 0
 		self.instala_voces = wx.Button(self.treeItem_2, wx.ID_ANY, label=_("Instalar un paquete de voz..."))
 		self.instala_voces.Bind(wx.EVT_BUTTON, self.instalar_voz_piper)
@@ -263,8 +265,14 @@ class configuracionDialog(wx.Dialog):
 		self.Center()
 
 	def alternar_dispositivo(self, event):
-		config['dispositivo']=(self.dispositivos.GetSelection() +1)
+		global prueba_piper, dispositivos_piper
+		valor = (self.lista_dispositivos.GetSelection() +1)
+		valor_str = self.lista_dispositivos.GetStringSelection()
+		config['dispositivo']=valor
 		player.setdevice(config["dispositivo"]+1)
+		if config['sistemaTTS'] == "piper" and dispositivos_piper is not None:
+			salida_piper = prueba_piper.find_device_id(valor_str)
+			prueba_piper.set_device(salida_piper)
 
 	def cambiar_sintetizador(self, event):
 		global lista_voces
@@ -281,7 +289,7 @@ class configuracionDialog(wx.Dialog):
 		self.choice_2.Clear()
 		self.choice_2.AppendItems(lista_voces)
 	def instalar_voz_piper(self, event):
-		global config, prueba_piper,lista_voces
+		global config, prueba_piper, lista_voces
 		config, prueba_piper = install_piper_voice(config, prueba_piper)
 		lista_voces = piper_list_voices()
 		if lista_voces:
@@ -326,9 +334,13 @@ class configuracionDialog(wx.Dialog):
 		self.seleccionar_TTS.Enable(not event.IsChecked())
 
 	def cambiarVoz(self, event):	
-		global prueba_piper, lista_voces
+		global prueba_piper, lista_voces, dispositivos_piper
 		config['voz']=self.choice_2.GetSelection()
 		if config['sistemaTTS'] == "piper":
 			prueba_piper = speaker.piperSpeak(f"piper/voices/voice-{lista_voces[config['voz']][:-4]}/{lista_voces[config['voz']]}")
+			dispositivos_piper = prueba_piper.get_devices()
+			# Establecer dispositivo desde la configuración:
+			salida_piper = prueba_piper.find_device_id(self.dispositivos[config["dispositivo"]-1])
+			prueba_piper.set_device(salida_piper)
 		else:
 			prueba.set_voice(lista_voces[config['voz']])

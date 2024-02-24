@@ -107,18 +107,7 @@ class Piper:
             },
         )[0].squeeze((0, 1))
         audio = audio_float_to_int16(audio.squeeze())
-
-        # Convert to WAV
-        with io.BytesIO() as wav_io:
-            wav_file: wave.Wave_write = wave.open(wav_io, "wb")
-            with wav_file:
-                wav_file.setframerate(self.config.sample_rate)
-                wav_file.setsampwidth(2)
-                wav_file.setnchannels(1)
-                wav_file.writeframes(audio.tobytes())
-
-            return wav_io.getvalue(), self.config.sample_rate
-        #return audio, self.config.sample_rate
+        return audio, self.config.sample_rate
 
 
 def load_config(config_path: Union[str, Path]) -> PiperConfig:
