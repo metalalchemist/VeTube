@@ -1,6 +1,7 @@
 from logging import getLogger
 logger = getLogger('update')
-import json,languageHandler
+import json
+from utils import languageHandler
 import contextlib
 import io
 import os

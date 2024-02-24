@@ -1,4 +1,5 @@
-import wx,languageHandler,fajustes
+import wx
+from utils import languageHandler, fajustes
 from google_currency import CODES
 from translator import TranslatorWrapper
 from accessible_output2.outputs import  sapi5
@@ -6,15 +7,31 @@ from TTS.lector import configurar_tts, detect_onnx_models
 from TTS.list_voices import piper_list_voices, install_piper_voice
 from TTS.Piper import Piper, speaker
 from os import path
-from playsound import playsound
+from helpers.sound_helper import playsound
+player = playsound()
 if not path.exists("data.json"): fajustes.escribirConfiguracion()
 config=fajustes.leerConfiguracion()
-
+player.setdevice(int(config["dispositivo"]))
 prueba=configurar_tts("sapi5")
 prueba_piper=configurar_tts("piper")
 lista_voces=prueba.list_voices()
 lista_voces_piper = piper_list_voices()
-rutasonidos=["sounds/chat.mp3","sounds/chatmiembro.mp3","sounds/miembros.mp3","sounds/donar.mp3","sounds/moderators.mp3","sounds/verified.mp3","sounds/abrirchat.wav","sounds/propietario.mp3","sounds/buscar.wav","sounds/like.wav","sounds/seguirte.mp3","sounds/share.mp3","sounds/chest.mp3"]
+rutasonidos=[
+	"sounds/chat.mp3",
+	"sounds/chatmiembro.mp3",
+	"sounds/miembros.mp3",
+	"sounds/donar.mp3",
+	"sounds/moderators.mp3",
+	"sounds/verified.mp3",
+	"sounds/abrirchat.wav",
+	"sounds/propietario.mp3",
+	"sounds/buscar.wav",
+	"sounds/like.wav",
+	"sounds/seguirte.mp3",
+	"sounds/share.mp3",
+	"sounds/chest.mp3"
+]
+
 class configuracionDialog(wx.Dialog):
 	def __init__(self, parent):
 		global config, lista_voces, prueba_piper
@@ -38,9 +55,35 @@ class configuracionDialog(wx.Dialog):
 				lista_voces = lista_voces_piper
 			else:
 				lista_voces = [_("No hay voces instaladas")]
-		mensajes_categorias=[_('Mensajes'),_('Miembros'),_('Donativos'),_('Moderadores'),_('Usuarios Verificados'),_('Favoritos')]
-		mensajes_sonidos=[_('Sonido cuando llega un mensaje'),_('Sonido cuando habla un miembro'),_('Sonido cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok'),_('Sonido cuando llega un donativo'),_('Sonido cuando habla un moderador'),_('Sonido cuando habla un usuario verificado'),_('Sonido al ingresar al chat'),_('Sonido cuando habla el propietario del canal'),_('sonido al terminar la búsqueda de mensajes'),_('sonido cuando le dan me gusta al en vivo (solo para tiktok)'),_('Sonido cuando alguien empieza a seguirte en tiktok'),_('Sonido cuando alguien comparte el enlace de tu envivo en  tiktok'),_('Sonido cuando alguien envía un cofre  en tiktok')]
-		eventos_lista=[_('Cuando habla un miembro'),_('Cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok'),_('Cuando llega un donativo'),_('Cuando habla un moderador'),_('Cuando habla un usuario verificado'),_('Cuando le dan me gusta al en vivo (solo para tiktok)'),_('Cuando alguien empieza a seguirte en tiktok'),_('Cuando alguien comparte el enlace de tu envivo en  tiktok'),_('Cuando alguien envía un cofre  en tiktok')]
+		mensajes_categorias=[
+			_('Mensajes'),_('Miembros'),_('Donativos'),_('Moderadores'),_('Usuarios Verificados'),_('Favoritos')
+		]
+		mensajes_sonidos=[
+			_('Sonido cuando llega un mensaje'),
+			_('Sonido cuando habla un miembro'),
+			_('Sonido cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok'),
+			_('Sonido cuando llega un donativo'),
+			_('Sonido cuando habla un moderador'),
+			_('Sonido cuando habla un usuario verificado'),
+			_('Sonido al ingresar al chat'),
+			_('Sonido cuando habla el propietario del canal'),
+			_('sonido al terminar la búsqueda de mensajes'),
+			_('sonido cuando le dan me gusta al en vivo (solo para tiktok)'),
+			_('Sonido cuando alguien empieza a seguirte en tiktok'),
+			_('Sonido cuando alguien comparte el enlace de tu envivo en  tiktok'),
+			_('Sonido cuando alguien envía un cofre  en tiktok')
+		]
+		eventos_lista=[
+			_('Cuando habla un miembro'),
+			_('Cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok'),
+			_('Cuando llega un donativo'),
+			_('Cuando habla un moderador'),
+			_('Cuando habla un usuario verificado'),
+			_('Cuando le dan me gusta al en vivo (solo para tiktok)'),
+			_('Cuando alguien empieza a seguirte en tiktok'),
+			_('Cuando alguien comparte el enlace de tu envivo en  tiktok'),
+			_('Cuando alguien envía un cofre  en tiktok')
+		]
 		super().__init__(parent, title=_("Configuración"))
 		sizer_5 = wx.BoxSizer(wx.VERTICAL)
 		labelConfic = wx.StaticText(self, -1, _("Categorías"))
@@ -84,6 +127,13 @@ class configuracionDialog(wx.Dialog):
 		boxSizer_1.Add(label_monedas)
 		boxSizer_1.Add(self.choice_moneditas)
 		sizer_4.Add(boxSizer_1, 1, wx.EXPAND, 0)
+		self.treeItem_audio = wx.Panel(self.tree_1, wx.ID_ANY)
+		dispositivos = player.devicenames
+		label_dispositivo = wx.StaticText(self.treeItem_audio, wx.ID_ANY, _("Seleccionar dispositivo de audio"))
+		self.dispositivos= wx.Choice(self.treeItem_audio, wx.ID_ANY, choices=dispositivos)
+		self.dispositivos.SetSelection(config['dispositivo']-1)
+		self.dispositivos.Bind(wx.EVT_CHOICE, self.alternar_dispositivo)
+		self.tree_1.AddPage(self.treeItem_audio, _("audio"))
 		self.treeItem_2 = wx.Panel(self.tree_1, wx.ID_ANY)
 		self.tree_1.AddPage(self.treeItem_2, _("Voz"))
 		sizer_6 = wx.BoxSizer(wx.HORIZONTAL)
@@ -174,7 +224,7 @@ class configuracionDialog(wx.Dialog):
 		sizer_soniditos.Add(self.check_2)
 		sizer_soniditos.Add(self.soniditos, 1, wx.EXPAND)
 		self.reproducir= wx.Button(self.treeItem_4, wx.ID_ANY, _("&Reproducir"))
-		self.reproducir.Bind(wx.EVT_BUTTON, lambda event: playsound(rutasonidos[self.soniditos.GetFocusedItem()], False))
+		self.reproducir.Bind(wx.EVT_BUTTON, lambda event: player.playsound(rutasonidos[self.soniditos.GetFocusedItem()], False))
 		if config['sonidos']: self.reproducir.Enable()
 		else: self.reproducir.Disable()
 		sizer_soniditos.Add(self.reproducir)
@@ -211,6 +261,11 @@ class configuracionDialog(wx.Dialog):
 		self.treeItem_2.SetSizer(sizer_6)
 		self.SetSizer(sizer_5)		
 		self.Center()
+
+	def alternar_dispositivo(self, event):
+		config['dispositivo']=(self.dispositivos.GetSelection() +1)
+		player.setdevice(config["dispositivo"]+1)
+
 	def cambiar_sintetizador(self, event):
 		global lista_voces
 		config['sistemaTTS']=self.seleccionar_TTS.GetStringSelection()

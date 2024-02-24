@@ -1,4 +1,5 @@
-import wx,languageHandler
+import wx
+from utils import languageHandler
 from translator import TranslatorWrapper
 class showComment(wx.Dialog):
 	def __init__(self, parent,text):
