@@ -4,6 +4,7 @@ import json,wx,wx.adv,threading,languageHandler,restart,translator,time,funcione
 from keyboard_handler.wx_handler import WXKeyboardHandler
 from sound import playsound
 player = playsound()
+device_names = player.devicenames
 player.setdevice(2)
 from TTS.lector import configurar_tts, detect_onnx_models
 from TTS.list_voices import install_piper_voice

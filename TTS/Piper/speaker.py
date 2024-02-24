@@ -3,8 +3,8 @@ from functools import partial
 from pathlib import Path
 from sound_lib import stream
 from sound_lib import output
+from sound_lib.main import BassError
 from . import Piper
-o = output.Output()
 
 class piperSpeak:
 	def __init__(self, model_path):
@@ -15,6 +15,17 @@ class piperSpeak:
 		self.noise_w = 0.8
 		self.synthesize = None
 		self.voice = None
+		# Audio:
+		try:
+			self.o = output.Output()
+		except BassError as e:
+			if e.code == 14:
+				print("Already initialized.")
+				print(output.Output.free())
+				self.o = output.Output(device=-1)
+			else:
+				pass
+		self.o.start()
 		self.audio_stream=None
 
 	def load_model(self):

@@ -8,6 +8,7 @@ from TTS.Piper import Piper, speaker
 from os import path
 from sound import playsound
 player = playsound()
+player.setdevice(2)
 if not path.exists("data.json"): fajustes.escribirConfiguracion()
 config=fajustes.leerConfiguracion()
 
