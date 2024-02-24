@@ -17,7 +17,7 @@ class piperSpeak:
 		self.voice = None
 		# Audio:
 		try:
-			self.o = output.Output()
+			self.o = output.Output(device=-1)
 		except BassError as e:
 			if e.code == 14:
 				print("Already initialized.")
@@ -25,7 +25,7 @@ class piperSpeak:
 				self.o = output.Output(device=-1)
 			else:
 				pass
-		self.o.start()
+		#self.o.start()
 		self.audio_stream=None
 
 	def load_model(self):
@@ -39,6 +39,9 @@ class piperSpeak:
 
 	def set_speaker(self, sid):
 		self.speaker_id = sid
+
+	def set_device(self, device):
+		self.o.set_device(device)
 
 	def is_multispeaker(self):
 		return self.voice.config.num_speakers > 1
@@ -60,6 +63,7 @@ class piperSpeak:
 			self.noise_scale,
 			self.noise_w
 		)
-		self.audio_stream.stop()
+		if self.audio_stream.is_playing:
+			self.audio_stream.stop()
 		self.audio_stream.push(audio_norm)
 		self.audio_stream.play()

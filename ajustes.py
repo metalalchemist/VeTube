@@ -245,5 +245,6 @@ class configuracionDialog(wx.Dialog):
 		config['voz']=self.choice_2.GetSelection()
 		if config['sistemaTTS'] == "piper":
 			prueba_piper = speaker.piperSpeak(f"piper/voices/voice-{lista_voces[config['voz']][:-4]}/{lista_voces[config['voz']]}")
+			prueba_piper.set_device(2)
 		else:
 			prueba.set_voice(lista_voces[config['voz']])
