@@ -12,8 +12,8 @@ from helpers.timer import Timer
 from chat_downloader import ChatDownloader
 from update import updater,update
 from os import path,remove,getcwd, makedirs
-from TikTokLive import TikTokLiveClient
-from TikTokLive.types.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent,LikeEvent,JoinEvent,FollowEvent,ShareEvent,ViewerUpdateEvent,EnvelopeEvent, EmoteEvent
+from TikTokLiveLegacy import TikTokLiveClient
+from TikTokLiveLegacy.types.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent,LikeEvent,JoinEvent,FollowEvent,ShareEvent,ViewerUpdateEvent,EnvelopeEvent, EmoteEvent
 from utils.menu_accesible import Accesible
 from translator import TranslatorWrapper
 from helpers.playroom_helper import PlayroomHelper
@@ -90,9 +90,28 @@ codes = []
 [codes.append(i[0]) for i in idiomas]
 codes.reverse()
 langs.reverse()
-mensaje_teclas=[_('Silencia la voz sapy'),_('Mensaje anterior.'),_('Mensaje siguiente'),_('Buffer anterior'),_('Siguiente Buffer'),_('Ir al comienzo del buffer'),_('Ir al final del buffer'),_('Destaca un mensaje en el buffer de  favoritos'),_('Copia el mensaje actual'),_('Activa o desactiva la lectura automática'),_('Busca una palabra en los mensajes actuales'),_('Muestra el mensaje actual en un cuadro de texto'),_('borra el buffer seleccionado'),_('activa o desactiva los sonidos del programa'),_('Invocar el editor de combinaciones de teclado'),_('Archivar un mensaje')]
+mensaje_teclas=[
+	_('Silencia la voz sapy'),
+	_('Mensaje anterior.'),
+	_('Mensaje siguiente'),
+	_('Buffer anterior'),
+	_('Siguiente Buffer'),
+	_('Ir al comienzo del buffer'),
+	_('Ir al final del buffer'),
+	_('Destaca un mensaje en el buffer de  favoritos'),
+	_('Copia el mensaje actual'),
+	_('Activa o desactiva la lectura automática'),
+	_('Busca una palabra en los mensajes actuales'),
+	_('Muestra el mensaje actual en un cuadro de texto'),
+	_('borra el buffer seleccionado'),
+	_('activa o desactiva los sonidos del programa'),
+	_('Invocar el editor de combinaciones de teclado'),
+	_('Archivar un mensaje')
+]
 def retornarCategorias():
-	categorias = [_('General'), _('Mensajes'), _('Miembros'), _('Donativos'), _('Moderadores'), _('Usuarios Verificados'), _('Favoritos')]
+	categorias = [
+		_("General"), _("Mensajes"), _("Miembros"), _("Donativos"), _("Moderadores"), _("Usuarios Verificados"), _("Favoritos")
+	]
 	lista = [categoria for i, categoria in enumerate(categorias) if i < len(config['categorias']) and config['categorias'][i]]
 	return [lista]
 lista=retornarCategorias()
