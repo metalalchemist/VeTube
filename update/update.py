@@ -14,7 +14,7 @@ except ImportError:
     import zipfile
 import wx
 from platform_utils import paths
-from translator import TranslatorWrapper
+from utils.translator import TranslatorWrapper
 
 def perform_update(endpoint, current_version, app_name='', password=None, update_available_callback=None, progress_callback=None, update_complete_callback=None):
     if os.path.exists("data.json"):

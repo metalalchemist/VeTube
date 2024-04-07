@@ -1,7 +1,7 @@
 import wx
 from utils import languageHandler, fajustes
 from google_currency import CODES
-from translator import TranslatorWrapper
+from utils.translator import TranslatorWrapper
 from accessible_output2.outputs import  sapi5
 from TTS.lector import configurar_tts, detect_onnx_models
 from TTS.list_voices import piper_list_voices, install_piper_voice
@@ -133,7 +133,8 @@ class configuracionDialog(wx.Dialog):
 		label_dispositivo = wx.StaticText(self.treeItem_audio, wx.ID_ANY, _("Seleccionar dispositivo de audio"))
 		self.lista_dispositivos= wx.Choice(self.treeItem_audio, wx.ID_ANY, choices=self.dispositivos)
 		self.lista_dispositivos.SetSelection(config['dispositivo']-1)
-		self.lista_dispositivos.Bind(wx.EVT_CHOICE, self.alternar_dispositivo)
+		self.establecer_dispositivo = wx.Button(self.treeItem_audio, wx.ID_ANY, label=_("&Establecer"))
+		self.establecer_dispositivo.Bind(wx.EVT_BUTTON, self.alternar_dispositivo)
 		self.tree_1.AddPage(self.treeItem_audio, _("audio"))
 		self.treeItem_2 = wx.Panel(self.tree_1, wx.ID_ANY)
 		self.tree_1.AddPage(self.treeItem_2, _("Voz"))
@@ -269,10 +270,12 @@ class configuracionDialog(wx.Dialog):
 		valor = (self.lista_dispositivos.GetSelection() +1)
 		valor_str = self.lista_dispositivos.GetStringSelection()
 		config['dispositivo']=valor
-		player.setdevice(config["dispositivo"]+1)
+		player.setdevice(config["dispositivo"])
+		player.playsound("sounds/cambiardispositivo.wav")
 		if config['sistemaTTS'] == "piper" and dispositivos_piper is not None:
 			salida_piper = prueba_piper.find_device_id(valor_str)
 			prueba_piper.set_device(salida_piper)
+			prueba_piper.speak(_("Hablaré a través de este dispositivo."))
 
 	def cambiar_sintetizador(self, event):
 		global lista_voces

@@ -1,8 +1,8 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,wx.adv,threading,restart,time,google_currency,ajustes,mostrarchat
-from utils import fajustes, funciones, languageHandler
-from keyboard_handler.wx_handler import WXKeyboardHandler
+import json,wx,wx.adv,threading,time,google_currency,ajustes
+from utils import fajustes, funciones, languageHandler, mostrarchat, restart
+from helpers.keyboard_handler.wx_handler import WXKeyboardHandler
 from helpers.sound_helper import playsound
 player = playsound()
 from TTS.lector import configurar_tts, detect_onnx_models
@@ -15,7 +15,7 @@ from os import path,remove,getcwd, makedirs
 from TikTokLiveLegacy import TikTokLiveClient
 from TikTokLiveLegacy.types.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent,LikeEvent,JoinEvent,FollowEvent,ShareEvent,ViewerUpdateEvent,EnvelopeEvent, EmoteEvent
 from utils.menu_accesible import Accesible
-from translator import TranslatorWrapper
+from utils.translator import TranslatorWrapper
 from helpers.playroom_helper import PlayroomHelper
 
 yt=0
@@ -24,7 +24,7 @@ if not path.exists("data.json"): fajustes.escribirConfiguracion()
 config=fajustes.leerConfiguracion()
 lector=configurar_tts(config['sistemaTTS'])
 leer=configurar_tts("sapi5")
-player.setdevice(int(config["dispositivo"]))
+player.setdevice(config["dispositivo"])
 
 def configurar_piper(carpeta_voces):
 	global config, lector
