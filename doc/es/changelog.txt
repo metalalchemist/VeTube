@@ -1,3 +1,6 @@
+v3.0
+podremos capturar el chat de una plataforma solo con el usuario de la persona. por ejemplo, si escriimos 4everzyanya damos ta y elejimos tiktok y al dar enter nos llevará al en vivo de tiktok de la persona.
+el editor de cominaciones se podrá acceder antes del chat como durante el chat.
 v2.9
 corregido el bug de no poder agregar canales:
 *para agregar el canal de youtube necesitas escribir el usuario del canal, seguido de /live. por ejemplo:
