@@ -404,7 +404,11 @@ class MyFrame(wx.Frame):
 	def appConfiguracion(self, event):			
 		self.cf=ajustes.configuracionDialog(self)
 		if self.cf.ShowModal()==wx.ID_OK: self.guardar()
-	def infoApp(self, event): wx.MessageBox(_("Creadores del proyecto:")+"\nCésar Verástegui & Johan G.\n"+_("Descripción:\n Lee en voz alta los mensajes de los directos en youtube y twitch, ajusta tus preferencias como quieras y disfruta más tus canales favoritos."), _("Información"), wx.ICON_INFORMATION)
+	def infoApp(self, event):
+		wx.MessageBox(
+			_("Creadores del proyecto:")+"\nCésar Verástegui & Johan G.\n"+_("Descripción:\n Lee en voz alta los mensajes de los directos en youtube y twitch, ajusta tus preferencias como quieras y disfruta más tus canales favoritos."),
+			_("Información"), wx.ICON_INFORMATION
+		)
 	def acceder(self, event=None,url=""):
 		if not url: url=self.text_ctrl_1.GetValue()
 		if self.plataforma.GetSelection()==4: url="sala"
@@ -1057,7 +1061,8 @@ class MyFrame(wx.Frame):
 				else: lector.speak(event.user.nickname + _(" ha compartido el en vivo!"))
 		self.list_box_1.Append(event.user.nickname + _(" ha compartido tu en vivo!"))
 		if config['sonidos'] and config['listasonidos'][11]: player.playsound(ajustes.rutasonidos[11],False)
-	async def on_view(self,event: RoomUserSeqEvent): self.label_dialog.SetLabel(self.chat.unique_id+_(' en vivo, actualmente ')+str(event.total)+_(' viendo ahora'))
+	async def on_view(self,event: RoomUserSeqEvent):
+		self.label_dialog.SetLabel(self.chat.unique_id+_(' en vivo, actualmente ')+str(event.total)+_(' viendo ahora'))
 	async def on_disconnect(self,event: DisconnectEvent):
 		if self.dentro: self.chat.run()
 	def recibirTiktok(self):
