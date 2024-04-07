@@ -81,6 +81,8 @@ if config['sistemaTTS'] == "piper":
 	lector_Salidas = lector.get_devices()
 	salida_actual = lector.find_device_id(dispositivos[config["dispositivo"]-1])
 	lector.set_device(salida_actual)
+else:
+	lector_Salidas = None
 # establecer idiomas:
 languageHandler.setLanguage(config['idioma'])
 idiomas = languageHandler.getAvailableLanguages()
@@ -403,7 +405,8 @@ class MyFrame(wx.Frame):
 			self.handler_keyboard.register_keys(mis_teclas)
 	def appConfiguracion(self, event):			
 		self.cf=ajustes.configuracionDialog(self)
-		if self.cf.ShowModal()==wx.ID_OK: self.guardar()
+		if self.cf.ShowModal()==wx.ID_OK:
+			self.guardar()
 	def infoApp(self, event):
 		wx.MessageBox(
 			_("Creadores del proyecto:")+"\nCésar Verástegui & Johan G.\n"+_("Descripción:\n Lee en voz alta los mensajes de los directos en youtube y twitch, ajusta tus preferencias como quieras y disfruta más tus canales favoritos."),
@@ -627,7 +630,7 @@ class MyFrame(wx.Frame):
 			dlg_mensaje.Destroy()
 		else: wx.MessageBox(_("No hay mensajes para guardar."), "info.", wx.ICON_INFORMATION)
 	def guardar(self):
-		global lista,config,leer
+		global lista,config,leer,dispositivos,lector_Salidas
 		rest=False
 		translator = TranslatorWrapper()
 		config=ajustes.config
@@ -656,6 +659,9 @@ class MyFrame(wx.Frame):
 			dlg = wx.MessageDialog(None, _("Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea reiniciarlo ahora?"), _("¡Atención!"), wx.YES_NO | wx.ICON_ASTERISK)
 			if dlg.ShowModal()==wx.ID_YES: restart.restart_program()
 			else: dlg.Destroy()
+		# Targeta de sonido:
+		salida_actual = lector.find_device_id(dispositivos[config["dispositivo"]-1])
+		lector.set_device(salida_actual)
 		# verificar voces:
 		if config['sistemaTTS'] == "piper": configurar_piper(carpeta_voces)
 		leer=ajustes.prueba
