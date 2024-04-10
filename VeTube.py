@@ -112,10 +112,11 @@ mensaje_teclas=[
 ]
 def retornarCategorias():
 	categorias = [
-		_("General"), _("Mensajes"), _("Miembros"), _("Donativos"), _("Moderadores"), _("Usuarios Verificados"), _("Favoritos")
+		_("Mensajes"), _("Miembros"), _("Donativos"), _("Moderadores"), _("Usuarios Verificados"), _("Favoritos")
 	]
-	lista = [categoria for i, categoria in enumerate(categorias) if i < len(config['categorias']) and config['categorias'][i]]
-	return [lista]
+	lista = [[categoria] for i, categoria in enumerate(categorias) if i < len(config['categorias']) and config['categorias'][i]]
+	lista.insert(0,[_('General')])
+	return lista
 lista=retornarCategorias()
 for temporal in lista: pos.append(1)
 class MyFrame(wx.Frame):
