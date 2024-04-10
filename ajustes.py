@@ -1,23 +1,41 @@
-import wx,languageHandler,fajustes
+import wx
+from utils import languageHandler, fajustes
 from google_currency import CODES
-from translator import TranslatorWrapper
+from utils.translator import TranslatorWrapper
 from accessible_output2.outputs import  sapi5
 from TTS.lector import configurar_tts, detect_onnx_models
 from TTS.list_voices import piper_list_voices, install_piper_voice
 from TTS.Piper import Piper, speaker
 from os import path
-from playsound import playsound
+from helpers.sound_helper import playsound
+player = playsound()
 if not path.exists("data.json"): fajustes.escribirConfiguracion()
 config=fajustes.leerConfiguracion()
-
+player.setdevice(int(config["dispositivo"]))
 prueba=configurar_tts("sapi5")
 prueba_piper=configurar_tts("piper")
+dispositivos_piper = None
 lista_voces=prueba.list_voices()
 lista_voces_piper = piper_list_voices()
-rutasonidos=["sounds/chat.mp3","sounds/chatmiembro.mp3","sounds/miembros.mp3","sounds/donar.mp3","sounds/moderators.mp3","sounds/verified.mp3","sounds/abrirchat.wav","sounds/propietario.mp3","sounds/buscar.wav","sounds/like.wav","sounds/seguirte.mp3","sounds/share.mp3","sounds/chest.mp3"]
+rutasonidos=[
+	"sounds/chat.mp3",
+	"sounds/chatmiembro.mp3",
+	"sounds/miembros.mp3",
+	"sounds/donar.mp3",
+	"sounds/moderators.mp3",
+	"sounds/verified.mp3",
+	"sounds/abrirchat.wav",
+	"sounds/propietario.mp3",
+	"sounds/buscar.wav",
+	"sounds/like.wav",
+	"sounds/seguirte.mp3",
+	"sounds/share.mp3",
+	"sounds/chest.mp3"
+]
+
 class configuracionDialog(wx.Dialog):
 	def __init__(self, parent):
-		global config, lista_voces, prueba_piper
+		global config, lista_voces, prueba_piper, dispositivos_piper
 		# idioma:
 		translator = TranslatorWrapper()
 		languageHandler.setLanguage(config['idioma'])
@@ -38,9 +56,35 @@ class configuracionDialog(wx.Dialog):
 				lista_voces = lista_voces_piper
 			else:
 				lista_voces = [_("No hay voces instaladas")]
-		mensajes_categorias=[_('Mensajes'),_('Miembros'),_('Donativos'),_('Moderadores'),_('Usuarios Verificados'),_('Favoritos')]
-		mensajes_sonidos=[_('Sonido cuando llega un mensaje'),_('Sonido cuando habla un miembro'),_('Sonido cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok'),_('Sonido cuando llega un donativo'),_('Sonido cuando habla un moderador'),_('Sonido cuando habla un usuario verificado'),_('Sonido al ingresar al chat'),_('Sonido cuando habla el propietario del canal'),_('sonido al terminar la búsqueda de mensajes'),_('sonido cuando le dan me gusta al en vivo (solo para tiktok)'),_('Sonido cuando alguien empieza a seguirte en tiktok'),_('Sonido cuando alguien comparte el enlace de tu envivo en  tiktok'),_('Sonido cuando alguien envía un cofre  en tiktok')]
-		eventos_lista=[_('Cuando habla un miembro'),_('Cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok'),_('Cuando llega un donativo'),_('Cuando habla un moderador'),_('Cuando habla un usuario verificado'),_('Cuando le dan me gusta al en vivo (solo para tiktok)'),_('Cuando alguien empieza a seguirte en tiktok'),_('Cuando alguien comparte el enlace de tu envivo en  tiktok'),_('Cuando alguien envía un cofre  en tiktok')]
+		mensajes_categorias=[
+			_('Mensajes'),_('Miembros'),_('Donativos'),_('Moderadores'),_('Usuarios Verificados'),_('Favoritos')
+		]
+		mensajes_sonidos=[
+			_('Sonido cuando llega un mensaje'),
+			_('Sonido cuando habla un miembro'),
+			_('Sonido cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok'),
+			_('Sonido cuando llega un donativo'),
+			_('Sonido cuando habla un moderador'),
+			_('Sonido cuando habla un usuario verificado'),
+			_('Sonido al ingresar al chat'),
+			_('Sonido cuando habla el propietario del canal'),
+			_('sonido al terminar la búsqueda de mensajes'),
+			_('sonido cuando le dan me gusta al en vivo (solo para tiktok)'),
+			_('Sonido cuando alguien empieza a seguirte en tiktok'),
+			_('Sonido cuando alguien comparte el enlace de tu envivo en  tiktok'),
+			_('Sonido cuando alguien envía un cofre  en tiktok')
+		]
+		eventos_lista=[
+			_('Cuando habla un miembro'),
+			_('Cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok'),
+			_('Cuando llega un donativo'),
+			_('Cuando habla un moderador'),
+			_('Cuando habla un usuario verificado'),
+			_('Cuando le dan me gusta al en vivo (solo para tiktok)'),
+			_('Cuando alguien empieza a seguirte en tiktok'),
+			_('Cuando alguien comparte el enlace de tu envivo en  tiktok'),
+			_('Cuando alguien envía un cofre  en tiktok')
+		]
 		super().__init__(parent, title=_("Configuración"))
 		sizer_5 = wx.BoxSizer(wx.VERTICAL)
 		labelConfic = wx.StaticText(self, -1, _("Categorías"))
@@ -116,6 +160,7 @@ class configuracionDialog(wx.Dialog):
 		if config['sistemaTTS'] == "piper":
 			if len(lista_voces) == 1:
 				prueba_piper = speaker.piperSpeak(f"piper/voices/voice-{lista_voces[0][:-4]}/{lista_voces[0]}")
+				dispositivos_piper = prueba_piper.get_devices()
 				config['voz'] = 0
 		self.instala_voces = wx.Button(self.treeItem_2, wx.ID_ANY, label=_("Instalar un paquete de voz..."))
 		self.instala_voces.Bind(wx.EVT_BUTTON, self.instalar_voz_piper)
@@ -159,7 +204,7 @@ class configuracionDialog(wx.Dialog):
 		self.treeItem_3.SetSizer(sizer_categoriza)
 		self.tree_1.AddPage(self.treeItem_3, _('Categorías'))
 		self.treeItem_4 = wx.Panel(self.tree_1, wx.ID_ANY)
-		self.check_2 = wx.CheckBox(self.treeItem_4, wx.ID_ANY, _("Reproducir sonidos."))
+		self.check_2 = wx.CheckBox(self.treeItem_4, wx.ID_ANY, _("Activar sonidos"))
 		self.check_2.SetValue(config['sonidos'])
 		self.check_2.Bind(wx.EVT_CHECKBOX, self.mostrarSonidos)
 		self.soniditos=wx.ListCtrl(self.treeItem_4, wx.ID_ANY)
@@ -174,34 +219,38 @@ class configuracionDialog(wx.Dialog):
 		sizer_soniditos.Add(self.check_2)
 		sizer_soniditos.Add(self.soniditos, 1, wx.EXPAND)
 		self.reproducir= wx.Button(self.treeItem_4, wx.ID_ANY, _("&Reproducir"))
-		self.reproducir.Bind(wx.EVT_BUTTON, lambda event: playsound(rutasonidos[self.soniditos.GetFocusedItem()], False))
+		self.reproducir.Bind(wx.EVT_BUTTON, lambda event: player.playsound(rutasonidos[self.soniditos.GetFocusedItem()], False))
 		if config['sonidos']: self.reproducir.Enable()
 		else: self.reproducir.Disable()
 		sizer_soniditos.Add(self.reproducir)
+		self.dispositivos = player.devicenames
+		label_dispositivo = wx.StaticText(self.treeItem_4, wx.ID_ANY, _("Seleccionar dispositivo de audio"))
+		self.lista_dispositivos= wx.Choice(self.treeItem_4, wx.ID_ANY, choices=self.dispositivos)
+		self.lista_dispositivos.SetSelection(config['dispositivo']-1)
+		self.establecer_dispositivo = wx.Button(self.treeItem_4, wx.ID_ANY, label=_("&Establecer"))
+		self.establecer_dispositivo.Bind(wx.EVT_BUTTON, self.alternar_dispositivo)
 		self.treeItem_4.SetSizer(sizer_soniditos)
 		self.tree_1.AddPage(self.treeItem_4, _('Sonidos'))
 		self.treeItem_5 = wx.Panel(self.tree_1, wx.ID_ANY)
+		lbl = wx.StaticText(self.treeItem_5, wx.ID_ANY, _("procesados: "))
 		self.eventos=wx.ListCtrl(self.treeItem_5, wx.ID_ANY)
 		self.eventos.EnableCheckBoxes()
 		for contador in range(len(config['eventos'])):
 			self.eventos.InsertItem(contador,eventos_lista[contador])
 			self.eventos.CheckItem(contador,check=config['eventos'][contador])
-		self.eventos.Focus(0)
-		sizer_eventos = wx.BoxSizer()
-		sizer_eventos.Add(self.eventos, 1, wx.EXPAND)
-		self.treeItem_5.SetSizer(sizer_eventos)
-		self.tree_1.AddPage(self.treeItem_5, _('Eventos'))
-		self.treeItem_6 = wx.Panel(self.tree_1, wx.ID_ANY)
-		self.unread=wx.ListCtrl(self.treeItem_6, wx.ID_ANY)
+		lbl_1 = wx.StaticText(self.treeItem_5, wx.ID_ANY, _("leídos"))
+		self.unread=wx.ListCtrl(self.treeItem_5, wx.ID_ANY)
 		self.unread.EnableCheckBoxes()
 		for contador in range(len(config['unread'])):
 			self.unread.InsertItem(contador,eventos_lista[contador])
 			self.unread.CheckItem(contador,check=config['unread'][contador])
-		self.unread.Focus(0)
-		sizer_unread = wx.BoxSizer()
-		sizer_unread.Add(self.unread, 1, wx.EXPAND)
-		self.treeItem_6.SetSizer(sizer_unread)
-		self.tree_1.AddPage(self.treeItem_6, _('Eventos leídos.'))
+		sizer_eventos = wx.BoxSizer()
+		sizer_eventos.Add(self.eventos, 1, wx.EXPAND)
+		sizer_eventos.Add(lbl, 1, wx.EXPAND)
+		sizer_eventos.Add(self.unread, 1, wx.EXPAND)
+		sizer_eventos.Add(lbl_1, 1, wx.EXPAND)
+		self.treeItem_5.SetSizer(sizer_eventos)
+		self.tree_1.AddPage(self.treeItem_5, _('Eventos'))
 		button_6 = wx.Button(self, wx.ID_OK, _("&Aceptar"))
 		button_6.SetDefault()
 		sizer_5.Add(button_6, 0, 0, 0)
@@ -211,6 +260,19 @@ class configuracionDialog(wx.Dialog):
 		self.treeItem_2.SetSizer(sizer_6)
 		self.SetSizer(sizer_5)		
 		self.Center()
+
+	def alternar_dispositivo(self, event):
+		global prueba_piper, dispositivos_piper
+		valor = (self.lista_dispositivos.GetSelection() +1)
+		valor_str = self.lista_dispositivos.GetStringSelection()
+		config['dispositivo']=valor
+		player.setdevice(config["dispositivo"])
+		player.playsound("sounds/cambiardispositivo.wav")
+		if config['sistemaTTS'] == "piper" and dispositivos_piper is not None:
+			salida_piper = prueba_piper.find_device_id(valor_str)
+			prueba_piper.set_device(salida_piper)
+			prueba_piper.speak(_("Hablaré a través de este dispositivo."))
+
 	def cambiar_sintetizador(self, event):
 		global lista_voces
 		config['sistemaTTS']=self.seleccionar_TTS.GetStringSelection()
@@ -226,7 +288,7 @@ class configuracionDialog(wx.Dialog):
 		self.choice_2.Clear()
 		self.choice_2.AppendItems(lista_voces)
 	def instalar_voz_piper(self, event):
-		global config, prueba_piper,lista_voces
+		global config, prueba_piper, lista_voces
 		config, prueba_piper = install_piper_voice(config, prueba_piper)
 		lista_voces = piper_list_voices()
 		if lista_voces:
@@ -271,9 +333,13 @@ class configuracionDialog(wx.Dialog):
 		self.seleccionar_TTS.Enable(not event.IsChecked())
 
 	def cambiarVoz(self, event):	
-		global prueba_piper, lista_voces
+		global prueba_piper, lista_voces, dispositivos_piper
 		config['voz']=self.choice_2.GetSelection()
 		if config['sistemaTTS'] == "piper":
 			prueba_piper = speaker.piperSpeak(f"piper/voices/voice-{lista_voces[config['voz']][:-4]}/{lista_voces[config['voz']]}")
+			dispositivos_piper = prueba_piper.get_devices()
+			# Establecer dispositivo desde la configuración:
+			salida_piper = prueba_piper.find_device_id(self.dispositivos[config["dispositivo"]-1])
+			prueba_piper.set_device(salida_piper)
 		else:
 			prueba.set_voice(lista_voces[config['voz']])
