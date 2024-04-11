@@ -8,6 +8,7 @@ configuraciones ={
 	"volume": 100,
 	"speed": 0,
 	'sapi':True,
+	'dispositivo': 1,
 	'sonidos': True,
 	'idioma': "system",
 	'categorias': [True,True, True, False, False, False],
@@ -23,7 +24,8 @@ actualizar_configuracion = False
 
 def escribirConfiguracion():
 	global configuraciones
-	with open('data.json', 'w+') as file: json.dump(configuraciones, file)
+	with open('data.json', 'w+') as file:
+		json.dump(configuraciones, file, indent=4)
 
 def leerConfiguracion():
 	global configuraciones, actualizar_configuracion
@@ -35,5 +37,6 @@ def leerConfiguracion():
 			actualizar_configuracion = True
 	# actualizar al archivo en caso de ser necesario:
 	if actualizar_configuracion:
-		with open('data.json', 'w+') as file: json.dump(configs, file)
+		with open('data.json', 'w+') as file:
+			json.dump(configs, file, indent=4)
 	return configs

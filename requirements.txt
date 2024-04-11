@@ -1,5 +1,5 @@
 wxPython
-playsound==1.2.2
+sounddevice
 TikTokLive
 pyperclip
 chat_downloader
@@ -9,6 +9,6 @@ git+https://github.com/rmcpantoja/googletrans.git
 numpy
 onnxruntime
 git+https://github.com/mush42/espeak-phonemizer-windows
-sounddevice
+git+https://github.com/accessibleapps/sound_lib
 uiautomation
 psutil

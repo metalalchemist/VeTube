@@ -13,14 +13,37 @@ class piperSpeak:
 		self.noise_w = 0.8
 		self.synthesize = None
 		self.voice = None
+		# Audio:
+		self.device = sd.default.device[1]
+		self.devices = None
 
 	def load_model(self):
 		if self.voice:
 			return self.voice
 		self.voice = Piper(self.model_path)
 
+	def get_devices(self):
+		if self.devices is None:
+			devices = sd.query_devices()
+			self.devices= [
+				{'name': device["name"].replace("(", "").replace(")", "").strip(), 'id': device["index"]}
+				for device in devices
+				if device['max_output_channels'] > 0 and device['hostapi'] == 0
+			]
+		return self.devices
+
+	def find_device_id(self, term):
+		devices = self.get_devices()
+		for device in devices:
+			if device['name'] == term:
+				return device['id']
+		return sd.default.device[1]
+
 	def set_rate(self, new_scale):
 		self.length_scale = new_scale
+
+	def set_device(self, device):
+		self.device = device
 
 	def set_speaker(self, sid):
 		self.speaker_id = sid
@@ -45,4 +68,4 @@ class piperSpeak:
 			self.noise_scale,
 			self.noise_w
 		)
-		sd.play(audio_norm, sample_rate)
+		sd.play(audio_norm, sample_rate, device=self.device)
