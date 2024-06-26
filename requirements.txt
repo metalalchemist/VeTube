@@ -5,6 +5,7 @@ pyperclip
 chat_downloader
 git+https://github.com/metalalchemist/google-currency
 git+https://github.com/accessibleapps/accessible_output2
+git+https://github.com/accessibleapps/platform_utils
 git+https://github.com/rmcpantoja/googletrans.git
 numpy
 onnxruntime
