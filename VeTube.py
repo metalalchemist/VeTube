@@ -1093,6 +1093,7 @@ class MyFrame(wx.Frame):
 				exit()
 				self.hilo2.join()
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
+			print(message)
 			self.agregarUsuario(message['author']['name'])
 			if message['message_type']=='resubscription' and config['eventos'][1]:
 				if config['categorias'][1]:
@@ -1451,7 +1452,7 @@ class MyFrame(wx.Frame):
 			for i in range(len(urls)): list_urls.InsertItem(i, urls[i])
 			list_urls.Focus(0)
 			list_urls.SetFocus()
-			list_urls.Bind(wx.EVT_LIST_ITEM_ACTIVATED, lambda event: wx.LaunchDefaultBrowser(list_urls.GetItem(list_urls.GetFocusedItem(), 0).GetText()))
+			list_urls.Bind(wx.EVT_LIST_ITEM_ACTIVATED, lambda event: (wx.LaunchDefaultBrowser(list_urls.GetItem(list_urls.GetFocusedItem(), 0).GetText()), dialog_urls.Destroy()))
 			sizer_urls.Add(list_urls)
 			button_cerrar = wx.Button(dialog_urls, wx.ID_CANCEL, _("&Cerrar"))
 			sizer_urls.Add(button_cerrar)
