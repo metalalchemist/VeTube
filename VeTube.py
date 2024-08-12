@@ -1093,7 +1093,6 @@ class MyFrame(wx.Frame):
 				exit()
 				self.hilo2.join()
 			if self.dst: message['message'] = translator.translate(text=message['message'], target=self.dst)
-			print(message)
 			self.agregarUsuario(message['author']['name'])
 			if message['message_type']=='resubscription' and config['eventos'][1]:
 				if config['categorias'][1]:
@@ -1104,7 +1103,7 @@ class MyFrame(wx.Frame):
 				self.list_box_1.Append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses! '))
 				if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
 					if config['reader'] and config['unread'][1]:
-						if sapi: leer.speak(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!'))
+						if config['sapi']: leer.speak(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!'))
 						else: lector.speak(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!'))
 				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 				continue
