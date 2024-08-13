@@ -1,6 +1,15 @@
 import  json
+from . import fajustes
 from urllib.parse import urlsplit
 from os import  path
+def retornarCategorias():
+	config=fajustes.leerConfiguracion()
+	categorias = [
+		"Mensajes", "Miembros", "Donativos", "Moderadores", "Usuarios Verificados", "Favoritos"
+	]
+	lista = [[categoria] for i, categoria in enumerate(categorias) if i < len(config['categorias']) and config['categorias'][i]]
+	lista.insert(0,['General'])
+	return lista
 def escribirJsonLista(arch,lista=[]):
 	with open(arch, 'w+') as file: json.dump(lista, file)
 def leerJsonLista(arch):

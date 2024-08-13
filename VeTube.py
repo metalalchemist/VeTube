@@ -117,7 +117,8 @@ def retornarCategorias():
 	lista = [[categoria] for i, categoria in enumerate(categorias) if i < len(config['categorias']) and config['categorias'][i]]
 	lista.insert(0,[_('General')])
 	return lista
-lista=retornarCategorias()
+lista=funciones.retornarCategorias()
+lista1=retornarCategorias()
 for temporal in lista: pos.append(1)
 class MyFrame(wx.Frame):
 	def __init__(self, *args, **kwds):
@@ -611,8 +612,9 @@ class MyFrame(wx.Frame):
 				self.gustados=[]
 				self.megusta=self.unidos=self.seguidores=self.compartidas=0
 			yt=0
-			pos=lista=[]
-			lista=retornarCategorias()				
+			pos=lista=lista1=[]
+			lista=funciones.retornarCategorias()
+			lista1=retornarCategorias()
 			for temporal in lista: pos.append(1)
 			leer.silence()
 			leer.speak(_("ha finalizado la lectura del chat."))
@@ -650,7 +652,8 @@ class MyFrame(wx.Frame):
 			else: config['eventos'].append(False)
 			if self.cf.unread.IsItemChecked(contador): config['unread'].append(True)
 			else: config['unread'].append(False)
-		lista=retornarCategorias()
+			lista=funciones.retornarCategorias()
+			lista1=retornarCategorias()
 		if config['idioma']!=codes[self.cf.choice_language.GetSelection()]:
 			config['idioma']=codes[self.cf.choice_language.GetSelection()]
 			rest=True
@@ -1295,12 +1298,12 @@ class MyFrame(wx.Frame):
 		global yt
 		if yt<len(lista)-1: yt+=1
 		else: yt=0
-		lector.speak(lista[yt][0])
+		lector.speak(lista1[yt][0])
 	def retrocederCategorias(self):
 		global yt
 		if yt<=0: yt=len(lista)-1
 		else: yt-=1
-		lector.speak(lista[yt][0])
+		lector.speak(lista1[yt][0])
 	def destacarMensaje(self):
 		global lista,pos
 		if lista[yt][0]=='Favoritos': lector.speak(_("no puedes agregar un Favorito del bufer de favoritos"))
