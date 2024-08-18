@@ -664,10 +664,11 @@ class MyFrame(wx.Frame):
 			if dlg.ShowModal()==wx.ID_YES: restart.restart_program()
 			else: dlg.Destroy()
 		# Targeta de sonido:
-		salida_actual = lector.find_device_id(dispositivos[config["dispositivo"]-1])
-		lector.set_device(salida_actual)
-		# verificar voces:
-		if config['sistemaTTS'] == "piper": configurar_piper(carpeta_voces)
+		if config['sistemaTTS'] == "piper":
+			salida_actual = lector.find_device_id(dispositivos[config["dispositivo"]-1])
+			lector.set_device(salida_actual)
+			# verificar voces:
+			configurar_piper(carpeta_voces)
 		leer=ajustes.prueba
 		if self.cf.choice_traducir.GetStringSelection()!="":
 			for k in translator.LANGUAGES:
