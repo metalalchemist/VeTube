@@ -159,7 +159,7 @@ class configuracionDialog(wx.Dialog):
 		boxSizer_2 .Add(self.choice_2)
 		if config['sistemaTTS'] == "piper":
 			if len(lista_voces) == 1:
-				prueba_piper = speaker.piperSpeak(f"piper/voices/voice-{lista_voces[0][:-4]}/{lista_voces[0]}")
+				prueba_piper = speaker.piperSpeak(f"piper/voices/voice-{lista_voces[0][:-5]}/{lista_voces[0]}")
 				dispositivos_piper = prueba_piper.get_devices()
 				config['voz'] = 0
 		self.instala_voces = wx.Button(self.treeItem_2, wx.ID_ANY, label=_("Instalar un paquete de voz..."))

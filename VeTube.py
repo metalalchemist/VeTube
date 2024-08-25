@@ -4,8 +4,8 @@ import json,wx,wx.adv,threading,time,google_currency,ajustes
 from utils import fajustes, funciones, languageHandler, mostrarchat, restart
 from helpers.keyboard_handler.wx_handler import WXKeyboardHandler
 from helpers.sound_helper import playsound
-player = playsound()
-from TTS.lector import configurar_tts, detect_onnx_models
+from helpers.reader_handler import ReaderHandler
+from TTS.lector import detect_onnx_models
 from TTS.list_voices import install_piper_voice
 from pyperclip import copy
 from helpers.timer import Timer
@@ -17,13 +17,13 @@ from TikTokLive.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectE
 from utils.menu_accesible import Accesible
 from utils.translator import TranslatorWrapper
 from helpers.playroom_helper import PlayroomHelper
-
+player = playsound()
+reader=ReaderHandler()
 yt=0
 # revisar la configuración primero, ya que necesitamos determinar el sistema TTS a través de ella.
 if not path.exists("data.json"): fajustes.escribirConfiguracion()
 config=fajustes.leerConfiguracion()
-lector=configurar_tts(config['sistemaTTS'])
-leer=configurar_tts("sapi5")
+reader=ReaderHandler()
 player.setdevice(config["dispositivo"])
 
 def configurar_piper(carpeta_voces):
@@ -34,7 +34,7 @@ def configurar_piper(carpeta_voces):
 		abrir_modelos = sinvoces.ShowModal()
 		if abrir_modelos == wx.ID_YES:
 			wx.LaunchDefaultBrowser("https://drive.google.com/drive/folders/1zFJRTI6CpVw9NkrTiNYOKGga0yn4JXzv?usp=drive_link")
-			config, lector = install_piper_voice(config, lector)
+			config, reader._lector = install_piper_voice(config, reader._lector)
 		sinvoces.Destroy()
 	elif isinstance(onnx_models, str) or isinstance(onnx_models, list):
 		config['voz'] = 0
@@ -43,7 +43,7 @@ carpeta_voces = path.join(getcwd(), "piper", "voices")
 
 def escribirTeclas():
 	with open('keys.txt', 'w+') as arch: arch.write("""{
-"control+p": leer.silence,
+"control+p": reader._leer.silence,
 "alt+shift+up": self.elementoAnterior,
 "alt+shift+down": self.elementoSiguiente,
 "alt+shift+left": self.retrocederCategorias,
@@ -68,19 +68,19 @@ def leerTeclas():
 pos=[]
 favorite=funciones.leerJsonLista('favoritos.json')
 mensajes_destacados=funciones.leerJsonLista('mensajes_destacados.json')
-leer.set_rate(config['speed'])
-leer.set_pitch(config['tono'])
-leer.set_voice(leer.list_voices()[0])
-leer.set_volume(config['volume'])
+reader._leer.set_rate(config['speed'])
+reader._leer.set_pitch(config['tono'])
+reader._leer.set_voice(reader._leer.list_voices()[0])
+reader._leer.set_volume(config['volume'])
 favs=funciones.convertirLista(favorite,'titulo','url')
 msjs=funciones.convertirLista(mensajes_destacados,'mensaje','titulo')
 dispositivos = player.devicenames
 # establecer la voz del lector en piper:
 if config['sistemaTTS'] == "piper":
-	lector=lector.piperSpeak(f"piper/voices/voice-{ajustes.lista_voces_piper[config['voz']][:-5]}/{ajustes.lista_voces_piper[config['voz']]}")
-	lector_Salidas = lector.get_devices()
-	salida_actual = lector.find_device_id(dispositivos[config["dispositivo"]-1])
-	lector.set_device(salida_actual)
+	reader._lector=reader._lector.piperSpeak(f"piper/voices/voice-{ajustes.lista_voces_piper[config['voz']][:-5]}/{ajustes.lista_voces_piper[config['voz']]}")
+	lector_Salidas = reader._lector.get_devices()
+	salida_actual = reader._lector.find_device_id(dispositivos[config["dispositivo"]-1])
+	reader._lector.set_device(salida_actual)
 else:
 	lector_Salidas = None
 # establecer idiomas:
@@ -467,10 +467,10 @@ class MyFrame(wx.Frame):
 				self.dialog_mensaje.Centre()
 				self.dialog_mensaje.SetEscapeId(button_mensaje_detener.GetId())
 				if not isinstance(self.chat,TikTokLiveClient):
-					leer.speak(_("Ingresando al chat."))
+					reader.leer_sapi(_("Ingresando al chat."))
 					if config['sonidos'] and config['listasonidos'][6]: player.playsound(ajustes.rutasonidos[6],False)
 				else:
-					leer.speak(_("cargando..."))
+					self.leer_sapi(_("cargando..."))
 					self.megusta=self.seguidores=self.unidos=self.compartidas=0
 					self.gustados=[]
 				if url!="sala":
@@ -616,8 +616,8 @@ class MyFrame(wx.Frame):
 			lista=funciones.retornarCategorias()
 			lista1=retornarCategorias()
 			for temporal in lista: pos.append(1)
-			leer.silence()
-			leer.speak(_("ha finalizado la lectura del chat."))
+			reader._leer.silence()
+			reader.leer_sapi(_("ha finalizado la lectura del chat."))
 			self.dst =""
 			self.text_ctrl_1.SetValue("")
 			self.dialog_mensaje.Destroy()
@@ -665,11 +665,11 @@ class MyFrame(wx.Frame):
 			else: dlg.Destroy()
 		# Targeta de sonido:
 		if config['sistemaTTS'] == "piper":
-			salida_actual = lector.find_device_id(dispositivos[config["dispositivo"]-1])
-			lector.set_device(salida_actual)
+			salida_actual = reader._lector.find_device_id(dispositivos[config["dispositivo"]-1])
+			reader._lector.set_device(salida_actual)
 			# verificar voces:
 			configurar_piper(carpeta_voces)
-		leer=ajustes.prueba
+		reader._leer=ajustes.prueba
 		if self.cf.choice_traducir.GetStringSelection()!="":
 			for k in translator.LANGUAGES:
 				if translator.LANGUAGES[k] == self.cf.choice_traducir.GetStringSelection():
@@ -703,8 +703,8 @@ class MyFrame(wx.Frame):
 	def historialItemsTeclas(self, event):
 		event.Skip()
 		if event.GetKeyCode() == 32:
-			leer.silence()
-			leer.speak(self.list_box_1.GetString(self.list_box_1.GetSelection()))
+			reader._leer.silence()
+			reader.leer_sapi(self.list_box_1.GetString(self.list_box_1.GetSelection()))
 
 	def recibir_sala(self):
 		global lista
@@ -730,13 +730,9 @@ class MyFrame(wx.Frame):
 				if lista[yt][0]=='General' or lista[yt][0]=='Mensajes':
 					# I hate this code but the code is messy anyway so let's just add one more spagheti in the pile
 					if (message['type'] == 'private'):
-						if config['reader']:
-							if config['sapi']: leer.speak(_('privado de ') + message['author'] +': ' +message['message'])
-							else: lector.speak(_('privado de ') + message['author'] +': ' +message['message'])
+						if config['reader']: reader.leer_mensaje(_('privado de ') + message['author'] +': ' +message['message'])
 					else: # Not fucking private
-						if config['reader']:
-							if config['sapi']: leer.speak(message['author'] +': ' +message['message'])
-							else: lector.speak(message['author'] +': ' +message['message'])
+						if config['reader']: reader.leer_mensaje(message['author'] +': ' +message['message'])
 				if config['sonidos'] and config['listasonidos'][0]: player.playsound(ajustes.rutasonidos[0],False)
 				if (message['type'] == 'private'):
 					self.list_box_1.Append(_('privado de ') + message['author'] +': ' +message['message'])
@@ -761,7 +757,7 @@ class MyFrame(wx.Frame):
 			if self.list_box_1.GetSelection() >0: self.list_box_1.SetSelection(self.list_box_1.GetSelection()-1)
 		else:
 			if pos[yt]>1: pos[yt]-=1
-		lector.speak(self.retornarMensaje)
+		(self.retornarMensaje)
 		if config['sonidos']: self.reproducirMsg()
 	def elementoSiguiente(self):
 		global pos
@@ -770,33 +766,33 @@ class MyFrame(wx.Frame):
 			if self.list_box_1.GetSelection() <self.list_box_1.GetCount()-1: self.list_box_1.SetSelection(self.list_box_1.GetSelection()+1)
 		else:
 			if pos[yt]<len(lista[yt])-1: pos[yt]+=1
-		lector.speak(self.retornarMensaje)
+		reader.leer_auto(self.retornarMensaje)
 		if config['sonidos']: self.reproducirMsg()
 	def copiar(self):
 		if lista[yt][0]=='General':
 			if self.list_box_1.GetSelection() == wx.NOT_FOUND and self.list_box_1.GetCount()>0: self.list_box_1.SetSelection(0)
 		copy(self.retornarMensaje)
-		lector.speak(_("¡Copiado!"))
+		reader.leer_auto(_("¡Copiado!"))
 	def elementoInicial(self):
 		global pos
 		if lista[yt][0]=='General':
 			if self.list_box_1.GetCount()>0: self.list_box_1.SetSelection(0)
 		else: pos[yt]=1
-		lector.speak(self.retornarMensaje)
+		reader.leer_auto(self.retornarMensaje)
 		if config['sonidos']: self.reproducirMsg()
 	def elementoFinal(self):
 		global pos
 		if lista[yt][0]=='General':
 			if self.list_box_1.GetCount()>0: self.list_box_1.SetSelection(self.list_box_1.GetCount()-1)
 		else: pos[yt]=len(lista[yt])-1
-		lector.speak(self.retornarMensaje)
+		reader.leer_auto(self.retornarMensaje)
 		if config['sonidos']: self.reproducirMsg()
 	def callar(self):
 		if config['reader']:
 			config['reader']=False
-			leer.silence()
+			reader._leer.silence()
 		else: config['reader']=True
-		lector.speak(_("Lectura automática activada.")if config['reader'] else _("Lectura automática  desactivada."))
+		reader.leer_auto(_("Lectura automática activada.")if config['reader'] else _("Lectura automática  desactivada."))
 	def cerrarVentana(self, event):
 		if config['salir']:
 			dialogo_cerrar = wx.MessageDialog(self, _("¿está seguro que desea salir del programa?"), _("¡atención!"), wx.YES_NO | wx.ICON_ASTERISK)
@@ -852,7 +848,7 @@ class MyFrame(wx.Frame):
 				self.list_favorite.Delete(self.list_favorite.GetSelection())
 				favorite.pop(self.list_favorite.GetSelection())
 				funciones.escribirJsonLista('favoritos.json',favorite)
-				lector.speak(_("Se a borrado el elemento de favoritos"))
+				reader.leer_auto(_("Se a borrado el elemento de favoritos"))
 				self.list_favorite.SetFocus()
 		if self.list_favorite.GetCount()<=0: self.list_favorite.Append(_("Tus favoritos aparecerán aquí"))
 	def favoritoTeclas(self,event):
@@ -878,9 +874,7 @@ class MyFrame(wx.Frame):
 							lista[contador].append(mensajito)
 							break
 					if config['reader'] and config['unread'][1]:
-						if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
-							if config['sapi']: leer.speak(mensajito)
-							else: lector.speak(mensajito)
+						if lista[yt][0]=='Miembros' or lista[yt][0]=='General': reader.leer_mensaje(mensajito)
 					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 					self.list_box_1.Append(mensajito)
 				continue
@@ -893,9 +887,7 @@ class MyFrame(wx.Frame):
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
 							if lista[yt][0]=='Moderadores' or lista[yt][0]=='General':
-								if config['reader']:
-									if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
-									else: lector.speak(message['author']['name'] +': ' +message['message'])
+								if config['reader']: reader.leer_mensaje(message['author']['name'] +': ' +message['message'])
 						if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][4]: player.playsound(ajustes.rutasonidos[7],False)
 						self.list_box_1.Append(_('Propietario ')+message['author']['name'] +': ' +message['message'])
 						break
@@ -906,9 +898,7 @@ class MyFrame(wx.Frame):
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
 							if config['reader'] and config['unread'][3]:
-								if lista[yt][0]=='Moderadores' or lista[yt][0]=='General':
-									if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
-									else: lector.speak(message['author']['name'] +': ' +message['message'])
+								if lista[yt][0]=='Moderadores' or lista[yt][0]=='General': reader.leer_mensaje(message['author']['name'] +': ' +message['message'])
 						if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][4]: player.playsound(ajustes.rutasonidos[4],False)
 						self.list_box_1.Append(_('Moderador ')+message['author']['name'] +': ' +message['message'])
 						break
@@ -919,9 +909,7 @@ class MyFrame(wx.Frame):
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
 							if config['reader'] and config['unread'][0]:
-								if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
-									if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
-									else: lector.speak(message['author']['name'] +': ' +message['message'])
+								if lista[yt][0]=='Miembros' or lista[yt][0]=='General': reader.leer_mensaje(message['author']['name'] +': ' +message['message'])
 						if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][1]: player.playsound(ajustes.rutasonidos[1],False)
 						self.list_box_1.Append(_('Miembro ')+message['author']['name'] +': ' +message['message'])
 						break
@@ -932,9 +920,7 @@ class MyFrame(wx.Frame):
 									lista[contador].append(message['author']['name'] +': ' +message['message'])
 									break
 							if config['reader'] and config['unread'][4]:
-								if lista[yt][0]=='Usuarios Verificados' or lista[yt][0]=='General':
-									if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
-									else: lector.speak(message['author']['name'] +': ' +message['message'])
+								if lista[yt][0]=='Usuarios Verificados' or lista[yt][0]=='General': reader.leer_mensaje(message['author']['name'] +': ' +message['message'])
 						if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][5]: player.playsound(ajustes.rutasonidos[5],False)
 						self.list_box_1.Append(message['author']['name'] +_(' (usuario verificado): ') +message['message'])
 						break
@@ -952,9 +938,7 @@ class MyFrame(wx.Frame):
 								lista[contador].append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
 								break
 					if config['reader'] and config['unread'][2]:
-						if lista[yt][0]=='Donativos' or lista[yt][0]=='General':
-							if config['sapi']: leer.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
-							else: lector.speak(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
+						if lista[yt][0]=='Donativos' or lista[yt][0]=='General': reader.leer_mensaje(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
 					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][3]: player.playsound(ajustes.rutasonidos[3],False)
 					self.list_box_1.Append(str(message['money']['amount'])+message['money']['currency']+ ', '+message['author']['name'] +': ' +message['message'])
 					continue
@@ -965,15 +949,13 @@ class MyFrame(wx.Frame):
 							lista[contador].append(message['author']['name'] +': ' +message['message'])
 							break
 				if lista[yt][0]=='General' or lista[yt][0]=='Mensajes':
-					if config['reader']:
-						if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
-						else: lector.speak(message['author']['name'] +': ' +message['message'])
+					if config['reader']: reader.leer_mensaje(message['author']['name'] +': ' +message['message'])
 				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: player.playsound(ajustes.rutasonidos[0],False)
 				self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
 				continue
 	async def finalizado(self, event: LiveEndEvent): self.detenerLectura()
 	async def on_connect(self,event: ConnectEvent):
-		leer.speak(_("Ingresando al chat"))
+		reader.leer_sapi(_("Ingresando al chat"))
 		if config['sonidos'] and config['listasonidos'][6]: player.playsound(ajustes.rutasonidos[6],False)
 	async def on_comment(self,event: CommentEvent):
 		self.agregarUsuario(str(event.user.nickname))
@@ -983,9 +965,7 @@ class MyFrame(wx.Frame):
 					lista[contador].append(event.user.nickname + ": " + event.comment if event.comment is not None else '')
 					break
 		if lista[yt][0]=='General' or lista[yt][0]=='Mensajes':
-			if config['reader']:
-				if config['sapi']: leer.speak(event.user.nickname + ": " + event.comment if event.comment is not None else '')
-				else: lector.speak(event.user.nickname + ": " + event.comment if event.comment is not None else '')
+			if config['reader']: reader.leer_mensaje(event.user.nickname + ": " + event.comment if event.comment is not None else '')
 		self.list_box_1.Append(event.user.nickname + ": " + event.comment if event.comment is not None else '')
 		if config['sonidos'] and config['listasonidos'][0]: player.playsound(ajustes.rutasonidos[0],False)
 	async def on_emote(self,event: EmoteChatEvent):
@@ -996,23 +976,17 @@ class MyFrame(wx.Frame):
 					break
 		self.list_box_1.Append(event.user.nickname + _(" envió un emogi."))
 		if config['reader'] and config['unread'][0]:
-			if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
-				if config['sapi']: leer.speak(event.user.nickname + _(" envió un emogi."))
-				else: lector.speak(event.user.nickname + _(" envió un emogi."))
+			if lista[yt][0]=='Miembros' or lista[yt][0]=='General': reader.leer_mensaje(event.user.nickname + _(" envió un emogi."))
 		if config['sonidos'] and config['listasonidos'][1]: player.playsound(ajustes.rutasonidos[1],False)
 	async def on_chest(self,event: EnvelopeEvent):
 		if config['reader'] and config['unread'][8]:
-			if lista[yt][0]=='General':
-				if config['sapi']: leer.speak(event.user.nickname + _("ha enviado un cofre!"))
-				else: lector.speak(event.user.nickname + _(" ha enviado un cofre!"))
+			if lista[yt][0]=='General': reader.leer_mensaje(event.user.nickname + _("ha enviado un cofre!"))
 		self.list_box_1.Append(event.user.nickname + _(" ha enviado un cofre!"))
 		if config['sonidos'] and config['listasonidos'][12]: player.playsound(ajustes.rutasonidos[12],False)
 	async def on_follow(self,event: FollowEvent):
 		self.seguidores+=1
 		if config['reader'] and config['unread'][6]:
-			if lista[yt][0]=='General':
-				if config['sapi']: leer.speak(event.user.nickname + _(" comenzó a seguirte!"))
-				else: lector.speak(event.user.nickname + _(" comenzó a seguirte!"))
+			if lista[yt][0]=='General': reader.leer_mensaje(event.user.nickname + _(" comenzó a seguirte!"))
 		self.list_box_1.Append(event.user.nickname + _(" comenzó a seguirte!"))
 		if config['sonidos'] and config['listasonidos'][10]: player.playsound(ajustes.rutasonidos[10],False)
 	async def on_gift(self,event: GiftEvent):
@@ -1040,18 +1014,14 @@ class MyFrame(wx.Frame):
 						break
 			self.list_box_1.Append(mensajito)
 			if config['reader'] and config['unread'][2]:
-				if lista[yt][0]=='Donativos' or lista[yt][0]=='General':
-					if config['sapi']: leer.speak(mensajito)
-					else: lector.speak(mensajito)
+				if lista[yt][0]=='Donativos' or lista[yt][0]=='General': reader.leer_mensaje(mensajito)
 			if config['sonidos'] and config['listasonidos'][3]: player.playsound(ajustes.rutasonidos[3],False)
 		except Exception as e: pass
 	async def on_join(self,event: JoinEvent):
 		if not self.dentro: exit()
 		self.unidos+=1
 		if config['reader'] and config['unread'][1]:
-			if lista[yt][0]=='General':
-				if config['sapi']: leer.speak(event.user.nickname+_(" se ha unido a tu en vivo."))
-				else: lector.speak(event.user.nickname+_(" se ha unido a tu en vivo."))
+			if lista[yt][0]=='General': reader.leer_mensaje(event.user.nickname+_(" se ha unido a tu en vivo."))
 		self.list_box_1.Append(event.user.nickname+_(" se ha unido a tu en vivo."))
 		if config['sonidos'] and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 	async def on_like(self,event: LikeEvent):
@@ -1059,17 +1029,14 @@ class MyFrame(wx.Frame):
 		if config['reader'] and config['unread'][5]:
 			if lista[yt][0]=='General':
 				if event.user.nickname not in self.gustados:
-					if config['sapi']: leer.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
-					else: lector.speak(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+					reader.leer_mensaje(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
 					self.gustados.append(event.user.nickname)
 					self.list_box_1.Append(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
 		if config['sonidos'] and config['listasonidos'][9]: player.playsound(ajustes.rutasonidos[9],False)
 	async def on_share(self,event: ShareEvent):
 		self.compartidas+=1
 		if config['reader'] and config['unread'][7]:
-			if lista[yt][0]=='General':
-				if config['sapi']: leer.speak(event.user.nickname + _(" ha compartido tu en vivo!"))
-				else: lector.speak(event.user.nickname + _(" ha compartido el en vivo!"))
+			if lista[yt][0]=='General': reader.leer_mensaje(event.user.nickname + _(" ha compartido tu en vivo!"))
 		self.list_box_1.Append(event.user.nickname + _(" ha compartido tu en vivo!"))
 		if config['sonidos'] and config['listasonidos'][11]: player.playsound(ajustes.rutasonidos[11],False)
 	async def on_view(self,event: RoomUserSeqEvent):
@@ -1106,9 +1073,7 @@ class MyFrame(wx.Frame):
 							break
 				self.list_box_1.Append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses! '))
 				if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
-					if config['reader'] and config['unread'][1]:
-						if config['sapi']: leer.speak(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!'))
-						else: lector.speak(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!'))
+					if config['reader'] and config['unread'][1]: reader.leer_mensaje(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!'))
 				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 				continue
 			if message['message_type']=='subscription' and config['eventos'][1]:
@@ -1119,9 +1084,7 @@ class MyFrame(wx.Frame):
 							break
 				self.list_box_1.Append(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
 				if config['reader'] and config['unread'][1]:
-					if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
-						if config['sapi']: leer.speak(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
-						else: lector.speak(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
+					if lista[yt][0]=='Miembros' or lista[yt][0]=='General': reader.leer_mensaje(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
 				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 				continue
 			if 'Cheer' in message['message'] and config['eventos'][2]:
@@ -1153,9 +1116,7 @@ class MyFrame(wx.Frame):
 							lista[contador].append(dinero+', '+message['author']['name']+': '+divide1)
 							break
 				if config['reader'] and config['unread'][2]:
-					if lista[yt][0]=='Donativos' or lista[yt][0]=='General':
-						if config['sapi']: leer.speak(dinero+', '+message['author']['name']+': '+divide1)
-						else: lector.speak(dinero+', '+message['author']['name']+': '+divide1)
+					if lista[yt][0]=='Donativos' or lista[yt][0]=='General': reader.leer_mensaje(dinero+', '+message['author']['name']+': '+divide1)
 				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][3]: player.playsound(ajustes.rutasonidos[3],False)
 				self.list_box_1.Append(dinero+', '+message['author']['name']+': '+divide1)
 				continue
@@ -1167,9 +1128,7 @@ class MyFrame(wx.Frame):
 							break
 				self.list_box_1.Append(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
 				if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
-					if config['reader']:
-						if config['sapi']: leer.speak(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
-						else: lector.speak(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
+					if config['reader']: reader.leer_mensaje(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
 				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 				continue
 			if message['message_type']=='subscription_gift':
@@ -1180,9 +1139,7 @@ class MyFrame(wx.Frame):
 							break
 				self.list_box_1.Append(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
 				if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
-					if config['reader']:
-						if config['sapi']: leer.speak(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
-						else: lector.speak(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
+					if config['reader']: reader.leer_mensaje(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
 				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 				continue
 			if message['message_type']=='resubscription' and config['eventos'][1]:
@@ -1195,9 +1152,7 @@ class MyFrame(wx.Frame):
 							break
 				self.list_box_1.Append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses! ')+mssg)
 				if config['reader'] and config['unread'][1]:
-					if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
-						if config['sapi']: leer.speak(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!')+mssg)
-						else: lector.speak(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!')+mssg)
+					if lista[yt][0]=='Miembros' or lista[yt][0]=='General': reader.leer_mensaje(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!')+mssg)
 				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 				continue
 			try:
@@ -1209,9 +1164,7 @@ class MyFrame(wx.Frame):
 								break
 					self.list_box_1.Append(message['author']['name']+': '+message['message'])
 					if config['reader'] and config['unread'][0]:
-						if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
-							if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
-							else: lector.speak(message['author']['name'] +': ' +message['message'])
+						if lista[yt][0]=='Miembros' or lista[yt][0]=='General': reader.leer_mensaje(message['author']['name'] +': ' +message['message'])
 					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][1]: player.playsound(ajustes.rutasonidos[1],False)
 					continue
 				elif message['author']['is_moderator'] and config['eventos'][3]:
@@ -1221,9 +1174,7 @@ class MyFrame(wx.Frame):
 								lista[contador].append(message['author']['name'] +': ' +message['message'])
 								break
 					if config['reader'] and config['unread'][3]:
-						if lista[yt][0]=='Moderadores' or lista[yt][0]=='General':
-							if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
-							else: lector.speak(message['author']['name'] +': ' +message['message'])
+						if lista[yt][0]=='Moderadores' or lista[yt][0]=='General': reader.leer_mensaje(message['author']['name'] +': ' +message['message'])
 					self.list_box_1.Append(message['author']['name']+': '+message['message'])
 					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][4]: player.playsound(ajustes.rutasonidos[4],False)
 					continue
@@ -1239,9 +1190,7 @@ class MyFrame(wx.Frame):
 						if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][1]: player.playsound(ajustes.rutasonidos[1],False)
 						self.list_box_1.Append(message['author']['name']+': '+message['message'])
 						if config['reader'] and config['unread'][0]:
-							if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
-								if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
-								else: lector.speak(message['author']['name'] +': ' +message['message'])
+							if lista[yt][0]=='Miembros' or lista[yt][0]=='General': reader.leer_mensaje(message['author']['name'] +': ' +message['message'])
 						break
 					elif 'Moderator' in t['title'] and config['eventos'][3]:
 						if config['categorias'][3]:
@@ -1252,9 +1201,7 @@ class MyFrame(wx.Frame):
 						if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][4]: player.playsound(ajustes.rutasonidos[4],False)
 						self.list_box_1.Append(message['author']['name']+': '+message['message'])
 						if config['reader'] and config['unread'][3]:
-							if lista[yt][0]=='Moderadores' or lista[yt][0]=='General':
-								if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
-								else: lector.speak(message['author']['name'] +': ' +message['message'])
+							if lista[yt][0]=='Moderadores' or lista[yt][0]=='General': reader.leer_mensaje(message['author']['name'] +': ' +message['message'])
 						break
 					elif 'Verified' in t['title'] and config['eventos'][4]:
 						if config['categorias'][4]:
@@ -1265,9 +1212,7 @@ class MyFrame(wx.Frame):
 						if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][5]: player.playsound(ajustes.rutasonidos[5],False)
 						self.list_box_1.Append(message['author']['name']+': '+message['message'])
 						if config['reader'] and config['unread'][4]:
-							if lista[yt][0]=='Usuarios Verificados' or lista[yt][0]=='General':
-								if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
-								else: lector.speak(message['author']['name'] +': ' +message['message'])
+							if lista[yt][0]=='Usuarios Verificados' or lista[yt][0]=='General': reader.leer_mensaje(message['author']['name'] +': ' +message['message'])
 						break
 				else:
 					if config['categorias'][1]:
@@ -1276,9 +1221,7 @@ class MyFrame(wx.Frame):
 								lista[contador].append(message['author']['name'] +': ' +message['message'])
 								break
 					if lista[yt][0]=='General' or lista[yt][0]=='Mensajes':
-						if config['reader']:
-							if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
-							else: lector.speak(message['author']['name'] +': ' +message['message'])
+						if config['reader']: reader.leer_mensaje(message['author']['name'] +': ' +message['message'])
 					if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: player.playsound(ajustes.rutasonidos[0],False)
 					self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
 				continue
@@ -1289,9 +1232,7 @@ class MyFrame(wx.Frame):
 							lista[contador].append(message['author']['name'] +': ' +message['message'])
 							break
 				if lista[yt][0]=='General' or lista[yt][0]=='Mensajes':
-					if config['reader']:
-						if config['sapi']: leer.speak(message['author']['name'] +': ' +message['message'])
-						else: lector.speak(message['author']['name'] +': ' +message['message'])
+					if config['reader']: reader.leer_mensaje(message['author']['name'] +': ' +message['message'])
 				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: player.playsound(ajustes.rutasonidos[0],False)
 				self.list_box_1.Append(message['author']['name'] +': ' +message['message'])
 				continue
@@ -1299,15 +1240,15 @@ class MyFrame(wx.Frame):
 		global yt
 		if yt<len(lista)-1: yt+=1
 		else: yt=0
-		lector.speak(lista1[yt][0])
+		reader.leer_auto(lista1[yt][0])
 	def retrocederCategorias(self):
 		global yt
 		if yt<=0: yt=len(lista)-1
 		else: yt-=1
-		lector.speak(lista1[yt][0])
+		reader.leer_auto(lista1[yt][0])
 	def destacarMensaje(self):
 		global lista,pos
-		if lista[yt][0]=='Favoritos': lector.speak(_("no puedes agregar un Favorito del bufer de favoritos"))
+		if lista[yt][0]=='Favoritos': reader.leer_auto(_("no puedes agregar un Favorito del bufer de favoritos"))
 		encontrado=False
 		contador=0
 		for coso in lista:
@@ -1318,15 +1259,15 @@ class MyFrame(wx.Frame):
 			if lista[contador]=='Favoritos': break
 		if lista[yt][0]=='General':
 			if self.list_box_1.GetString(self.list_box_1.GetSelection()) in [x for x in lista[contador]]:
-				lector.speak(_("este mensaje ya se encuentra en el buffer de favoritos."))
+				reader.leer_auto(_("este mensaje ya se encuentra en el buffer de favoritos."))
 				return
 			else: lista[contador].append(self.list_box_1.GetString(self.list_box_1.GetSelection()))
 		else:
 			if lista[yt][pos[yt]] in [x for x in lista[contador]]:
-				lector.speak(_("este mensaje ya se encuentra en el buffer de favoritos."))
+				reader.leer_auto(_("este mensaje ya se encuentra en el buffer de favoritos."))
 				return
 			else: lista[contador].append(lista[yt][pos[yt]])
-		lector.speak(_('Se agregó el elemento a la lista de favoritos...'))
+		reader.leer_auto(_('Se agregó el elemento a la lista de favoritos...'))
 	def reproducirSonidos(self,event): player.playsound(ajustes.rutasonidos[self.soniditos.GetFocusedItem()], False)
 	def iniciarBusqueda(self):
 		self.my_dialog = wx.Dialog(self, wx.ID_ANY, _("escriba el término de su búsqueda"))
@@ -1359,7 +1300,7 @@ class MyFrame(wx.Frame):
 				wx.MessageBox(_("No hay ningún criterio de búsqueda que coincida con el término ingresado."), _("información"), wx.ICON_INFORMATION)
 			else:
 				if config['sonidos'] and config['listasonidos'][8]: player.playsound(ajustes.rutasonidos[8],False)
-				leer.speak(_("se encontraron %s resultados") % str(len(lista[-1])-1))
+				reader.leer_sapi(_("se encontraron %s resultados") % str(len(lista[-1])-1))
 		else:
 			wx.MessageBox(_("No hay nada que buscar porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
 			self.text_box.SetFocus()
@@ -1367,11 +1308,11 @@ class MyFrame(wx.Frame):
 		if lista[yt][0]!='General' and lista[yt][0]!='Miembros' and lista[yt][0]!='Donativos' and lista[yt][0]!='Moderadores' and lista[yt][0]!='Usuarios Verificados':
 			lista.pop(yt)
 			pos.pop()
-			lector.speak(_('Se eliminó el buffer'))
-		else: lector.speak(_('No es posible borrar este buffer'))
+			reader.leer_auto(_('Se eliminó el buffer'))
+		else: reader.leer_auto(_('No es posible borrar este buffer'))
 	def desactivarSonidos(self):
 		config['sonidos']=False if config['sonidos'] else True
-		lector.speak(_("Sonidos activados.") if config['sonidos'] else _("Sonidos desactivados"))
+		reader.leer_auto(_("Sonidos activados.") if config['sonidos'] else _("Sonidos desactivados"))
 	def addRecuerdo(self, event=None):
 		if self.list_mensajes.GetStrings()[0]==_("Tus mensajes archivados aparecerán aquí"): self.list_mensajes.Delete(0)
 		if len(mensajes_destacados)<=0:
@@ -1398,7 +1339,7 @@ class MyFrame(wx.Frame):
 					self.list_mensajes.Append(lista[yt][pos[yt]]+': '+info_dict.get('title'))
 					mensajes_destacados.append({'mensaje': lista[yt][pos[yt]], 'titulo': info_dict.get('title')})
 		funciones.escribirJsonLista('mensajes_destacados.json',mensajes_destacados)
-		lector.speak(_("se archivó el mensaje"))
+		reader.leer_auto(_("se archivó el mensaje"))
 	def seleccionarTodos(self, event):
 		if self.check_borrar_todos.GetValue():
 			self.button_borrar_mensajes.SetLabel(_("&Borrar mensajes"))
@@ -1425,7 +1366,7 @@ class MyFrame(wx.Frame):
 					self.list_mensajes.Delete(self.list_mensajes.GetSelection())
 					mensajes_destacados.pop(self.list_mensajes.GetSelection())
 					funciones.escribirJsonLista('mensajes_destacados.json',mensajes_destacados)
-					lector.speak(_("se eliminó el mensaje de tus mensajes archivados"))
+					reader.leer_auto(_("se eliminó el mensaje de tus mensajes archivados"))
 					self.list_mensajes.SetFocus()
 				else: wx.MessageBox(_("No hay más elementos que borrar"), "Error.", wx.ICON_ERROR)
 			else:
@@ -1440,7 +1381,7 @@ class MyFrame(wx.Frame):
 					remove('mensajes_destacados.json')
 					self.list_mensajes.Clear()
 					self.list_mensajes.Append(_("Tus mensajes archivados aparecerán aquí"))
-					lector.speak(_("se eliminaron los mensajes archivados"))
+					reader.leer_auto(_("se eliminaron los mensajes archivados"))
 					self.list_mensajes.SetFocus()
 			elif	len(mensajes_destacados)<=0:
 				wx.MessageBox(_("No hay mensajes que borrar"), "Error.", wx.ICON_ERROR)
