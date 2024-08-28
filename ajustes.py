@@ -3,19 +3,18 @@ from utils import languageHandler, fajustes
 from google_currency import CODES
 from utils.translator import TranslatorWrapper
 from accessible_output2.outputs import  sapi5
-from TTS.lector import configurar_tts, detect_onnx_models
+from TTS.lector import detect_onnx_models
 from TTS.list_voices import piper_list_voices, install_piper_voice
-from TTS.Piper import Piper, speaker
 from os import path
 from helpers.sound_helper import playsound
+from helpers.reader_handler import ReaderHandler
 player = playsound()
 if not path.exists("data.json"): fajustes.escribirConfiguracion()
 config=fajustes.leerConfiguracion()
 player.setdevice(int(config["dispositivo"]))
-prueba=configurar_tts("sapi5")
-prueba_piper=configurar_tts("piper")
+prueba=ReaderHandler("piper")
 dispositivos_piper = None
-lista_voces=prueba.list_voices()
+lista_voces=prueba._leer.list_voices()
 lista_voces_piper = piper_list_voices()
 rutasonidos=[
 	"sounds/chat.mp3",
@@ -35,7 +34,7 @@ rutasonidos=[
 
 class configuracionDialog(wx.Dialog):
 	def __init__(self, parent):
-		global config, lista_voces, prueba_piper, dispositivos_piper
+		global config, lista_voces, dispositivos_piper
 		# idioma:
 		translator = TranslatorWrapper()
 		languageHandler.setLanguage(config['idioma'])
@@ -159,8 +158,8 @@ class configuracionDialog(wx.Dialog):
 		boxSizer_2 .Add(self.choice_2)
 		if config['sistemaTTS'] == "piper":
 			if len(lista_voces) == 1:
-				prueba_piper = speaker.piperSpeak(f"piper/voices/voice-{lista_voces[0][:-5]}/{lista_voces[0]}")
-				dispositivos_piper = prueba_piper.get_devices()
+				prueba._lector=prueba._lector.piperSpeak(f"piper/voices/voice-{lista_voces[0][:-5]}/{lista_voces[0]}")
+				dispositivos_piper = prueba._lector.get_devices()
 				config['voz'] = 0
 		self.instala_voces = wx.Button(self.treeItem_2, wx.ID_ANY, label=_("Instalar un paquete de voz..."))
 		self.instala_voces.Bind(wx.EVT_BUTTON, self.instalar_voz_piper)
@@ -262,16 +261,16 @@ class configuracionDialog(wx.Dialog):
 		self.Center()
 
 	def alternar_dispositivo(self, event):
-		global prueba_piper, dispositivos_piper
+		global dispositivos_piper
 		valor = (self.lista_dispositivos.GetSelection() +1)
 		valor_str = self.lista_dispositivos.GetStringSelection()
 		config['dispositivo']=valor
 		player.setdevice(config["dispositivo"])
 		player.playsound("sounds/cambiardispositivo.wav")
 		if config['sistemaTTS'] == "piper" and dispositivos_piper is not None:
-			salida_piper = prueba_piper.find_device_id(valor_str)
-			prueba_piper.set_device(salida_piper)
-			prueba_piper.speak(_("Hablaré a través de este dispositivo."))
+			salida_piper = prueba._lector.find_device_id(valor_str)
+			prueba._lector.set_device(salida_piper)
+			prueba.leer_auto(_("Hablaré a través de este dispositivo."))
 
 	def cambiar_sintetizador(self, event):
 		global lista_voces
@@ -283,23 +282,23 @@ class configuracionDialog(wx.Dialog):
 				lista_voces = [_("No hay voces instaladas")]
 			self.instala_voces.Enable()
 		else:
-			lista_voces = prueba.list_voices()
+			lista_voces = prueba.leer.list_voices()
 			self.instala_voces.Disable()
 		self.choice_2.Clear()
 		self.choice_2.AppendItems(lista_voces)
 	def instalar_voz_piper(self, event):
-		global config, prueba_piper, lista_voces
-		config, prueba_piper = install_piper_voice(config, prueba_piper)
+		global config, lista_voces
+		config, prueba._lector= install_piper_voice(config, prueba._lector)
 		lista_voces = piper_list_voices()
 		if lista_voces:
 			self.choice_2.Clear()
 			self.choice_2.AppendItems(lista_voces)
 	def reproducirPrueva(self, event):
 		if not ".onnx" in self.choice_2.GetStringSelection():
-			prueba.silence()
-			prueba.speak(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
+			prueba._leer.silence()
+			prueba.leer_sapi(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
 		else:
-			prueba_piper.speak(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
+			prueba.leer_auto(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
 	def porcentaje_a_escala(self, porcentaje):
 		scale = 2.00 + (1 - ((porcentaje - -10) / (10 - -10))) * (0.50 - 2.00)
 		return scale
@@ -307,16 +306,16 @@ class configuracionDialog(wx.Dialog):
 	def cambiarVelocidad(self, event):
 		value=self.slider_3.GetValue()-10
 		if not ".onnx" in lista_voces[self.choice_2.GetSelection()]:
-			prueba.set_rate(value)
+			prueba._leer.set_rate(value)
 		else:
-			prueba_piper.set_rate(self.porcentaje_a_escala(value))
+			prueba._lector.set_rate(self.porcentaje_a_escala(value))
 		config['speed']=value
 	def cambiarTono(self, event):
 		value=self.slider_1.GetValue()-10
-		prueba.set_pitch(value)
+		prueba._leer.set_pitch(value)
 		config['tono']=value
 	def cambiarVolumen(self, event):
-		prueba.set_volume(self.slider_2.GetValue())
+		prueba._leer.set_volume(self.slider_2.GetValue())
 		config['volume']=self.slider_2.GetValue()
 	def mostrarSonidos(self,event):
 		if event.IsChecked():
@@ -333,13 +332,13 @@ class configuracionDialog(wx.Dialog):
 		self.seleccionar_TTS.Enable(not event.IsChecked())
 
 	def cambiarVoz(self, event):	
-		global prueba_piper, lista_voces, dispositivos_piper
+		global lista_voces, dispositivos_piper
 		config['voz']=self.choice_2.GetSelection()
 		if config['sistemaTTS'] == "piper":
-			prueba_piper = speaker.piperSpeak(f"piper/voices/voice-{lista_voces[config['voz']][:-4]}/{lista_voces[config['voz']]}")
+			prueba._lector = prueba._lector.piperSpeak(f"piper/voices/voice-{lista_voces[config['voz']][:-5]}/{lista_voces[config['voz']]}")
 			dispositivos_piper = prueba_piper.get_devices()
 			# Establecer dispositivo desde la configuración:
-			salida_piper = prueba_piper.find_device_id(self.dispositivos[config["dispositivo"]-1])
-			prueba_piper.set_device(salida_piper)
+			salida_piper = prueba._lector.find_device_id(self.dispositivos[config["dispositivo"]-1])
+			prueba_lector.set_device(salida_piper)
 		else:
-			prueba.set_voice(lista_voces[config['voz']])
+			prueba._leer.set_voice(lista_voces[config['voz']])

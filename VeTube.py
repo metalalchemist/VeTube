@@ -18,7 +18,6 @@ from utils.menu_accesible import Accesible
 from utils.translator import TranslatorWrapper
 from helpers.playroom_helper import PlayroomHelper
 player = playsound()
-reader=ReaderHandler()
 yt=0
 # revisar la configuración primero, ya que necesitamos determinar el sistema TTS a través de ella.
 if not path.exists("data.json"): fajustes.escribirConfiguracion()
@@ -27,7 +26,7 @@ reader=ReaderHandler()
 player.setdevice(config["dispositivo"])
 
 def configurar_piper(carpeta_voces):
-	global config, lector
+	global config
 	onnx_models = detect_onnx_models(carpeta_voces)
 	if onnx_models is None:
 		sinvoces = wx.MessageDialog(None, _('Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Quieres abrir nuestra carpeta de Drive para descargar algunos modelos? Si pulsas sí, se abrirá nuestra carpeta seguido de una ventana para instalar una una vez la descargues.'), _("No hay voces instaladas"), wx.YES_NO | wx.ICON_QUESTION)
@@ -36,11 +35,8 @@ def configurar_piper(carpeta_voces):
 			wx.LaunchDefaultBrowser("https://drive.google.com/drive/folders/1zFJRTI6CpVw9NkrTiNYOKGga0yn4JXzv?usp=drive_link")
 			config, reader._lector = install_piper_voice(config, reader._lector)
 		sinvoces.Destroy()
-	elif isinstance(onnx_models, str) or isinstance(onnx_models, list):
-		config['voz'] = 0
-
+	elif isinstance(onnx_models, str) or isinstance(onnx_models, list): config['voz'] = 0
 carpeta_voces = path.join(getcwd(), "piper", "voices")
-
 def escribirTeclas():
 	with open('keys.txt', 'w+') as arch: arch.write("""{
 "control+p": reader._leer.silence,
@@ -68,21 +64,13 @@ def leerTeclas():
 pos=[]
 favorite=funciones.leerJsonLista('favoritos.json')
 mensajes_destacados=funciones.leerJsonLista('mensajes_destacados.json')
+favs=funciones.convertirLista(favorite,'titulo','url')
+msjs=funciones.convertirLista(mensajes_destacados,'mensaje','titulo')
+dispositivos = player.devicenames
 reader._leer.set_rate(config['speed'])
 reader._leer.set_pitch(config['tono'])
 reader._leer.set_voice(reader._leer.list_voices()[0])
 reader._leer.set_volume(config['volume'])
-favs=funciones.convertirLista(favorite,'titulo','url')
-msjs=funciones.convertirLista(mensajes_destacados,'mensaje','titulo')
-dispositivos = player.devicenames
-# establecer la voz del lector en piper:
-if config['sistemaTTS'] == "piper":
-	reader._lector=reader._lector.piperSpeak(f"piper/voices/voice-{ajustes.lista_voces_piper[config['voz']][:-5]}/{ajustes.lista_voces_piper[config['voz']]}")
-	lector_Salidas = reader._lector.get_devices()
-	salida_actual = reader._lector.find_device_id(dispositivos[config["dispositivo"]-1])
-	reader._lector.set_device(salida_actual)
-else:
-	lector_Salidas = None
 # establecer idiomas:
 languageHandler.setLanguage(config['idioma'])
 idiomas = languageHandler.getAvailableLanguages()
@@ -92,6 +80,14 @@ codes = []
 [codes.append(i[0]) for i in idiomas]
 codes.reverse()
 langs.reverse()
+# establecer la voz del lector en piper:
+if config['sistemaTTS'] == "piper":
+	if detect_onnx_models(carpeta_voces) is not None:
+		reader._lector=reader._lector.piperSpeak(f"piper/voices/voice-{ajustes.lista_voces_piper[config['voz']][:-5]}/{ajustes.lista_voces_piper[config['voz']]}")
+		lector_Salidas = reader._lector.get_devices()
+		salida_actual = reader._lector.find_device_id(dispositivos[config["dispositivo"]-1])
+		reader._lector.set_device(salida_actual)
+else: lector_Salidas = None
 mensaje_teclas=[
 	_('Silencia la voz sapy'),
 	_('Mensaje anterior.'),
