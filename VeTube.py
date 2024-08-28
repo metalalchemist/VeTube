@@ -466,7 +466,7 @@ class MyFrame(wx.Frame):
 					reader.leer_sapi(_("Ingresando al chat."))
 					if config['sonidos'] and config['listasonidos'][6]: player.playsound(ajustes.rutasonidos[6],False)
 				else:
-					self.leer_sapi(_("cargando..."))
+					reader.leer_sapi(_("cargando..."))
 					self.megusta=self.seguidores=self.unidos=self.compartidas=0
 					self.gustados=[]
 				if url!="sala":
