@@ -13,3 +13,4 @@ def restart_program():
     if os.path.exists(pidpath):
         os.remove(pidpath)
     os.execv(sys.executable, args)
+def porcentaje_a_escala(porcentaje): return 2.00 + (1 - ((porcentaje - -10) / (10 - -10))) * (0.50 - 2.00)

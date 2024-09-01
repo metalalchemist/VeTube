@@ -1,5 +1,5 @@
 import wx
-from utils import languageHandler, fajustes
+from utils import languageHandler, fajustes,app_utilitys
 from google_currency import CODES
 from utils.translator import TranslatorWrapper
 from accessible_output2.outputs import  sapi5
@@ -299,16 +299,12 @@ class configuracionDialog(wx.Dialog):
 			prueba.leer_sapi(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
 		else:
 			prueba.leer_auto(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
-	def porcentaje_a_escala(self, porcentaje):
-		scale = 2.00 + (1 - ((porcentaje - -10) / (10 - -10))) * (0.50 - 2.00)
-		return scale
-
 	def cambiarVelocidad(self, event):
 		value=self.slider_3.GetValue()-10
 		if not ".onnx" in lista_voces[self.choice_2.GetSelection()]:
 			prueba._leer.set_rate(value)
 		else:
-			prueba._lector.set_rate(self.porcentaje_a_escala(value))
+			prueba._lector.set_rate(app_utilitys.porcentaje_a_escala(value))
 		config['speed']=value
 	def cambiarTono(self, event):
 		value=self.slider_1.GetValue()-10

@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
 import json,wx,wx.adv,threading,time,google_currency,ajustes
-from utils import fajustes, funciones, languageHandler, mostrarchat, restart
+from utils import fajustes, funciones, languageHandler, mostrarchat, app_utilitys,key_utilitys
 from helpers.keyboard_handler.wx_handler import WXKeyboardHandler
 from helpers.sound_helper import playsound
 from helpers.reader_handler import ReaderHandler
@@ -37,30 +37,6 @@ def configurar_piper(carpeta_voces):
 		sinvoces.Destroy()
 	elif isinstance(onnx_models, str) or isinstance(onnx_models, list): config['voz'] = 0
 carpeta_voces = path.join(getcwd(), "piper", "voices")
-def escribirTeclas():
-	with open('keys.txt', 'w+') as arch: arch.write("""{
-"control+p": reader._leer.silence,
-"alt+shift+up": self.elementoAnterior,
-"alt+shift+down": self.elementoSiguiente,
-"alt+shift+left": self.retrocederCategorias,
-"alt+shift+right": self.avanzarCategorias,
-"alt+shift+home": self.elementoInicial,
-"alt+shift+end": self.elementoFinal,
-"alt+shift+f": self.destacarMensaje,
-"alt+shift+c": self.copiar,
-"alt+shift+m": self.callar,
-"alt+shift+s": self.iniciarBusqueda,
-"alt+shift+v": self.mostrarMensaje,
-"alt+shift+d": self.borrarBuffer,
-"alt+shift+p": self.desactivarSonidos,
-"alt+shift+k": self.createEditor,
-"alt+shift+a": self.addRecuerdo}""")
-	leerTeclas()
-def leerTeclas():
-	if path.exists("keys.txt"):
-		global mis_teclas
-		with open ("keys.txt",'r') as arch: mis_teclas=arch.read()
-	else: escribirTeclas()
 pos=[]
 favorite=funciones.leerJsonLista('favoritos.json')
 mensajes_destacados=funciones.leerJsonLista('mensajes_destacados.json')
@@ -131,7 +107,7 @@ class MyFrame(wx.Frame):
 		self.dst =""
 		self.nueva_combinacion=""
 		self.divisa="Por defecto"
-		leerTeclas()
+		self.key_config=key_utilitys.KeyUtils()
 		kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
 		wx.Frame.__init__(self, *args, **kwds)
 		if config['updates']: updater.do_update()
@@ -256,10 +232,9 @@ class MyFrame(wx.Frame):
 			if self.FindFocus()== self.plataforma or self.FindFocus()==self.text_ctrl_1: self.acceder()
 		else: event.Skip()
 	def createEditor(self,event=None):
-		global mis_teclas
-		try: mis_teclas=eval(mis_teclas)
+		try: self.key_config.mis_teclas=eval(self.key_config.mis_teclas)
 		except TypeError: pass
-		if not self.dentro: self.handler_keyboard.register_keys(mis_teclas)
+		if not self.dentro: self.handler_keyboard.register_keys(self.key_config.mis_teclas)
 		self.dlg_teclado = wx.Dialog(None, wx.ID_ANY, _("Editor de combinaciones de teclado para Vetube"))
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		label_editor = wx.StaticText(self.dlg_teclado, wx.ID_ANY, _("&Selecciona la combinación de teclado a editar"))
@@ -268,7 +243,7 @@ class MyFrame(wx.Frame):
 		self.combinaciones.InsertColumn(1, _("combinación de teclas: "))
 		for i in range(len(mensaje_teclas)): self.combinaciones.InsertItem(i, mensaje_teclas[i])
 		c=0
-		for valor in mis_teclas:
+		for valor in self.key_config.mis_teclas:
 			self.combinaciones.SetItem(c, 1, valor)
 			c+=1
 		self.combinaciones.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.editarTeclas)
@@ -365,22 +340,21 @@ class MyFrame(wx.Frame):
 				wx.MessageBox(_("esta combinación ya está siendo usada en la función %s") % mensaje_teclas[busc], "error.", wx.ICON_ERROR)
 				return
 		if self.texto in self.handler_keyboard.active_keys:
-			self.handler_keyboard.unregister_key(self.combinaciones.GetItem(indice,1).GetText(),mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
-			self.handler_keyboard.register_key(self.nueva_combinacion,mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
+			self.handler_keyboard.unregister_key(self.combinaciones.GetItem(indice,1).GetText(),self.key_config.mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
+			self.handler_keyboard.register_key(self.nueva_combinacion,self.key_config.mis_teclas[self.combinaciones.GetItem(indice,1).GetText()])
 		self.dlg_editar_combinacion.Destroy()
 		wx.CallAfter(self.correccion)
 	def correccion(self):
-		global mis_teclas
 		if self.nueva_combinacion not in self.handler_keyboard.active_keys:
 			wx.MessageBox(_("esa combinación está siendo usada por el sistema"), "error.", wx.ICON_ERROR)
-			self.handler_keyboard.register_key(self.texto,mis_teclas[self.combinaciones.GetItem(self.combinaciones.GetFocusedItem(),1).GetText()])
+			self.handler_keyboard.register_key(self.texto,self.key_config.mis_teclas[self.combinaciones.GetItem(self.combinaciones.GetFocusedItem(),1).GetText()])
 		else:
 			self.texto=self.nueva_combinacion
 			self.nueva_combinacion=""
-		leerTeclas()
-		mis_teclas=mis_teclas.replace(self.combinaciones.GetItem(self.combinaciones.GetFocusedItem(),1).GetText(),self.texto)
-		with open("keys.txt", "w") as fichero: fichero.write(mis_teclas)
-		mis_teclas=eval(mis_teclas)
+		self.key_config.leerTeclas()
+		self.key_config.mis_teclas=self.key_config.mis_teclas.replace(self.combinaciones.GetItem(self.combinaciones.GetFocusedItem(),1).GetText(),self.texto)
+		with open("keys.txt", "w") as fichero: fichero.write(self.key_config.mis_teclas)
+		self.key_config.mis_teclas=eval(self.key_config.mis_teclas)
 		self.combinaciones.SetItem(self.combinaciones.GetFocusedItem(), 1, self.texto)
 		self.combinaciones.SetFocus()
 	def berifica(self, event):
@@ -390,17 +364,16 @@ class MyFrame(wx.Frame):
 		dlg_2 = wx.MessageDialog(self.dlg_teclado, _("Está apunto de restaurar las combinaciones a sus valores por defecto, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		if dlg_2.ShowModal()==wx.ID_YES:
 			remove("keys.txt")
-			leerTeclas()
-			global mis_teclas
-			mis_teclas=eval(mis_teclas)
+			self.key_config.leerTeclas()
+			self.key_config.mis_teclas=eval(self.key_config.mis_teclas)
 			c=0
-			for valor in mis_teclas:
+			for valor in self.key_config.mis_teclas:
 				self.combinaciones.SetItem(c, 1, valor)
 				c+=1
 			self.combinaciones.Focus(0)
 			self.combinaciones.SetFocus()
 			self.handler_keyboard.unregister_all_keys()
-			self.handler_keyboard.register_keys(mis_teclas)
+			self.handler_keyboard.register_keys(self.key_config.mis_teclas)
 	def appConfiguracion(self, event):			
 		self.cf=ajustes.configuracionDialog(self)
 		if self.cf.ShowModal()==wx.ID_OK:
@@ -657,7 +630,7 @@ class MyFrame(wx.Frame):
 			json.dump(config, file, indent=4)
 		if rest:
 			dlg = wx.MessageDialog(None, _("Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea reiniciarlo ahora?"), _("¡Atención!"), wx.YES_NO | wx.ICON_ASTERISK)
-			if dlg.ShowModal()==wx.ID_YES: restart.restart_program()
+			if dlg.ShowModal()==wx.ID_YES: app_utilitys.restart_program()
 			else: dlg.Destroy()
 		# Targeta de sonido:
 		if config['sistemaTTS'] == "piper":
@@ -688,7 +661,7 @@ class MyFrame(wx.Frame):
 		self.dlg_3 = wx.MessageDialog(self, _("Estás apunto de reiniciar la configuración a sus valores predeterminados, ¿Deseas proceder?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
 		if self.dlg_3.ShowModal()==wx.ID_YES:
 			fajustes.escribirConfiguracion()
-			restart.restart_program()
+			app_utilitys.restart_program()
 	def mostrarBoton(self, event):
 		if self.text_ctrl_1.GetValue() != "":
 			self.button_1.Enable()
@@ -740,8 +713,8 @@ class MyFrame(wx.Frame):
 
 	def iniciarChat(self):
 		if not isinstance(self.chat, TikTokLiveClient): self.label_dialog.SetLabel(self.chat.title)
-		try: self.handler_keyboard.register_keys(eval(mis_teclas))
-		except TypeError: self.handler_keyboard.register_keys(mis_teclas)
+		try: self.handler_keyboard.register_keys(eval(self.key_config.mis_teclas))
+		except TypeError: self.handler_keyboard.register_keys(self.key_config.mis_teclas)
 		if 'yout' in self.text_ctrl_1.GetValue(): self.recibirYT()
 		elif 'twitch' in self.text_ctrl_1.GetValue(): self.recibirTwich()
 		elif 'tiktok' in self.text_ctrl_1.GetValue(): self.recibirTiktok()
@@ -1417,11 +1390,3 @@ class MyFrame(wx.Frame):
 	def cierraEditor(self,evt):
 		if not self.dentro: self.handler_keyboard.unregister_all_keys()
 		self.dlg_teclado.Destroy()
-class MyApp(wx.App):
-	def OnInit(self):
-		self.frame = MyFrame(None, wx.ID_ANY, "")
-		self.SetTopWindow(self.frame)
-		self.frame.Show()
-		return True
-app = MyApp(0)
-app.MainLoop()
