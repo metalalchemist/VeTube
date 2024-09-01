@@ -1,7 +1,8 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,wx.adv,threading,time,google_currency,ajustes
-from utils import fajustes, funciones, languageHandler, mostrarchat, app_utilitys,key_utilitys
+import json,wx,wx.adv,threading,time,google_currency
+from utils import fajustes, funciones, languageHandler, app_utilitys,key_utilitys
+from ui import mostrarchat,ajustes,dialog_response
 from helpers.keyboard_handler.wx_handler import WXKeyboardHandler
 from helpers.sound_helper import playsound
 from helpers.reader_handler import ReaderHandler
@@ -29,12 +30,9 @@ def configurar_piper(carpeta_voces):
 	global config
 	onnx_models = detect_onnx_models(carpeta_voces)
 	if onnx_models is None:
-		sinvoces = wx.MessageDialog(None, _('Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Quieres abrir nuestra carpeta de Drive para descargar algunos modelos? Si pulsas sí, se abrirá nuestra carpeta seguido de una ventana para instalar una una vez la descargues.'), _("No hay voces instaladas"), wx.YES_NO | wx.ICON_QUESTION)
-		abrir_modelos = sinvoces.ShowModal()
-		if abrir_modelos == wx.ID_YES:
+		if dialog_response.response(_('Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Quieres abrir nuestra carpeta de Drive para descargar algunos modelos? Si pulsas sí, se abrirá nuestra carpeta seguido de una ventana para instalar una una vez la descargues.'), _("No hay voces instaladas"),wx.YES_NO | wx.ICON_ASTERISK) == wx.ID_YES:
 			wx.LaunchDefaultBrowser("https://drive.google.com/drive/folders/1zFJRTI6CpVw9NkrTiNYOKGga0yn4JXzv?usp=drive_link")
 			config, reader._lector = install_piper_voice(config, reader._lector)
-		sinvoces.Destroy()
 	elif isinstance(onnx_models, str) or isinstance(onnx_models, list): config['voz'] = 0
 carpeta_voces = path.join(getcwd(), "piper", "voices")
 pos=[]
@@ -361,8 +359,7 @@ class MyFrame(wx.Frame):
 		self.nueva_combinacion=""
 		self.dlg_editar_combinacion.Destroy()
 	def restaurarTeclas(self,event):
-		dlg_2 = wx.MessageDialog(self.dlg_teclado, _("Está apunto de restaurar las combinaciones a sus valores por defecto, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
-		if dlg_2.ShowModal()==wx.ID_YES:
+		if dialog_response.response(_("Está apunto de restaurar las combinaciones a sus valores por defecto, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"))==wx.ID_YES:
 			remove("keys.txt")
 			self.key_config.leerTeclas()
 			self.key_config.mis_teclas=eval(self.key_config.mis_teclas)
@@ -573,8 +570,7 @@ class MyFrame(wx.Frame):
 		self.text_ctrl_1.SetFocus()
 	def detenerLectura(self, event=None):
 		global yt,pos,lista
-		dlg_mensaje = wx.MessageDialog(self.dialog_mensaje, _("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
-		if dlg_mensaje.ShowModal() == wx.ID_YES:
+		if dialog_response.response(_("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:"))== wx.ID_YES:
 			self.dentro=False
 			self.usuarios=self.mensajes=[]
 			if isinstance(self.chat, TikTokLiveClient):
@@ -602,7 +598,7 @@ class MyFrame(wx.Frame):
 			dlg_mensaje.Destroy()
 		else: wx.MessageBox(_("No hay mensajes para guardar."), "info.", wx.ICON_INFORMATION)
 	def guardar(self):
-		global lista,config,leer,dispositivos,lector_Salidas
+		global lista,config,dispositivos,lector_Salidas
 		rest=False
 		translator = TranslatorWrapper()
 		config=ajustes.config
@@ -629,16 +625,14 @@ class MyFrame(wx.Frame):
 		with open('data.json', 'w+') as file:
 			json.dump(config, file, indent=4)
 		if rest:
-			dlg = wx.MessageDialog(None, _("Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea reiniciarlo ahora?"), _("¡Atención!"), wx.YES_NO | wx.ICON_ASTERISK)
-			if dlg.ShowModal()==wx.ID_YES: app_utilitys.restart_program()
-			else: dlg.Destroy()
+			if dialog_response.response(_("Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea reiniciarlo ahora?"), _("¡Atención!"))==wx.ID_YES: app_utilitys.restart_program()
 		# Targeta de sonido:
 		if config['sistemaTTS'] == "piper":
+			reader=ajustes.prueba
 			salida_actual = reader._lector.find_device_id(dispositivos[config["dispositivo"]-1])
 			reader._lector.set_device(salida_actual)
 			# verificar voces:
 			configurar_piper(carpeta_voces)
-		reader._leer=ajustes.prueba
 		if self.cf.choice_traducir.GetStringSelection()!="":
 			for k in translator.LANGUAGES:
 				if translator.LANGUAGES[k] == self.cf.choice_traducir.GetStringSelection():
@@ -658,8 +652,7 @@ class MyFrame(wx.Frame):
 			self.list_box_1.Clear()
 			self.list_box_1.SetFocus()
 	def restaurar(self, event):
-		self.dlg_3 = wx.MessageDialog(self, _("Estás apunto de reiniciar la configuración a sus valores predeterminados, ¿Deseas proceder?"), _("Atención:"), wx.YES_NO | wx.ICON_ASTERISK)
-		if self.dlg_3.ShowModal()==wx.ID_YES:
+		if dialog_response.response(_("Estás apunto de reiniciar la configuración a sus valores predeterminados, ¿Deseas proceder?"), _("Atención:"))==wx.ID_YES:
 			fajustes.escribirConfiguracion()
 			app_utilitys.restart_program()
 	def mostrarBoton(self, event):
@@ -764,8 +757,7 @@ class MyFrame(wx.Frame):
 		reader.leer_auto(_("Lectura automática activada.")if config['reader'] else _("Lectura automática  desactivada."))
 	def cerrarVentana(self, event):
 		if config['salir']:
-			dialogo_cerrar = wx.MessageDialog(self, _("¿está seguro que desea salir del programa?"), _("¡atención!"), wx.YES_NO | wx.ICON_ASTERISK)
-			if dialogo_cerrar.ShowModal()==wx.ID_YES: wx.GetApp().ExitMainLoop()
+			if dialog_response.response(_("¿está seguro que desea salir del programa?"), _("¡atención!"))==wx.ID_YES: wx.GetApp().ExitMainLoop()
 		else: wx.GetApp().ExitMainLoop()
 	@property
 	def retornarMensaje(self):

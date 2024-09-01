@@ -1,4 +1,5 @@
-import vetube,wx
+import wx
+from ui import vetube
 class MyApp(wx.App):
 	def OnInit(self):
 		self.frame = vetube.MyFrame(None, wx.ID_ANY, "")
