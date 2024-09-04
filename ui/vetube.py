@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/python
 # -*- coding: <encoding name> -*-
-import json,wx,wx.adv,threading,time,google_currency
+import json,wx,wx.adv,threading,time,google_currency,re
 from utils import fajustes, funciones, languageHandler, app_utilitys,key_utilitys
 from ui import mostrarchat,ajustes,dialog_response
 from helpers.keyboard_handler.wx_handler import WXKeyboardHandler
@@ -711,7 +711,6 @@ class MyFrame(wx.Frame):
 		if 'yout' in self.text_ctrl_1.GetValue(): self.recibirYT()
 		elif 'twitch' in self.text_ctrl_1.GetValue(): self.recibirTwich()
 		elif 'tiktok' in self.text_ctrl_1.GetValue(): self.recibirTiktok()
-
 	def elementoAnterior(self):
 		global pos
 		if lista[yt][0]=='General':
@@ -719,7 +718,7 @@ class MyFrame(wx.Frame):
 			if self.list_box_1.GetSelection() >0: self.list_box_1.SetSelection(self.list_box_1.GetSelection()-1)
 		else:
 			if pos[yt]>1: pos[yt]-=1
-		(self.retornarMensaje)
+		reader.leer_auto(self.retornarMensaje)
 		if config['sonidos']: self.reproducirMsg()
 	def elementoSiguiente(self):
 		global pos
@@ -1048,7 +1047,42 @@ class MyFrame(wx.Frame):
 					if lista[yt][0]=='Miembros' or lista[yt][0]=='General': reader.leer_mensaje(message['author']['name']+_(' se ha suscrito en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['cumulative_months'])+_(' meses!'))
 				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 				continue
-			if 'Cheer' in message['message'] and config['eventos'][2]:
+			if message['message_type']=='mystery_subscription_gift':
+				if config['categorias'][1]:
+					for contador in range(len(lista)):
+						if lista[contador][0]=='Miembros':
+							lista[contador].append(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
+							break
+				self.list_box_1.Append(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
+				if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
+					if config['reader']: reader.leer_mensaje(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
+				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
+				continue
+			if message['message_type']=='subscription_gift':
+				if config['categorias'][1]:
+					for contador in range(len(lista)):
+						if lista[contador][0]=='Miembros':
+							lista[contador].append(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
+							break
+				self.list_box_1.Append(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
+				if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
+					if config['reader']: reader.leer_mensaje(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
+				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
+				continue
+			if message['message_type']=='resubscription' and config['eventos'][1]:
+				mssg=message['message'].split('! ')
+				mssg=str(mssg[1:])
+				if config['categorias'][1]:
+					for contador in range(len(lista)):
+						if lista[contador][0]=='Miembros':
+							lista[contador].append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses! ')+mssg)
+							break
+				self.list_box_1.Append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses! ')+mssg)
+				if config['reader'] and config['unread'][1]:
+					if lista[yt][0]=='Miembros' or lista[yt][0]=='General': reader.leer_mensaje(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!')+mssg)
+				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
+				continue
+			if re.search(r'\bCheer\d+\b', message['message']) and config['eventos'][2]:
 				divide1=message['message'].split('Cheer')
 				if not divide1[0]:
 					if self.divisa!='Por defecto': divide1[0]=self.divisa
@@ -1080,41 +1114,6 @@ class MyFrame(wx.Frame):
 					if lista[yt][0]=='Donativos' or lista[yt][0]=='General': reader.leer_mensaje(dinero+', '+message['author']['name']+': '+divide1)
 				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][3]: player.playsound(ajustes.rutasonidos[3],False)
 				self.list_box_1.Append(dinero+', '+message['author']['name']+': '+divide1)
-				continue
-			if message['message_type']=='mystery_subscription_gift':
-				if config['categorias'][1]:
-					for contador in range(len(lista)):
-						if lista[contador][0]=='Miembros':
-							lista[contador].append(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
-							break
-				self.list_box_1.Append(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
-				if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
-					if config['reader']: reader.leer_mensaje(message['author']['name']+_(' regaló una suscripción de nivel ')+message['subscription_type']+_(' a la  comunidad, ha regalado un total de ')+str(message['sender_count'])+_(' suscripciones!'))
-				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
-				continue
-			if message['message_type']=='subscription_gift':
-				if config['categorias'][1]:
-					for contador in range(len(lista)):
-						if lista[contador][0]=='Miembros':
-							lista[contador].append(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
-							break
-				self.list_box_1.Append(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
-				if lista[yt][0]=='Miembros' or lista[yt][0]=='General':
-					if config['reader']: reader.leer_mensaje(message['author']['name']+_(' a regalado una suscripción a ')+message['gift_recipient_display_name']+_(' en el nivel ')+message['subscription_plan_name']+_(' por ')+str(message['number_of_months_gifted'])+_(' meses!'))
-				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
-				continue
-			if message['message_type']=='resubscription' and config['eventos'][1]:
-				mssg=message['message'].split('! ')
-				mssg=str(mssg[1:])
-				if config['categorias'][1]:
-					for contador in range(len(lista)):
-						if lista[contador][0]=='Miembros':
-							lista[contador].append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses! ')+mssg)
-							break
-				self.list_box_1.Append(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses! ')+mssg)
-				if config['reader'] and config['unread'][1]:
-					if lista[yt][0]=='Miembros' or lista[yt][0]=='General': reader.leer_mensaje(message['author']['name']+_(' ha renovado su suscripción en el nivel ')+message['subscription_plan_name']+_('. lleva suscrito por')+str(message['cumulative_months'])+_(' meses!')+mssg)
-				if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(ajustes.rutasonidos[2],False)
 				continue
 			try:
 				if message['author']['is_subscriber'] and config['eventos'][0]:
