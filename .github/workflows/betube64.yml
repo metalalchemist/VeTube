@@ -32,7 +32,7 @@ jobs:
 
       - name: Compiling
         run: |
-          pyinstaller VeTube.py --windowed
+          pyinstaller main.py --windowed
           gdown 1ZtF6zus0A7kC9Lwr_kTUbw0MiOoZq29H -O dist/VeTube/bootstrap.exe
           cp -R chat_downloader dist/VeTube/_internal/
           cp -R doc dist/VeTube/
