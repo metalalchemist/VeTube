@@ -32,7 +32,10 @@ def configurar_piper(carpeta_voces):
 	if onnx_models is None:
 		if dialog_response.response(_('Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Quieres abrir nuestra carpeta de Drive para descargar algunos modelos? Si pulsas sí, se abrirá nuestra carpeta seguido de una ventana para instalar una una vez la descargues.'), _("No hay voces instaladas"),wx.YES_NO | wx.ICON_ASTERISK) == wx.ID_YES:
 			wx.LaunchDefaultBrowser("https://drive.google.com/drive/folders/1zFJRTI6CpVw9NkrTiNYOKGga0yn4JXzv?usp=drive_link")
-			config, reader._lector = install_piper_voice(config, reader._lector)
+			try:
+				config, reader._lector = install_piper_voice(config, reader._lector)
+			except TypeError:
+				config["sistemaTTS"] = "auto"
 	elif isinstance(onnx_models, str) or isinstance(onnx_models, list): config['voz'] = 0
 carpeta_voces = path.join(getcwd(), "piper", "voices")
 pos=[]
