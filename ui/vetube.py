@@ -43,7 +43,7 @@ msjs=funciones.convertirLista(mensajes_destacados,'mensaje','titulo')
 dispositivos = player.devicenames
 reader._leer.set_rate(config['speed'])
 reader._leer.set_pitch(config['tono'])
-reader._leer.set_voice(reader._leer.list_voices()[0])
+reader._leer.set_voice(reader._leer.list_voices()[config['voz']])
 reader._leer.set_volume(config['volume'])
 # establecer idiomas:
 languageHandler.setLanguage(config['idioma'])
@@ -557,9 +557,7 @@ class MyFrame(wx.Frame):
 	def descargarEstadisticas(self, event):
 		dlg_file	= wx.FileDialog(self.dlg_estadisticas, _("Guardar archivo de texto"), "", _("estadísticas %s %s.txt") % (time.strftime("%d-%m-%Y"),self.chat.unique_id) if isinstance(self.chat,TikTokLiveClient) else _("estadísticas %s.txt") %time.strftime("%d-%m-%Y") if isinstance(self.chat, PlayroomHelper) else _("estadísticas %s %s.txt") % (time.strftime("%d-%m-%Y"),self.chat.title), _("Archivos de texto (*.txt)|*.txt"), wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
 		if dlg_file.ShowModal() == wx.ID_OK:
-			nombre_archivo = dlg_file.GetFilename()
-			directorio = dlg_file.GetDirectory()
-			with open(path.join(directorio, nombre_archivo), "w",encoding='utf-8') as archivo:
+			with open(path.join(dlg_file.GetDirectory(), dlg_file.GetFilename()), "w",encoding='utf-8') as archivo:
 				archivo.write("\n"+_("Estadísticas del canal: %s") %self.chat.unique_id if isinstance(self.chat,TikTokLiveClient) else _("estadísticas de la sala de juegos") if isinstance(self.chat, PlayroomHelper) else _("Estadísticas del canal: %s") %self.chat.title)
 				archivo.write("\n"+self.text_ctrl_estadisticas.GetValue()+ "\n")
 				archivo.write(_("Usuarios y mensajes:")+ "\n")
@@ -598,7 +596,7 @@ class MyFrame(wx.Frame):
 			dlg_mensaje.Destroy()
 		else: wx.MessageBox(_("No hay mensajes para guardar."), "info.", wx.ICON_INFORMATION)
 	def guardar(self):
-		global lista,config,dispositivos,lector_Salidas
+		global lista,config,dispositivos,lector_Salidas,reader
 		rest=False
 		translator = TranslatorWrapper()
 		config=ajustes.config
@@ -627,6 +625,11 @@ class MyFrame(wx.Frame):
 		if rest:
 			if dialog_response.response(_("Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea reiniciarlo ahora?"), _("¡Atención!"))==wx.ID_YES: app_utilitys.restart_program()
 		# Targeta de sonido:
+		reader=ReaderHandler()
+		reader._leer.set_rate(config['speed'])
+		reader._leer.set_pitch(config['tono'])
+		reader._leer.set_voice(reader._leer.list_voices()[config['voz']])
+		reader._leer.set_volume(config['volume'])
 		if config['sistemaTTS'] == "piper":
 			reader=ajustes.prueba
 			salida_actual = reader._lector.find_device_id(dispositivos[config["dispositivo"]-1])
@@ -1000,7 +1003,7 @@ class MyFrame(wx.Frame):
 		self.list_box_1.Append(event.user.nickname + _(" ha compartido tu en vivo!"))
 		if config['sonidos'] and config['listasonidos'][11]: player.playsound(ajustes.rutasonidos[11],False)
 	async def on_view(self,event: RoomUserSeqEvent):
-		self.label_dialog.SetLabel(self.chat.unique_id+_(' en vivo, actualmente ')+str(event.total)+_(' viendo ahora'))
+		self.label_dialog.SetLabel(self.chat.unique_id+_(' en vivo, actualmente ')+str(event.m_total)+_(' viendo ahora'))
 	async def on_disconnect(self,event: DisconnectEvent):
 		if self.dentro: self.chat.run()
 	def recibirTiktok(self):

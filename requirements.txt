@@ -1,8 +1,8 @@
 wxPython
 sounddevice
-git+https://github.com/isaackogan/TikTokLive
+TikTokLive
 pyperclip
-git+https://github.com/stream-gizmos/chat-downloader.git
+git+https://github.com/owsombra/chat-downloader.git
 git+https://github.com/metalalchemist/google-currency
 git+https://github.com/accessibleapps/accessible_output2
 git+https://github.com/accessibleapps/platform_utils
