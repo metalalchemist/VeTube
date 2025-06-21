@@ -1,14 +1,16 @@
-import wx
+import wx,json,google_currency
 from ui.menus.main_menu import MainMenu
 from update import updater
 from utils.languageHandler import curLang
 from ui.ajustes import configuracionDialog
 from utils import fajustes, app_utilitys
 from ui.dialog_response import response
-from globals.data_store import config
+from globals.data_store import config,dst,divisa
+from globals.resources import carpeta_voces,codes,idiomas_disponibles,monedas
 from ui.editor.editor import EditorCombinaciones
 from controller.ajustes_controller import AjustesController
-
+from setup import reader,player
+from googletrans import LANGUAGES
 class MainMenuController:
     def __init__(self, frame):
         self.frame = frame
@@ -42,7 +44,10 @@ class MainMenuController:
     def mostrar_ajustes(self, event):
         dlg = configuracionDialog(self.frame)
         AjustesController(dlg)
-        dlg.ShowModal()
+        resultado = dlg.ShowModal()
+        if resultado == wx.ID_OK:
+            self.config_dialog = dlg  # Guarda la referencia para usarla en guardar()
+            self.guardar()
         dlg.Destroy()
 
     def restaurar(self, event):
@@ -57,3 +62,38 @@ class MainMenuController:
     def mostrar_editor_combinaciones(self, event):
         dlg = EditorCombinaciones(self.frame)
         dlg.ShowModal()
+
+    def guardar(self):
+        cf = self.config_dialog
+        config['categorias'] = [cf.categoriza.IsItemChecked(i) for i in range(cf.categoriza.GetItemCount())]
+        config['listasonidos'] = [cf.soniditos.IsItemChecked(i) for i in range(cf.soniditos.GetItemCount())]
+        config['eventos'] = [cf.eventos.IsItemChecked(i) for i in range(cf.eventos.GetItemCount())]
+        config['unread'] = [cf.unread.IsItemChecked(i) for i in range(cf.unread.GetItemCount())]
+        rest = False
+        if config['idioma'] != codes[cf.choice_language.GetSelection()]:
+            config['idioma'] = codes[cf.choice_language.GetSelection()]
+            rest = True
+        with open('data.json', 'w+', encoding='utf-8') as file:
+            json.dump(config, file, indent=4, ensure_ascii=False)
+        if rest:
+            if response(_("Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea reiniciarlo ahora?"), _("¡Atención!")) == wx.ID_YES:
+                app_utilitys.restart_program()
+        reader._leer.set_rate(config['speed'])
+        reader._leer.set_pitch(config['tono'])
+        reader._leer.set_voice(reader._leer.list_voices()[config['voz']])
+        reader._leer.set_volume(config['volume'])
+        if config['sistemaTTS'] == "piper":
+            salida_actual = reader._lector.find_device_id(player.devicenames[config["dispositivo"]-1])
+            reader._lector.set_device(salida_actual)
+            app_utilitys.configurar_piper(carpeta_voces)
+        if cf.choice_traducir.GetStringSelection()!="":
+            for k in LANGUAGES:
+                if LANGUAGES[k] == cf.choice_traducir.GetStringSelection():
+                    dst = k
+                    break
+        if cf.choice_moneditas.GetStringSelection()!='Por defecto':
+            monedita=cf.choice_moneditas.GetStringSelection().split(', (')
+            for k in google_currency.CODES:
+                if google_currency.CODES[k] == monedita[0]:
+                    divisa = k
+                    break

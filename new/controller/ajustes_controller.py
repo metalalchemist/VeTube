@@ -107,7 +107,6 @@ class AjustesController:
     def instalar_voz_piper(self, event):
         reader.set_tts("sapi5")
         reader.set_tts("piper")
-        global config, reader, lista_voces_piper
         config, reader._lector = install_piper_voice(config, reader._lector)
         lista_voces_piper = piper_list_voices()
         if lista_voces_piper:

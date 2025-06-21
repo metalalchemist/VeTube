@@ -3,7 +3,7 @@ from utils.languageHandler import getAvailableLanguages
 from google_currency import CODES
 from TTS.list_voices import piper_list_voices
 from setup import reader
-from .data_store import config
+from os import path, getcwd
 rutasonidos = [
     "sounds/chat.mp3",
     "sounds/chatmiembro.mp3",
@@ -47,3 +47,4 @@ if piper_list_voices() is None:
 else:
 	lista_voces_piper=piper_list_voices()
 lista_voces=reader._leer.list_voices()
+carpeta_voces = path.join(getcwd(), "piper", "voices")

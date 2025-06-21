@@ -13,3 +13,5 @@ favorite = funciones.leerJsonLista('favoritos.json')
 mensajes_destacados = funciones.leerJsonLista('mensajes_destacados.json')
 favs = funciones.convertirLista(favorite, 'titulo', 'url')
 msjs = funciones.convertirLista(mensajes_destacados, 'mensaje', 'titulo')
+divisa="Por defecto"
+dst=""
