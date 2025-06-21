@@ -1,0 +1,15 @@
+wxPython
+sounddevice
+TikTokLive
+pyperclip
+git+https://github.com/owsombra/chat-downloader.git
+git+https://github.com/metalalchemist/google-currency
+git+https://github.com/accessibleapps/accessible_output2
+git+https://github.com/accessibleapps/platform_utils
+git+https://github.com/rmcpantoja/googletrans.git
+numpy
+onnxruntime
+git+https://github.com/mush42/espeak-phonemizer-windows
+git+https://github.com/accessibleapps/sound_lib
+uiautomation
+psutil

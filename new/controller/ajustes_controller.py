@@ -1,6 +1,8 @@
 from globals.data_store import config
 from globals.resources import rutasonidos,lista_voces,lista_voces_piper
 from setup import player,reader
+from utils import app_utilitys
+from TTS.list_voices import piper_list_voices , install_piper_voice
 import wx
 class AjustesController:
     def __init__(self, dialog):
@@ -19,6 +21,10 @@ class AjustesController:
         self.dialog.establecer_dispositivo.Bind(wx.EVT_BUTTON, self.establecer_dispositivo)
         self.dialog.boton_prueva.Bind(wx.EVT_BUTTON, self.reproducirPrueva)
         self.dialog.choice_2.Bind(wx.EVT_CHOICE, self.cambiarVoz)
+        self.dialog.slider_2.Bind(wx.EVT_SLIDER, self.cambiarVolumen)
+        self.dialog.slider_1.Bind(wx.EVT_SLIDER, self.cambiarTono)
+        self.dialog.slider_3.Bind(wx.EVT_SLIDER, self.cambiarVelocidad)
+        self.dialog.instala_voces.Bind(wx.EVT_BUTTON, self.instalar_voz_piper)
 
     def mostrarSonidos(self, event):
         if event.IsChecked():
@@ -84,3 +90,26 @@ class AjustesController:
             reader._lector.set_device(salida_piper)
         else:
             reader._leer.set_voice(lista_voces[config['voz']])
+    def cambiarVolumen(self, event):
+        reader._leer.set_volume(self.dialog.slider_2.GetValue())
+        config['volume'] = self.dialog.slider_2.GetValue()
+    def cambiarTono(self, event):
+        value = self.dialog.slider_1.GetValue() - 10
+        reader._leer.set_pitch(value)
+        config['tono'] = value
+    def cambiarVelocidad(self, event):
+        value = self.dialog.slider_3.GetValue() - 10
+        if not ".onnx" in lista_voces[self.dialog.choice_2.GetSelection()]:
+            reader._leer.set_rate(value)
+        else:
+            reader._lector.set_rate(app_utilitys.porcentaje_a_escala(value))
+        config['speed'] = value
+    def instalar_voz_piper(self, event):
+        reader.set_tts("sapi5")
+        reader.set_tts("piper")
+        global config, reader, lista_voces_piper
+        config, reader._lector = install_piper_voice(config, reader._lector)
+        lista_voces_piper = piper_list_voices()
+        if lista_voces_piper:
+            self.dialog.choice_2.Clear()
+            self.dialog.choice_2.AppendItems(lista_voces_piper)
