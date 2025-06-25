@@ -35,6 +35,7 @@ class MainController:
         self.frame.borrar_todos_favs.Bind(wx.EVT_CHECKBOX, self.borrarTodosFavoritos)
         self.frame.check_borrar_todos.Bind(wx.EVT_CHECKBOX, self.seleccionarTodos)
         self.frame.button_borrar_mensajes.Bind(wx.EVT_BUTTON, self.borraRecuerdo)
+        self.frame.button_1.Bind(wx.EVT_BUTTON, self.abrir_chat_dialog)
         # Bind global key events (CharHook) to the frame
         self.frame.Bind(wx.EVT_CHAR_HOOK, self.OnCharHook)
 
@@ -119,6 +120,11 @@ class MainController:
             elif len(mensajes_destacados) <= 0:
                 wx.MessageBox(_( "No hay mensajes que borrar"), "Error.", wx.ICON_ERROR)
                 lf.SetFocus()
+
+    def abrir_chat_dialog(self, event):
+        from ui.chat_ui import ChatDialog
+        dlg = ChatDialog(self.frame)
+        dlg.ShowModal()
 
     def OnCharHook(self, event):
         code = event.GetKeyCode()

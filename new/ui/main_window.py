@@ -66,4 +66,5 @@ class MyFrame(wx.Frame):
         self.SetClientSize(self.sizer_1.CalcMin())
         self.Centre()
         self.Show()
+        self.Raise()  # Trae la ventana al frente
 
