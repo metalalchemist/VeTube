@@ -3,8 +3,9 @@ from ui.main_window import MyFrame
 from utils import funciones
 from os import remove
 from utils import languageHandler
-import wx
 from controller.main_menu_controller import MainMenuController
+from ui.chat_ui import ChatDialog
+import wx
 
 class MainController:
     def __init__(self):
@@ -36,8 +37,10 @@ class MainController:
         self.frame.check_borrar_todos.Bind(wx.EVT_CHECKBOX, self.seleccionarTodos)
         self.frame.button_borrar_mensajes.Bind(wx.EVT_BUTTON, self.borraRecuerdo)
         self.frame.button_1.Bind(wx.EVT_BUTTON, self.abrir_chat_dialog)
+        self.frame.plataforma.Bind(wx.EVT_CHOICE, self.habilitarSala)
         # Bind global key events (CharHook) to the frame
         self.frame.Bind(wx.EVT_CHAR_HOOK, self.OnCharHook)
+        self.frame.list_favorite.Bind(wx.EVT_KEY_UP, self.on_favorite_key_up)
 
     def mostrarBoton(self, event):
         if self.frame.text_ctrl_1.GetValue() != "":
@@ -121,8 +124,7 @@ class MainController:
                 wx.MessageBox(_( "No hay mensajes que borrar"), "Error.", wx.ICON_ERROR)
                 lf.SetFocus()
 
-    def abrir_chat_dialog(self, event):
-        from ui.chat_ui import ChatDialog
+    def abrir_chat_dialog(self, event=None):
         dlg = ChatDialog(self.frame)
         dlg.ShowModal()
 
@@ -133,5 +135,18 @@ class MainController:
             self.menu_controller.menu.mostrar(self.frame.menu_1)
         elif wx.GetKeyState(wx.WXK_F1):
             wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube/tree/master/doc/'+languageHandler.curLang[:2]+'/readme.md')
+        elif code == wx.WXK_RETURN or code == wx.WXK_NUMPAD_ENTER:
+            if self.frame.FindFocus()== self.frame.plataforma or self.frame.FindFocus()==self.frame.text_ctrl_1: self.abrir_chat_dialog()
+
         else:
             event.Skip()
+
+    def on_favorite_key_up(self, event):
+        if event.GetKeyCode() == wx.WXK_SPACE:
+            self.abrir_chat_dialog()
+        else:
+            event.Skip()
+
+    def habilitarSala(self, evt):
+        if evt.GetSelection() == 4:
+            self.frame.button_1.Enable()
