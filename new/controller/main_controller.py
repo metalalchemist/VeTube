@@ -2,6 +2,7 @@ from globals.data_store import favorite, mensajes_destacados, favs, msjs
 from ui.main_window import MyFrame
 from utils import funciones
 from os import remove
+from utils import languageHandler
 import wx
 from controller.main_menu_controller import MainMenuController
 
@@ -34,6 +35,8 @@ class MainController:
         self.frame.borrar_todos_favs.Bind(wx.EVT_CHECKBOX, self.borrarTodosFavoritos)
         self.frame.check_borrar_todos.Bind(wx.EVT_CHECKBOX, self.seleccionarTodos)
         self.frame.button_borrar_mensajes.Bind(wx.EVT_BUTTON, self.borraRecuerdo)
+        # Bind global key events (CharHook) to the frame
+        self.frame.Bind(wx.EVT_CHAR_HOOK, self.OnCharHook)
 
     def mostrarBoton(self, event):
         if self.frame.text_ctrl_1.GetValue() != "":
@@ -116,3 +119,13 @@ class MainController:
             elif len(mensajes_destacados) <= 0:
                 wx.MessageBox(_( "No hay mensajes que borrar"), "Error.", wx.ICON_ERROR)
                 lf.SetFocus()
+
+    def OnCharHook(self, event):
+        code = event.GetKeyCode()
+        # alt + m
+        if code == 77 and event.AltDown():
+            self.menu_controller.menu.mostrar(self.frame.menu_1)
+        elif wx.GetKeyState(wx.WXK_F1):
+            wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube/tree/master/doc/'+languageHandler.curLang[:2]+'/readme.md')
+        else:
+            event.Skip()
