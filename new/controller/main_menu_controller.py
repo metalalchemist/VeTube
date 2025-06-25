@@ -7,7 +7,7 @@ from utils import fajustes, app_utilitys
 from ui.dialog_response import response
 from globals.data_store import config,dst,divisa
 from globals.resources import carpeta_voces,codes,idiomas_disponibles,monedas
-from ui.editor.editor import EditorCombinaciones
+from controller.editor_controller import EditorController
 from controller.ajustes_controller import AjustesController
 from setup import reader,player
 from googletrans import LANGUAGES
@@ -60,8 +60,8 @@ class MainMenuController:
         else: wx.GetApp().ExitMainLoop()
 
     def mostrar_editor_combinaciones(self, event):
-        dlg = EditorCombinaciones(self.frame)
-        dlg.ShowModal()
+        editor_ctrl = EditorController(self.frame)
+        editor_ctrl.ShowModal()
 
     def guardar(self):
         cf = self.config_dialog

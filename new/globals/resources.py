@@ -22,24 +22,6 @@ rutasonidos = [
 idiomas = getAvailableLanguages()
 langs = [i[1] for i in idiomas][::-1]
 codes = [i[0] for i in idiomas][::-1]
-teclas=[
-"control+p",
-"alt+shift+up",
-"alt+shift+down",
-"alt+shift+left",
-"alt+shift+right",
-"alt+shift+home",
-"alt+shift+end",
-"alt+shift+f",
-"alt+shift+c",
-"alt+shift+m",
-"alt+shift+s",
-"alt+shift+v",
-"alt+shift+d",
-"alt+shift+p",
-"alt+shift+k",
-"alt+shift+a"
-]
 idiomas_disponibles = [""] + [v for v in LANGUAGES.values()]
 monedas = [_('Por defecto')] + [f'{CODES[k]}, ({k})' for k in CODES]
 if piper_list_voices() is None:

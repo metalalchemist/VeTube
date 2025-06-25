@@ -1,5 +1,5 @@
 from globals.mensajes import mensaje_teclas
-from globals.resources import teclas
+from utils.key_utilitys import editor
 import wx
 
 class EditorCombinaciones:
@@ -12,22 +12,22 @@ class EditorCombinaciones:
         self.combinaciones.InsertColumn(1, _("combinación de teclas: "))
         for i in range(len(mensaje_teclas)): self.combinaciones.InsertItem(i, mensaje_teclas[i])
         c=0
-        for valor in teclas:
+        for valor in editor.teclas:
             self.combinaciones.SetItem(c, 1, valor)
             c+=1
         self.combinaciones.Focus(0)
         self.combinaciones.SetFocus()
-        editar = wx.Button(self.dlg_teclado, -1, _(u"&Editar"))
-        editar.SetDefault()
-        restaurar = wx.Button(self.dlg_teclado, -1, _(u"&restaurar combinaciones por defecto"))
-        close = wx.Button(self.dlg_teclado, wx.ID_CANCEL, _(u"&Cerrar"))
+        self.editar = wx.Button(self.dlg_teclado, -1, _(u"&Editar"))
+        self.editar.SetDefault()
+        self.restaurar = wx.Button(self.dlg_teclado, -1, _(u"&restaurar combinaciones por defecto"))
+        self.close = wx.Button(self.dlg_teclado, wx.ID_CANCEL, _(u"&Cerrar"))
         firstSizer = wx.BoxSizer(wx.HORIZONTAL)
         firstSizer.Add(label_editor, 0, wx.ALL, 5)
         firstSizer.Add(self.combinaciones, 0, wx.ALL, 5)
         secondSizer = wx.BoxSizer(wx.HORIZONTAL)
-        secondSizer.Add(editar, 0, wx.ALL, 5)
-        secondSizer.Add(restaurar, 0, wx.ALL, 5)
-        secondSizer.Add(close, 0, wx.ALL, 5)
+        secondSizer.Add(self.editar, 0, wx.ALL, 5)
+        secondSizer.Add(self.restaurar, 0, wx.ALL, 5)
+        secondSizer.Add(self.close, 0, wx.ALL, 5)
         sizer.Add(firstSizer, 0, wx.ALL, 5)
         sizer.Add(secondSizer, 0, wx.ALL, 5)
         self.dlg_teclado.SetSizerAndFit(sizer)

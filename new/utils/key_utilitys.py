@@ -1,4 +1,5 @@
 from os import path
+import re
 class KeyUtils:
 	def __init__(self): self.leerTeclas()
 	def escribirTeclas(self):
@@ -22,5 +23,15 @@ class KeyUtils:
 		self.leerTeclas()
 	def leerTeclas(self):
 		if path.exists("keys.txt"):
-			with open ("keys.txt",'r') as arch: self.mis_teclas=arch.read()
+			with open ("keys.txt",'r') as arch:
+				contenido = arch.read()
+				self.teclas = re.findall(r'"(.*?)"', contenido)
 		else: self.escribirTeclas()
+	def reemplazar(self, vieja, nueva):
+		with open("keys.txt", 'r', encoding='utf-8') as arch:
+			contenido = arch.read()
+		contenido = contenido.replace(vieja, nueva)
+		with open("keys.txt", 'w', encoding='utf-8') as arch:
+			arch.write(contenido)
+		self.leerTeclas()
+editor=KeyUtils()
