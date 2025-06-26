@@ -11,7 +11,7 @@ class ChatDialog(wx.Dialog):
         sizer_mensaje_1.Add(sizer_mensaje_2, 0, wx.ALIGN_RIGHT | wx.ALL, 4)
         self.label_mensaje = wx.StaticText(self, wx.ID_ANY, _(u"historial  de mensajes: "))
         sizer_mensaje_2.Add(self.label_mensaje, 20, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 0)
-        self.list_box_1 = wx.ListBox(self, wx.ID_ANY)
+        self.list_box_1 = wx.ListBox(self, wx.ID_ANY,choices=['hola'])
         self.list_box_1.SetFocus()
         sizer_mensaje_1.Add(self.list_box_1, 1, wx.EXPAND | wx.ALL, 4)
         self.boton_opciones = wx.Button(self, wx.ID_ANY, _(u"&Opciones"))

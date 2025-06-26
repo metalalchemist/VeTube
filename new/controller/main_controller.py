@@ -3,8 +3,8 @@ from ui.main_window import MyFrame
 from utils import funciones
 from os import remove
 from utils import languageHandler
-from controller.main_menu_controller import MainMenuController
-from ui.chat_ui import ChatDialog
+from controller.menus.main_menu_controller import MainMenuController
+from controller.chat_controller import ChatController
 import wx
 
 class MainController:
@@ -125,8 +125,8 @@ class MainController:
                 lf.SetFocus()
 
     def abrir_chat_dialog(self, event=None):
-        dlg = ChatDialog(self.frame)
-        dlg.ShowModal()
+        chat_ctrl = ChatController(self.frame)
+        chat_ctrl.mostrar_dialogo()  # Llama al método para mostrar el diálogo
 
     def OnCharHook(self, event):
         code = event.GetKeyCode()
