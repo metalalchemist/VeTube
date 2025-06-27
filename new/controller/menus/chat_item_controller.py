@@ -4,6 +4,8 @@ from ui.show_comment import ShowCommentDialog
 from pyperclip import copy
 from utils.translator import TranslatorWrapper
 from utils.languageHandler import curLang
+from ui.list_urls import ListUrlsDialog
+from utils import funciones
 class ChatItemController:
     def __init__(self, parent):
         self.parent = parent
@@ -14,6 +16,7 @@ class ChatItemController:
         self.parent.list_box_1.Bind(wx.EVT_MENU, self.mostrar_mensaje, self.menu.mostrar)
         self.parent.list_box_1.Bind(wx.EVT_MENU, self.traducirMenu, self.menu.traducir)
         self.parent.list_box_1.Bind(wx.EVT_MENU, self.copiarMensaje, self.menu.copiar)
+        self.parent.list_box_1.Bind(wx.EVT_MENU, self.listaUrls, self.menu.listado_urls)
 
     def mostrar_mensaje(self, event):
         sel = self.parent.list_box_1.GetSelection()
@@ -31,3 +34,6 @@ class ChatItemController:
         noti = wx.adv.NotificationMessage(_("Mensaje copiado al portapapeles"), _("El mensaje seleccionado ha sido copiado al portapapeles."))
         noti.Show(timeout=10)
         copy(self.parent.list_box_1.GetString(self.parent.list_box_1.GetSelection()))
+
+    def listaUrls(self, event):
+        ListUrlsDialog(self.parent, self.parent.list_box_1, self.parent)
