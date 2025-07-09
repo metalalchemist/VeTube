@@ -164,5 +164,6 @@ def langToWindowsLocale(lang):
                  "ru": "rus",
                  "tr": "trk",
                  "sr": "eng",
+                 "id": "ind",
                  }
     return languages[lang]
