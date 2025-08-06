@@ -125,7 +125,8 @@ class MainController:
                 lf.SetFocus()
 
     def abrir_chat_dialog(self, event=None):
-        chat_ctrl = ChatController(self.frame)
+        plataforma = self.frame.plataforma.GetString(self.frame.plataforma.GetSelection())
+        chat_ctrl = ChatController(self.frame, plataforma)
         chat_ctrl.mostrar_dialogo()  # Llama al método para mostrar el diálogo
 
     def OnCharHook(self, event):

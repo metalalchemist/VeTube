@@ -4,13 +4,15 @@ from ui.chat_ui import ChatDialog
 from ui.menus.chat_item_menu import ChatItemMenu
 from ui.menus.chat_opciones_menu import ChatOpcionesMenu
 from controller.menus.chat_item_controller import ChatItemController
+from controller.menus.chat_menu_controller import ChatMenuController
 
 class ChatController:
-    def __init__(self, frame):
+    def __init__(self, frame, plataforma):
         self.frame = frame
+        self.plataforma = plataforma
         self.ui = ChatDialog(frame)
         self.menu_controller = ChatItemController(self.ui)  # Solo pasa el dialog como parent
-        self.opciones_menu = ChatOpcionesMenu(self.ui)
+        self.menu_opciones_controller = ChatMenuController(self.ui, self.plataforma)
         self._bind_events()
 
     def _bind_events(self):
@@ -22,7 +24,7 @@ class ChatController:
         self.menu_controller.menu.mostrar_menu(self.ui.list_box_1)
 
     def on_opciones_btn(self, event):
-        self.opciones_menu.popup(self.ui.boton_opciones)
+        self.menu_opciones_controller.menu.popup(self.ui.boton_opciones)
 
     def on_listbox_keyup(self, event):
         event.Skip()
