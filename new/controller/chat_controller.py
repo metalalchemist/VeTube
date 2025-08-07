@@ -5,6 +5,7 @@ from ui.menus.chat_item_menu import ChatItemMenu
 from ui.menus.chat_opciones_menu import ChatOpcionesMenu
 from controller.menus.chat_item_controller import ChatItemController
 from controller.menus.chat_menu_controller import ChatMenuController
+from ui.dialog_response import response
 
 class ChatController:
     def __init__(self, frame, plataforma):
@@ -16,6 +17,7 @@ class ChatController:
         self._bind_events()
 
     def _bind_events(self):
+        self.ui.button_mensaje_detener.Bind(wx.EVT_BUTTON, self.on_close_dialog)
         self.ui.list_box_1.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
         self.ui.list_box_1.Bind(wx.EVT_KEY_UP, self.on_listbox_keyup)
         self.ui.boton_opciones.Bind(wx.EVT_BUTTON, self.on_opciones_btn)
@@ -31,6 +33,15 @@ class ChatController:
         if event.GetKeyCode() == 32:
             reader._leer.silence()
             reader.leer_sapi(self.ui.list_box_1.GetString(self.ui.list_box_1.GetSelection()))
+    def on_close_dialog(self, event):
+        if response(_("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:")) == wx.ID_YES:
+            main_frame = self.ui.GetParent()
+            self.ui.Destroy()
+            reader._leer.silence()
+            reader.leer_sapi(_("ha finalizado la lectura del chat."))
+            main_frame.text_ctrl_1.SetValue("")
+            main_frame.text_ctrl_1.SetFocus()
+            main_frame.plataforma.SetSelection(0)
 
     def mostrar_dialogo(self):
         self.ui.ShowModal()

@@ -1,9 +1,8 @@
-import wx
-import wx.adv
+import wx, wx.adv
 from pyperclip import copy
 from ui.menus.chat_opciones_menu import ChatOpcionesMenu
 from controller.editor_controller import EditorController
-
+from utils import funciones
 class ChatMenuController:
     def __init__(self, parent, plataforma=None):
         self.parent = parent
@@ -23,6 +22,26 @@ class ChatMenuController:
         self.parent.Bind(wx.EVT_MENU, self.mostrar_editor_combinaciones, self.menu.editor_combinaciones)
         self.parent.Bind(wx.EVT_MENU, self.copiarEnlace, self.menu.copiar_enlace)
         self.parent.Bind(wx.EVT_MENU, self.reproducirVideo, self.menu.reproducir_navegador)
+        self.parent.Bind(wx.EVT_MENU, self.addFavoritos, self.menu.favoritos)
+    def addFavoritos(self, event):
+        from globals.data_store import favorite
+        main_frame = self.parent.GetParent()
+        list_favorite = main_frame.list_favorite
+        text_ctrl_1 = main_frame.text_ctrl_1
+        if list_favorite.GetStrings() == [_("Tus favoritos aparecerán aquí")]:
+            list_favorite.Delete(0)
+        if len(favorite) <= 0:
+            list_favorite.Append(funciones.extractUser(text_ctrl_1.GetValue())+': '+text_ctrl_1.GetValue())
+            favorite.append({'titulo': funciones.extractUser(text_ctrl_1.GetValue()), 'url': text_ctrl_1.GetValue()})
+        else:
+            if any(funciones.extractUser(text_ctrl_1.GetValue())+': '+text_ctrl_1.GetValue() == item for item in list_favorite.GetStrings()):
+                wx.MessageBox(_("Ya se encuentra en favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
+                return
+            else:
+                list_favorite.Append(funciones.extractUser(text_ctrl_1.GetValue())+': '+text_ctrl_1.GetValue())
+                favorite.append({'titulo': funciones.extractUser(text_ctrl_1.GetValue()), 'url': text_ctrl_1.GetValue()})
+        funciones.escribirJsonLista('favoritos.json', favorite)
+        wx.MessageBox(_("Se ha agregado a favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
     def copiarEnlace(self, event):
         main_frame = self.parent.GetParent()
         url = main_frame.text_ctrl_1.GetValue()

@@ -124,10 +124,57 @@ class MainController:
                 wx.MessageBox(_( "No hay mensajes que borrar"), "Error.", wx.ICON_ERROR)
                 lf.SetFocus()
 
-    def abrir_chat_dialog(self, event=None):
-        plataforma = self.frame.plataforma.GetString(self.frame.plataforma.GetSelection())
-        chat_ctrl = ChatController(self.frame, plataforma)
-        chat_ctrl.mostrar_dialogo()  # Llama al método para mostrar el diálogo
+    def abrir_chat_dialog(self, event=None, url=""):
+        if not url:
+            url = self.frame.text_ctrl_1.GetValue()
+        plataforma_idx = self.frame.plataforma.GetSelection()
+        if plataforma_idx == 4:
+            url = "sala"
+        if url:
+            autodetectar = False if plataforma_idx != 0 else True
+            if 'http' in url or 'www' in url:
+                autodetectar = True
+            if not autodetectar:
+                if plataforma_idx == 1:
+                    url = "www.youtube.com/@" + self.frame.text_ctrl_1.GetValue() + "/live"
+                elif plataforma_idx == 2:
+                    url = "https://www.twitch.tv/@" + self.frame.text_ctrl_1.GetValue()
+                elif plataforma_idx == 3:
+                    url = "https://www.tiktok.com/@" + self.frame.text_ctrl_1.GetValue() + "/live"
+            if 'yout' in url:
+                if 'studio' in url:
+                    url = url.replace('https://studio.youtube.com/video/','https://www.youtube.com/watch?v=')
+                    url = url.replace('/livestreaming','/')
+                if 'live' in url:
+                    url = url.replace('live/','watch?v=')
+            try:
+                self.frame.text_ctrl_1.SetValue(url)
+                if 'yout' in url:
+                    self.frame.plataforma.SetSelection(1)
+                elif 'twitch' in url:
+                    self.frame.plataforma.SetSelection(2)
+                elif 'tiktok' in url:
+                    self.frame.plataforma.SetSelection(3)
+                elif "sala" in url:
+                    self.frame.plataforma.SetSelection(4)
+                else:
+                    wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), "error.", wx.ICON_ERROR)
+                    return
+                # Muestra el chat controller solo si la URL es válida
+                plataforma_idx = self.frame.plataforma.GetSelection()
+                plataforma = self.frame.plataforma.GetString(plataforma_idx)
+                chat_ctrl = ChatController(self.frame, plataforma)
+                chat_ctrl.mostrar_dialogo()
+            except Exception as e:
+                if url != "sala":
+                    wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido." + str(e)), "error.", wx.ICON_ERROR)
+                    self.frame.text_ctrl_1.SetFocus()
+                else:
+                    wx.MessageBox(_("No ha sido posible engancharse al proceso de la sala de juegos. Debe estar ejecutándose antes de empezar a capturar chats. Si tienes dudas, por favor ponte en contacto con nosotros. Código de error: ") + str(e), "error.", wx.ICON_ERROR)
+                self.frame.text_ctrl_1.SetValue("")
+        else:
+            wx.MessageBox(_("No se puede  acceder porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
+            self.frame.text_ctrl_1.SetFocus()
 
     def OnCharHook(self, event):
         code = event.GetKeyCode()
@@ -138,13 +185,17 @@ class MainController:
             wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube/tree/master/doc/'+languageHandler.curLang[:2]+'/readme.md')
         elif code == wx.WXK_RETURN or code == wx.WXK_NUMPAD_ENTER:
             if self.frame.FindFocus()== self.frame.plataforma or self.frame.FindFocus()==self.frame.text_ctrl_1: self.abrir_chat_dialog()
-
         else:
             event.Skip()
 
     def on_favorite_key_up(self, event):
         if event.GetKeyCode() == wx.WXK_SPACE:
-            self.abrir_chat_dialog()
+            sel = self.frame.list_favorite.GetSelection()
+            if sel != -1:
+                texto = self.frame.list_favorite.GetString(sel)
+                if 'tus favoritos aparecerán aquí' in texto.lower():
+                    return
+                self.abrir_chat_dialog(url=favorite[sel]['url'])
         else:
             event.Skip()
 
