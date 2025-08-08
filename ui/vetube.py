@@ -146,7 +146,6 @@ class MyFrame(wx.Frame):
 		self.button_1.Bind(wx.EVT_BUTTON, self.acceder)
 		self.button_1.Disable()
 		sizer_2.Add(self.button_1, 0, 0, 0)
-
 		self.button_2 = wx.Button(self.tap_1, wx.ID_ANY, _("&Borrar"))
 		self.button_2.Bind(wx.EVT_BUTTON, self.borrarContenido)
 		self.button_2.Disable()
@@ -388,7 +387,7 @@ class MyFrame(wx.Frame):
 			if 'http' in url or 'www' in url: autodetectar=True
 			if not autodetectar:
 				if self.plataforma.GetSelection()==1: url="www.youtube.com/@"+self.text_ctrl_1.GetValue()+"/live"
-				elif self.plataforma.GetSelection()==2: url="https://www.twitch.tv/@"+self.text_ctrl_1.GetValue()
+				elif self.plataforma.GetSelection()==2: url="https://www.twitch.tv/"+self.text_ctrl_1.GetValue()
 				elif self.plataforma.GetSelection()==3: url="https://www.tiktok.com/@"+self.text_ctrl_1.GetValue()+"/live"
 			if 'yout' in url: 
 				if 'studio' in url:
@@ -640,6 +639,7 @@ class MyFrame(wx.Frame):
 			for k in translator.LANGUAGES:
 				if translator.LANGUAGES[k] == self.cf.choice_traducir.GetStringSelection():
 					self.dst = k
+					print(self.dst)
 					break
 		if self.cf.choice_moneditas.GetStringSelection()!='Por defecto':
 			monedita=self.cf.choice_moneditas.GetStringSelection().split(', (')
