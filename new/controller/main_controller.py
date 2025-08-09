@@ -4,7 +4,7 @@ from utils import funciones
 from os import remove
 from utils import languageHandler
 from controller.menus.main_menu_controller import MainMenuController
-from controller.chat_controller import ChatController
+from servicios.youtube import ServicioYouTube
 import wx
 
 class MainController:
@@ -127,53 +127,50 @@ class MainController:
     def abrir_chat_dialog(self, event=None, url=""):
         if not url:
             url = self.frame.text_ctrl_1.GetValue()
-        plataforma_idx = self.frame.plataforma.GetSelection()
-        if plataforma_idx == 4:
+        plataforma_ids = self.frame.plataforma.GetSelection()
+        if plataforma_ids == 4:
             url = "sala"
         if url:
-            autodetectar = False if plataforma_idx != 0 else True
+            autodetectar = False if plataforma_ids != 0 else True
             if 'http' in url or 'www' in url:
                 autodetectar = True
             if not autodetectar:
-                if plataforma_idx == 1:
+                if plataforma_ids == 1:
                     url = "www.youtube.com/@" + self.frame.text_ctrl_1.GetValue() + "/live"
-                elif plataforma_idx == 2:
+                elif plataforma_ids == 2:
                     url = "https://www.twitch.tv/@" + self.frame.text_ctrl_1.GetValue()
-                elif plataforma_idx == 3:
+                elif plataforma_ids == 3:
                     url = "https://www.tiktok.com/@" + self.frame.text_ctrl_1.GetValue() + "/live"
+            # Normaliza url de YouTube
             if 'yout' in url:
                 if 'studio' in url:
                     url = url.replace('https://studio.youtube.com/video/','https://www.youtube.com/watch?v=')
                     url = url.replace('/livestreaming','/')
                 if 'live' in url:
                     url = url.replace('live/','watch?v=')
-            try:
-                self.frame.text_ctrl_1.SetValue(url)
-                if 'yout' in url:
-                    self.frame.plataforma.SetSelection(1)
-                elif 'twitch' in url:
-                    self.frame.plataforma.SetSelection(2)
-                elif 'tiktok' in url:
-                    self.frame.plataforma.SetSelection(3)
-                elif "sala" in url:
-                    self.frame.plataforma.SetSelection(4)
-                else:
-                    wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), "error.", wx.ICON_ERROR)
-                    return
-                # Muestra el chat controller solo si la URL es válida
-                plataforma_idx = self.frame.plataforma.GetSelection()
-                plataforma = self.frame.plataforma.GetString(plataforma_idx)
-                chat_ctrl = ChatController(self.frame, plataforma)
-                chat_ctrl.mostrar_dialogo()
-            except Exception as e:
-                if url != "sala":
-                    wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido." + str(e)), "error.", wx.ICON_ERROR)
+                self.set_plataforma(1)
+            elif 'twitch' in url:
+                self.set_plataforma(2)
+            elif 'tiktok' in url:
+                self.set_plataforma(3)
+            elif "sala" in url:
+                self.set_plataforma(4)
+            else:
+                wx.MessageBox("¡Parece que el enlace al cual está intentando acceder no es un enlace válido.", "error.", wx.ICON_ERROR)
+                return
+            self.frame.text_ctrl_1.SetValue(url)
+            plataforma_ids = self.frame.plataforma.GetSelection()
+            plataforma = self.frame.plataforma.GetString(plataforma_ids)
+            if plataforma_ids == 1:
+                try:
+                    servicio = ServicioYouTube(url, self.frame, plataforma)
+                    servicio.iniciar_chat()
+                except Exception as e:
+                    wx.MessageBox(f"Error al iniciar el chat de YouTube: {str(e)}", "error.", wx.ICON_ERROR)
                     self.frame.text_ctrl_1.SetFocus()
-                else:
-                    wx.MessageBox(_("No ha sido posible engancharse al proceso de la sala de juegos. Debe estar ejecutándose antes de empezar a capturar chats. Si tienes dudas, por favor ponte en contacto con nosotros. Código de error: ") + str(e), "error.", wx.ICON_ERROR)
-                self.frame.text_ctrl_1.SetValue("")
+                    return
         else:
-            wx.MessageBox(_("No se puede  acceder porque el campo de  texto está vacío, debe escribir  algo."), "error.", wx.ICON_ERROR)
+            wx.MessageBox("No se puede  acceder porque el campo de  texto está vacío, debe escribir  algo.", "error.", wx.ICON_ERROR)
             self.frame.text_ctrl_1.SetFocus()
 
     def OnCharHook(self, event):
@@ -187,6 +184,8 @@ class MainController:
             if self.frame.FindFocus()== self.frame.plataforma or self.frame.FindFocus()==self.frame.text_ctrl_1: self.abrir_chat_dialog()
         else:
             event.Skip()
+    def set_plataforma(self, idx):
+        self.frame.plataforma.SetSelection(idx)
 
     def on_favorite_key_up(self, event):
         if event.GetKeyCode() == wx.WXK_SPACE:

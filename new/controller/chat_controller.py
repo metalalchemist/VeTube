@@ -8,12 +8,11 @@ from controller.menus.chat_menu_controller import ChatMenuController
 from ui.dialog_response import response
 
 class ChatController:
-    def __init__(self, frame, plataforma):
+    def __init__(self, frame):
         self.frame = frame
-        self.plataforma = plataforma
         self.ui = ChatDialog(frame)
         self.menu_controller = ChatItemController(self.ui)  # Solo pasa el dialog como parent
-        self.menu_opciones_controller = ChatMenuController(self.ui, self.plataforma)
+        self.opciones_menu = ChatOpcionesMenu(self.ui)
         self._bind_events()
 
     def _bind_events(self):
@@ -26,7 +25,7 @@ class ChatController:
         self.menu_controller.menu.mostrar_menu(self.ui.list_box_1)
 
     def on_opciones_btn(self, event):
-        self.menu_opciones_controller.menu.popup(self.ui.boton_opciones)
+        self.opciones_menu.popup(self.ui.boton_opciones)
 
     def on_listbox_keyup(self, event):
         event.Skip()
@@ -42,6 +41,8 @@ class ChatController:
             main_frame.text_ctrl_1.SetValue("")
             main_frame.text_ctrl_1.SetFocus()
             main_frame.plataforma.SetSelection(0)
+    def agregar_mensaje(self, mensaje):
+        self.ui.list_box_1.Append(mensaje)
 
     def mostrar_dialogo(self):
         self.ui.ShowModal()

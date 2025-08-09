@@ -13,7 +13,7 @@ class ChatDialog(wx.Dialog):
         main_sizer.Add(top_sizer, 0, wx.EXPAND)
         self.label_mensaje = wx.StaticText(self, wx.ID_ANY, _(u"Historial de mensajes:"))
         main_sizer.Add(self.label_mensaje, 0, wx.ALL, 5)
-        self.list_box_1 = wx.ListBox(self, wx.ID_ANY, choices=['hola', 'https://m.facebook.com'])
+        self.list_box_1 = wx.ListBox(self, wx.ID_ANY, choices=[])
         self.list_box_1.SetFocus()
         main_sizer.Add(self.list_box_1, 1, wx.EXPAND | wx.ALL, 5)
         bottom_sizer = wx.BoxSizer(wx.HORIZONTAL)
