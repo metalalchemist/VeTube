@@ -25,6 +25,7 @@ class ServicioYouTube:
         self._detener = True
 
     def recibir(self):
+        if dst: translator=translator.TranslatorWrapper()
         self.chat = ChatDownloader().get_chat(self.url, message_groups=["messages", "superchat"], interruptible_retry=False)
         for message in self.chat:
             if self._detener:
