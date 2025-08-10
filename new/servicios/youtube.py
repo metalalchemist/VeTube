@@ -3,7 +3,7 @@ from chat_downloader import ChatDownloader
 from globals.data_store import config, divisa, dst
 from globals.resources import rutasonidos
 from utils import translator
-from setup import player
+from setup import player,reader
 from controller.chat_controller import ChatController
 
 class ServicioYouTube:
@@ -11,20 +11,30 @@ class ServicioYouTube:
         self.url = url
         self.frame = frame
         self.chat = None
-        self.chat_controller = ChatController(frame)
+        self.chat_controller = ChatController(frame, self)
+        self._detener = False
 
     def iniciar_chat(self):
-            threading.Thread(target=self.recibir, daemon=True).start()
-            self.chat_controller.mostrar_dialogo()
+        self._detener = False
+        self._hilo = threading.Thread(target=self.recibir, daemon=True)
+        self._hilo.start()
+        player.playsound(rutasonidos[6], False)
+        reader.leer_sapi(_("Ingresando al chat."))
+        self.chat_controller.mostrar_dialogo()
+    def detener(self):
+        self._detener = True
 
     def recibir(self):
         self.chat = ChatDownloader().get_chat(self.url, message_groups=["messages", "superchat"], interruptible_retry=False)
         for message in self.chat:
+            if self._detener:
+                break
+            if not message:
+                continue
             if message['message'] is None:
                 message['message'] = ''
             if dst:
                 message['message'] = translator.translate(text=message['message'], target=dst)
-            # Comprobación básica para evitar KeyError en 'author'['name']
             if 'header_secondary_text' in message and config['eventos'][1]:
                 for t in message['author']['badges']:
                     mensajito = message['author']['display_name'] + _(' se a conectado al chat. ') + t['title']

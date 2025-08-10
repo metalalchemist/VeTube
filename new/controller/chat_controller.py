@@ -8,8 +8,9 @@ from controller.menus.chat_menu_controller import ChatMenuController
 from ui.dialog_response import response
 
 class ChatController:
-    def __init__(self, frame):
+    def __init__(self, frame, servicio=None):
         self.frame = frame
+        self.servicio = servicio
         self.ui = ChatDialog(frame)
         self.menu_controller = ChatItemController(self.ui)  # Solo pasa el dialog como parent
         self.opciones_menu = ChatOpcionesMenu(self.ui)
@@ -34,6 +35,7 @@ class ChatController:
             reader.leer_sapi(self.ui.list_box_1.GetString(self.ui.list_box_1.GetSelection()))
     def on_close_dialog(self, event):
         if response(_("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:")) == wx.ID_YES:
+            self.servicio.detener()
             main_frame = self.ui.GetParent()
             self.ui.Destroy()
             reader._leer.silence()
