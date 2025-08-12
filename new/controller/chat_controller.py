@@ -45,6 +45,6 @@ class ChatController:
             main_frame.plataforma.SetSelection(0)
     def agregar_mensaje(self, mensaje):
         self.ui.list_box_1.Append(mensaje)
-
+    def agregar_titulo(self, titulo): self.ui.label_dialog.SetLabel(titulo)
     def mostrar_dialogo(self):
         self.ui.ShowModal()

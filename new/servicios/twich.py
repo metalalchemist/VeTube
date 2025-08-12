@@ -11,7 +11,7 @@ class ServicioTwich:
         self.url = url
         self.frame = frame
         self.chat = None
-        self.chat_controller = ChatController(frame, self)
+        self.chat_controller = ChatController(frame, self, plataforma)
         self._detener = False
 
     def iniciar_chat(self):

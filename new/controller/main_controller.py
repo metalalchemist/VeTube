@@ -6,6 +6,8 @@ from utils import languageHandler
 from controller.menus.main_menu_controller import MainMenuController
 from servicios.youtube import ServicioYouTube
 from servicios.twich import ServicioTwich
+from servicios.sala import ServicioSala
+from servicios.tiktok import ServicioTiktok
 import wx
 
 class MainController:
@@ -176,6 +178,22 @@ class MainController:
                     servicio.iniciar_chat()
                 except Exception as e:
                     wx.MessageBox(f"Error al iniciar el chat de Twich: {str(e)}", "error.", wx.ICON_ERROR)
+                    self.frame.text_ctrl_1.SetFocus()
+                    return
+            elif plataforma_ids == 3:
+                try:
+                    servicio = ServicioTiktok(url, self.frame, plataforma)
+                    servicio.iniciar_chat()
+                except Exception as e:
+                    wx.MessageBox(f"Error al iniciar el chat de Tiktok: {str(e)}", "error.", wx.ICON_ERROR)
+                    self.frame.text_ctrl_1.SetFocus()
+                    return
+            elif plataforma_ids == 4:
+                try:
+                    servicio = ServicioSala(url, self.frame, plataforma)
+                    servicio.iniciar_chat()
+                except Exception as e:
+                    wx.MessageBox(f"Error al iniciar el chat de La sala de juegos: {str(e)}", "error.", wx.ICON_ERROR)
                     self.frame.text_ctrl_1.SetFocus()
                     return
         else:
