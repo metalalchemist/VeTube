@@ -88,20 +88,20 @@ class ServicioTiktok:
         if config['sonidos'] and config['listasonidos'][6]: player.playsound(rutasonidos[6],False)
 
     async def on_comment(self,event: CommentEvent):
-        self.chat_controller.agregar_mensaje(event.user.nickname + ": " + event.comment if event.comment is not None else '')
+        self.chat_controller.agregar_mensaje_general(event.user.nickname + ": " + event.comment if event.comment is not None else '')
         if config['sonidos'] and config['listasonidos'][0]: player.playsound(rutasonidos[0],False)
 
     async def on_emote(self,event: EmoteChatEvent):
-        self.chat_controller.agregar_mensaje(event.user.nickname + _(" envió un emogi."))
+        self.chat_controller.agregar_mensaje_general(event.user.nickname + _(" envió un emogi."))
         if config['sonidos'] and config['listasonidos'][1]: player.playsound(rutasonidos[1],False)
 
     async def on_chest(self,event: EnvelopeEvent):
-        self.chat_controller.agregar_mensaje(event.user.nickname + _(" ha enviado un cofre!"))
+        self.chat_controller.agregar_mensaje_donacion(event.user.nickname + _(" ha enviado un cofre!"))
         if config['sonidos'] and config['listasonidos'][12]: player.playsound(rutasonidos[12],False)
 
     async def on_follow(self,event: FollowEvent):
         self.seguidores+=1
-        self.chat_controller.agregar_mensaje(event.user.nickname + _(" comenzó a seguirte!"))
+        self.chat_controller.agregar_mensaje_general(event.user.nickname + _(" comenzó a seguirte!"))
         if config['sonidos'] and config['listasonidos'][10]: player.playsound(rutasonidos[10],False)
 
     async def on_gift(self,event: GiftEvent):
@@ -122,24 +122,24 @@ class ServicioTiktok:
                 mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(total),divisa)
             else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(event.gift.diamond_count))
         try:
-            self.chat_controller.agregar_mensaje(mensajito)
+            self.chat_controller.agregar_mensaje_donacion(mensajito)
             if config['sonidos'] and config['listasonidos'][3]: player.playsound(rutasonidos[3],False)
         except Exception as e: pass
 
     async def on_join(self,event: JoinEvent):
         self.unidos+=1
-        self.chat_controller.agregar_mensaje(event.user.nickname+_(" se ha unido a tu en vivo."))
+        self.chat_controller.agregar_mensaje_general(event.user.nickname+_(" se ha unido a tu en vivo."))
         if config['sonidos'] and config['listasonidos'][2]: player.playsound(rutasonidos[2],False)
 
     async def on_like(self,event: LikeEvent):
         self.megusta=event.total
         self.gustados.append(event.user.nickname)
-        self.chat_controller.agregar_mensaje(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+        self.chat_controller.agregar_mensaje_general(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
         if config['sonidos'] and config['listasonidos'][9]: player.playsound(rutasonidos[9],False)
 
     async def on_share(self,event: ShareEvent):
         self.compartidas+=1
-        self.chat_controller.agregar_mensaje(event.user.nickname + _(" ha compartido tu en vivo!"))
+        self.chat_controller.agregar_mensaje_general(event.user.nickname + _(" ha compartido tu en vivo!"))
         if config['sonidos'] and config['listasonidos'][11]: player.playsound(rutasonidos[11],False)
 
     async def on_view(self,event: RoomUserSeqEvent): self.chat_controller.agregar_titulo(self.chat.unique_id+_(' en vivo, actualmente ')+str(event.m_total)+_(' viendo ahora'))

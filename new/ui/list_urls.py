@@ -2,7 +2,7 @@ import wx
 from utils import funciones
 
 class ListUrlsDialog(wx.Dialog):
-    def __init__(self, parent, list_box_1, dialog_mensaje):
+    def __init__(self, list_box_1, dialog_mensaje):
         urls = funciones.extract_urls(list_box_1.GetString(list_box_1.GetSelection()))
         if urls:
             super().__init__(dialog_mensaje, wx.ID_ANY, _("Lista de URLS"), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)

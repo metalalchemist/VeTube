@@ -35,5 +35,7 @@ class ServicioSala:
             if message['message']==None: message['message']=''
             if dst: message['message'] = translator.translate(text=message['message'], target=dst)
             if config['sonidos'] and config['listasonidos'][0]: player.playsound(rutasonidos[0],False)
-            if (message['type'] == 'private'): self.chat_controller.agregar_mensaje(_('privado de ') + message['author'] +': ' +message['message'])
-            else: self.chat_controller.agregar_mensaje(message['author'] +': ' +message['message'])
+            if (message['type'] == 'private'): 
+                self.chat_controller.agregar_mensaje_donacion(_('privado de ') + message['author'] +': ' +message['message'])
+            else: 
+                self.chat_controller.agregar_mensaje_general(message['author'] +': ' +message['message'])

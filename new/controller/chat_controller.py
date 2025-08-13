@@ -12,18 +12,33 @@ class ChatController:
         self.frame = frame
         self.servicio = servicio
         self.plataforma = plataforma
-        self.ui = ChatDialog(frame)
-        self.menu_opciones_controller = ChatMenuController(self.ui, self.plataforma)
-        self._bind_events()
+        self.ui = None
+        self.menu_opciones_controller = None
 
     def _bind_events(self):
         self.ui.button_mensaje_detener.Bind(wx.EVT_BUTTON, self.on_close_dialog)
-        self.ui.list_box_1.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
-        self.ui.list_box_1.Bind(wx.EVT_KEY_UP, self.on_listbox_keyup)
         self.ui.boton_opciones.Bind(wx.EVT_BUTTON, self.on_opciones_btn)
+        
+        list_boxes = [
+            self.ui.list_box_general,
+            self.ui.list_box_miembros,
+            self.ui.list_box_moderadores,
+            self.ui.list_box_donaciones,
+            self.ui.list_box_verificados
+        ]
+        
+        for lb in list_boxes:
+            lb.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
+            lb.Bind(wx.EVT_KEY_UP, self.on_listbox_keyup)
 
     def on_context_menu(self, event):
-        self.menu_controller.menu.mostrar_menu(self.ui.list_box_1)
+        list_box = event.GetEventObject()
+        if list_box.GetSelection() == wx.NOT_FOUND:
+            return
+        
+        menu = ChatItemMenu(self.ui)
+        ChatItemController(menu, list_box)
+        self.ui.PopupMenu(menu.menu)
 
     def on_opciones_btn(self, event):
         self.menu_opciones_controller.menu.popup(self.ui.boton_opciones)
@@ -32,7 +47,9 @@ class ChatController:
         event.Skip()
         if event.GetKeyCode() == 32:
             reader._leer.silence()
-            reader.leer_sapi(self.ui.list_box_1.GetString(self.ui.list_box_1.GetSelection()))
+            list_box = event.GetEventObject()
+            reader.leer_sapi(list_box.GetString(list_box.GetSelection()))
+
     def on_close_dialog(self, event):
         if response(_("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:")) == wx.ID_YES:
             self.servicio.detener()
@@ -43,8 +60,28 @@ class ChatController:
             main_frame.text_ctrl_1.SetValue("")
             main_frame.text_ctrl_1.SetFocus()
             main_frame.plataforma.SetSelection(0)
-    def agregar_mensaje(self, mensaje):
-        self.ui.list_box_1.Append(mensaje)
-    def agregar_titulo(self, titulo): self.ui.label_dialog.SetLabel(titulo)
+
+    def agregar_mensaje_general(self, mensaje):
+        self.ui.list_box_general.Append(mensaje)
+
+    def agregar_mensaje_miembro(self, mensaje):
+        self.ui.list_box_miembros.Append(mensaje)
+
+    def agregar_mensaje_moderador(self, mensaje):
+        self.ui.list_box_moderadores.Append(mensaje)
+
+    def agregar_mensaje_donacion(self, mensaje):
+        self.ui.list_box_donaciones.Append(mensaje)
+
+    def agregar_mensaje_verificado(self, mensaje):
+        self.ui.list_box_verificados.Append(mensaje)
+
+    def agregar_titulo(self, titulo): 
+        if self.ui:
+            self.ui.label_dialog.SetLabel(titulo)
+
     def mostrar_dialogo(self):
+        self.ui = ChatDialog(self.frame)
+        self.menu_opciones_controller = ChatMenuController(self.ui, self.plataforma)
+        self._bind_events()
         self.ui.ShowModal()

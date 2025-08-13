@@ -36,50 +36,61 @@ class ServicioYouTube:
                 message['message'] = ''
             if dst:
                 message['message'] = translator.translate(text=message['message'], target=dst)
-            if 'header_secondary_text' in message and config['eventos'][1]:
-                for t in message['author']['badges']:
-                    mensajito = message['author']['display_name'] + _(' se a conectado al chat. ') + t['title']
-                    break
-                    if config['sonidos'] and self.chat.status != "past" and config['listasonidos'][2]:
-                        player.playsound(rutasonidos[2], False)
-                    self.chat_controller.agregar_mensaje(mensajito)
-                continue
+
+            author_name = message['author']['display_name']
+            msg = message['message']
+
+            # Default message type
+            message_type = 'general'
+
             if 'badges' in message['author']:
-                for t in message['author']['badges']:
-                    if 'Owner' in t['title']:
-                        if config['sonidos'] and self.chat.status != "past" and config['listasonidos'][4]:
-                            player.playsound(rutasonidos[7], False)
-                        self.chat_controller.agregar_mensaje(_('Propietario ') + message['author']['display_name'] + ': ' + message['message'])
+                for badge in message['author']['badges']:
+                    title = badge.get('title', '')
+                    if 'Owner' in title:
+                        message_type = 'propietario'
                         break
-                    if 'Moderator' in t['title'] and config['eventos'][3]:
-                        if config['sonidos'] and self.chat.status != "past" and config['listasonidos'][4]:
-                            player.playsound(rutasonidos[4], False)
-                        self.chat_controller.agregar_mensaje(_('Moderador ') + message['author']['display_name'] + ': ' + message['message'])
+                    if 'Moderator' in title:
+                        message_type = 'moderador'
                         break
-                    if 'member' in t['title'].lower() and config['eventos'][0]:
-                        if config['sonidos'] and self.chat.status != "past" and config['listasonidos'][1]:
-                            player.playsound(rutasonidos[1], False)
-                        self.chat_controller.agregar_mensaje(_('Miembro ') + message['author']['display_name'] + ': ' + message['message'])
+                    if 'member' in title.lower():
+                        message_type = 'miembro'
                         break
-                    if 'Verified' in t['title'] and config['eventos'][4]:
-                        if config['sonidos'] and self.chat.status != "past" and config['listasonidos'][5]:
-                            player.playsound(rutasonidos[5], False)
-                        self.chat_controller.agregar_mensaje(message['author']['display_name'] + _(' (usuario verificado): ') + message['message'])
+                    if 'Verified' in title:
+                        message_type = 'verificado'
                         break
-                continue
+
             if message['message_type'] == 'paid_message' or message['message_type'] == 'paid_sticker':
+                message_type = 'donacion'
+
+            # Construct the message string
+            if message_type == 'donacion':
                 if config['eventos'][2]:
                     if divisa != "Por defecto" and divisa != message['money']['currency']:
                         moneda = json.loads(google_currency.convert(message['money']['currency'], divisa, message['money']['amount']))
                         if moneda['converted']:
                             message['money']['currency'] = divisa
                             message['money']['amount'] = moneda['amount']
-                    if config['sonidos'] and self.chat.status != "past" and config['listasonidos'][3]:
-                        player.playsound(rutasonidos[3], False)
-                    self.chat_controller.agregar_mensaje(str(message['money']['amount']) + message['money']['currency'] + ', ' + message['author']['display_name'] + ': ' + message['message'])
-                    continue
-            else:
-                if config['sonidos'] and self.chat.status != "past" and config['listasonidos'][0]:
-                    player.playsound(rutasonidos[0], False)
-                self.chat_controller.agregar_mensaje(message['author']['display_name'] + ': ' + message['message'])
+                    full_message = f"{message['money']['amount']} {message['money']['currency']}, {author_name}: {msg}"
+                    if config['sonidos'] and self.chat.status != "past" and config['listasonidos'][3]: player.playsound(rutasonidos[3], False)
+                    self.chat_controller.agregar_mensaje_donacion(full_message)
                 continue
+
+            full_message = f"{author_name}: {msg}"
+
+            if message_type == 'general':
+                if config['sonidos'] and self.chat.status != "past" and config['listasonidos'][0]: player.playsound(rutasonidos[0], False)
+                self.chat_controller.agregar_mensaje_general(full_message)
+            elif message_type == 'miembro':
+                if config['eventos'][0]:
+                    if config['sonidos'] and self.chat.status != "past" and config['listasonidos'][1]: player.playsound(rutasonidos[1], False)
+                    self.chat_controller.agregar_mensaje_miembro(full_message)
+            elif message_type == 'moderador' or message_type=='propietario':
+                if config['eventos'][3]:
+                    if config['sonidos'] and self.chat.status != "past" and config['listasonidos'][4]:
+                        if message_type=='moderador': player.playsound(rutasonidos[4], False)
+                        if message_type=='propietario': player.playsound(rutasonidos[7], False)
+                    self.chat_controller.agregar_mensaje_moderador(full_message)
+            elif message_type == 'verificado':
+                if config['eventos'][4]:
+                    if config['sonidos'] and self.chat.status != "past" and config['listasonidos'][5]: player.playsound(rutasonidos[5], False)
+                    self.chat_controller.agregar_mensaje_verificado(f"{author_name}: {msg}")

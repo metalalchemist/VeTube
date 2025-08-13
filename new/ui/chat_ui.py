@@ -11,11 +11,19 @@ class ChatDialog(wx.Dialog):
         self.button_mensaje_detener = wx.Button(self, wx.ID_ANY, _(u"&Detener chat"))
         top_sizer.Add(self.button_mensaje_detener, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
         main_sizer.Add(top_sizer, 0, wx.EXPAND)
-        self.label_mensaje = wx.StaticText(self, wx.ID_ANY, _(u"Historial de mensajes:"))
-        main_sizer.Add(self.label_mensaje, 0, wx.ALL, 5)
-        self.list_box_1 = wx.ListBox(self, wx.ID_ANY, choices=[])
-        self.list_box_1.SetFocus()
-        main_sizer.Add(self.list_box_1, 1, wx.EXPAND | wx.ALL, 5)
+
+        self.treebook = wx.Treebook(self, wx.ID_ANY)
+        
+        # Create and add pages
+        self.list_box_general, self.page_index_general = self.create_page_with_listbox(self.treebook, _(u"General"))
+        self.list_box_miembros, self.page_index_miembros = self.create_page_with_listbox(self.treebook, _(u"Miembros"))
+        self.list_box_moderadores, self.page_index_moderadores = self.create_page_with_listbox(self.treebook, _(u"Moderadores"))
+        self.list_box_donaciones, self.page_index_donaciones = self.create_page_with_listbox(self.treebook, _(u"Donaciones"))
+        self.list_box_verificados, self.page_index_verificados = self.create_page_with_listbox(self.treebook, _(u"Verificados"))
+
+        self.treebook.SetFocus()
+        main_sizer.Add(self.treebook, 1, wx.EXPAND | wx.ALL, 5)
+
         bottom_sizer = wx.BoxSizer(wx.HORIZONTAL)
         bottom_sizer.AddStretchSpacer()
         self.boton_opciones = wx.Button(self, wx.ID_ANY, _(u"&Opciones"))
@@ -26,6 +34,15 @@ class ChatDialog(wx.Dialog):
         self.SetSize((400, 500))
         self.Centre()
         self.SetEscapeId(self.button_mensaje_detener.GetId())
+
+    def create_page_with_listbox(self, parent, name):
+        page = wx.Panel(parent)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        list_box = wx.ListBox(page, wx.ID_ANY, choices=[])
+        sizer.Add(list_box, 1, wx.EXPAND | wx.ALL, 5)
+        page.SetSizer(sizer)
+        page_index = parent.AddPage(page, str(name))
+        return list_box, page_index
 
     def ShowModal(self):
         return super().ShowModal()
