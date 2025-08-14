@@ -1,7 +1,7 @@
 from helpers.timer import Timer
 from helpers.playroom_helper import PlayroomHelper
 from controller.chat_controller import ChatController
-from globals.data_store import config, dst
+from globals import data_store
 from globals.resources import rutasonidos
 from utils import translator
 from setup import player,reader
@@ -28,14 +28,21 @@ class ServicioSala:
         self._detener = True
 
     def recibir(self):
-        if dst: translator=translator.TranslatorWrapper()
+        if data_store.dst: self.translator=translator.translatorWrapper()
         self.chat.get_new_messages()
         for message in self.chat.new_messages:
             if self._detener: break
             if message['message']==None: message['message']=''
-            if dst: message['message'] = translator.translate(text=message['message'], target=dst)
-            if config['sonidos'] and config['listasonidos'][0]: player.playsound(rutasonidos[0],False)
-            if (message['type'] == 'private'): 
-                self.chat_controller.agregar_mensaje_donacion(_('privado de ') + message['author'] +': ' +message['message'])
-            else: 
-                self.chat_controller.agregar_mensaje_general(message['author'] +': ' +message['message'])
+            if data_store.dst: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
+            if (message['type'] == 'private'):
+                if data_store.config['categorias'][2]:
+                    if data_store.config['eventos'][1]:
+                        self.chat_controller.agregar_mensaje_miembro(message['author'] +': ' +message['message'])
+                        if data_store.config['reader'] and data_store.config['unread'][1]: reader.leer_mensaje(message['author'] +': ' +message['message'])
+                        if data_store.config['sonidos'] and data_store.config['listasonidos'][2]: player.playsound(rutasonidos[2],False)
+            else:
+                if data_store.config['categorias'][0]:
+                    if data_store.config['eventos'][0]:
+                        self.chat_controller.agregar_mensaje_general(message['author'] +': ' +message['message'])
+                        if data_store.config['reader'] and data_store.config['unread'][0]: reader.leer_mensaje(message['author'] +': ' +message['message'])
+                        if data_store.config['sonidos'] and data_store.config['listasonidos'][0]: player.playsound(rutasonidos[0],False)

@@ -16,6 +16,7 @@ class ChatDialog(wx.Dialog):
         
         # Create and add pages
         self.list_box_general, self.page_index_general = self.create_page_with_listbox(self.treebook, _(u"General"))
+        self.list_box_eventos, self.page_index_eventos = self.create_page_with_listbox(self.treebook, _(u"Eventos"))
         self.list_box_miembros, self.page_index_miembros = self.create_page_with_listbox(self.treebook, _(u"Miembros"))
         self.list_box_moderadores, self.page_index_moderadores = self.create_page_with_listbox(self.treebook, _(u"Moderadores"))
         self.list_box_donaciones, self.page_index_donaciones = self.create_page_with_listbox(self.treebook, _(u"Donaciones"))
@@ -38,7 +39,7 @@ class ChatDialog(wx.Dialog):
     def create_page_with_listbox(self, parent, name):
         page = wx.Panel(parent)
         sizer = wx.BoxSizer(wx.VERTICAL)
-        list_box = wx.ListBox(page, wx.ID_ANY, choices=[])
+        list_box = wx.ListBox(page, wx.ID_ANY)
         sizer.Add(list_box, 1, wx.EXPAND | wx.ALL, 5)
         page.SetSizer(sizer)
         page_index = parent.AddPage(page, str(name))

@@ -1,6 +1,6 @@
 import json, google_currency,threading,re
 from chat_downloader import ChatDownloader
-from globals.data_store import config, divisa, dst
+from globals import data_store
 from globals.resources import rutasonidos
 from utils import translator
 from setup import player,reader
@@ -25,21 +25,22 @@ class ServicioTwich:
         self._detener = True
 
     def recibir(self):
-        if dst: translator=translator.TranslatorWrapper()
+        if data_store.dst: self.translator=translator.translatorWrapper()
         self.chat=ChatDownloader().get_chat(self.url,message_groups=["messages", "bits","subscriptions","upgrades"])
+        self.chat_controller.agregar_titulo(self.chat.title)
         for message in self.chat:
             if self._detener: break
             if not message: continue
 
             if message['message'] is None: message['message'] = ''
-            if dst: message['message'] = translator.translate(text=message['message'], target=dst)
+            if data_store.dst: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
 
             author_name = message['author'].get('display_name', _('Desconocido'))
             msg = message['message']
             full_message = f"{author_name}: {msg}"
 
             # Subscription events
-            if message['message_type'] in ['resubscription', 'subscription', 'mystery_subscription_gift', 'subscription_gift'] and config['eventos'][1]:
+            if message['message_type'] in ['resubscription', 'subscription', 'mystery_subscription_gift', 'subscription_gift'] and data_store.config['eventos'][1]:
                 sub_message = ""
                 if message['message_type'] == 'resubscription':
                     sub_message = _("{author_name} ha renovado su suscripción en el nivel {subscription_plan_name}. ¡Lleva suscrito por {cumulative_months} meses!").format(author_name=author_name, subscription_plan_name=message.get('subscription_plan_name', ''), cumulative_months=message.get('cumulative_months', ''))
@@ -52,47 +53,47 @@ class ServicioTwich:
                 elif message['message_type'] == 'subscription_gift': sub_message = _("{author_name} ha regalado una suscripción a {gift_recipient_display_name} en el nivel {subscription_plan_name} por {number_of_months_gifted} meses!").format(author_name=author_name, gift_recipient_display_name=message.get('gift_recipient_display_name', ''), subscription_plan_name=message.get('subscription_plan_name', ''), number_of_months_gifted=message.get('number_of_months_gifted', ''))
                 
                 self.chat_controller.agregar_mensaje_miembro(sub_message)
-                if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][2]: player.playsound(rutasonidos[2],False)
+                if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][2]: player.playsound(rutasonidos[2],False)
                 continue
 
             # Cheer/Bits event
-            if re.search(r'\bCheer\d+\b', msg) and config['eventos'][2]:
+            if re.search(r'\bCheer\d+\b', msg) and data_store.config['eventos'][2]:
                 divide1=message['message'].split('Cheer')
                 if not divide1[0]:
-                    if divisa!=_('Por defecto'): divide1[0]=divisa
+                    if data_store.divisa!=_('Por defecto'): divide1[0]=data_store.divisa
                     else: divide1[0]='Cheer'
                     final_msj=divide1[1].split()
-                    if divisa!=_('Por defecto'):
-                        if divisa=='USD':final_msj[0]=int(final_msj[0])/100
+                    if data_store.divisa!=_('Por defecto'):
+                        if data_store.divisa=='USD':final_msj[0]=int(final_msj[0])/100
                         else:
-                            moneda=json.loads(google_currency.convert('USD',divisa,int(final_msj[0])/100) )
+                            moneda=json.loads(google_currency.convert('USD',data_store.divisa,int(final_msj[0])/100) )
                             if moneda['converted']: final_msj[0]=moneda['amount']
                     dinero=divide1[0]+str(final_msj[0])
                     if len(final_msj)==1: divide1=''
                     else: divide1=' '.join(final_msj[1:])
                 else:
-                    if divisa!=_('Por defecto'):
-                        if divisa=='USD': divide1[1]=int(divide1[1])/100
+                    if data_store.divisa!=_('Por defecto'):
+                        if data_store.divisa=='USD': divide1[1]=int(divide1[1])/100
                         else:
-                            moneda=json.loads(google_currency.convert('USD',divisa,int(divide1[1])/100) )
+                            moneda=json.loads(google_currency.convert('USD',data_store.divisa,int(divide1[1])/100) )
                             if moneda['converted']: divide1[1]=moneda['amount']
-                    if divisa!=_('Por defecto'): dinero=divisa+str(divide1[1])
+                    if data_store.divisa!=_('Por defecto'): dinero=data_store.divisa+str(divide1[1])
                     else: dinero='Cheer '+str(divide1[1])
                     divide1=' '+divide1[0]
-                if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][3]: player.playsound(rutasonidos[3],False)
+                if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][3]: player.playsound(rutasonidos[3],False)
                 self.chat_controller.agregar_mensaje_donacion(dinero+', '+author_name+': '+divide1)
                 continue
 
             # Regular messages with badges/roles
             message_sent = False
             try:
-                if message['author'].get('is_moderator') and config['eventos'][3]:
+                if message['author'].get('is_moderator') and data_store.config['eventos'][3]:
                     self.chat_controller.agregar_mensaje_moderador(full_message)
-                    if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][4]: player.playsound(rutasonidos[4],False)
+                    if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][4]: player.playsound(rutasonidos[4],False)
                     message_sent = True
-                elif message['author'].get('is_subscriber') and config['eventos'][0]:
+                elif message['author'].get('is_subscriber') and data_store.config['eventos'][0]:
                     self.chat_controller.agregar_mensaje_miembro(full_message)
-                    if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][1]: player.playsound(rutasonidos[1],False)
+                    if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][1]: player.playsound(rutasonidos[1],False)
                     message_sent = True
             except KeyError: pass
 
@@ -101,27 +102,27 @@ class ServicioTwich:
             if 'badges' in message['author']:
                 for badge in message['author']['badges']:
                     title = badge.get('title', '')
-                    if 'Subscriber' in title and config['eventos'][0]:
-                        if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][1]: player.playsound(rutasonidos[1],False)
+                    if 'Subscriber' in title and data_store.config['eventos'][0]:
+                        if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][1]: player.playsound(rutasonidos[1],False)
                         self.chat_controller.agregar_mensaje_miembro(full_message)
                         message_sent = True
                         break
-                    elif 'Moderator' in title and config['eventos'][3]:
-                        if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][4]: player.playsound(rutasonidos[4],False)
+                    elif 'Moderator' in title and data_store.config['eventos'][3]:
+                        if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][4]: player.playsound(rutasonidos[4],False)
                         self.chat_controller.agregar_mensaje_moderador(full_message)
                         message_sent = True
                         break
-                    if 'Verified' in title and config['eventos'][4]:
+                    if 'Verified' in title and data_store.config['eventos'][4]:
                         self.chat_controller.agregar_mensaje_verificado(full_message)
-                        if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][5]: player.playsound(rutasonidos[5],False)
+                        if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][5]: player.playsound(rutasonidos[5],False)
                         message_sent = True
                         break
                 else:
-                    if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: player.playsound(rutasonidos[0],False)
+                    if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][0]: player.playsound(rutasonidos[0],False)
                     self.chat_controller.agregar_mensaje_general(message['author']['display_name'] +': ' +message['message'])
                     message_sent = True
             if message_sent: continue
 
             # Default to general
             self.chat_controller.agregar_mensaje_general(full_message)
-            if config['sonidos'] and self.chat.status!="past" and config['listasonidos'][0]: player.playsound(rutasonidos[0],False)
+            if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][0]: player.playsound(rutasonidos[0],False)

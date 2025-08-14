@@ -5,7 +5,7 @@ from utils.languageHandler import curLang
 from ui.ajustes import configuracionDialog
 from utils import fajustes, app_utilitys
 from ui.dialog_response import response
-from globals.data_store import config,dst,divisa
+from globals import data_store
 from globals.resources import carpeta_voces,codes,idiomas_disponibles,monedas
 from controller.editor_controller import EditorController
 from controller.ajustes_controller import AjustesController
@@ -55,7 +55,7 @@ class MainMenuController:
             fajustes.escribirConfiguracion()
             app_utilitys.restart_program()
     def cerrarVentana(self, event):
-        if config['salir']:
+        if data_store.config['salir']:
             if response(_("¿está seguro que desea salir del programa?"), _("¡atención!"))==wx.ID_YES: wx.GetApp().ExitMainLoop()
         else: wx.GetApp().ExitMainLoop()
 
@@ -65,35 +65,36 @@ class MainMenuController:
 
     def guardar(self):
         cf = self.config_dialog
-        config['categorias'] = [cf.categoriza.IsItemChecked(i) for i in range(cf.categoriza.GetItemCount())]
-        config['listasonidos'] = [cf.soniditos.IsItemChecked(i) for i in range(cf.soniditos.GetItemCount())]
-        config['eventos'] = [cf.eventos.IsItemChecked(i) for i in range(cf.eventos.GetItemCount())]
-        config['unread'] = [cf.unread.IsItemChecked(i) for i in range(cf.unread.GetItemCount())]
+        data_store.config['categorias'] = [cf.categoriza.IsItemChecked(i) for i in range(cf.categoriza.GetItemCount())]
+        data_store.config['listasonidos'] = [cf.soniditos.IsItemChecked(i) for i in range(cf.soniditos.GetItemCount())]
+        data_store.config['eventos'] = [cf.eventos.IsItemChecked(i) for i in range(cf.eventos.GetItemCount())]
+        data_store.config['unread'] = [cf.unread.IsItemChecked(i) for i in range(cf.unread.GetItemCount())]
         rest = False
-        if config['idioma'] != codes[cf.choice_language.GetSelection()]:
-            config['idioma'] = codes[cf.choice_language.GetSelection()]
+        if data_store.config['idioma'] != codes[cf.choice_language.GetSelection()]:
+            data_store.config['idioma'] = codes[cf.choice_language.GetSelection()]
             rest = True
         with open('data.json', 'w+', encoding='utf-8') as file:
-            json.dump(config, file, indent=4, ensure_ascii=False)
+            json.dump(data_store.config, file, indent=4, ensure_ascii=False)
         if rest:
             if response(_("Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea reiniciarlo ahora?"), _("¡Atención!")) == wx.ID_YES:
                 app_utilitys.restart_program()
-        reader._leer.set_rate(config['speed'])
-        reader._leer.set_pitch(config['tono'])
-        reader._leer.set_voice(reader._leer.list_voices()[config['voz']])
-        reader._leer.set_volume(config['volume'])
-        if config['sistemaTTS'] == "piper":
-            salida_actual = reader._lector.find_device_id(player.devicenames[config["dispositivo"]-1])
+        reader._leer.set_rate(data_store.config['speed'])
+        reader._leer.set_pitch(data_store.config['tono'])
+        reader._leer.set_voice(reader._leer.list_voices()[data_store.config['voz']])
+        reader._leer.set_volume(data_store.config['volume'])
+        reader.set_sapi(data_store.config['sapi'])
+        if data_store.config['sistemaTTS'] == "piper":
+            salida_actual = reader._lector.find_device_id(player.devicenames[data_store.config["dispositivo"]-1])
             reader._lector.set_device(salida_actual)
             app_utilitys.configurar_piper(carpeta_voces)
         if cf.choice_traducir.GetStringSelection()!="":
             for k in LANGUAGES:
                 if LANGUAGES[k] == cf.choice_traducir.GetStringSelection():
-                    dst = k
+                    data_store.dst = k
                     break
         if cf.choice_moneditas.GetStringSelection()!='Por defecto':
             monedita=cf.choice_moneditas.GetStringSelection().split(', (')
             for k in google_currency.CODES:
                 if google_currency.CODES[k] == monedita[0]:
-                    divisa = k
+                    data_store.divisa = k
                     break

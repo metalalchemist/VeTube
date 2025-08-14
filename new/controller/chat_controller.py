@@ -63,6 +63,8 @@ class ChatController:
 
     def agregar_mensaje_general(self, mensaje):
         self.ui.list_box_general.Append(mensaje)
+    def agregar_mensaje_evento(self, mensaje):
+        self.ui.list_box_eventos.Append(mensaje)
 
     def agregar_mensaje_miembro(self, mensaje):
         self.ui.list_box_miembros.Append(mensaje)
@@ -77,8 +79,7 @@ class ChatController:
         self.ui.list_box_verificados.Append(mensaje)
 
     def agregar_titulo(self, titulo): 
-        if self.ui:
-            self.ui.label_dialog.SetLabel(titulo)
+        self.ui.label_dialog.SetLabel(titulo)
 
     def mostrar_dialogo(self):
         self.ui = ChatDialog(self.frame)

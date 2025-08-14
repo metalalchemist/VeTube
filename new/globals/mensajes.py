@@ -18,7 +18,7 @@ mensaje_teclas=[
 ]
 
 mensajes_categorias = [
-    _('Mensajes'), _('Miembros'), _('Donativos'), _('Moderadores'),
+    _('Mensajes'), _('eventos'), _('Miembros'), _('Donativos'), _('Moderadores'),
     _('Usuarios Verificados'), _('Favoritos')
 ]
 
@@ -39,6 +39,7 @@ mensajes_sonidos = [
 ]
 
 eventos_lista = [
+    _('Cuando llega un mensaje'),
     _('Cuando habla un miembro'),
     _('Cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok'),
     _('Cuando llega un donativo'),
