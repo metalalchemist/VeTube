@@ -6,7 +6,7 @@ from ui.menus.chat_opciones_menu import ChatOpcionesMenu
 from controller.menus.chat_item_controller import ChatItemController
 from controller.menus.chat_menu_controller import ChatMenuController
 from ui.dialog_response import response
-
+from globals import data_store
 class ChatController:
     def __init__(self, frame, servicio=None,plataforma=None):
         self.frame = frame
@@ -19,13 +19,13 @@ class ChatController:
         self.ui.button_mensaje_detener.Bind(wx.EVT_BUTTON, self.on_close_dialog)
         self.ui.boton_opciones.Bind(wx.EVT_BUTTON, self.on_opciones_btn)
         
-        list_boxes = [
-            self.ui.list_box_general,
-            self.ui.list_box_miembros,
-            self.ui.list_box_moderadores,
-            self.ui.list_box_donaciones,
-            self.ui.list_box_verificados
-        ]
+        list_boxes = []
+        if data_store.config['categorias'][0]: list_boxes.append(self.ui.list_box_general)
+        if data_store.config['categorias'][2]: list_boxes.append(self.ui.list_box_miembros)
+        if data_store.config['categorias'][4]: list_boxes.append(self.ui.list_box_moderadores)
+        if data_store.config['categorias'][3]: list_boxes.append(self.ui.list_box_donaciones)
+        if data_store.config['categorias'][5]: list_boxes.append(self.ui.list_box_verificados)
+        if data_store.config['categorias'][1]: list_boxes.append(self.ui.list_box_eventos)
         
         for lb in list_boxes:
             lb.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
@@ -33,8 +33,7 @@ class ChatController:
 
     def on_context_menu(self, event):
         list_box = event.GetEventObject()
-        if list_box.GetSelection() == wx.NOT_FOUND:
-            return
+        if list_box.GetSelection() == wx.NOT_FOUND: return
         
         menu = ChatItemMenu(self.ui)
         ChatItemController(menu, list_box)
@@ -61,25 +60,13 @@ class ChatController:
             main_frame.text_ctrl_1.SetFocus()
             main_frame.plataforma.SetSelection(0)
 
-    def agregar_mensaje_general(self, mensaje):
-        self.ui.list_box_general.Append(mensaje)
-    def agregar_mensaje_evento(self, mensaje):
-        self.ui.list_box_eventos.Append(mensaje)
-
-    def agregar_mensaje_miembro(self, mensaje):
-        self.ui.list_box_miembros.Append(mensaje)
-
-    def agregar_mensaje_moderador(self, mensaje):
-        self.ui.list_box_moderadores.Append(mensaje)
-
-    def agregar_mensaje_donacion(self, mensaje):
-        self.ui.list_box_donaciones.Append(mensaje)
-
-    def agregar_mensaje_verificado(self, mensaje):
-        self.ui.list_box_verificados.Append(mensaje)
-
-    def agregar_titulo(self, titulo): 
-        self.ui.label_dialog.SetLabel(titulo)
+    def agregar_mensaje_general(self, mensaje): self.ui.list_box_general.Append(mensaje)
+    def agregar_mensaje_evento(self, mensaje): self.ui.list_box_eventos.Append(mensaje)
+    def agregar_mensaje_miembro(self, mensaje): self.ui.list_box_miembros.Append(mensaje)
+    def agregar_mensaje_moderador(self, mensaje): self.ui.list_box_moderadores.Append(mensaje)
+    def agregar_mensaje_donacion(self, mensaje): self.ui.list_box_donaciones.Append(mensaje)
+    def agregar_mensaje_verificado(self, mensaje): self.ui.list_box_verificados.Append(mensaje)
+    def agregar_titulo(self, titulo): self.ui.label_dialog.SetLabel(titulo)
 
     def mostrar_dialogo(self):
         self.ui = ChatDialog(self.frame)

@@ -4,20 +4,21 @@ from google_currency import CODES
 from TTS.list_voices import piper_list_voices
 from setup import reader
 from os import path, getcwd
+from globals.data_store import config
 rutasonidos = [
-    "sounds/chat.mp3",
-    "sounds/chatmiembro.mp3",
-    "sounds/miembros.mp3",
-    "sounds/donar.mp3",
-    "sounds/moderators.mp3",
-    "sounds/verified.mp3",
-    "sounds/abrirchat.wav",
-    "sounds/propietario.mp3",
-    "sounds/buscar.wav",
-    "sounds/like.wav",
-    "sounds/seguirte.mp3",
-    "sounds/share.mp3",
-    "sounds/chest.mp3"
+    f"sounds/{config['directorio']}/chat.mp3",
+    f"sounds/{config['directorio']}/chatmiembro.mp3",
+    f"sounds/{config['directorio']}/miembros.mp3",
+    f"sounds/{config['directorio']}/donar.mp3",
+    f"sounds/{config['directorio']}/moderators.mp3",
+    f"sounds/{config['directorio']}/verified.mp3",
+    f"sounds/{config['directorio']}/abrirchat.wav",
+    f"sounds/{config['directorio']}/propietario.mp3",
+    f"sounds/{config['directorio']}/buscar.wav",
+    f"sounds/{config['directorio']}/like.wav",
+    f"sounds/{config['directorio']}/seguirte.mp3",
+    f"sounds/{config['directorio']}/share.mp3",
+    f"sounds/{config['directorio']}/chest.mp3"
 ]
 idiomas = getAvailableLanguages()
 langs = [i[1] for i in idiomas][::-1]

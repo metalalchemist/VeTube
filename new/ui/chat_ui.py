@@ -1,6 +1,6 @@
 import wx
 from utils.menu_accesible import Accesible
-
+from globals import data_store
 class ChatDialog(wx.Dialog):
     def __init__(self, parent):
         super().__init__(parent, wx.ID_ANY, _(u"Chat en vivo"), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
@@ -15,12 +15,12 @@ class ChatDialog(wx.Dialog):
         self.treebook = wx.Treebook(self, wx.ID_ANY)
         
         # Create and add pages
-        self.list_box_general, self.page_index_general = self.create_page_with_listbox(self.treebook, _(u"General"))
-        self.list_box_eventos, self.page_index_eventos = self.create_page_with_listbox(self.treebook, _(u"Eventos"))
-        self.list_box_miembros, self.page_index_miembros = self.create_page_with_listbox(self.treebook, _(u"Miembros"))
-        self.list_box_moderadores, self.page_index_moderadores = self.create_page_with_listbox(self.treebook, _(u"Moderadores"))
-        self.list_box_donaciones, self.page_index_donaciones = self.create_page_with_listbox(self.treebook, _(u"Donaciones"))
-        self.list_box_verificados, self.page_index_verificados = self.create_page_with_listbox(self.treebook, _(u"Verificados"))
+        if data_store.config['categorias'][0]: self.list_box_general, self.page_index_general = self.create_page_with_listbox(self.treebook, _(u"General"))
+        if data_store.config['categorias'][1]: self.list_box_eventos, self.page_index_eventos = self.create_page_with_listbox(self.treebook, _(u"Eventos"))
+        if data_store.config['categorias'][2]: self.list_box_miembros, self.page_index_miembros = self.create_page_with_listbox(self.treebook, _(u"Miembros"))
+        if data_store.config['categorias'][4]: self.list_box_moderadores, self.page_index_moderadores = self.create_page_with_listbox(self.treebook, _(u"Moderadores"))
+        if data_store.config['categorias'][3]: self.list_box_donaciones, self.page_index_donaciones = self.create_page_with_listbox(self.treebook, _(u"Donaciones"))
+        if data_store.config['categorias'][5]: self.list_box_verificados, self.page_index_verificados = self.create_page_with_listbox(self.treebook, _(u"Verificados"))
 
         self.treebook.SetFocus()
         main_sizer.Add(self.treebook, 1, wx.EXPAND | wx.ALL, 5)

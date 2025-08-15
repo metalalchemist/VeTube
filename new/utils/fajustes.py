@@ -18,7 +18,8 @@ configuraciones ={
 	'reader': True,
 	'donations': True,
 	'updates': True,
-	'traducir': False
+	'traducir': False,
+	'directorio':'default'
 }
 actualizar_configuracion = False
 

@@ -18,7 +18,6 @@ class ServicioTiktok:
         self.last_live_status = None
         self.megusta=self.seguidores=self.unidos=self.compartidas=0
         self.gustados=[]
-        self.translator = None
 
     def iniciar_chat(self):
         self.is_running = True
@@ -62,16 +61,16 @@ class ServicioTiktok:
 
     def _add_listeners(self):
         self.chat.add_listener(ConnectEvent, self.on_connect)
-        self.chat.add_listener(CommentEvent, self.on_comment)
+        if data_store.config['categorias'][0]: self.chat.add_listener(CommentEvent, self.on_comment)
         self.chat.add_listener(LiveEndEvent, self.finalizado)
         self.chat.add_listener(DisconnectEvent, self.on_disconnect)
-        if data_store.config['eventos'][0]: self.chat.add_listener(EmoteChatEvent, self.on_emote)
-        if data_store.config['eventos'][8]: self.chat.add_listener(EnvelopeEvent, self.on_chest)
-        if data_store.config['eventos'][6]: self.chat.add_listener(FollowEvent, self.on_follow)
-        if data_store.config['eventos'][2]: self.chat.add_listener(GiftEvent, self.on_gift)
-        if data_store.config['eventos'][1]: self.chat.add_listener(JoinEvent, self.on_join)
-        if data_store.config['eventos'][5]: self.chat.add_listener(LikeEvent, self.on_like)
-        if data_store.config['eventos'][7]: self.chat.add_listener(ShareEvent, self.on_share)
+        if data_store.config['categorias'][2]: self.chat.add_listener(EmoteChatEvent, self.on_emote)
+        if data_store.config['categorias'][1]: self.chat.add_listener(EnvelopeEvent, self.on_chest)
+        if data_store.config['categorias'][1]: self.chat.add_listener(FollowEvent, self.on_follow)
+        if data_store.config['categorias'][3]: self.chat.add_listener(GiftEvent, self.on_gift)
+        if data_store.config['categorias'][1]: self.chat.add_listener(JoinEvent, self.on_join)
+        if data_store.config['categorias'][1]: self.chat.add_listener(LikeEvent, self.on_like)
+        if data_store.config['categorias'][1]: self.chat.add_listener(ShareEvent, self.on_share)
         self.chat.add_listener(RoomUserSeqEvent, self.on_view)
 
     async def finalizado(self, event: LiveEndEvent):
@@ -89,61 +88,75 @@ class ServicioTiktok:
         if data_store.config['sonidos'] and data_store.config['listasonidos'][6]: player.playsound(rutasonidos[6],False)
 
     async def on_comment(self,event: CommentEvent):
-        cadena = event.comment if event.comment is not None else ''
-        if data_store.dst and self.translator:
-            cadena = self.translator.translate(text=cadena, target=data_store.dst)
-        self.chat_controller.agregar_mensaje_general(event.user.nickname + ": " + cadena)
-        if data_store.config['sonidos'] and data_store.config['listasonidos'][0]: player.playsound(rutasonidos[0],False)
+        if data_store.config['eventos'][0]:
+            cadena = event.comment if event.comment is not None else ''
+            if data_store.dst: cadena = self.translator.translate(text=cadena, target=data_store.dst)
+            self.chat_controller.agregar_mensaje_general(event.user.nickname + ": " + cadena)
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][0]: player.playsound(rutasonidos[0],False)
+            if data_store.config['reader'] and data_store.config['unread'][0]: reader.leer_mensaje(event.user.nickname + ": " + cadena)
 
     async def on_emote(self,event: EmoteChatEvent):
-        self.chat_controller.agregar_mensaje_miembro(event.user.nickname + _(" envió un emogi."))
-        if data_store.config['sonidos'] and data_store.config['listasonidos'][1]: player.playsound(rutasonidos[1],False)
-
+        if data_store.config['eventos'][1]:
+            self.chat_controller.agregar_mensaje_miembro(event.user.nickname + _(" envió un emogi."))
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][1]: player.playsound(rutasonidos[1],False)
+            if data_store.config['reader'] and data_store.config['unread'][1]: reader.leer_mensaje(event.user.nickname + _(" envió un emogi."))
     async def on_chest(self,event: EnvelopeEvent):
-        self.chat_controller.agregar_mensaje_donacion(event.user.nickname + _(" ha enviado un cofre!"))
-        if data_store.config['sonidos'] and data_store.config['listasonidos'][12]: player.playsound(rutasonidos[12],False)
+        if data_store.config['eventos'][9]:
+            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" ha enviado un cofre!"))
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][12]: player.playsound(rutasonidos[12],False)
+            if data_store.config['reader'] and data_store.config['unread'][9]: reader.leer_mensaje(event.user.nickname + _(" ha enviado un cofre!"))
 
     async def on_follow(self,event: FollowEvent):
-        self.seguidores+=1
-        self.chat_controller.agregar_mensaje_general(event.user.nickname + _(" comenzó a seguirte!"))
-        if data_store.config['sonidos'] and data_store.config['listasonidos'][10]: player.playsound(rutasonidos[10],False)
+        if data_store.config['eventos'][7]:
+            self.seguidores+=1
+            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" comenzó a seguirte!"))
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][10]: player.playsound(rutasonidos[10],False)
+            if data_store.config['reader'] and data_store.config['unread'][7]: reader.leer_mensaje(event.user.nickname + _(" comenzó a seguirte!"))
 
     async def on_gift(self,event: GiftEvent):
-        if event.gift.streakable and not event.streaking:
-            if data_store.divisa!="Por defecto":
-                if data_store.divisa=='USD': total=float((event.gift.diamond_count*event.repeat_count)/100)
-                else:
-                    moneda = json.loads(google_currency.convert('USD', data_store.divisa, int((event.gift.diamond_count * event.repeat_count) / 100)))
-                    if moneda['converted']: total=moneda['amount']
-                mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(total),data_store.divisa)
-            else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(event.gift.diamond_count))
-        elif not event.gift.streakable:
-            if data_store.divisa!="Por defecto":
-                if data_store.divisa=='USD': total=int((event.gift.diamond_count*event.repeat_count)/100)
-                else:
-                    moneda = json.loads(google_currency.convert('USD', data_store.divisa, int((event.gift.diamond_count * event.repeat_count) / 100)))
-                    if moneda['converted']: total=moneda['amount']
-                mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(total),data_store.divisa)
-            else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(event.gift.diamond_count))
-        try:
-            self.chat_controller.agregar_mensaje_donacion(mensajito)
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][3]: player.playsound(rutasonidos[3],False)
-        except Exception as e: pass
+        if data_store.config['eventos'][3]:
+            if event.gift.streakable and not event.streaking:
+                if data_store.divisa!="Por defecto":
+                    if data_store.divisa=='USD': total=float((event.gift.diamond_count*event.repeat_count)/100)
+                    else:
+                        moneda = json.loads(google_currency.convert('USD', data_store.divisa, int((event.gift.diamond_count * event.repeat_count) / 100)))
+                        if moneda['converted']: total=moneda['amount']
+                    mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(total),data_store.divisa)
+                else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(event.gift.diamond_count))
+            elif not event.gift.streakable:
+                if data_store.divisa!="Por defecto":
+                    if data_store.divisa=='USD': total=int((event.gift.diamond_count*event.repeat_count)/100)
+                    else:
+                        moneda = json.loads(google_currency.convert('USD', data_store.divisa, int((event.gift.diamond_count * event.repeat_count) / 100)))
+                        if moneda['converted']: total=moneda['amount']
+                    mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(total),data_store.divisa)
+                else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(event.gift.diamond_count))
+            try:
+                self.chat_controller.agregar_mensaje_donacion(mensajito)
+                if data_store.config['sonidos'] and data_store.config['listasonidos'][3]: player.playsound(rutasonidos[3],False)
+                if data_store.config['reader'] and data_store.config['unread'][3]: reader.leer_mensaje(mensajito)
+            except Exception as e: pass
 
     async def on_join(self,event: JoinEvent):
-        self.unidos+=1
-        self.chat_controller.agregar_mensaje_general(event.user.nickname+_(" se ha unido a tu en vivo."))
-        if data_store.config['sonidos'] and data_store.config['listasonidos'][2]: player.playsound(rutasonidos[2],False)
+        if data_store.config['eventos'][2]:
+            self.unidos+=1
+            self.chat_controller.agregar_mensaje_evento(event.user.nickname+_(" se ha unido a tu en vivo."))
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][2]: player.playsound(rutasonidos[2],False)
+            if data_store.config['reader'] and data_store.config['unread'][2]: reader.leer_mensaje(event.user.nickname + _(" se ha unido a tu en vivo."))
 
     async def on_like(self,event: LikeEvent):
-        self.megusta=event.total
-        self.gustados.append(event.user.nickname)
-        self.chat_controller.agregar_mensaje_general(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
-        if data_store.config['sonidos'] and data_store.config['listasonidos'][9]: player.playsound(rutasonidos[9],False)
+        if data_store.config['eventos'][6]:
+            self.megusta=event.total
+            self.gustados.append(event.user.nickname)
+            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][9]: player.playsound(rutasonidos[9],False)
+            if data_store.config['reader'] and data_store.config['unread'][6]: reader.leer_mensaje(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
 
     async def on_share(self,event: ShareEvent):
-        self.compartidas+=1
-        self.chat_controller.agregar_mensaje_general(event.user.nickname + _(" ha compartido tu en vivo!"))
-        if data_store.config['sonidos'] and data_store.config['listasonidos'][11]: player.playsound(rutasonidos[11],False)
+        if data_store.config['eventos'][8]:
+            self.compartidas+=1
+            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" ha compartido tu en vivo!"))
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][11]: player.playsound(rutasonidos[11],False)
+            if data_store.config['reader'] and data_store.config['unread'][8]: reader.leer_mensaje(event.user.nickname + _(" ha compartido tu en vivo!"))
 
     async def on_view(self,event: RoomUserSeqEvent): self.chat_controller.agregar_titulo(self.chat.unique_id+_(' en vivo, actualmente ')+str(event.m_total)+_(' viendo ahora'))
