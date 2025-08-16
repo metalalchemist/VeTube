@@ -6,6 +6,7 @@ from globals.resources import rutasonidos
 from utils import translator
 from setup import player,reader
 from controller.chat_controller import ChatController
+from utils.estadisticas_manager import EstadisticasManager
 
 class ServicioSala:
     def __init__(self, url, frame, plataforma):
@@ -31,6 +32,7 @@ class ServicioSala:
         if data_store.dst: self.translator=translator.translatorWrapper()
         self.chat.get_new_messages()
         for message in self.chat.new_messages:
+            EstadisticasManager().agregar_mensaje(message['author'])
             if self._detener: break
             if message['message']==None: message['message']=''
             if data_store.dst: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)

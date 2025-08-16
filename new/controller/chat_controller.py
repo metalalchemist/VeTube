@@ -7,6 +7,7 @@ from controller.menus.chat_item_controller import ChatItemController
 from controller.menus.chat_menu_controller import ChatMenuController
 from ui.dialog_response import response
 from globals import data_store
+from utils.estadisticas_manager import EstadisticasManager
 class ChatController:
     def __init__(self, frame, servicio=None,plataforma=None):
         self.frame = frame
@@ -21,12 +22,11 @@ class ChatController:
         
         list_boxes = []
         if data_store.config['categorias'][0]: list_boxes.append(self.ui.list_box_general)
-        if data_store.config['categorias'][2]: list_boxes.append(self.ui.list_box_miembros)
-        if data_store.config['categorias'][4]: list_boxes.append(self.ui.list_box_moderadores)
-        if data_store.config['categorias'][3]: list_boxes.append(self.ui.list_box_donaciones)
-        if data_store.config['categorias'][5]: list_boxes.append(self.ui.list_box_verificados)
         if data_store.config['categorias'][1]: list_boxes.append(self.ui.list_box_eventos)
-        
+        if data_store.config['categorias'][2]: list_boxes.append(self.ui.list_box_miembros)
+        if data_store.config['categorias'][3]: list_boxes.append(self.ui.list_box_donaciones)
+        if data_store.config['categorias'][4]: list_boxes.append(self.ui.list_box_moderadores)
+        if data_store.config['categorias'][5]: list_boxes.append(self.ui.list_box_verificados)
         for lb in list_boxes:
             lb.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
             lb.Bind(wx.EVT_KEY_UP, self.on_listbox_keyup)
@@ -51,6 +51,7 @@ class ChatController:
 
     def on_close_dialog(self, event):
         if response(_("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:")) == wx.ID_YES:
+            EstadisticasManager().resetear_estadisticas()
             self.servicio.detener()
             main_frame = self.ui.GetParent()
             self.ui.Destroy()
@@ -63,8 +64,8 @@ class ChatController:
     def agregar_mensaje_general(self, mensaje): self.ui.list_box_general.Append(mensaje)
     def agregar_mensaje_evento(self, mensaje): self.ui.list_box_eventos.Append(mensaje)
     def agregar_mensaje_miembro(self, mensaje): self.ui.list_box_miembros.Append(mensaje)
-    def agregar_mensaje_moderador(self, mensaje): self.ui.list_box_moderadores.Append(mensaje)
     def agregar_mensaje_donacion(self, mensaje): self.ui.list_box_donaciones.Append(mensaje)
+    def agregar_mensaje_moderador(self, mensaje): self.ui.list_box_moderadores.Append(mensaje)
     def agregar_mensaje_verificado(self, mensaje): self.ui.list_box_verificados.Append(mensaje)
     def agregar_titulo(self, titulo): self.ui.label_dialog.SetLabel(titulo)
 
