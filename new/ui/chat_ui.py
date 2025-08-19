@@ -22,7 +22,7 @@ class ChatDialog(wx.Dialog):
             if data_store.config['categorias'][0]: self.list_box_general, self.page_index_general = self.create_page_with_listbox(self.treebook, _(u"General"))
             if data_store.config['categorias'][1]: self.list_box_eventos, self.page_index_eventos = self.create_page_with_listbox(self.treebook, _(u"Eventos"))
             if data_store.config['categorias'][2]: self.list_box_miembros, self.page_index_miembros = self.create_page_with_listbox(self.treebook, _(u"Miembros"))
-            if data_store.confifg['categorias'][3]: self.list_box_donaciones, self.page_index_donaciones = self.create_page_with_listbox(self.treebook, _(u"regalos"))
+            if data_store.config['categorias'][3]: self.list_box_donaciones, self.page_index_donaciones = self.create_page_with_listbox(self.treebook, _(u"regalos"))
         else:
             if data_store.config['categorias'][0]: self.list_box_general, self.page_index_general = self.create_page_with_listbox(self.treebook, _(u"General"))
             if data_store.config['categorias'][1]: self.list_box_eventos, self.page_index_eventos = self.create_page_with_listbox(self.treebook, _(u"Eventos"))

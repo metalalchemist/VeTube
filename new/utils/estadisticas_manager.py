@@ -8,6 +8,10 @@ class EstadisticasManager:
             cls._instance = super(EstadisticasManager, cls).__new__(cls)
             cls._instance.usuarios = []
             cls._instance.mensajes_por_usuario = []
+            cls._instance.unidos = 0
+            cls._instance.seguidores = 0
+            cls._instance.megusta = 0
+            cls._instance.compartidas = 0
         return cls._instance
 
     def agregar_mensaje(self, autor):
@@ -25,14 +29,38 @@ class EstadisticasManager:
             # Línea de depuración para autores existentes
             count = self.mensajes_por_usuario[index]
 
+    def agregar_unido(self):
+        self.unidos += 1
+
+    def agregar_seguidor(self):
+        self.seguidores += 1
+
+    def actualizar_megusta(self, total_likes):
+        self.megusta = total_likes
+
+    def agregar_compartida(self):
+        self.compartidas += 1
+
     def resetear_estadisticas(self):
         """Reinicia todas las estadísticas a cero."""
         self.usuarios = []
         self.mensajes_por_usuario = []
+        self.unidos = 0
+        self.seguidores = 0
+        self.megusta = 0
+        self.compartidas = 0
 
     def obtener_estadisticas(self):
         """Devuelve un diccionario con los datos sin ordenar."""
         return dict(zip(self.usuarios, self.mensajes_por_usuario))
+
+    def obtener_estadisticas_tiktok(self):
+        return {
+            "unidos": self.unidos,
+            "seguidores": self.seguidores,
+            "megusta": self.megusta,
+            "compartidas": self.compartidas
+        }
 
     def obtener_estadisticas_ordenadas(self, descendente=True):
         """
@@ -59,3 +87,12 @@ class EstadisticasManager:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(stats_a_guardar, f, ensure_ascii=False, indent=4)
         print(f"Estadísticas guardadas en {file_path}")
+
+
+    def total_mensajes(self):
+        """Devuelve el número total de mensajes."""
+        return sum(self.mensajes_por_usuario)
+
+    def total_usuarios(self):
+        """Devuelve el número total de usuarios únicos."""
+        return len(self.usuarios)
