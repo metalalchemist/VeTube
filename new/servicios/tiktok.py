@@ -6,6 +6,7 @@ from globals.resources import rutasonidos
 from utils import translator,funciones
 from setup import player,reader
 from controller.chat_controller import ChatController
+from utils.estadisticas_manager import EstadisticasManager
 
 class ServicioTiktok:
     def __init__(self, url, frame, plataforma):
@@ -89,6 +90,7 @@ class ServicioTiktok:
 
     async def on_comment(self,event: CommentEvent):
         if data_store.config['eventos'][0]:
+            EstadisticasManager().agregar_mensaje(event.user.nickname)
             cadena = event.comment if event.comment is not None else ''
             if data_store.dst: cadena = self.translator.translate(text=cadena, target=data_store.dst)
             self.chat_controller.agregar_mensaje_general(event.user.nickname + ": " + cadena)
@@ -97,6 +99,7 @@ class ServicioTiktok:
 
     async def on_emote(self,event: EmoteChatEvent):
         if data_store.config['eventos'][1]:
+            EstadisticasManager().agregar_mensaje(event.user.nickname)
             self.chat_controller.agregar_mensaje_miembro(event.user.nickname + _(" envió un emogi."))
             if data_store.config['sonidos'] and data_store.config['listasonidos'][1]: player.playsound(rutasonidos[1],False)
             if data_store.config['reader'] and data_store.config['unread'][1]: reader.leer_mensaje(event.user.nickname + _(" envió un emogi."))

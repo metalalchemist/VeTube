@@ -3,6 +3,9 @@ from pyperclip import copy
 from ui.menus.chat_opciones_menu import ChatOpcionesMenu
 from controller.editor_controller import EditorController
 from utils import funciones
+from controller.estadisticas_controller import EstadisticasController
+from utils.estadisticas_manager import EstadisticasManager
+
 class ChatMenuController:
     def __init__(self, parent, plataforma=None):
         self.parent = parent
@@ -23,6 +26,7 @@ class ChatMenuController:
         self.parent.Bind(wx.EVT_MENU, self.copiarEnlace, self.menu.copiar_enlace)
         self.parent.Bind(wx.EVT_MENU, self.reproducirVideo, self.menu.reproducir_navegador)
         self.parent.Bind(wx.EVT_MENU, self.addFavoritos, self.menu.favoritos)
+        self.parent.Bind(wx.EVT_MENU, self.mostrar_estadisticas, self.menu.ver_estadisticas)
     def addFavoritos(self, event):
         from globals.data_store import favorite
         main_frame = self.parent.GetParent()
@@ -61,3 +65,7 @@ class ChatMenuController:
     def mostrar_editor_combinaciones(self, event):
         editor_ctrl = EditorController(self.parent)
         editor_ctrl.ShowModal()
+    def mostrar_estadisticas(self, event):
+        estadisticas_manager = EstadisticasManager()
+        controller = EstadisticasController(self.parent, estadisticas_manager)
+        controller.show()

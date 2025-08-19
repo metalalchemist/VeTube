@@ -5,6 +5,7 @@ from globals.resources import rutasonidos
 from utils import translator
 from setup import player,reader
 from controller.chat_controller import ChatController
+from utils.estadisticas_manager import EstadisticasManager
 
 class ServicioYouTube:
     def __init__(self, url, frame, plataforma):
@@ -35,6 +36,7 @@ class ServicioYouTube:
             if data_store.dst: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
 
             author_name = message['author']['display_name']
+            EstadisticasManager().agregar_mensaje(author_name)
             msg = message['message']
 
             # Default message type
@@ -60,7 +62,7 @@ class ServicioYouTube:
             if 'header_secondary_text' in message:
                 if data_store.config['eventos'][2] and data_store.config['categorias'][1]:
                     for t in message['author']['badges']:
-                        mensajito=message['author']['name']+ _(' se a conectado al chat. ')+t['title']
+                        mensajito=author_name+ _(' se a conectado al chat. ')+t['title']
                         break
                     self.chat_controller.agregar_mensaje_evento(mensajito)
                     if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][2]: player.playsound(rutasonidos[2],False)

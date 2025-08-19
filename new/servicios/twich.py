@@ -5,6 +5,7 @@ from globals.resources import rutasonidos
 from utils import translator
 from setup import player,reader
 from controller.chat_controller import ChatController
+from utils.estadisticas_manager import EstadisticasManager
 
 class ServicioTwich:
     def __init__(self, url, frame, plataforma):
@@ -36,6 +37,7 @@ class ServicioTwich:
             if data_store.dst: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
 
             author_name = message['author'].get('display_name', _('Desconocido'))
+            EstadisticasManager().agregar_mensaje(author_name)
             msg = message['message']
             full_message = f"{author_name}: {msg}"
 

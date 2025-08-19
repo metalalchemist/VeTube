@@ -21,12 +21,21 @@ class ChatController:
         self.ui.boton_opciones.Bind(wx.EVT_BUTTON, self.on_opciones_btn)
         
         list_boxes = []
-        if data_store.config['categorias'][0]: list_boxes.append(self.ui.list_box_general)
-        if data_store.config['categorias'][1]: list_boxes.append(self.ui.list_box_eventos)
-        if data_store.config['categorias'][2]: list_boxes.append(self.ui.list_box_miembros)
-        if data_store.config['categorias'][3]: list_boxes.append(self.ui.list_box_donaciones)
-        if data_store.config['categorias'][4]: list_boxes.append(self.ui.list_box_moderadores)
-        if data_store.config['categorias'][5]: list_boxes.append(self.ui.list_box_verificados)
+        if self.plataforma=='La sala de juegos':
+            if data_store.config['categorias'][0]: list_boxes.append(self.ui.list_box_general)
+            if data_store.config['categorias'][2]: list_boxes.append(self.ui.list_box_miembros)
+        elif self.plataforma=='TikTok':
+            if data_store.config['categorias'][0]: list_boxes.append(self.ui.list_box_general)
+            if data_store.config['categorias'][1]: list_boxes.append(self.ui.list_box_eventos)
+            if data_store.config['categorias'][2]: list_boxes.append(self.ui.list_box_miembros)
+            if data_store.config['categorias'][3]: list_boxes.append(self.ui.list_box_donaciones)
+        else:
+            if data_store.config['categorias'][0]: list_boxes.append(self.ui.list_box_general)
+            if data_store.config['categorias'][1]: list_boxes.append(self.ui.list_box_eventos)
+            if data_store.config['categorias'][2]: list_boxes.append(self.ui.list_box_miembros)
+            if data_store.config['categorias'][3]: list_boxes.append(self.ui.list_box_donaciones)
+            if data_store.config['categorias'][4]: list_boxes.append(self.ui.list_box_moderadores)
+            if data_store.config['categorias'][5]: list_boxes.append(self.ui.list_box_verificados)
         for lb in list_boxes:
             lb.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
             lb.Bind(wx.EVT_KEY_UP, self.on_listbox_keyup)
@@ -70,7 +79,7 @@ class ChatController:
     def agregar_titulo(self, titulo): self.ui.label_dialog.SetLabel(titulo)
 
     def mostrar_dialogo(self):
-        self.ui = ChatDialog(self.frame)
+        self.ui = ChatDialog(self.frame,self.plataforma)
         self.menu_opciones_controller = ChatMenuController(self.ui, self.plataforma)
         self._bind_events()
         self.ui.ShowModal()
