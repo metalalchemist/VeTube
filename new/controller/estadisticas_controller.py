@@ -40,7 +40,7 @@ class EstadisticasController:
 
             pathname = fileDialog.GetPath()
             try:
-                self.estadisticas_manager.guardar_en_archivo(pathname)
+                self.estadisticas_manager.guardar_en_archivo(pathname, plataforma=self.plataforma)
                 wx.MessageBox(_("Estadísticas guardadas en {}").format(pathname), _("Éxito"), wx.OK | wx.ICON_INFORMATION)
             except Exception as e:
                 wx.MessageBox(_("Error al guardar el archivo: {}").format(e), _("Error"), wx.OK | wx.ICON_ERROR)

@@ -71,18 +71,24 @@ class EstadisticasManager:
         stats.sort(key=lambda x: x[1], reverse=descendente)
         return stats
 
-    def guardar_en_archivo(self, file_path="data.json", ordenar=True):
+    def guardar_en_archivo(self, file_path="data.json", ordenar=True, plataforma=None):
         """
         Guarda las estadísticas en un archivo JSON.
+        Si la plataforma es TikTok, añade estadísticas adicionales.
         Por defecto, las guarda ordenadas de mayor a menor.
         """
         if ordenar:
-            # El método de ordenación devuelve una lista de tuplas, ideal para JSON
             stats_ordenadas = self.obtener_estadisticas_ordenadas()
-            # Convertimos la lista de tuplas a un diccionario para un formato JSON más legible
-            stats_a_guardar = {usuario: mensajes for usuario, mensajes in stats_ordenadas}
+            stats_a_guardar = {"usuarios": {usuario: mensajes for usuario, mensajes in stats_ordenadas}}
         else:
-            stats_a_guardar = self.obtener_estadisticas()
+            stats_a_guardar = {"usuarios": self.obtener_estadisticas()}
+
+        if plataforma and plataforma.lower() == 'tiktok':
+            tiktok_stats = self.obtener_estadisticas_tiktok()
+            # Filtramos las estadísticas de TikTok para no guardar las que son 0
+            tiktok_stats_filtradas = {k: v for k, v in tiktok_stats.items() if v > 0}
+            if tiktok_stats_filtradas:
+                stats_a_guardar['tiktok'] = tiktok_stats_filtradas
 
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(stats_a_guardar, f, ensure_ascii=False, indent=4)
