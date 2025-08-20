@@ -103,14 +103,14 @@ class ServicioTiktok:
             if data_store.config['reader'] and data_store.config['unread'][1]: reader.leer_mensaje(event.user.nickname + _(" envió un emogi."))
     async def on_chest(self,event: EnvelopeEvent):
         if data_store.config['eventos'][9]:
-            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" ha enviado un cofre!"))
+            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" ha enviado un cofre!"), "chest")
             if data_store.config['sonidos'] and data_store.config['listasonidos'][12]: player.playsound(rutasonidos[12],False)
             if data_store.config['reader'] and data_store.config['unread'][9]: reader.leer_mensaje(event.user.nickname + _(" ha enviado un cofre!"))
 
     async def on_follow(self,event: FollowEvent):
         if data_store.config['eventos'][7]:
             EstadisticasManager().agregar_seguidor()
-            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" comenzó a seguirte!"))
+            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" comenzó a seguirte!"), "follow")
             if data_store.config['sonidos'] and data_store.config['listasonidos'][10]: player.playsound(rutasonidos[10],False)
             if data_store.config['reader'] and data_store.config['unread'][7]: reader.leer_mensaje(event.user.nickname + _(" comenzó a seguirte!"))
 
@@ -141,21 +141,21 @@ class ServicioTiktok:
     async def on_join(self,event: JoinEvent):
         if data_store.config['eventos'][2]:
             EstadisticasManager().agregar_unido()
-            self.chat_controller.agregar_mensaje_evento(event.user.nickname+_(" se ha unido a tu en vivo."))
+            self.chat_controller.agregar_mensaje_evento(event.user.nickname+_(" se ha unido a tu en vivo."), "join")
             if data_store.config['sonidos'] and data_store.config['listasonidos'][2]: player.playsound(rutasonidos[2],False)
             if data_store.config['reader'] and data_store.config['unread'][2]: reader.leer_mensaje(event.user.nickname + _(" se ha unido a tu en vivo."))
 
     async def on_like(self,event: LikeEvent):
         if data_store.config['eventos'][6]:
             EstadisticasManager().actualizar_megusta(event.total)
-            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" le ha dado me gusta a tu en vivo."), "like")
             if data_store.config['sonidos'] and data_store.config['listasonidos'][9]: player.playsound(rutasonidos[9],False)
             if data_store.config['reader'] and data_store.config['unread'][6]: reader.leer_mensaje(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
 
     async def on_share(self,event: ShareEvent):
         if data_store.config['eventos'][8]:
             EstadisticasManager().agregar_compartida()
-            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" ha compartido tu en vivo!"))
+            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" ha compartido tu en vivo!"), "share")
             if data_store.config['sonidos'] and data_store.config['listasonidos'][11]: player.playsound(rutasonidos[11],False)
             if data_store.config['reader'] and data_store.config['unread'][8]: reader.leer_mensaje(event.user.nickname + _(" ha compartido tu en vivo!"))
 

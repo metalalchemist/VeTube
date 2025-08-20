@@ -1,8 +1,9 @@
 import wx
 from utils.menu_accesible import Accesible
 from globals import data_store
+
 class ChatDialog(wx.Dialog):
-    def __init__(self, parent,plataforma):
+    def __init__(self, parent, plataforma):
         super().__init__(parent, wx.ID_ANY, _(u"Chat en vivo"), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
         main_sizer = wx.BoxSizer(wx.VERTICAL)
         top_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -15,12 +16,12 @@ class ChatDialog(wx.Dialog):
         self.treebook = wx.Treebook(self, wx.ID_ANY)
         
         # Create and add pages
-        if plataforma=='La sala de juegos':
+        if plataforma == 'La sala de juegos':
             if data_store.config['categorias'][0]: self.list_box_general, self.page_index_general = self.create_page_with_listbox(self.treebook, _(u"conversaciones"))
             if data_store.config['categorias'][2]: self.list_box_miembros, self.page_index_miembros = self.create_page_with_listbox(self.treebook, _(u"mensajes privados"))
-        elif plataforma=='TikTok':
+        elif plataforma == 'TikTok':
             if data_store.config['categorias'][0]: self.list_box_general, self.page_index_general = self.create_page_with_listbox(self.treebook, _(u"General"))
-            if data_store.config['categorias'][1]: self.list_box_eventos, self.page_index_eventos = self.create_page_with_listbox(self.treebook, _(u"Eventos"))
+            if data_store.config['categorias'][1]: self.list_box_eventos, self.page_index_eventos = self.create_page_with_listbox(self.treebook, _(u"Eventos"), plataforma)
             if data_store.config['categorias'][2]: self.list_box_miembros, self.page_index_miembros = self.create_page_with_listbox(self.treebook, _(u"Miembros"))
             if data_store.config['categorias'][3]: self.list_box_donaciones, self.page_index_donaciones = self.create_page_with_listbox(self.treebook, _(u"regalos"))
         else:
@@ -30,6 +31,7 @@ class ChatDialog(wx.Dialog):
             if data_store.config['categorias'][4]: self.list_box_moderadores, self.page_index_moderadores = self.create_page_with_listbox(self.treebook, _(u"Moderadores"))
             if data_store.config['categorias'][3]: self.list_box_donaciones, self.page_index_donaciones = self.create_page_with_listbox(self.treebook, _(u"Donaciones"))
             if data_store.config['categorias'][5]: self.list_box_verificados, self.page_index_verificados = self.create_page_with_listbox(self.treebook, _(u"Verificados"))
+        
         self.treebook.SetFocus()
         main_sizer.Add(self.treebook, 1, wx.EXPAND | wx.ALL, 5)
         bottom_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -43,14 +45,29 @@ class ChatDialog(wx.Dialog):
         self.Centre()
         self.SetEscapeId(self.button_mensaje_detener.GetId())
 
-    def create_page_with_listbox(self, parent, name):
+    def create_page_with_listbox(self, parent, name, plataforma=None, add_close_button=False):
         page = wx.Panel(parent)
         sizer = wx.BoxSizer(wx.VERTICAL)
         list_box = wx.ListBox(page, wx.ID_ANY)
         sizer.Add(list_box, 1, wx.EXPAND | wx.ALL, 5)
+        
+        close_button = None
+        if plataforma == 'TikTok' and name == _(u"Eventos"):
+            self.boton_filtrar = wx.Button(page, wx.ID_ANY, _(u"&Filtrar por"))
+            self.boton_filtrar.SetAccessible(Accesible(self.boton_filtrar))
+            sizer.Add(self.boton_filtrar, 0, wx.ALL | wx.ALIGN_RIGHT, 5)
+        elif add_close_button:
+            close_button = wx.Button(page, wx.ID_ANY, _(u"Eliminar"))
+            sizer.Add(close_button, 0, wx.ALL | wx.ALIGN_RIGHT, 5)
+        
         page.SetSizer(sizer)
         page_index = parent.AddPage(page, str(name))
+        if add_close_button:
+            return list_box, page_index, close_button
         return list_box, page_index
+
+    def actualizar_filtro_eventos(self, filtro):
+        pass
 
     def ShowModal(self):
         return super().ShowModal()

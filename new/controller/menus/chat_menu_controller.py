@@ -7,12 +7,27 @@ from controller.estadisticas_controller import EstadisticasController
 from utils.estadisticas_manager import EstadisticasManager
 
 class ChatMenuController:
-    def __init__(self, parent, plataforma=None):
+    def __init__(self, parent, plataforma, chat_controller):
         self.parent = parent
         self.plataforma = plataforma
+        self.chat_controller = chat_controller
         self.menu = ChatOpcionesMenu(parent)
-        self._customize_menu()
-        self._bind_menu_events()
+        self.parent.Bind(wx.EVT_MENU, self.on_menu_item_selected)
+
+    def on_menu_item_selected(self, event):
+        item_id = event.GetId()
+        if hasattr(self.menu, 'pausar_chat') and item_id == self.menu.pausar_chat.GetId():
+            self.pausar_chat()
+        elif hasattr(self.menu, 'borrar_chat') and item_id == self.menu.borrar_chat.GetId():
+            self.borrar_chat()
+        elif hasattr(self.menu, 'exportar_chat') and item_id == self.menu.exportar_chat.GetId():
+            self.exportar_chat()
+        elif hasattr(self.menu, 'ver_estadisticas') and item_id == self.menu.ver_estadisticas.GetId():
+            self.ver_estadisticas()
+        elif hasattr(self.menu, 'abrir_sala') and item_id == self.menu.abrir_sala.GetId():
+            self.abrir_sala()
+        elif hasattr(self.menu, 'buscar') and item_id == self.menu.buscar.GetId():
+            self.chat_controller.buscar_mensajes()
 
     def _customize_menu(self):
         # Ocultar opciones si la plataforma es 'La sala de juegos'
@@ -67,5 +82,5 @@ class ChatMenuController:
         editor_ctrl.ShowModal()
     def mostrar_estadisticas(self, event):
         estadisticas_manager = EstadisticasManager()
-        controller = EstadisticasController(self.parent, estadisticas_manager)
+        controller = EstadisticasController(self.parent, estadisticas_manager, self.plataforma)
         controller.show()
