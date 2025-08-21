@@ -36,6 +36,8 @@ class ChatDialog(wx.Dialog):
         main_sizer.Add(self.treebook, 1, wx.EXPAND | wx.ALL, 5)
         bottom_sizer = wx.BoxSizer(wx.HORIZONTAL)
         bottom_sizer.AddStretchSpacer()
+        self.boton_eliminar = wx.Button(self, wx.ID_ANY, _(u"&Eliminar"))
+        bottom_sizer.Add(self.boton_eliminar, 0, wx.ALL, 5)
         self.boton_opciones = wx.Button(self, wx.ID_ANY, _(u"&Opciones"))
         self.boton_opciones.SetAccessible(Accesible(self.boton_opciones))
         bottom_sizer.Add(self.boton_opciones, 0, wx.ALL, 5)
@@ -65,9 +67,6 @@ class ChatDialog(wx.Dialog):
         if add_close_button:
             return list_box, page_index, close_button
         return list_box, page_index
-
-    def actualizar_filtro_eventos(self, filtro):
-        pass
 
     def ShowModal(self):
         return super().ShowModal()

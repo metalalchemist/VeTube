@@ -47,18 +47,26 @@ class ChatMenuController:
         main_frame = self.parent.GetParent()
         list_favorite = main_frame.list_favorite
         text_ctrl_1 = main_frame.text_ctrl_1
-        if list_favorite.GetStrings() == [_("Tus favoritos aparecerán aquí")]:
-            list_favorite.Delete(0)
-        if len(favorite) <= 0:
-            list_favorite.Append(funciones.extractUser(text_ctrl_1.GetValue())+': '+text_ctrl_1.GetValue())
-            favorite.append({'titulo': funciones.extractUser(text_ctrl_1.GetValue()), 'url': text_ctrl_1.GetValue()})
+        url = text_ctrl_1.GetValue()
+
+        if not url:
+            wx.MessageBox(_("No hay una URL para agregar a favoritos."), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
+            return
+
+        if self.plataforma == 'TikTok':
+            titulo = funciones.extractUser(url)
         else:
-            if any(funciones.extractUser(text_ctrl_1.GetValue())+': '+text_ctrl_1.GetValue() == item for item in list_favorite.GetStrings()):
-                wx.MessageBox(_("Ya se encuentra en favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
-                return
-            else:
-                list_favorite.Append(funciones.extractUser(text_ctrl_1.GetValue())+': '+text_ctrl_1.GetValue())
-                favorite.append({'titulo': funciones.extractUser(text_ctrl_1.GetValue()), 'url': text_ctrl_1.GetValue()})
+            titulo = self.parent.label_dialog.GetLabel()
+
+        if any(fav.get('url') == url for fav in favorite):
+            wx.MessageBox(_("Ya se encuentra en favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
+            return
+
+        if list_favorite.GetCount() > 0 and list_favorite.GetStrings()[0] == _("Tus favoritos aparecerán aquí"):
+            list_favorite.Delete(0)
+
+        list_favorite.Append(f"{titulo}: {url}")
+        favorite.append({'titulo': titulo, 'url': url})
         funciones.escribirJsonLista('favoritos.json', favorite)
         wx.MessageBox(_("Se ha agregado a favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
     def copiarEnlace(self, event):

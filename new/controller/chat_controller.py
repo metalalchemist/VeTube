@@ -23,10 +23,8 @@ class ChatController:
     def _bind_events(self):
         self.ui.button_mensaje_detener.Bind(wx.EVT_BUTTON, self.on_close_dialog)
         self.ui.boton_opciones.Bind(wx.EVT_BUTTON, self.on_opciones_btn)
-        
-        if self.plataforma == 'TikTok' and hasattr(self.ui, 'boton_filtrar'):
-            self.ui.boton_filtrar.Bind(wx.EVT_BUTTON, self.on_filter_btn)
-
+        self.ui.boton_eliminar.Bind(wx.EVT_BUTTON, self.on_eliminar_pestaña)
+        if self.plataforma == 'TikTok' and hasattr(self.ui, 'boton_filtrar'): self.ui.boton_filtrar.Bind(wx.EVT_BUTTON, self.on_filter_btn)
         list_boxes = []
         if self.plataforma == 'La sala de juegos':
             if data_store.config['categorias'][0]: list_boxes.append(self.ui.list_box_general)
@@ -52,7 +50,7 @@ class ChatController:
         if list_box.GetSelection() == wx.NOT_FOUND: return
         
         menu = ChatItemMenu(self.ui)
-        ChatItemController(menu, list_box)
+        ChatItemController(menu, list_box, self.plataforma, self.ui.label_dialog)
         self.ui.PopupMenu(menu.menu)
 
     def on_opciones_btn(self, event):
@@ -80,6 +78,16 @@ class ChatController:
             main_frame.text_ctrl_1.SetFocus()
             main_frame.plataforma.SetSelection(0)
 
+    def on_eliminar_pestaña(self, event):
+        page_index = self.ui.treebook.GetSelection()
+        if page_index == wx.NOT_FOUND: return
+        page_text = self.ui.treebook.GetPageText(page_index)
+        if page_text in [_("General"), _("conversaciones")]:
+            wx.MessageBox(_("No se puede eliminar la pestaña principal."), _("Acción no permitida"), wx.OK | wx.ICON_WARNING)
+            return
+        self.ui.treebook.DeletePage(page_index)
+        self.actualizar_estado_boton_eliminar()
+
     def agregar_mensaje_general(self, mensaje): self.ui.list_box_general.Append(mensaje)
     def agregar_mensaje_evento(self, mensaje, tipo=None):
         if self.plataforma=='TikTok':
@@ -99,6 +107,13 @@ class ChatController:
             if self.filtro_eventos == "todos" or self.filtro_eventos == tipo:
                 self.ui.list_box_eventos.Append(mensaje)
 
+    def actualizar_estado_boton_eliminar(self):
+        if self.ui.treebook.GetPageCount() <= 1:
+            self.ui.boton_eliminar.Hide()
+        else:
+            self.ui.boton_eliminar.Show()
+        self.ui.Layout()
+
     def mostrar_dialogo(self):
         self.ui = ChatDialog(self.frame, self.plataforma)
         self.ui.actualizar_filtro_eventos = self.actualizar_filtro_eventos
@@ -106,6 +121,9 @@ class ChatController:
         if self.plataforma == 'TikTok':
             self.menu_filter_controller = ChatFilterController(self)
         self._bind_events()
+        self.actualizar_estado_boton_eliminar()
+
+    def show(self):
         self.ui.ShowModal()
 
     def buscar_mensajes(self):
@@ -133,6 +151,7 @@ class ChatController:
                 list_box.Set(resultados)
                 close_button.Bind(wx.EVT_BUTTON, self.cerrar_pestaña_busqueda)
                 self.ui.treebook.SetSelection(page_index)
+                self.actualizar_estado_boton_eliminar()
             else: wx.MessageBox(_("No se encontraron mensajes que coincidan con el criterio de búsqueda."), _("Búsqueda sin resultados"), wx.OK | wx.ICON_INFORMATION)
         dialogo.Destroy()
 
@@ -141,3 +160,4 @@ class ChatController:
         panel = button.GetParent()
         page_index = self.ui.treebook.FindPage(panel)
         if page_index != wx.NOT_FOUND: self.ui.treebook.DeletePage(page_index)
+        self.actualizar_estado_boton_eliminar()

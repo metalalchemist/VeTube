@@ -22,6 +22,7 @@ class ServicioTwich:
         player.playsound(rutasonidos[6], False)
         reader.leer_sapi(_("Ingresando al chat."))
         self.chat_controller.mostrar_dialogo()
+        self.chat_controller.show()
     def detener(self):
         self._detener = True
 
@@ -42,7 +43,7 @@ class ServicioTwich:
             full_message = f"{author_name}: {msg}"
 
             # Subscription events
-            if message['message_type'] in ['resubscription', 'subscription', 'mystery_subscription_gift', 'subscription_gift'] and data_store.config['categorias'][1]:
+            if message['message_type'] in ['resubscription', 'subscription', 'mystery_subscription_gift', 'subscription_gift'] and data_store.config['categorias'][1] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
                 sub_message = ""
                 if message['message_type'] == 'resubscription' and data_store.config['eventos'][2]:
                     sub_message = _("{author_name} ha renovado su suscripción en el nivel {subscription_plan_name}. ¡Lleva suscrito por {cumulative_months} meses!").format(author_name=author_name, subscription_plan_name=message.get('subscription_plan_name', ''), cumulative_months=message.get('cumulative_months', ''))
@@ -59,7 +60,7 @@ class ServicioTwich:
                 continue
 
             # Cheer/Bits event
-            if re.search(r'\bCheer\d+\b', msg) and data_store.config['categorias'][3] and data_store.config['eventos'][3]:
+            if re.search(r'\bCheer\d+\b', msg) and data_store.config['categorias'][3] and data_store.config['eventos'][3] and hasattr(self.chat_controller.ui, 'list_box_donaciones'):
                 divide1=message['message'].split('Cheer')
                 if not divide1[0]:
                     if data_store.divisa!=_('Por defecto'): divide1[0]=data_store.divisa
@@ -90,12 +91,12 @@ class ServicioTwich:
             # Regular messages with badges/roles
             message_sent = False
             try:
-                if message['author'].get('is_moderator') and data_store.config['eventos'][4] and data_store.config['categorias'][4]:
+                if message['author'].get('is_moderator') and data_store.config['eventos'][4] and data_store.config['categorias'][4] and hasattr(self.chat_controller.ui, 'list_box_moderadores'):
                     self.chat_controller.agregar_mensaje_moderador(full_message)
                     if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][4]: player.playsound(rutasonidos[4],False)
                     if data_store.config['reader'] and data_store.config['unread'][4]: reader.leer_mensaje(full_message)
                     message_sent = True
-                elif message['author'].get('is_subscriber') and data_store.config['eventos'][1] and data_store.config['categorias'][2]:
+                elif message['author'].get('is_subscriber') and data_store.config['eventos'][1] and data_store.config['categorias'][2] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
                     self.chat_controller.agregar_mensaje_miembro(full_message)
                     if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][1]: player.playsound(rutasonidos[1],False)
                     if data_store.config['reader'] and data_store.config['unread'][1]: reader.leer_mensaje(full_message)
@@ -106,35 +107,35 @@ class ServicioTwich:
                 for badge in message['author']['badges']:
                     title = badge.get('title', '')
                     if 'Subscriber' in title:
-                        if data_store.config['eventos'][1] and data_store.config['categorias'][2]:
+                        if data_store.config['eventos'][1] and data_store.config['categorias'][2] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
                             if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][1]: player.playsound(rutasonidos[1],False)
                             self.chat_controller.agregar_mensaje_miembro(full_message)
                             if data_store.config['reader'] and data_store.config['unread'][1]: reader.leer_mensaje(full_message)
                         message_sent = True
                         break
                     elif 'Moderator' in title:
-                        if data_store.config['eventos'][4] and data_store.config['categorias'][4]:
+                        if data_store.config['eventos'][4] and data_store.config['categorias'][4] and hasattr(self.chat_controller.ui, 'list_box_moderadores'):
                             if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][4]: player.playsound(rutasonidos[4],False)
                             self.chat_controller.agregar_mensaje_moderador(full_message)
                             if data_store.config['reader'] and data_store.config['unread'][4]: reader.leer_mensaje(full_message)
                         message_sent = True
                         break
                     elif 'Verified' in title:
-                        if data_store.config['eventos'][5] and data_store.config['categorias'][5]:
+                        if data_store.config['eventos'][5] and data_store.config['categorias'][5] and hasattr(self.chat_controller.ui, 'list_box_verificados'):
                             self.chat_controller.agregar_mensaje_verificado(full_message)
                             if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][5]: player.playsound(rutasonidos[5],False)
                             if data_store.config['reader'] and data_store.config['unread'][5]: reader.leer_mensaje(full_message)
                         message_sent = True
                         break
                 else:
-                    if data_store.config['eventos'][0] and data_store.config['categorias'][0]:
+                    if data_store.config['eventos'][0] and data_store.config['categorias'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
                         if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][0]: player.playsound(rutasonidos[0],False)
                         self.chat_controller.agregar_mensaje_general(full_message)
                         if data_store.config['reader'] and data_store.config['unread'][0]: reader.leer_mensaje(full_message)
                         message_sent = True
             if message_sent: continue
             # Default to general
-            if data_store.config['eventos'][0] and data_store.config['categorias'][0]:
+            if data_store.config['eventos'][0] and data_store.config['categorias'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
                 self.chat_controller.agregar_mensaje_general(full_message)
                 if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][0]: player.playsound(rutasonidos[0],False)
                 if data_store.config['reader'] and data_store.config['unread'][0]: reader.leer_mensaje(full_message)
