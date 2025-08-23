@@ -12,22 +12,8 @@ class ChatMenuController:
         self.plataforma = plataforma
         self.chat_controller = chat_controller
         self.menu = ChatOpcionesMenu(parent)
-        self.parent.Bind(wx.EVT_MENU, self.on_menu_item_selected)
-
-    def on_menu_item_selected(self, event):
-        item_id = event.GetId()
-        if hasattr(self.menu, 'pausar_chat') and item_id == self.menu.pausar_chat.GetId():
-            self.pausar_chat()
-        elif hasattr(self.menu, 'borrar_chat') and item_id == self.menu.borrar_chat.GetId():
-            self.borrar_chat()
-        elif hasattr(self.menu, 'exportar_chat') and item_id == self.menu.exportar_chat.GetId():
-            self.exportar_chat()
-        elif hasattr(self.menu, 'ver_estadisticas') and item_id == self.menu.ver_estadisticas.GetId():
-            self.ver_estadisticas()
-        elif hasattr(self.menu, 'abrir_sala') and item_id == self.menu.abrir_sala.GetId():
-            self.abrir_sala()
-        elif hasattr(self.menu, 'buscar') and item_id == self.menu.buscar.GetId():
-            self.chat_controller.buscar_mensajes()
+        self._bind_menu_events()
+        self._customize_menu()
 
     def _customize_menu(self):
         # Ocultar opciones si la plataforma es 'La sala de juegos'
@@ -37,11 +23,18 @@ class ChatMenuController:
             self.menu.menu.Remove(self.menu.favoritos.GetId())
 
     def _bind_menu_events(self):
+        # Bind all menu items here
         self.parent.Bind(wx.EVT_MENU, self.mostrar_editor_combinaciones, self.menu.editor_combinaciones)
-        self.parent.Bind(wx.EVT_MENU, self.copiarEnlace, self.menu.copiar_enlace)
-        self.parent.Bind(wx.EVT_MENU, self.reproducirVideo, self.menu.reproducir_navegador)
         self.parent.Bind(wx.EVT_MENU, self.addFavoritos, self.menu.favoritos)
         self.parent.Bind(wx.EVT_MENU, self.mostrar_estadisticas, self.menu.ver_estadisticas)
+        self.parent.Bind(wx.EVT_MENU, self.copiarEnlace, self.menu.copiar_enlace)
+        self.parent.Bind(wx.EVT_MENU, self.reproducirVideo, self.menu.reproducir_navegador)
+        self.parent.Bind(wx.EVT_MENU, self.on_buscar_mensajes, self.menu.buscar)
+
+    # New handler for buscar
+    def on_buscar_mensajes(self, event):
+        self.chat_controller.buscar_mensajes()
+
     def addFavoritos(self, event):
         from globals.data_store import favorite
         main_frame = self.parent.GetParent()
@@ -69,6 +62,7 @@ class ChatMenuController:
         favorite.append({'titulo': titulo, 'url': url})
         funciones.escribirJsonLista('favoritos.json', favorite)
         wx.MessageBox(_("Se ha agregado a favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
+
     def copiarEnlace(self, event):
         main_frame = self.parent.GetParent()
         url = main_frame.text_ctrl_1.GetValue()
@@ -78,6 +72,7 @@ class ChatMenuController:
             noti.Show(timeout=5)
         else:
             wx.adv.NotificationMessage(_("No se pudo copiar el enlace"), _("No se encontró un enlace válido para copiar.")).Show(timeout=5)
+
     def reproducirVideo(self, event):
         main_frame = self.parent.GetParent()
         url = main_frame.text_ctrl_1.GetValue()
@@ -85,9 +80,11 @@ class ChatMenuController:
             wx.LaunchDefaultBrowser(url)
         else:
             wx.adv.NotificationMessage(_("No se pudo abrir el enlace"), _("No se encontró un enlace válido para abrir.")).Show(timeout=5)
+
     def mostrar_editor_combinaciones(self, event):
-        editor_ctrl = EditorController(self.parent)
+        editor_ctrl = EditorController(self.parent, self.chat_controller)
         editor_ctrl.ShowModal()
+
     def mostrar_estadisticas(self, event):
         estadisticas_manager = EstadisticasManager()
         controller = EstadisticasController(self.parent, estadisticas_manager, self.plataforma)

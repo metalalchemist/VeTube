@@ -31,7 +31,8 @@ class ChatDialog(wx.Dialog):
             if data_store.config['categorias'][4]: self.list_box_moderadores, self.page_index_moderadores = self.create_page_with_listbox(self.treebook, _(u"Moderadores"))
             if data_store.config['categorias'][3]: self.list_box_donaciones, self.page_index_donaciones = self.create_page_with_listbox(self.treebook, _(u"Donaciones"))
             if data_store.config['categorias'][5]: self.list_box_verificados, self.page_index_verificados = self.create_page_with_listbox(self.treebook, _(u"Verificados"))
-        
+        if data_store.config['categorias'][5]: self.list_box_favoritos, self.page_index_favoritos = self.create_page_with_listbox(self.treebook, _(u"Favoritos"))
+
         self.treebook.SetFocus()
         main_sizer.Add(self.treebook, 1, wx.EXPAND | wx.ALL, 5)
         bottom_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -47,25 +48,17 @@ class ChatDialog(wx.Dialog):
         self.Centre()
         self.SetEscapeId(self.button_mensaje_detener.GetId())
 
-    def create_page_with_listbox(self, parent, name, plataforma=None, add_close_button=False):
+    def create_page_with_listbox(self, parent, name, plataforma=None):
         page = wx.Panel(parent)
         sizer = wx.BoxSizer(wx.VERTICAL)
         list_box = wx.ListBox(page, wx.ID_ANY)
         sizer.Add(list_box, 1, wx.EXPAND | wx.ALL, 5)
-        
-        close_button = None
         if plataforma == 'TikTok' and name == _(u"Eventos"):
             self.boton_filtrar = wx.Button(page, wx.ID_ANY, _(u"&Filtrar por"))
             self.boton_filtrar.SetAccessible(Accesible(self.boton_filtrar))
             sizer.Add(self.boton_filtrar, 0, wx.ALL | wx.ALIGN_RIGHT, 5)
-        elif add_close_button:
-            close_button = wx.Button(page, wx.ID_ANY, _(u"Eliminar"))
-            sizer.Add(close_button, 0, wx.ALL | wx.ALIGN_RIGHT, 5)
-        
         page.SetSizer(sizer)
         page_index = parent.AddPage(page, str(name))
-        if add_close_button:
-            return list_box, page_index, close_button
         return list_box, page_index
 
     def ShowModal(self):

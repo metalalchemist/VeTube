@@ -12,11 +12,9 @@ class ServicioTiktok:
     def __init__(self, url, frame, plataforma):
         self.url = url
         self.frame = frame
-        self.chat_controller = ChatController(frame, self, plataforma)
         self.chat = None
-        self.loop = None
-        self.is_running = False
-        self.last_live_status = None
+        self.chat_controller = ChatController(frame, self, plataforma)
+        self._detener = False
 
     def iniciar_chat(self):
         self.is_running = True

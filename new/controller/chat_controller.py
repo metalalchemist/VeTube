@@ -1,13 +1,21 @@
 import wx
+import wx.adv
+from pyperclip import copy
 from setup import reader
 from ui.chat_ui import ChatDialog
 from ui.menus.chat_item_menu import ChatItemMenu
+from ui.show_comment import ShowCommentDialog
 from controller.menus.chat_item_controller import ChatItemController
 from controller.menus.chat_menu_controller import ChatMenuController
 from controller.menus.chat_filter_controller import ChatFilterController
+from controller.editor_controller import EditorController
 from ui.dialog_response import response
 from globals import data_store
+from globals.data_store import mensajes_destacados
 from utils.estadisticas_manager import EstadisticasManager
+from utils.funciones import escribirJsonLista, extractUser
+import configparser
+from helpers.keyboard_handler.wx_handler import WXKeyboardHandler
 
 class ChatController:
     def __init__(self, frame, servicio=None, plataforma=None):
@@ -19,6 +27,8 @@ class ChatController:
         self.menu_filter_controller = None
         self.todos_los_eventos = []
         self.filtro_eventos = "todos"
+        self.keyboard_handler = None
+        self.chat_shortcuts = {}
 
     def _bind_events(self):
         self.ui.button_mensaje_detener.Bind(wx.EVT_BUTTON, self.on_close_dialog)
@@ -41,6 +51,7 @@ class ChatController:
             if data_store.config['categorias'][3]: list_boxes.append(self.ui.list_box_donaciones)
             if data_store.config['categorias'][4]: list_boxes.append(self.ui.list_box_moderadores)
             if data_store.config['categorias'][5]: list_boxes.append(self.ui.list_box_verificados)
+        if data_store.config['categorias'][6]: list_boxes.append(self.ui.list_box_favoritos)
         for lb in list_boxes:
             lb.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
             lb.Bind(wx.EVT_KEY_UP, self.on_listbox_keyup)
@@ -64,10 +75,12 @@ class ChatController:
         if event.GetKeyCode() == 32:
             reader._leer.silence()
             list_box = event.GetEventObject()
-            reader.leer_sapi(list_box.GetString(list_box.GetSelection()))
+            reader.leer_auto(list_box.GetString(list_box.GetSelection()))
 
     def on_close_dialog(self, event):
         if response(_("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:")) == wx.ID_YES:
+            if self.keyboard_handler:
+                self.keyboard_handler.unregister_all_keys()
             EstadisticasManager().resetear_estadisticas()
             self.servicio.detener()
             main_frame = self.ui.GetParent()
@@ -81,10 +94,6 @@ class ChatController:
     def on_eliminar_pestaña(self, event):
         page_index = self.ui.treebook.GetSelection()
         if page_index == wx.NOT_FOUND: return
-        page_text = self.ui.treebook.GetPageText(page_index)
-        if page_text in [_("General"), _("conversaciones")]:
-            wx.MessageBox(_("No se puede eliminar la pestaña principal."), _("Acción no permitida"), wx.OK | wx.ICON_WARNING)
-            return
         self.ui.treebook.DeletePage(page_index)
         self.actualizar_estado_boton_eliminar()
 
@@ -116,6 +125,28 @@ class ChatController:
 
     def mostrar_dialogo(self):
         self.ui = ChatDialog(self.frame, self.plataforma)
+        self.keyboard_handler = WXKeyboardHandler(self.ui)
+        command_objects = {'chat': self, 'reader': reader}
+        config = configparser.ConfigParser(interpolation=None)
+        config.read("keys.txt")
+        if 'atajos_chat' in config:
+            for key, command_str in config['atajos_chat'].items():
+                try:
+                    obj_name, method_path = command_str.split('.', 1)
+                    if obj_name in command_objects:
+                        target_obj = command_objects[obj_name]
+                        attrs = method_path.split('.')
+                        final_callable = target_obj
+                        for attr in attrs:
+                            final_callable = getattr(final_callable, attr)
+                        if callable(final_callable):
+                            self.chat_shortcuts[key] = final_callable
+                        else:
+                            print(f"Warning: Command '{command_str}' did not resolve to a callable function.")
+                    else:
+                        print(f"Warning: Object '{obj_name}' not defined for commands")
+                except Exception as e:
+                    print(f"Error parsing shortcut {key}={command_str}: {e}")
         self.ui.actualizar_filtro_eventos = self.actualizar_filtro_eventos
         self.menu_opciones_controller = ChatMenuController(self.ui, self.plataforma, self)
         if self.plataforma == 'TikTok':
@@ -124,6 +155,8 @@ class ChatController:
         self.actualizar_estado_boton_eliminar()
 
     def show(self):
+        if self.keyboard_handler:
+            self.keyboard_handler.register_keys(self.chat_shortcuts)
         self.ui.ShowModal()
 
     def buscar_mensajes(self):
@@ -147,17 +180,195 @@ class ChatController:
                     if criterio.lower() in mensaje.lower(): resultados.append(mensaje)
             
             if resultados:
-                list_box, page_index, close_button = self.ui.create_page_with_listbox(self.ui.treebook, name=criterio, add_close_button=True)
+                list_box, page_index= self.ui.create_page_with_listbox(self.ui.treebook, name=criterio)
                 list_box.Set(resultados)
-                close_button.Bind(wx.EVT_BUTTON, self.cerrar_pestaña_busqueda)
                 self.ui.treebook.SetSelection(page_index)
                 self.actualizar_estado_boton_eliminar()
             else: wx.MessageBox(_("No se encontraron mensajes que coincidan con el criterio de búsqueda."), _("Búsqueda sin resultados"), wx.OK | wx.ICON_INFORMATION)
         dialogo.Destroy()
 
-    def cerrar_pestaña_busqueda(self, event):
-        button = event.GetEventObject()
-        panel = button.GetParent()
-        page_index = self.ui.treebook.FindPage(panel)
-        if page_index != wx.NOT_FOUND: self.ui.treebook.DeletePage(page_index)
+    @property
+    def current_listbox(self):
+        if not self.ui: return None
+        page = self.ui.treebook.GetCurrentPage()
+        if not page:
+            return None
+        for child in page.GetChildren():
+            if isinstance(child, wx.ListBox):
+                return child
+        return None
+
+    def avanzarCategorias(self):
+        if not self.ui: return
+        current_selection = self.ui.treebook.GetSelection()
+        page_count = self.ui.treebook.GetPageCount()
+        if page_count == 0: return
+        next_selection = current_selection + 1
+        if next_selection >= page_count:
+            next_selection = 0
+        self.ui.treebook.SetSelection(next_selection)
+        self.ui.treebook.SetFocus()
+        reader.leer_auto(self.ui.treebook.GetPageText(next_selection))
+
+    def retrocederCategorias(self):
+        if not self.ui: return
+        current_selection = self.ui.treebook.GetSelection()
+        page_count = self.ui.treebook.GetPageCount()
+        if page_count == 0: return
+        next_selection = current_selection - 1
+        if next_selection < 0:
+            next_selection = page_count - 1
+        self.ui.treebook.SetSelection(next_selection)
+        self.ui.treebook.SetFocus()
+        reader.leer_auto(self.ui.treebook.GetPageText(next_selection))
+
+    def elementoAnterior(self):
+        listbox = self.current_listbox
+        if not listbox or listbox.GetCount() == 0: return
+        selection = listbox.GetSelection()
+        if selection == wx.NOT_FOUND:
+            selection = 0
+        elif selection > 0:
+            selection -= 1
+        listbox.SetSelection(selection)
+        reader.leer_auto(listbox.GetString(selection))
+
+    def elementoSiguiente(self):
+        listbox = self.current_listbox
+        if not listbox or listbox.GetCount() == 0: return
+        selection = listbox.GetSelection()
+        if selection == wx.NOT_FOUND:
+            selection = 0
+        elif selection < listbox.GetCount() - 1:
+            selection += 1
+        listbox.SetSelection(selection)
+        reader.leer_auto(listbox.GetString(selection))
+
+    def elemento_inicial(self):
+        listbox = self.current_listbox
+        if not listbox or listbox.GetCount() == 0: return
+        listbox.SetSelection(0)
+        reader.leer_auto(listbox.GetString(0))
+
+    def elemento_final(self):
+        listbox = self.current_listbox
+        if not listbox or listbox.GetCount() == 0: return
+        last_index = listbox.GetCount() - 1
+        listbox.SetSelection(last_index)
+        reader.leer_auto(listbox.GetString(last_index))
+
+    def copiarMensajeActual(self):
+        listbox = self.current_listbox
+        if not listbox or listbox.GetSelection() == wx.NOT_FOUND: return
+        selected_text = listbox.GetString(listbox.GetSelection())
+        copy(selected_text)
+        reader.leer_auto(_("Mensaje copiado"))
+
+    def mostrar_mensaje_actual(self):
+        listbox = self.current_listbox
+        if not listbox or listbox.GetSelection() == wx.NOT_FOUND: return
+        selected_text = listbox.GetString(listbox.GetSelection())
+        dialog = ShowCommentDialog(self.ui, selected_text)
+        dialog.Show()
+
+    def agregar_mensajes_favoritos(self):
+        listbox = self.current_listbox
+        if not listbox or listbox.GetSelection() == wx.NOT_FOUND:
+            return
+        mensaje = listbox.GetString(listbox.GetSelection())
+        if not hasattr(self.ui, 'list_box_favoritos'):
+            self.ui.list_box_favoritos, self.ui.page_index_favoritos = self.ui.create_page_with_listbox(self.ui.treebook, _(u"Favoritos"))
+            self.ui.list_box_favoritos.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
+            self.ui.list_box_favoritos.Bind(wx.EVT_KEY_UP, self.on_listbox_keyup)
+        if mensaje in self.ui.list_box_favoritos.GetStrings():
+            reader.leer_auto(_("Este mensaje ya se encuentra en favoritos"))
+            return
+        self.ui.list_box_favoritos.Append(mensaje)
+        reader.leer_auto(_("Mensaje agregado a favoritos"))
+
+    def archivar_mensaje(self):
+        listbox = self.current_listbox
+        if not listbox or listbox.GetSelection() == wx.NOT_FOUND: return
+        
+        mensaje = listbox.GetString(listbox.GetSelection())
+        if not mensaje: return # Evitar archivar mensajes vacíos
+
+        main_frame = self.ui.GetParent()
+        list_mensajes = main_frame.list_mensajes
+
+        if list_mensajes.GetCount() > 0 and list_mensajes.GetStrings()[0] == _("Tus mensajes archivados aparecerán aquí"):
+            list_mensajes.Delete(0)
+        
+        ya_archivado = any(mensaje == d.get('mensaje', '') for d in mensajes_destacados)
+        if not ya_archivado:
+            # Determinar el título
+            if self.plataforma == 'TikTok':
+                titulo = extractUser(main_frame.text_ctrl_1.GetValue())
+            else:
+                titulo = self.ui.label_dialog.GetLabelText()
+
+            # Añadir a la lista de la UI y al almacenamiento de datos
+            list_mensajes.Append(f"{mensaje}: {titulo}")
+            mensajes_destacados.append({'mensaje': mensaje, 'titulo': titulo})
+            
+            escribirJsonLista('mensajes_destacados.json', mensajes_destacados)
+            reader.leer_auto(_("El mensaje ha sido archivado correctamente."))
+        else: 
+            reader.leer_auto(_("Este mensaje ya está en la lista de archivados."))
+
+    def borrar_pagina_actual(self):
+        page_index = self.ui.treebook.GetSelection()
+        page_count = self.ui.treebook.GetPageCount()
+
+        if page_count <= 1:
+            reader.leer_auto(_("No se puede borrar la última página."))
+            return
+
+        self.ui.treebook.DeletePage(page_index)
+        reader.leer_auto(_("Página borrada."))
         self.actualizar_estado_boton_eliminar()
+
+    def mostrar_editor_combinaciones(self):
+        editor = EditorController(self.ui, self)
+        editor.ShowModal()
+
+    def reload_shortcuts(self):
+        if self.keyboard_handler:
+            self.keyboard_handler.unregister_all_keys()
+        
+        self.chat_shortcuts = {}
+        command_objects = {'chat': self, 'reader': reader}
+        config = configparser.ConfigParser(interpolation=None)
+        config.read("keys.txt")
+        if 'atajos_chat' in config:
+            for key, command_str in config['atajos_chat'].items():
+                try:
+                    obj_name, method_path = command_str.split('.', 1)
+                    if obj_name in command_objects:
+                        target_obj = command_objects[obj_name]
+                        attrs = method_path.split('.')
+                        final_callable = target_obj
+                        for attr in attrs:
+                            final_callable = getattr(final_callable, attr)
+                        if callable(final_callable):
+                            self.chat_shortcuts[key] = final_callable
+                        else:
+                            print(f"Warning: Command '{command_str}' did not resolve to a callable function.")
+                    else:
+                        print(f"Warning: Object '{obj_name}' not defined for commands")
+                except Exception as e:
+                    print(f"Error parsing shortcut {key}={command_str}: {e}")
+        
+        if self.keyboard_handler:
+            self.keyboard_handler.register_keys(self.chat_shortcuts)
+
+    def toggle_lectura_automatica(self):
+        if data_store.config['reader']:
+            reader._leer.silence()
+            data_store.config['reader'] = False
+        else: data_store.config['reader'] = True
+        reader.leer_auto(_("Lectura automática activada.") if data_store.config['reader'] else _("Lectura automática  desactivada."))
+    def toggle_sounds(self):
+        if data_store.config['sonidos']: data_store.config['sonidos'] = False
+        else: data_store.config['sonidos'] = True
+        reader.leer_auto(_("sonidos activados.") if data_store.config['reader'] else _("sonidos desactivados."))

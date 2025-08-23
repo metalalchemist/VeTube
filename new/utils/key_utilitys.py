@@ -1,37 +1,64 @@
+import configparser
 from os import path
-import re
+
 class KeyUtils:
-	def __init__(self): self.leerTeclas()
-	def escribirTeclas(self):
-		with open('keys.txt', 'w+') as arch: arch.write("""{
-"control+p": reader._leer.silence,
-"alt+shift+up": self.elementoAnterior,
-"alt+shift+down": self.elementoSiguiente,
-"alt+shift+left": self.retrocederCategorias,
-"alt+shift+right": self.avanzarCategorias,
-"alt+shift+home": self.elementoInicial,
-"alt+shift+end": self.elementoFinal,
-"alt+shift+f": self.destacarMensaje,
-"alt+shift+c": self.copiar,
-"alt+shift+m": self.callar,
-"alt+shift+s": self.iniciarBusqueda,
-"alt+shift+v": self.mostrarMensaje,
-"alt+shift+d": self.borrarBuffer,
-"alt+shift+p": self.desactivarSonidos,
-"alt+shift+k": self.createEditor,
-"alt+shift+a": self.addRecuerdo}""")
-		self.leerTeclas()
-	def leerTeclas(self):
-		if path.exists("keys.txt"):
-			with open ("keys.txt",'r') as arch:
-				contenido = arch.read()
-				self.teclas = re.findall(r'"(.*?)"', contenido)
-		else: self.escribirTeclas()
-	def reemplazar(self, vieja, nueva):
-		with open("keys.txt", 'r', encoding='utf-8') as arch:
-			contenido = arch.read()
-		contenido = contenido.replace(vieja, nueva)
-		with open("keys.txt", 'w', encoding='utf-8') as arch:
-			arch.write(contenido)
-		self.leerTeclas()
+    def __init__(self): self.leerTeclas()
+
+    def escribirTeclas(self):
+        config = configparser.ConfigParser(interpolation=None)
+        config['atajos_chat'] = {
+            'control+p': 'reader._leer.silence',
+            'alt+shift+up': 'chat.elementoAnterior',
+            'alt+shift+down': 'chat.elementoSiguiente',
+            'alt+shift+left': 'chat.retrocederCategorias',
+            'alt+shift+right': 'chat.avanzarCategorias',
+            'alt+shift+home': 'chat.elemento_inicial',
+            'alt+shift+end': 'chat.elemento_final',
+            'alt+shift+f': 'chat.agregar_mensajes_favoritos',
+            'alt+shift+c': 'chat.copiarMensajeActual',
+            'alt+shift+r': 'chat.toggle_lectura_automatica',
+            'alt+shift+b': 'chat.buscar_mensajes',
+            'alt+shift+v': 'chat.mostrar_mensaje_actual',
+            'alt+shift+d': 'chat.borrar_pagina_actual',
+            'alt+shift+p': 'chat.toggle_sounds',
+            'alt+shift+k': 'chat.mostrar_editor_combinaciones',
+            'alt+shift+a': 'chat.archivar_mensaje',
+        }
+        with open('keys.txt', 'w', encoding='utf-8') as configfile:
+            config.write(configfile)
+        self.leerTeclas()
+
+    def leerTeclas(self):
+        config = configparser.ConfigParser(interpolation=None)
+        if path.exists("keys.txt"):
+            config.read("keys.txt")
+            if 'atajos_chat' in config:
+                self.teclas = list(config['atajos_chat'].keys())
+            else:
+                self.teclas = []
+        else:
+            self.escribirTeclas()
+            self.leerTeclas()
+
+    def reemplazar(self, old_shortcut, new_shortcut):
+        config = configparser.ConfigParser(interpolation=None)
+        config.read("keys.txt")
+        if 'atajos_chat' in config:
+            function_call = None
+            for key, value in config['atajos_chat'].items():
+                if key == old_shortcut:
+                    function_call = value
+                    del config['atajos_chat'][key]
+                    break
+            
+            if function_call:
+                config['atajos_chat'][new_shortcut] = function_call
+                with open("keys.txt", 'w', encoding='utf-8') as configfile:
+                    config.write(configfile)
+                self.leerTeclas()
+            else:
+                print(f"Warning: Old shortcut '{old_shortcut}' not found in keys.txt for replacement.")
+        else:
+            print("Warning: [atajos_chat] section not found in keys.txt for replacement.")
+
 editor=KeyUtils()

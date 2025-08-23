@@ -50,3 +50,26 @@ eventos_lista = [
     _('Cuando alguien comparte el enlace de tu envivo en  tiktok'),
     _('Cuando alguien envía un cofre  en tiktok')
 ]
+
+comandos_ordenados = [
+    'reader._leer.silence',
+    'chat.elementoAnterior',
+    'chat.elementoSiguiente',
+    'chat.retrocederCategorias',
+    'chat.avanzarCategorias',
+    'chat.elemento_inicial',
+    'chat.elemento_final',
+    'chat.agregar_mensajes_favoritos',
+    'chat.copiarMensajeActual',
+    'chat.toggle_lectura_automatica',
+    'chat.buscar_mensajes',
+    'chat.mostrar_mensaje_actual',
+    'chat.borrar_pagina_actual',
+    'chat.toggle_sounds',
+    'chat.mostrar_editor_combinaciones',
+    'chat.archivar_mensaje',
+]
+
+comandos_a_descripcion = dict(zip(comandos_ordenados, mensaje_teclas))
+
+

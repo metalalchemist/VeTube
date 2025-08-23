@@ -1,13 +1,11 @@
 import wx
-from globals.mensajes import mensaje_teclas
+from globals.mensajes import mensaje_teclas, comandos_a_descripcion
 
 class NuevaCombinacionDialog:
-    def __init__(self, parent, combinaciones, indice=None, texto=None):
-        if indice is None:
-            indice = combinaciones.GetFocusedItem()
-        if texto is None:
-            texto = combinaciones.GetItem(indice, 1).GetText()
-        self.dlg_editar_combinacion = wx.Dialog(parent, wx.ID_ANY, _("Editando la combinación de teclas para %s") % mensaje_teclas[indice])
+    def __init__(self, parent, combinaciones, indice=None, texto=None, description=None):
+        # Remove logic related to indice and mensaje_teclas for description
+        # The description is now passed directly
+        self.dlg_editar_combinacion = wx.Dialog(parent, wx.ID_ANY, _("Editando la combinación de teclas para %s") % description)
         sizer = wx.BoxSizer(wx.VERTICAL)
         groupbox = wx.StaticBox(self.dlg_editar_combinacion, wx.ID_ANY, _("Selecciona las teclas que quieres usar"))
         sizer_groupbox = wx.StaticBoxSizer(groupbox, wx.VERTICAL)
@@ -27,7 +25,7 @@ class NuevaCombinacionDialog:
         sizer_groupbox.Add(sizer_check, 1, wx.EXPAND)
         sizer.Add(sizer_groupbox, 0, wx.EXPAND | wx.ALL, 5)
         self.teclas = ["return", "tab", "space", "back", "delete", "home", "end", "pageup", "pagedown", "up", "down", "left", "right", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-        label_tecla = wx.StaticText(self.dlg_editar_combinacion, wx.ID_ANY, _("&Selecciona una tecla para la combinación"))
+        label_tecla = wx.StaticText(self.dlg_editar_combinacion, wx.ID_ANY, _("Selecciona una tecla para la combinación"))
         self.combo_tecla = wx.ComboBox(self.dlg_editar_combinacion, wx.ID_ANY, choices=self.teclas, style=wx.CB_DROPDOWN | wx.CB_READONLY)
         texto_split = texto.split('+')
         self.combo_tecla.SetValue(texto_split[-1])

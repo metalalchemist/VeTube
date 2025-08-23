@@ -5,14 +5,32 @@ from os import remove
 from ui.dialog_response import response
 from ui.editor.nueva_combinacion import NuevaCombinacionDialog
 from helpers.keyboard_handler.wx_handler import WXKeyboardHandler
-from globals.mensajes import mensaje_teclas
+from globals.mensajes import mensaje_teclas, comandos_a_descripcion
+import configparser
 
 class EditorController:
-    def __init__(self, frame):
-        self.frame = frame  # Guarda el frame principal como atributo
-        self.ui = EditorCombinaciones(frame)  # frame como parent visual
-        self.handler_keyboard = WXKeyboardHandler(self.frame)  # Usa el frame para hotkeys
+    def __init__(self, frame, chat_controller=None):
+        self.frame = frame
+        self.chat_controller = chat_controller
+        self.ui = EditorCombinaciones(frame)
+        self.handler_keyboard = WXKeyboardHandler(self.frame)
         self._bind_events()
+        self._load_combinations()
+
+    def _load_combinations(self):
+        config = configparser.ConfigParser(interpolation=None)
+        config.read("keys.txt")
+        
+        if 'atajos_chat' in config:
+            self.ui.combinaciones.DeleteAllItems()
+            index = 0
+            for key, command_str in config['atajos_chat'].items():
+                description = comandos_a_descripcion.get(command_str, "")
+                
+                self.ui.combinaciones.InsertItem(index, description)
+                self.ui.combinaciones.SetItem(index, 1, key)
+                index += 1
+        self.ui.combinaciones.SetFocus()
 
     def _bind_events(self):
         self.ui.restaurar.Bind(wx.EVT_BUTTON, self.on_restore_defaults)
@@ -21,19 +39,27 @@ class EditorController:
 
     def on_restore_defaults(self, event):
         if response(_("Está apunto de restaurar las combinaciones a sus valores por defecto, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"))==wx.ID_YES:
-            remove("keys.txt")
-            editor.leerTeclas()
-            c=0
-            for valor in editor.teclas:
-                self.ui.combinaciones.SetItem(c, 1, valor)
-                c+=1
+            editor.escribirTeclas() # This writes the default keys.txt
+            self._load_combinations() # This reloads the UI from the new keys.txt
             self.ui.combinaciones.Focus(0)
             self.ui.combinaciones.SetFocus()
+            # Notify ChatController to reload shortcuts
+            if self.chat_controller:
+                self.chat_controller.reload_shortcuts()
             
     def on_editar(self, event):
-        dlg = NuevaCombinacionDialog(self.ui.dlg_teclado, self.ui.combinaciones)
+        indice = self.ui.combinaciones.GetFocusedItem()
+        selected_key = self.ui.combinaciones.GetItem(indice, 1).GetText()
+
+        config = configparser.ConfigParser(interpolation=None)
+        config.read("keys.txt")
+        command_str = config['atajos_chat'].get(selected_key, "")
+        description = comandos_a_descripcion.get(command_str, _("Función desconocida"))
+
+        dlg = NuevaCombinacionDialog(self.ui.dlg_teclado, self.ui.combinaciones, texto=selected_key, description=description)
         if dlg.ShowModal() == wx.ID_OK:
-            indice = self.ui.combinaciones.GetFocusedItem()
+            combinacion_actual = self.ui.combinaciones.GetItem(indice, 1).GetText()
+
             tecla = dlg.combo_tecla.GetValue()
             ctrl = dlg.check_ctrl.GetValue()
             alt = dlg.check_alt.GetValue()
@@ -44,32 +70,44 @@ class EditorController:
             if alt: self.nueva_combinacion = "alt+" + self.nueva_combinacion
             if ctrl: self.nueva_combinacion = "control+" + self.nueva_combinacion
             if win: self.nueva_combinacion = "win+" + self.nueva_combinacion
+
+            if self.nueva_combinacion == combinacion_actual:
+                dlg.dlg_editar_combinacion.Destroy()
+                return
+
             if not ctrl and not alt and not win and not shift:
                 wx.MessageBox(_("Debe escoger al menos una tecla de las casillas de verificación"), "error.", wx.ICON_ERROR)
                 return
+
             for busc in range(self.ui.combinaciones.GetItemCount()):
                 if busc == indice:
                     continue
                 if self.nueva_combinacion == self.ui.combinaciones.GetItem(busc, 1).GetText():
-                    wx.MessageBox(_("Esta combinación ya está siendo usada en la función %s") % mensaje_teclas[busc], "error.", wx.ICON_ERROR)
+                    wx.MessageBox(_("Esta combinación ya está siendo usada en la función %s") % comandos_a_descripcion.get(config['atajos_chat'].get(self.ui.combinaciones.GetItem(busc, 1).GetText(), ""), _("Función desconocida")), "error.", wx.ICON_ERROR)
                     return
-            self.handler_keyboard.register_key(self.nueva_combinacion,print)
-        wx.CallAfter(self.correccion)
+
+            self.handler_keyboard.register_key(self.nueva_combinacion, print)
+            wx.CallAfter(self.correccion_de_prueba)
         dlg.dlg_editar_combinacion.Destroy()
 
-    def correccion(self):
-        indice = self.ui.combinaciones.GetFocusedItem()
-        combinacion_actual = self.ui.combinaciones.GetItem(indice, 1).GetText()
-        if self.nueva_combinacion not in self.handler_keyboard.active_keys:
-            wx.MessageBox(_("Esa combinación está siendo usada por el sistema"), "error.", wx.ICON_ERROR)
-            return
-        else:
-            self.handler_keyboard.unregister_key(self.nueva_combinacion,print)
-            self.texto = self.nueva_combinacion
-            self.nueva_combinacion = ""
-            editor.reemplazar(combinacion_actual, self.texto)
-            self.ui.combinaciones.SetItem(indice, 1, self.texto)
+    def correccion_de_prueba(self):
+        # Check if the key was successfully added to the handler's active list
+        if self.nueva_combinacion in self.handler_keyboard.active_keys:
+            # Success! Immediately unregister the test key.
+            self.handler_keyboard.unregister_key(self.nueva_combinacion, print)
+            
+            # And now save the change permanently
+            indice = self.ui.combinaciones.GetFocusedItem()
+            combinacion_actual = self.ui.combinaciones.GetItem(indice, 1).GetText()
+            editor.reemplazar(combinacion_actual, self.nueva_combinacion)
+            self.ui.combinaciones.SetItem(indice, 1, self.nueva_combinacion)
             self.ui.combinaciones.SetFocus()
+            # Notify ChatController to reload shortcuts
+            if self.chat_controller:
+                self.chat_controller.reload_shortcuts()
+        else:
+            # Failure. The key was not registered, likely because the OS blocked it.
+            wx.MessageBox(_("Esa combinación está siendo usada por el sistema operativo"), "error.", wx.ICON_ERROR)
 
     def ShowModal(self):
         return self.ui.ShowModal()
