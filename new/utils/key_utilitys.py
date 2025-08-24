@@ -1,5 +1,5 @@
 import configparser
-from os import path
+from os import path, makedirs
 
 class KeyUtils:
     def __init__(self): self.leerTeclas()
@@ -24,14 +24,15 @@ class KeyUtils:
             'alt+shift+k': 'chat.mostrar_editor_combinaciones',
             'alt+shift+a': 'chat.archivar_mensaje',
         }
-        with open('keys.txt', 'w', encoding='utf-8') as configfile:
+        makedirs("keymaps", exist_ok=True)
+        with open('keymaps/keys.txt', 'w', encoding='utf-8') as configfile:
             config.write(configfile)
         self.leerTeclas()
 
     def leerTeclas(self):
         config = configparser.ConfigParser(interpolation=None)
-        if path.exists("keys.txt"):
-            config.read("keys.txt")
+        if path.exists("keymaps/keys.txt"):
+            config.read("keymaps/keys.txt")
             if 'atajos_chat' in config:
                 self.teclas = list(config['atajos_chat'].keys())
             else:
@@ -42,7 +43,7 @@ class KeyUtils:
 
     def reemplazar(self, old_shortcut, new_shortcut):
         config = configparser.ConfigParser(interpolation=None)
-        config.read("keys.txt")
+        config.read("keymaps/keys.txt")
         if 'atajos_chat' in config:
             function_call = None
             for key, value in config['atajos_chat'].items():
@@ -53,7 +54,7 @@ class KeyUtils:
             
             if function_call:
                 config['atajos_chat'][new_shortcut] = function_call
-                with open("keys.txt", 'w', encoding='utf-8') as configfile:
+                with open("keymaps/keys.txt", 'w', encoding='utf-8') as configfile:
                     config.write(configfile)
                 self.leerTeclas()
             else:

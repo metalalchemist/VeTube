@@ -16,8 +16,7 @@ class EditorCombinaciones:
         for valor in editor.teclas:
             self.combinaciones.SetItem(c, 1, valor)
             c += 1
-        self.combinaciones.Focus(0)
-        self.combinaciones.SetFocus()
+        
 
         self.editar = wx.Button(self.dlg_teclado, -1, _(u"&Editar"))
         self.editar.SetDefault()
@@ -39,4 +38,5 @@ class EditorCombinaciones:
         self.dlg_teclado.Centre()
 
     def ShowModal(self):
+        self.dlg_teclado.Raise()
         return self.dlg_teclado.ShowModal()

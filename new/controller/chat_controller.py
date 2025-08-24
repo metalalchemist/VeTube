@@ -128,7 +128,7 @@ class ChatController:
         self.keyboard_handler = WXKeyboardHandler(self.ui)
         command_objects = {'chat': self, 'reader': reader}
         config = configparser.ConfigParser(interpolation=None)
-        config.read("keys.txt")
+        config.read("keymaps/keys.txt")
         if 'atajos_chat' in config:
             for key, command_str in config['atajos_chat'].items():
                 try:
@@ -161,6 +161,7 @@ class ChatController:
 
     def buscar_mensajes(self):
         dialogo = wx.TextEntryDialog(self.ui, _("Introduce el criterio de búsqueda"), _("Buscar mensajes"))
+        dialogo.Raise()
         if dialogo.ShowModal() == wx.ID_OK:
             criterio = dialogo.GetValue()
             if not criterio: return
@@ -269,7 +270,8 @@ class ChatController:
         if not listbox or listbox.GetSelection() == wx.NOT_FOUND: return
         selected_text = listbox.GetString(listbox.GetSelection())
         dialog = ShowCommentDialog(self.ui, selected_text)
-        dialog.Show()
+        dialog.ShowModal()
+        dialog.Destroy()
 
     def agregar_mensajes_favoritos(self):
         listbox = self.current_listbox
@@ -339,7 +341,7 @@ class ChatController:
         self.chat_shortcuts = {}
         command_objects = {'chat': self, 'reader': reader}
         config = configparser.ConfigParser(interpolation=None)
-        config.read("keys.txt")
+        config.read("keymaps/keys.txt")
         if 'atajos_chat' in config:
             for key, command_str in config['atajos_chat'].items():
                 try:

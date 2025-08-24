@@ -19,7 +19,7 @@ class EditorController:
 
     def _load_combinations(self):
         config = configparser.ConfigParser(interpolation=None)
-        config.read("keys.txt")
+        config.read("keymaps/keys.txt")
         
         if 'atajos_chat' in config:
             self.ui.combinaciones.DeleteAllItems()
@@ -30,7 +30,9 @@ class EditorController:
                 self.ui.combinaciones.InsertItem(index, description)
                 self.ui.combinaciones.SetItem(index, 1, key)
                 index += 1
-        self.ui.combinaciones.SetFocus()
+        if self.ui.combinaciones.GetItemCount() > 0:
+            self.ui.combinaciones.Focus(0)
+            self.ui.combinaciones.SetFocus()
 
     def _bind_events(self):
         self.ui.restaurar.Bind(wx.EVT_BUTTON, self.on_restore_defaults)
@@ -52,7 +54,7 @@ class EditorController:
         selected_key = self.ui.combinaciones.GetItem(indice, 1).GetText()
 
         config = configparser.ConfigParser(interpolation=None)
-        config.read("keys.txt")
+        config.read("keymaps/keys.txt")
         command_str = config['atajos_chat'].get(selected_key, "")
         description = comandos_a_descripcion.get(command_str, _("Función desconocida"))
 
