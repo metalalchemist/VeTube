@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-08-24 00:51-0700\n"
+"POT-Creation-Date: 2025-08-24 19:00-0700\n"
 "PO-Revision-Date: 2024-07-29 11:01-0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -49,8 +49,10 @@ msgid "No se instaló ninguna voz"
 msgstr "Aucune voix n'a été installée"
 
 #: TTS/list_voices.py:21
+#, fuzzy
 msgid ""
-"¡Voz instalada satosfactoriamente! esta será establecida en VeTube ahora." " Para cambiar de modelo de voz, puedes hacerlo a través de las "
+"¡Voz instalada satosfactoriamente! esta será establecida en VeTube ahora."
+" Para cambiar de modelo de voz, puedes hacerlo a través de las "
 "configuraciones."
 msgstr ""
 "Voix installée avec succès ! Elle sera maintenant définie dans VeTube. "
@@ -77,7 +79,7 @@ msgid "¿Desea salir de esta ventana y detener la lectura de los mensajes?"
 msgstr "Voulez-vous quitter cette fenêtre et arrêter la lecture des messages ?"
 
 #: controller/chat_controller.py:81 controller/editor_controller.py:43
-#: controller/menus/main_menu_controller.py:57 update/update.py:131
+#: controller/menus/main_menu_controller.py:58 update/update.py:131
 msgid "Atención:"
 msgstr "Attention :"
 
@@ -203,27 +205,37 @@ msgstr "historique des messages : "
 #: controller/estadisticas_controller.py:10
 #, fuzzy, python-brace-format
 msgid "Total de usuarios que hablaron: {}"
-msgstr "\n" "Total d'utilisateurs ayant partagé en direct : "
+msgstr ""
+"\n"
+"\" \"Total d'utilisateurs ayant partagé en direct : "
 
 #: controller/estadisticas_controller.py:14
 #, fuzzy, python-brace-format
 msgid "Total de usuarios que se unieron al en vivo: {}"
-msgstr "\n" "Nouveaux utilisateurs qui ont rejoint en direct : "
+msgstr ""
+"\n"
+"\" \"Nouveaux utilisateurs qui ont rejoint en direct : "
 
 #: controller/estadisticas_controller.py:15
 #, fuzzy, python-brace-format
 msgid "Total de usuarios que siguieron al moderador: {}"
-msgstr "\n" "Nouveaux utilisateurs qui suivent le modérateur en direct : "
+msgstr ""
+"\n"
+"\" \"Nouveaux utilisateurs qui suivent le modérateur en direct : "
 
 #: controller/estadisticas_controller.py:16
 #, fuzzy, python-brace-format
 msgid "Total de me gustan en el en vivo: {}"
-msgstr "\n" "Nouveaux J'aime en direct : "
+msgstr ""
+"\n"
+"\" \"Nouveaux J'aime en direct : "
 
 #: controller/estadisticas_controller.py:17
 #, fuzzy, python-brace-format
 msgid "Total de usuarios que compartieron en el en vivo: {}"
-msgstr "\n" "Total d'utilisateurs ayant partagé en direct : "
+msgstr ""
+"\n"
+"\" \"Total d'utilisateurs ayant partagé en direct : "
 
 #: controller/estadisticas_controller.py:19 ui/estadisticas_dialog.py:4
 #, fuzzy
@@ -256,7 +268,7 @@ msgid "Error al guardar el archivo: {}"
 msgstr "Erreur lors de l'enregistrement du fichier : {}"
 
 #: controller/estadisticas_controller.py:46 controller/main_controller.py:63
-#: ui/update_languages_dialog.py:117 utils/language_updater.py:13
+#: controller/update_languages_controller.py:82 utils/language_updater.py:13
 msgid "Error"
 msgstr "Erreur"
 
@@ -279,7 +291,8 @@ msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr "Êtes-vous sûr de vouloir supprimer tous les favoris de la liste ?"
 
 #: controller/main_controller.py:67
-#: controller/menus/main_menu_controller.py:122
+#: controller/menus/main_menu_controller.py:109
+#: controller/update_languages_controller.py:93
 msgid "¡Atención!"
 msgstr "Attention !"
 
@@ -326,6 +339,41 @@ msgstr "Aucun message à supprimer"
 #: controller/main_controller.py:120
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr "Êtes-vous sûr de vouloir supprimer tous les messages ?"
+
+#: controller/update_languages_controller.py:38
+msgid "Por favor, selecciona al menos un idioma para actualizar."
+msgstr "Veuillez sélectionner au moins une langue à mettre à jour."
+
+#: controller/update_languages_controller.py:38
+#, fuzzy
+msgid "Advertencia"
+msgstr "Attention :"
+
+#: controller/update_languages_controller.py:64
+msgid "Iniciando descarga de idiomas..."
+msgstr "Démarrage du téléchargement des langues..."
+
+#: controller/update_languages_controller.py:74
+msgid "data"
+msgstr "données"
+
+#: controller/update_languages_controller.py:76
+msgid "dataerror_msg"
+msgstr "donnéeserreur_msg"
+
+#: controller/update_languages_controller.py:86
+#: ui/update_languages_dialog.py:72
+msgid "Actualización completada."
+msgstr "Mise à jour terminée."
+
+#: controller/update_languages_controller.py:93
+#, fuzzy
+msgid ""
+"Es necesario reiniciar el programa para aplicar los nuevos idiomas. "
+"¿Desea reiniciarlo ahora?"
+msgstr ""
+"Vous devez redémarrer le programme pour appliquer la nouvelle langue. "
+"Voulez-vous le redémarrer maintenant ?"
 
 #: controller/menus/chat_item_controller.py:28
 msgid "Mensaje copiado al portapapeles"
@@ -390,59 +438,65 @@ msgstr "Impossible d'ouvrir le lien"
 msgid "No se encontró un enlace válido para abrir."
 msgstr "Aucun lien valide à ouvrir n'a été trouvé."
 
-#: controller/menus/main_menu_controller.py:38
+#: controller/menus/main_menu_controller.py:39
 msgid "Al parecer tienes la última versión del programa"
 msgstr "Vous semblez avoir la dernière version du programme"
 
-#: controller/menus/main_menu_controller.py:38
-#: controller/menus/main_menu_controller.py:44
+#: controller/menus/main_menu_controller.py:39
+#: controller/menus/main_menu_controller.py:45
 msgid "Información"
 msgstr "Informations"
 
-#: controller/menus/main_menu_controller.py:42
+#: controller/menus/main_menu_controller.py:43
 msgid "Creadores del proyecto:"
 msgstr "Créateurs du projet :"
 
-#: controller/menus/main_menu_controller.py:43
+#: controller/menus/main_menu_controller.py:44
 #, fuzzy
 msgid ""
-"Descripción:\n" " Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch "
-"y la sala de  juegos, ajusta tus preferencias como quieras y disfruta más" " tus canales favoritos."
+"Descripción:\n"
+" Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch "
+"y la sala de  juegos, ajusta tus preferencias como quieras y disfruta más"
+" tus canales favoritos."
 msgstr ""
-"Description :\n" " Lit à haute voix les messages en direct sur YouTube et Twitch, ajuste "
-"tes préférences comme tu le souhaites et profite davantage de tes chaînes" " préférées."
+"Description :\n"
+"\" \" Lit à haute voix les messages en direct sur YouTube et Twitch, "
+"ajuste tes préférences comme tu le souhaites et profite davantage de tes "
+"chaînes\" \" préférées."
 
-#: controller/menus/main_menu_controller.py:57
+#: controller/menus/main_menu_controller.py:58
+#, fuzzy
 msgid ""
-"Estás apunto de reiniciar la configuración a sus valores predeterminados," " ¿Deseas proceder?"
+"Estás apunto de reiniciar la configuración a sus valores predeterminados,"
+" ¿Deseas proceder?"
 msgstr ""
 "Vous êtes sur le point de réinitialiser les paramètres par défaut. "
 "Voulez-vous continuer ?"
 
-#: controller/menus/main_menu_controller.py:62
+#: controller/menus/main_menu_controller.py:63
 msgid "¿está seguro que desea salir del programa?"
 msgstr "Êtes-vous sûr de vouloir quitter le programme ?"
 
-#: controller/menus/main_menu_controller.py:62
+#: controller/menus/main_menu_controller.py:63
 msgid "¡atención!"
 msgstr "Attention !"
 
-#: controller/menus/main_menu_controller.py:80
-#: controller/menus/main_menu_controller.py:105
-#, fuzzy, python-format
+#: controller/menus/main_menu_controller.py:81
+#: controller/menus/main_menu_controller.py:92
+#, fuzzy
 msgid "Actualización de idiomas"
 msgstr "Mise à jour en cours... %s sur %s"
 
-#: controller/menus/main_menu_controller.py:105 utils/language_updater.py:106
+#: controller/menus/main_menu_controller.py:92 utils/language_updater.py:106
 msgid "No hay actualizaciones ni nuevos idiomas disponibles."
 msgstr "Aucune nouvelle langue ou mise à jour n'est disponible."
 
-#: controller/menus/main_menu_controller.py:107
+#: controller/menus/main_menu_controller.py:94
 #, fuzzy
 msgid "Error de actualización"
 msgstr "Téléchargement de la mise à jour en cours"
 
-#: controller/menus/main_menu_controller.py:122
+#: controller/menus/main_menu_controller.py:109
 msgid ""
 "Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea "
 "reiniciarlo ahora?"
@@ -731,8 +785,8 @@ msgid ""
 "{author_name} ha renovado su suscripción en el nivel "
 "{subscription_plan_name}. ¡Lleva suscrito por {cumulative_months} meses!"
 msgstr ""
-"{author_name} a renouvelé son abonnement au niveau {subscription_plan_name}. "
-"Il est abonné depuis {cumulative_months} mois !"
+"{author_name} a renouvelé son abonnement au niveau "
+"{subscription_plan_name}. Il est abonné depuis {cumulative_months} mois !"
 
 #: servicios/twich.py:54
 #, python-brace-format
@@ -967,7 +1021,7 @@ msgstr "Auteur"
 msgid "Cantidad de mensajes"
 msgstr "Nombre de messages :"
 
-#: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:122
+#: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:73
 #, fuzzy
 msgid "Cerrar"
 msgstr "&Fermer"
@@ -1075,48 +1129,23 @@ msgstr "&Traduire vers la langue du programme"
 msgid "mensaje en "
 msgstr "message en "
 
-#: ui/update_languages_dialog.py:8
+#: ui/update_languages_dialog.py:5
 #, fuzzy
 msgid "Actualizar idiomas"
 msgstr "Lire les sons."
 
-#: ui/update_languages_dialog.py:12
+#: ui/update_languages_dialog.py:9
 #, fuzzy
 msgid "Selecciona los idiomas que deseas actualizar:"
 msgstr "Sélectionnez les touches que vous souhaitez utiliser"
 
-#: ui/update_languages_dialog.py:17
+#: ui/update_languages_dialog.py:13
 msgid "Idioma"
 msgstr "Langue"
 
-#: ui/update_languages_dialog.py:37
+#: ui/update_languages_dialog.py:31
 msgid "Actualizar"
 msgstr "Mettre à jour"
-
-#: ui/update_languages_dialog.py:63
-msgid "Por favor, selecciona al menos un idioma para actualizar."
-msgstr "Veuillez sélectionner au moins une langue à mettre à jour."
-
-#: ui/update_languages_dialog.py:63
-#, fuzzy
-msgid "Advertencia"
-msgstr "Attention :"
-
-#: ui/update_languages_dialog.py:97
-msgid "Iniciando descarga de idiomas..."
-msgstr "Démarrage du téléchargement des langues..."
-
-#: ui/update_languages_dialog.py:107
-msgid "data"
-msgstr "données"
-
-#: ui/update_languages_dialog.py:110
-msgid "dataerror_msg"
-msgstr "donnéeserreur_msg"
-
-#: ui/update_languages_dialog.py:121
-msgid "Actualización completada."
-msgstr "Mise à jour terminée."
 
 #: ui/editor/editor.py:7
 msgid "Editor de combinaciones de teclado para Vetube"
@@ -1195,7 +1224,7 @@ msgid "Compartidas"
 msgstr "Partagés"
 
 #: ui/menus/chat_filter_menu.py:13
-#, fuzzy, python-format
+#, fuzzy
 msgid "Seguidores"
 msgstr "%s secondes"
 
@@ -1334,12 +1363,22 @@ msgid "%s segundos"
 msgstr "%s secondes"
 
 #: update/wxUpdater.py:9
-#, python-format
+#, fuzzy, python-format
 msgid ""
-"Hay una nueva versión de VeTube. Te gustaría descargarla ahora?\n" "\n" " VeTube versión: %s\n" "\n" "Cambios:\n" "%s"
+"Hay una nueva versión de VeTube. Te gustaría descargarla ahora?\n"
+"\n"
+" VeTube versión: %s\n"
+"\n"
+"Cambios:\n"
+"%s"
 msgstr ""
 "Il y a une nouvelle version de VeTube. Souhaitez-vous la télécharger "
-"maintenant ?\n" "\n" " Version de VeTube : %s\n" "\n" "Changements :\n" "%s"
+"maintenant ?\n"
+"\" \"\n"
+"\" \" Version de VeTube : %s\n"
+"\" \"\n"
+"\" \"Changements :\n"
+"\" \"%s"
 
 #: update/wxUpdater.py:9
 msgid "Nueva versión de VeTube"
@@ -1420,3 +1459,4 @@ msgstr "Erreur lors de la décompression du fichier .zip de {} : {}"
 #, python-brace-format
 msgid "Error al actualizar el idioma local {}: {}"
 msgstr "Erreur lors de la mise à jour de la langue locale {} : {}"
+

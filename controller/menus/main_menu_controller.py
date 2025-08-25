@@ -11,6 +11,9 @@ from controller.editor_controller import EditorController
 from controller.ajustes_controller import AjustesController
 from setup import reader,player
 from googletrans import LANGUAGES
+from utils.language_updater import GestorRepositorios
+from ui.update_languages_dialog import UpdateLanguagesDialog
+from controller.update_languages_controller import UpdateLanguagesController
 class MainMenuController:
     def __init__(self, frame):
         self.frame = frame
@@ -27,6 +30,7 @@ class MainMenuController:
         self.frame.Bind(wx.EVT_MENU, self.restaurar, self.menu.opcion_3)
         self.frame.Bind(wx.EVT_MENU, self.cerrarVentana, self.menu.salir)
         self.frame.Bind(wx.EVT_MENU, self.mostrar_editor_combinaciones, self.menu.opcion_0)
+        self.frame.Bind(wx.EVT_MENU, self.on_update_languages, self.menu.update_langs)
 
     def enlazar_actualizador(self, event):
         update = updater.do_update()
@@ -62,6 +66,32 @@ class MainMenuController:
     def mostrar_editor_combinaciones(self, event):
         editor_ctrl = EditorController(self.frame)
         editor_ctrl.ShowModal()
+
+    def on_update_languages(self, event):
+        # Hardcode the repo URL for now
+        github_repo_url = "metalalchemist/VeTube"
+        
+        # Instantiate the GestorRepositorios
+        gestor = GestorRepositorios(self.frame, github_repo=github_repo_url, local_dir=".")
+        
+        # Check for updates
+        result = gestor.comprobar_nuevos_y_actualizaciones()
+        
+        if not result['success'] and not result.get('error', True): # 'error': False means no updates
+            wx.MessageBox(result['data'], _("Actualización de idiomas"), wx.ICON_INFORMATION)
+        elif result['success']:
+            nuevos = result['data'].get('nuevos', {})
+            actualizaciones = result['data'].get('actualizaciones', {})
+            
+            if nuevos or actualizaciones:
+                # Use the new controller
+                update_controller = UpdateLanguagesController(self.frame, gestor, result['data'])
+                update_controller.show()
+                update_controller.close() # This will be called after ShowModal returns
+            else:
+                wx.MessageBox(_("No hay actualizaciones ni nuevos idiomas disponibles."), _("Actualización de idiomas"), wx.ICON_INFORMATION)
+        else: # An actual error occurred
+            wx.MessageBox(result['data'], _("Error de actualización"), wx.ICON_ERROR)
 
     def guardar(self):
         cf = self.config_dialog

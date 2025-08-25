@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-08-24 00:51-0700\n"
+"POT-Creation-Date: 2025-08-24 19:00-0700\n"
 "PO-Revision-Date: 2023-10-09 05:35+0200\n"
 "Last-Translator: \n"
 "Language: en\n"
@@ -78,7 +78,7 @@ msgid "¿Desea salir de esta ventana y detener la lectura de los mensajes?"
 msgstr "Would you like to exit this window and stop reading messages?"
 
 #: controller/chat_controller.py:81 controller/editor_controller.py:43
-#: controller/menus/main_menu_controller.py:57 update/update.py:131
+#: controller/menus/main_menu_controller.py:58 update/update.py:131
 msgid "Atención:"
 msgstr "Warning:"
 
@@ -96,11 +96,11 @@ msgstr "&search"
 
 #: controller/chat_controller.py:188
 msgid "No se encontraron mensajes que coincidan con el criterio de búsqueda."
-msgstr ""
+msgstr "No messages matching the search criteria were found."
 
 #: controller/chat_controller.py:188
 msgid "Búsqueda sin resultados"
-msgstr ""
+msgstr "No results found"
 
 #: controller/chat_controller.py:266
 msgid "Mensaje copiado"
@@ -138,11 +138,11 @@ msgstr "The message is already archived."
 
 #: controller/chat_controller.py:326
 msgid "No se puede borrar la última página."
-msgstr ""
+msgstr "The last page cannot be deleted."
 
 #: controller/chat_controller.py:330
 msgid "Página borrada."
-msgstr ""
+msgstr "Page deleted."
 
 #: controller/chat_controller.py:372
 msgid "Lectura automática activada."
@@ -170,7 +170,7 @@ msgstr ""
 
 #: controller/editor_controller.py:59 controller/editor_controller.py:88
 msgid "Función desconocida"
-msgstr ""
+msgstr "Unknown function"
 
 #: controller/editor_controller.py:81
 msgid "Debe escoger al menos una tecla de las casillas de verificación"
@@ -188,12 +188,12 @@ msgstr "the keystroke is being used by the system"
 #: controller/estadisticas_controller.py:9
 #, python-brace-format
 msgid "Total de mensajes recibidos: {}"
-msgstr ""
+msgstr "Total messages received: {}"
 
 #: controller/estadisticas_controller.py:10
 #, python-brace-format
 msgid "Total de usuarios que hablaron: {}"
-msgstr ""
+msgstr "Total users who spoke: {}"
 
 #: controller/estadisticas_controller.py:14
 #, python-brace-format
@@ -239,10 +239,10 @@ msgstr "succes"
 #: controller/estadisticas_controller.py:46
 #, python-brace-format
 msgid "Error al guardar el archivo: {}"
-msgstr ""
+msgstr "Error saving file: {}"
 
 #: controller/estadisticas_controller.py:46 controller/main_controller.py:63
-#: ui/update_languages_dialog.py:117 utils/language_updater.py:13
+#: controller/update_languages_controller.py:82 utils/language_updater.py:13
 msgid "Error"
 msgstr "Error"
 
@@ -265,7 +265,8 @@ msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr "Are you sure to delete all favorites from the list?"
 
 #: controller/main_controller.py:67
-#: controller/menus/main_menu_controller.py:122
+#: controller/menus/main_menu_controller.py:109
+#: controller/update_languages_controller.py:93
 msgid "¡Atención!"
 msgstr "Warning!"
 
@@ -313,6 +314,39 @@ msgstr "There are no messages to delete"
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr "Are you sure you want to delete all messages?"
 
+#: controller/update_languages_controller.py:38
+msgid "Por favor, selecciona al menos un idioma para actualizar."
+msgstr "Please select at least one language to update."
+
+#: controller/update_languages_controller.py:38
+msgid "Advertencia"
+msgstr "Warning:"
+
+#: controller/update_languages_controller.py:64
+msgid "Iniciando descarga de idiomas..."
+msgstr "Starting language download..."
+
+#: controller/update_languages_controller.py:74
+msgid "data"
+msgstr "data"
+
+#: controller/update_languages_controller.py:76
+msgid "dataerror_msg"
+msgstr "dataerror_msg"
+
+#: controller/update_languages_controller.py:86
+#: ui/update_languages_dialog.py:72
+msgid "Actualización completada."
+msgstr "update completed"
+
+#: controller/update_languages_controller.py:93
+msgid ""
+"Es necesario reiniciar el programa para aplicar los nuevos idiomas. "
+"¿Desea reiniciarlo ahora?"
+msgstr ""
+"It's necessary to restart the program to apply new languages. Would "
+"you like to restart it now?"
+
 #: controller/menus/chat_item_controller.py:28
 msgid "Mensaje copiado al portapapeles"
 msgstr "Message copied to clipboard"
@@ -335,7 +369,7 @@ msgstr ""
 
 #: controller/menus/chat_menu_controller.py:46
 msgid "No hay una URL para agregar a favoritos."
-msgstr ""
+msgstr "There is no URL to add to favorites."
 
 #: controller/menus/chat_menu_controller.py:46
 #: controller/menus/chat_menu_controller.py:55
@@ -361,34 +395,34 @@ msgstr "The live stream link has been copied to the clipboard."
 
 #: controller/menus/chat_menu_controller.py:74
 msgid "No se pudo copiar el enlace"
-msgstr ""
+msgstr "Could not copy the link"
 
 #: controller/menus/chat_menu_controller.py:74
 msgid "No se encontró un enlace válido para copiar."
-msgstr ""
+msgstr "No valid link found to copy."
 
 #: controller/menus/chat_menu_controller.py:82
 msgid "No se pudo abrir el enlace"
-msgstr ""
+msgstr "Could not open the link"
 
 #: controller/menus/chat_menu_controller.py:82
 msgid "No se encontró un enlace válido para abrir."
-msgstr ""
+msgstr "No valid link found to open."
 
-#: controller/menus/main_menu_controller.py:38
+#: controller/menus/main_menu_controller.py:39
 msgid "Al parecer tienes la última versión del programa"
 msgstr "It seems you have the latest version of the program"
 
-#: controller/menus/main_menu_controller.py:38
-#: controller/menus/main_menu_controller.py:44
+#: controller/menus/main_menu_controller.py:39
+#: controller/menus/main_menu_controller.py:45
 msgid "Información"
 msgstr "Information"
 
-#: controller/menus/main_menu_controller.py:42
+#: controller/menus/main_menu_controller.py:43
 msgid "Creadores del proyecto:"
 msgstr "Project creators:"
 
-#: controller/menus/main_menu_controller.py:43
+#: controller/menus/main_menu_controller.py:44
 msgid ""
 "Descripción:\n"
 " Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch "
@@ -396,11 +430,11 @@ msgid ""
 " tus canales favoritos."
 msgstr ""
 "Description:\n"
-"Read aloud the messages from live streams on YouTube, TikTok, playroom and Twitch, "
-"customize your preferences as you desire, and enhance your enjoyment of "
-"your favorite channels."
+"Read aloud the messages from live streams on YouTube, TikTok, playroom "
+"and Twitch, customize your preferences as you desire, and enhance your "
+"enjoyment of your favorite channels."
 
-#: controller/menus/main_menu_controller.py:57
+#: controller/menus/main_menu_controller.py:58
 msgid ""
 "Estás apunto de reiniciar la configuración a sus valores predeterminados,"
 " ¿Deseas proceder?"
@@ -408,28 +442,28 @@ msgstr ""
 "You are about to reset the settings to their default values, do you want "
 "to continue?"
 
-#: controller/menus/main_menu_controller.py:62
+#: controller/menus/main_menu_controller.py:63
 msgid "¿está seguro que desea salir del programa?"
 msgstr "Are you sure you want to exit the program?"
 
-#: controller/menus/main_menu_controller.py:62
+#: controller/menus/main_menu_controller.py:63
 msgid "¡atención!"
 msgstr "Warning!"
 
-#: controller/menus/main_menu_controller.py:80
-#: controller/menus/main_menu_controller.py:105
+#: controller/menus/main_menu_controller.py:81
+#: controller/menus/main_menu_controller.py:92
 msgid "Actualización de idiomas"
-msgstr ""
+msgstr "Language update"
 
-#: controller/menus/main_menu_controller.py:105 utils/language_updater.py:106
+#: controller/menus/main_menu_controller.py:92 utils/language_updater.py:106
 msgid "No hay actualizaciones ni nuevos idiomas disponibles."
-msgstr ""
+msgstr "No updates or new languages available."
 
-#: controller/menus/main_menu_controller.py:107
+#: controller/menus/main_menu_controller.py:94
 msgid "Error de actualización"
-msgstr ""
+msgstr "Update error"
 
-#: controller/menus/main_menu_controller.py:122
+#: controller/menus/main_menu_controller.py:109
 msgid ""
 "Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea "
 "reiniciarlo ahora?"
@@ -641,19 +675,19 @@ msgstr "QuentinC Playroom's chat"
 
 #: servicios/tiktok.py:40
 msgid "El usuario está en vivo. Conectando..."
-msgstr ""
+msgstr "The user is live. Connecting..."
 
 #: servicios/tiktok.py:45
 msgid "El usuario no está en vivo. Reintentando en un minuto."
-msgstr ""
+msgstr "The user is not live. Retrying in one minute."
 
 #: servicios/tiktok.py:76
 msgid "El directo ha finalizado. Se buscará de nuevo en un minuto."
-msgstr ""
+msgstr "The stream has ended. Will check again in one minute."
 
 #: servicios/tiktok.py:81
 msgid "Se ha perdido la conexión. El servicio se ha detenido."
-msgstr ""
+msgstr "Connection lost. The service has stopped."
 
 #: servicios/tiktok.py:85
 msgid "Ingresando al chat"
@@ -703,7 +737,7 @@ msgstr " watching now"
 
 #: servicios/twich.py:40
 msgid "Desconocido"
-msgstr ""
+msgstr "Unknown"
 
 #: servicios/twich.py:49
 #, python-brace-format
@@ -718,6 +752,8 @@ msgid ""
 "{author_name} se ha suscrito en el nivel {subscription_plan_name} por "
 "{cumulative_months} meses!"
 msgstr ""
+"{author_name} subscribed at level {subscription_plan_name} for "
+"{cumulative_months} months!"
 
 #: servicios/twich.py:55
 #, python-brace-format
@@ -725,6 +761,8 @@ msgid ""
 "{author_name} regaló una suscripción de nivel {subscription_type} a la "
 "comunidad, ¡ha regalado un total de {sender_count} suscripciones!"
 msgstr ""
+"{author_name} gifted a {subscription_type} level subscription to the "
+"community, having gifted a total of {sender_count} subscriptions!"
 
 #: servicios/twich.py:56
 #, python-brace-format
@@ -733,6 +771,8 @@ msgid ""
 " en el nivel {subscription_plan_name} por {number_of_months_gifted} "
 "meses!"
 msgstr ""
+"{author_name} gifted a subscription to {gift_recipient_display_name} at "
+"level {subscription_plan_name} for {number_of_months_gifted} months!"
 
 #: servicios/youtube.py:65
 msgid " se a conectado al chat. "
@@ -892,11 +932,11 @@ msgstr "&Stop chat"
 
 #: ui/chat_ui.py:20
 msgid "conversaciones"
-msgstr ""
+msgstr "conversations"
 
 #: ui/chat_ui.py:21
 msgid "mensajes privados"
-msgstr ""
+msgstr "private messages"
 
 #: ui/chat_ui.py:26
 msgid "regalos"
@@ -920,17 +960,17 @@ msgstr "&Options"
 
 #: ui/chat_ui.py:57
 msgid "&Filtrar por"
-msgstr ""
+msgstr "&Filter by"
 
 #: ui/estadisticas_dialog.py:13
 msgid "Autor"
-msgstr ""
+msgstr "Author"
 
 #: ui/estadisticas_dialog.py:14
 msgid "Cantidad de mensajes"
 msgstr "Number of messages: "
 
-#: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:122
+#: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:73
 msgid "Cerrar"
 msgstr "&Close"
 
@@ -1035,45 +1075,21 @@ msgstr "&Translate message into program language"
 msgid "mensaje en "
 msgstr "Message in "
 
-#: ui/update_languages_dialog.py:8
+#: ui/update_languages_dialog.py:5
 msgid "Actualizar idiomas"
 msgstr "update languages"
 
-#: ui/update_languages_dialog.py:12
+#: ui/update_languages_dialog.py:9
 msgid "Selecciona los idiomas que deseas actualizar:"
 msgstr "Select the languages that you want to update"
 
-#: ui/update_languages_dialog.py:17
+#: ui/update_languages_dialog.py:13
 msgid "Idioma"
 msgstr "language"
 
-#: ui/update_languages_dialog.py:37
+#: ui/update_languages_dialog.py:31
 msgid "Actualizar"
 msgstr "Update"
-
-#: ui/update_languages_dialog.py:63
-msgid "Por favor, selecciona al menos un idioma para actualizar."
-msgstr ""
-
-#: ui/update_languages_dialog.py:63
-msgid "Advertencia"
-msgstr "Warning:"
-
-#: ui/update_languages_dialog.py:97
-msgid "Iniciando descarga de idiomas..."
-msgstr ""
-
-#: ui/update_languages_dialog.py:107
-msgid "data"
-msgstr ""
-
-#: ui/update_languages_dialog.py:110
-msgid "dataerror_msg"
-msgstr ""
-
-#: ui/update_languages_dialog.py:121
-msgid "Actualización completada."
-msgstr "update completed"
 
 #: ui/editor/editor.py:7
 msgid "Editor de combinaciones de teclado para Vetube"
@@ -1149,7 +1165,6 @@ msgid "Compartidas"
 msgstr "shareds"
 
 #: ui/menus/chat_filter_menu.py:13
-#, fuzzy, python-format
 msgid "Seguidores"
 msgstr "followers"
 
@@ -1334,7 +1349,7 @@ msgstr "Done!"
 #: utils/app_utilitys.py:26
 msgid ""
 "Necesitas al menos una voz para poder usar el sintetizador Piper. "
-"¿Quieres abrir nuestra carpeta de Drive para descargar algunos modelos? "
+"Â¿Quieres abrir nuestra carpeta de Drive para descargar algunos modelos? "
 "Si pulsas sÃ­, se abrirÃ¡ nuestra carpeta seguido de una ventana para "
 "instalar una una vez la descargues."
 msgstr ""
@@ -1350,33 +1365,33 @@ msgstr "System language"
 #: utils/language_updater.py:40
 #, python-brace-format
 msgid "Error al cargar idiomas locales: {}"
-msgstr ""
+msgstr "Error loading local languages: {}"
 
 #: utils/language_updater.py:54
 msgid "Idiomas guardados exitosamente."
-msgstr ""
+msgstr "Languages saved successfully."
 
 #: utils/language_updater.py:56
 #, python-brace-format
 msgid "Error al guardar idiomas locales: {}"
-msgstr ""
+msgstr "Error saving local languages: {}"
 
 #: utils/language_updater.py:76 utils/language_updater.py:80
 #, python-brace-format
 msgid "Error al obtener idiomas remotos: {}"
-msgstr ""
+msgstr "Error getting remote languages: {}"
 
 #: utils/language_updater.py:138
 #, python-brace-format
 msgid "Error al descargar el archivo .zip de {}: {}"
-msgstr ""
+msgstr "Error downloading .zip file from {}: {}"
 
 #: utils/language_updater.py:172
 #, python-brace-format
 msgid "Error al descomprimir el archivo .zip de {}: {}"
-msgstr ""
+msgstr "Error extracting .zip file from {}: {}"
 
 #: utils/language_updater.py:197
 #, python-brace-format
 msgid "Error al actualizar el idioma local {}: {}"
-msgstr ""
+msgstr "Error updating local language {}: {}"

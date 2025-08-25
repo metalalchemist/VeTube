@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-08-24 00:57-0700\n"
+"POT-Creation-Date: 2025-08-24 19:00-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,7 +68,7 @@ msgid "¿Desea salir de esta ventana y detener la lectura de los mensajes?"
 msgstr ""
 
 #: controller/chat_controller.py:81 controller/editor_controller.py:43
-#: controller/menus/main_menu_controller.py:57 update/update.py:131
+#: controller/menus/main_menu_controller.py:58 update/update.py:131
 msgid "Atención:"
 msgstr ""
 
@@ -230,7 +230,7 @@ msgid "Error al guardar el archivo: {}"
 msgstr ""
 
 #: controller/estadisticas_controller.py:46 controller/main_controller.py:63
-#: ui/update_languages_dialog.py:117 utils/language_updater.py:13
+#: controller/update_languages_controller.py:82 utils/language_updater.py:13
 msgid "Error"
 msgstr ""
 
@@ -253,7 +253,8 @@ msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr ""
 
 #: controller/main_controller.py:67
-#: controller/menus/main_menu_controller.py:122
+#: controller/menus/main_menu_controller.py:109
+#: controller/update_languages_controller.py:93
 msgid "¡Atención!"
 msgstr ""
 
@@ -299,6 +300,37 @@ msgstr ""
 
 #: controller/main_controller.py:120
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
+msgstr ""
+
+#: controller/update_languages_controller.py:38
+msgid "Por favor, selecciona al menos un idioma para actualizar."
+msgstr ""
+
+#: controller/update_languages_controller.py:38
+msgid "Advertencia"
+msgstr ""
+
+#: controller/update_languages_controller.py:64
+msgid "Iniciando descarga de idiomas..."
+msgstr ""
+
+#: controller/update_languages_controller.py:74
+msgid "data"
+msgstr ""
+
+#: controller/update_languages_controller.py:76
+msgid "dataerror_msg"
+msgstr ""
+
+#: controller/update_languages_controller.py:86
+#: ui/update_languages_dialog.py:72
+msgid "Actualización completada."
+msgstr ""
+
+#: controller/update_languages_controller.py:93
+msgid ""
+"Es necesario reiniciar el programa para aplicar los nuevos idiomas. "
+"¿Desea reiniciarlo ahora?"
 msgstr ""
 
 #: controller/menus/chat_item_controller.py:28
@@ -361,20 +393,20 @@ msgstr ""
 msgid "No se encontró un enlace válido para abrir."
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:38
+#: controller/menus/main_menu_controller.py:39
 msgid "Al parecer tienes la última versión del programa"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:38
-#: controller/menus/main_menu_controller.py:44
+#: controller/menus/main_menu_controller.py:39
+#: controller/menus/main_menu_controller.py:45
 msgid "Información"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:42
+#: controller/menus/main_menu_controller.py:43
 msgid "Creadores del proyecto:"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:43
+#: controller/menus/main_menu_controller.py:44
 msgid ""
 "Descripción:\n"
 " Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch "
@@ -382,34 +414,34 @@ msgid ""
 " tus canales favoritos."
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:57
+#: controller/menus/main_menu_controller.py:58
 msgid ""
 "Estás apunto de reiniciar la configuración a sus valores predeterminados,"
 " ¿Deseas proceder?"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:62
+#: controller/menus/main_menu_controller.py:63
 msgid "¿está seguro que desea salir del programa?"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:62
+#: controller/menus/main_menu_controller.py:63
 msgid "¡atención!"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:80
-#: controller/menus/main_menu_controller.py:105
+#: controller/menus/main_menu_controller.py:81
+#: controller/menus/main_menu_controller.py:92
 msgid "Actualización de idiomas"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:105 utils/language_updater.py:106
+#: controller/menus/main_menu_controller.py:92 utils/language_updater.py:106
 msgid "No hay actualizaciones ni nuevos idiomas disponibles."
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:107
+#: controller/menus/main_menu_controller.py:94
 msgid "Error de actualización"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:122
+#: controller/menus/main_menu_controller.py:109
 msgid ""
 "Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea "
 "reiniciarlo ahora?"
@@ -907,7 +939,7 @@ msgstr ""
 msgid "Cantidad de mensajes"
 msgstr ""
 
-#: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:122
+#: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:73
 msgid "Cerrar"
 msgstr ""
 
@@ -1012,44 +1044,20 @@ msgstr ""
 msgid "mensaje en "
 msgstr ""
 
-#: ui/update_languages_dialog.py:8
+#: ui/update_languages_dialog.py:5
 msgid "Actualizar idiomas"
 msgstr ""
 
-#: ui/update_languages_dialog.py:12
+#: ui/update_languages_dialog.py:9
 msgid "Selecciona los idiomas que deseas actualizar:"
 msgstr ""
 
-#: ui/update_languages_dialog.py:17
+#: ui/update_languages_dialog.py:13
 msgid "Idioma"
 msgstr ""
 
-#: ui/update_languages_dialog.py:37
+#: ui/update_languages_dialog.py:31
 msgid "Actualizar"
-msgstr ""
-
-#: ui/update_languages_dialog.py:63
-msgid "Por favor, selecciona al menos un idioma para actualizar."
-msgstr ""
-
-#: ui/update_languages_dialog.py:63
-msgid "Advertencia"
-msgstr ""
-
-#: ui/update_languages_dialog.py:97
-msgid "Iniciando descarga de idiomas..."
-msgstr ""
-
-#: ui/update_languages_dialog.py:107
-msgid "data"
-msgstr ""
-
-#: ui/update_languages_dialog.py:110
-msgid "dataerror_msg"
-msgstr ""
-
-#: ui/update_languages_dialog.py:121
-msgid "Actualización completada."
 msgstr ""
 
 #: ui/editor/editor.py:7
