@@ -1,17 +1,17 @@
-# Portuguese translations for PROJECT.
-# Copyright (C) 2022 ORGANIZATION: eternal legend
-# This file is distributed under the same license as the PROJECT project.
-# FIRST translator  Eternal Legend <filmesfxx@gmail.com>, 2022.
+# Indonesian translations for .
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the  project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: filmesfxx@gmail.com\n"
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2025-08-24 19:00-0700\n"
-"PO-Revision-Date: 2022-08-18 09:10-0700\n"
-"Last-Translator: Eternal legend <filmesfxx@gmail.com>\n"
-"Language: pt_BR\n"
-"Language-Team: pt-BR <eternallegend.github.io>\n"
+"PO-Revision-Date: 2025-07-09 21:11+0700\n"
+"Last-Translator: \n"
+"Language: id\n"
+"Language-Team: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -23,16 +23,16 @@ msgid ""
 "VeTube ya se encuentra en ejecución. Cierra la otra instancia antes de "
 "iniciar esta."
 msgstr ""
-"VeTube já está  em execução. Feche a outra instância antes de iniciar "
-"esta."
+"VeTube sudah berjalan. Silahkan Tutup aplikasi ini sebelum menjalankan "
+"aplikasi VeTube yang baru."
 
 #: TTS/list_voices.py:13
 msgid "Selecciona un paquete de voz"
-msgstr "Selecionar um pacote de voz."
+msgstr "Pilih paket suara"
 
 #: TTS/list_voices.py:13
 msgid "Archivos tar.gz (*.tar.gz)|*.tar.gz"
-msgstr "Arquivos tar.gz (.tar.gz)|.tar.gz"
+msgstr "Berkas tar.gz (*.tar.gz)|*.tar.gz"
 
 #: TTS/list_voices.py:15
 msgid ""
@@ -40,13 +40,13 @@ msgid ""
 "quieres hacerlo de forma manual, extrae el paquete de voz en la carpeta "
 "\"piper/voices/voice-nombre_de_paquete\" en VeTube."
 msgstr ""
-"Para usar o Piper como sistema TTS, você precisa ter pelo menos uma voz. "
-"Se quiser fazer isso manualmente, extraia o pacote de voz na pasta "
-"\"piper/voices/voice-nome_do_pacote\" no VeTube."
+"Untuk menggunakan Piper sebagai sistem TTS, Anda memerlukan setidaknya "
+"satu suara. Jika Anda ingin melakukannya secara manual, ekstrak paket "
+"suara ke folder \"piper/voices/voice-nama_paket\" di VeTube."
 
 #: TTS/list_voices.py:15
 msgid "No se instaló ninguna voz"
-msgstr "Nenhuma voz foi instalada"
+msgstr "Tidak ada suara yang terinstal"
 
 #: TTS/list_voices.py:21
 msgid ""
@@ -54,363 +54,365 @@ msgid ""
 " Para cambiar de modelo de voz, puedes hacerlo a través de las "
 "configuraciones."
 msgstr ""
-"Voz instalada com sucesso! Ela será configurada no VeTube agora. Para "
-"mudar o modelo de voz, você pode fazer isso através das configurações."
+"Suara berhasil diinstal! Ini akan diatur di VeTube sekarang. Untuk "
+"mengubah model suara, Anda dapat melakukannya melalui pengaturan."
 
 #: TTS/list_voices.py:21
 msgid "Listo"
-msgstr "listo!"
+msgstr "Selesai"
 
 #: controller/ajustes_controller.py:75
 msgid "Hablaré a través  de este dispositivo."
-msgstr "Vou falar através deste dispositivo."
+msgstr "Saya akan berbicara melalui perangkat ini."
 
 #: controller/ajustes_controller.py:79 controller/ajustes_controller.py:81
 msgid ""
 "Hola, soy la voz que te acompañará de ahora en adelante a leer los "
 "mensajes de tus canales favoritos."
 msgstr ""
-"Olá, eu sou a voz que irá acompanhá-lo a partir de agora para ler as "
-"mensagens de seus canais favoritos."
+"Halo, saya adalah suara yang akan menemani Anda membaca pesan dari "
+"saluran favorit Anda mulai sekarang. Bagus kan."
 
 #: controller/chat_controller.py:81
 msgid "¿Desea salir de esta ventana y detener la lectura de los mensajes?"
-msgstr "Deseja sair desta janela e parar de ler as mensagens?"
+msgstr ""
+"Apakah Anda ingin keluar dari aplikasi ini dan menghentikan pembacaan "
+"pesan?"
 
 #: controller/chat_controller.py:81 controller/editor_controller.py:43
 #: controller/menus/main_menu_controller.py:58 update/update.py:131
 msgid "Atención:"
-msgstr "Atenção!"
+msgstr "Perhatian:"
 
 #: controller/chat_controller.py:89
 msgid "ha finalizado la lectura del chat."
-msgstr "Você terminou de ler o bate-papo."
+msgstr "pembacaan obrolan telah dihentikan."
 
 #: controller/chat_controller.py:163
 msgid "Introduce el criterio de búsqueda"
-msgstr "Escreva o termo  que quer buscar"
+msgstr "ketik istilah pencarian Anda"
 
 #: controller/chat_controller.py:163
 msgid "Buscar mensajes"
-msgstr "Buscar mensagens"
+msgstr "Cari pesan"
 
 #: controller/chat_controller.py:188
 msgid "No se encontraron mensajes que coincidan con el criterio de búsqueda."
-msgstr "Nenhuma mensagem encontrada com o critério de busca."
+msgstr "Tidak ditemukan pesan yang sesuai dengan kriteria pencarian."
 
 #: controller/chat_controller.py:188
 msgid "Búsqueda sin resultados"
-msgstr "Busca sem resultados"
+msgstr "Pencarian tidak ditemukan"
 
 #: controller/chat_controller.py:266
 msgid "Mensaje copiado"
-msgstr "Mensagem copiada"
+msgstr "Pesan disalin"
 
 #: controller/chat_controller.py:282 globals/mensajes.py:22 ui/chat_ui.py:34
 #: ui/main_window.py:47 utils/mensajes.py:3
 msgid "Favoritos"
-msgstr "favoritos"
+msgstr "Favorit"
 
 #: controller/chat_controller.py:286
 msgid "Este mensaje ya se encuentra en favoritos"
-msgstr "esta mensagem já está no buffer de favoritos."
+msgstr "pesan ini sudah ada di buffer favorit."
 
 #: controller/chat_controller.py:289
 msgid "Mensaje agregado a favoritos"
-msgstr "O item foi adicionado aos favoritos."
+msgstr "Telah ditambahkan ke favorit"
 
 #: controller/chat_controller.py:301 controller/main_controller.py:31
 #: controller/main_controller.py:104 controller/main_controller.py:117
 #: controller/main_controller.py:124
 #: controller/menus/chat_item_controller.py:51
 msgid "Tus mensajes archivados aparecerán aquí"
-msgstr "Suas mensagens arquivadas aparecerão aqui"
+msgstr "Pesan arsip Anda akan muncul di sini"
 
 #: controller/chat_controller.py:317
 #: controller/menus/chat_item_controller.py:69
 msgid "El mensaje ha sido archivado correctamente."
-msgstr "A mensagem foi arquivada com sucesso."
+msgstr "Pesan berhasil diarsipkan."
 
 #: controller/chat_controller.py:319
 #: controller/menus/chat_item_controller.py:71
 msgid "Este mensaje ya está en la lista de archivados."
-msgstr "Esta mensagem já está na lista de arquivadas."
+msgstr ""
 
 #: controller/chat_controller.py:326
 msgid "No se puede borrar la última página."
-msgstr "Não é possível apagar a última página."
+msgstr ""
 
 #: controller/chat_controller.py:330
 msgid "Página borrada."
-msgstr "Página apagada."
+msgstr ""
 
 #: controller/chat_controller.py:372
 msgid "Lectura automática activada."
-msgstr "Leitura automática ativada"
+msgstr "Pembacaan otomatis diaktifkan."
 
 #: controller/chat_controller.py:372
 msgid "Lectura automática  desactivada."
-msgstr "Leitura automática desabilitada."
+msgstr "Pembacaan otomatis dinonaktifkan."
 
 #: controller/chat_controller.py:376
 msgid "sonidos activados."
-msgstr "Os sons foram ativados"
+msgstr "Suara diaktifkan."
 
 #: controller/chat_controller.py:376
 msgid "sonidos desactivados."
-msgstr "Os Sons foram desativados"
+msgstr "Suara dinonaktifkan"
 
 #: controller/editor_controller.py:43
 msgid ""
 "Está apunto de restaurar las combinaciones a sus valores por defecto, "
 "¿desea proceder? Esta acción no se puede desacer."
 msgstr ""
-"\"Você está prestes a restaurar as combinações para seus valores "
-"padrão,Deseja continuar? Esta ação não pode ser desfeita.\""
+"Anda akan mengembalikan pintasan menjadi pintasan bawaan, apakah Anda "
+"ingin melanjutkan? Tindakan ini tidak dapat dibatalkan."
 
 #: controller/editor_controller.py:59 controller/editor_controller.py:88
 msgid "Función desconocida"
-msgstr "Função desconhecida"
+msgstr ""
 
 #: controller/editor_controller.py:81
 msgid "Debe escoger al menos una tecla de las casillas de verificación"
-msgstr "Você deve escolher pelo menos uma tecla das caixas de seleção"
+msgstr "Anda harus memilih setidaknya satu tombol dari kotak centang"
 
 #: controller/editor_controller.py:88
 #, python-format
 msgid "Esta combinación ya está siendo usada en la función %s"
-msgstr "esta combinação já está a ser usada na função %s"
+msgstr "kombinasi ini sudah digunakan oleh fungsi %s"
 
 #: controller/editor_controller.py:112
 msgid "Esa combinación está siendo usada por el sistema operativo"
-msgstr "Essa combinação está sendo usada pelo sistema."
+msgstr "kombinasi ini sedang digunakan oleh sistem"
 
 #: controller/estadisticas_controller.py:9
 #, python-brace-format
 msgid "Total de mensajes recibidos: {}"
-msgstr "Total de mensagens recebidas: {}"
+msgstr ""
 
 #: controller/estadisticas_controller.py:10
 #, python-brace-format
 msgid "Total de usuarios que hablaron: {}"
-msgstr "Total de usuários que falaram: {}"
+msgstr "Jumlah pengguna yang membagikan siaran langsung: {}"
 
 #: controller/estadisticas_controller.py:14
 #, python-brace-format
 msgid "Total de usuarios que se unieron al en vivo: {}"
-msgstr "Total de usuários que entraram na live: {}"
+msgstr "Pengguna baru yang bergabung dengan siaran langsung: {}"
 
 #: controller/estadisticas_controller.py:15
 #, python-brace-format
 msgid "Total de usuarios que siguieron al moderador: {}"
-msgstr "Total de usuários que seguiram o moderador: {}"
+msgstr "Pengguna baru yang mengikuti moderator siaran langsung: {}"
 
 #: controller/estadisticas_controller.py:16
 #, python-brace-format
 msgid "Total de me gustan en el en vivo: {}"
-msgstr "Total de curtidas na live: {}"
+msgstr "Jumlah yang menyukai siaran langsung: {}"
 
 #: controller/estadisticas_controller.py:17
 #, python-brace-format
 msgid "Total de usuarios que compartieron en el en vivo: {}"
-msgstr "Total de usuários que compartilharam na live: {}"
+msgstr "Jumlah pengguna yang membagikan siaran langsung: {}"
 
 #: controller/estadisticas_controller.py:19 ui/estadisticas_dialog.py:4
 msgid "Estadísticas del Chat"
-msgstr "estatísticas do bate-papo"
+msgstr "Statistik obrolan:"
 
 #: controller/estadisticas_controller.py:35 ui/estadisticas_dialog.py:18
 msgid "Guardar estadísticas"
-msgstr "Salvar estatísticas"
+msgstr ""
 
 #: controller/estadisticas_controller.py:35
 msgid "Archivos JSON (*.json)|*.json"
-msgstr "Arquivos json (*.json)|*.json"
+msgstr "File json (*.json)|*.json"
 
 #: controller/estadisticas_controller.py:44
 #, python-brace-format
 msgid "Estadísticas guardadas en {}"
-msgstr "Estatísticas salvas em {}"
+msgstr ""
 
 #: controller/estadisticas_controller.py:44
 msgid "Éxito"
-msgstr "listo!"
+msgstr "Selesai"
 
 #: controller/estadisticas_controller.py:46
 #, python-brace-format
 msgid "Error al guardar el archivo: {}"
-msgstr "Erro ao salvar o arquivo: {}"
+msgstr ""
 
 #: controller/estadisticas_controller.py:46 controller/main_controller.py:63
 #: controller/update_languages_controller.py:82 utils/language_updater.py:13
 msgid "Error"
-msgstr "Erro, "
+msgstr "Kesalahan"
 
 #: controller/main_controller.py:25
 #, python-format
 msgid "Favoritos(%s)"
-msgstr "favoritos (%s)"
+msgstr "Favorit (%s)"
 
 #: controller/main_controller.py:27 controller/main_controller.py:62
 #: controller/main_controller.py:79 controller/menus/chat_menu_controller.py:58
 msgid "Tus favoritos aparecerán aquí"
-msgstr "Seus favoritos aparecerão aqui"
+msgstr "Favorit Anda akan muncul di sini"
 
 #: controller/main_controller.py:63
 msgid "No hay favoritos que borrar"
-msgstr "Não há itens para excluir"
+msgstr "Tidak ada favorit yang bisa dihapus"
 
 #: controller/main_controller.py:67
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
-msgstr "Tem certeza de que deseja excluir todos os favoritos da lista?"
+msgstr "Apakah Anda yakin ingin menghapus semua favorit dari daftar?"
 
 #: controller/main_controller.py:67
 #: controller/menus/main_menu_controller.py:109
 #: controller/update_languages_controller.py:93
 msgid "¡Atención!"
-msgstr "Atenção!"
+msgstr "Perhatian!"
 
 #: controller/main_controller.py:83
 msgid "&Borrar mensajes"
-msgstr "Apagar mensagens"
+msgstr "&Hapus pesan"
 
 #: controller/main_controller.py:84
 msgid "Borrar todos los mensajes destacados"
-msgstr "Limpar todas as mensagens destacadas"
+msgstr "Hapus semua pesan yang dibintangi"
 
 #: controller/main_controller.py:87 ui/main_window.py:67
 msgid "&Borrar mensaje"
-msgstr "Apagar mensagem"
+msgstr "&Hapus pesan"
 
 #: controller/main_controller.py:88
 msgid "Borrar el mensaje destacado seleccionado"
-msgstr "Excluir a mensagem destacada selecionada"
+msgstr "Hapus pesan yang dipilih dan dibintangi"
 
 #: controller/main_controller.py:93
 msgid "&Borrar favoritos"
-msgstr "&Excluir favoritos"
+msgstr "&Hapus favorit"
 
 #: controller/main_controller.py:94
 msgid "Borrar todos los favoritos"
-msgstr "&Excluir favoritos"
+msgstr "Hapus semua favorit"
 
 #: controller/main_controller.py:97 ui/main_window.py:55
 msgid "&Borrar favorito"
-msgstr "&Excluir favorito"
+msgstr "&Hapus Favorit"
 
 #: controller/main_controller.py:98
 msgid "Borrar el favorito seleccionado"
-msgstr "Excluir favorito selecionado"
+msgstr "Hapus favorit yang dipilih"
 
 #: controller/main_controller.py:112
 msgid "No hay más elementos que borrar"
-msgstr "Não há itens para excluir"
+msgstr "Tidak ada lagi item yang bisa dihapus"
 
 #: controller/main_controller.py:114 controller/main_controller.py:127
 msgid "No hay mensajes que borrar"
-msgstr "Não há itens para excluir"
+msgstr "Tidak ada pesan yang bisa dihapus"
 
 #: controller/main_controller.py:120
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
-msgstr "Tem certeza de que deseja excluir todas as mensagens?"
+msgstr "Apakah Anda yakin ingin menghapus semua pesan?"
 
 #: controller/update_languages_controller.py:38
 msgid "Por favor, selecciona al menos un idioma para actualizar."
-msgstr "Por favor, selecione pelo menos um idioma para atualizar."
+msgstr ""
 
 #: controller/update_languages_controller.py:38
 msgid "Advertencia"
-msgstr "Atenção!"
+msgstr ""
 
 #: controller/update_languages_controller.py:64
 msgid "Iniciando descarga de idiomas..."
-msgstr "Iniciando download de idiomas..."
+msgstr ""
 
 #: controller/update_languages_controller.py:86
 #: ui/update_languages_dialog.py:72
 msgid "Actualización completada."
-msgstr "Atualização concluída."
+msgstr ""
 
 #: controller/update_languages_controller.py:93
 msgid ""
-"Es necesario reiniciar o programa para aplicar os novos idiomas. "
-"Deseja reiniciá-lo agora?"
-msgstr "É necessário reiniciar o programa para aplicar os novos idiomas. Deseja reiniciar agora?"
+"Es necesario reiniciar el programa para aplicar los nuevos idiomas. "
+"¿Desea reiniciarlo ahora?"
+msgstr "Aplikasi perlu dimulai ulang untuk menerapkan bahasa baru. Apakah Anda ingin memulai ulang sekarang?"
 
 #: controller/menus/chat_item_controller.py:28
 msgid "Mensaje copiado al portapapeles"
-msgstr "Mensagem copiada para área de transferência"
+msgstr "Pesan disalin ke papan klip"
 
 #: controller/menus/chat_item_controller.py:28
 msgid "El mensaje seleccionado ha sido copiado al portapapeles."
-msgstr "A mensagem selecionada foi copiada para área de transferência"
+msgstr "Pesan yang dipilih telah disalin ke papan klip."
 
 #: controller/menus/chat_item_controller.py:42
 msgid "Mensaje traducido"
-msgstr "mensagem traduzida"
+msgstr "Pesan diterjemahkan"
 
 #: controller/menus/chat_item_controller.py:42
 msgid ""
 "el mensaje se ha traducido al idioma del programa y se  a  copiado en el "
 "portapapeles."
 msgstr ""
-"a mensagem foi traduzida para o idioma do programa e foi copiada para a "
-"área de transferência"
+"pesan telah diterjemahkan ke bahasa aplikasi saat ini, dan disalin ke "
+"papan klip."
 
 #: controller/menus/chat_menu_controller.py:46
 msgid "No hay una URL para agregar a favoritos."
-msgstr "Não há uma URL para adicionar aos favoritos."
+msgstr ""
 
 #: controller/menus/chat_menu_controller.py:46
 #: controller/menus/chat_menu_controller.py:55
 #: controller/menus/chat_menu_controller.py:64
 msgid "Aviso"
-msgstr "Atenção!"
+msgstr "Pemberitahuan"
 
 #: controller/menus/chat_menu_controller.py:55
 msgid "Ya se encuentra en favoritos"
-msgstr "Já está nos favoritos"
+msgstr "Sudah ada di favorit"
 
 #: controller/menus/chat_menu_controller.py:64
 msgid "Se ha agregado a favoritos"
-msgstr "O item foi adicionado aos favoritos."
+msgstr "Telah ditambahkan ke favorit"
 
 #: controller/menus/chat_menu_controller.py:71
 msgid "Enlace copiado al portapapeles"
-msgstr "Link copiado para a área de transferência"
+msgstr "Tautan disalin ke papan klip"
 
 #: controller/menus/chat_menu_controller.py:71
 msgid "El enlace del chat ha sido copiado al portapapeles."
-msgstr "O link do chat foi copiado para a área de transferência."
+msgstr "Tautan obrolan telah disalin ke papan klip."
 
 #: controller/menus/chat_menu_controller.py:74
 msgid "No se pudo copiar el enlace"
-msgstr "Não foi possível copiar o link"
+msgstr ""
 
 #: controller/menus/chat_menu_controller.py:74
 msgid "No se encontró un enlace válido para copiar."
-msgstr "Nenhum link válido encontrado para copiar."
+msgstr ""
 
 #: controller/menus/chat_menu_controller.py:82
 msgid "No se pudo abrir el enlace"
-msgstr "Não foi possível abrir o link"
+msgstr ""
 
 #: controller/menus/chat_menu_controller.py:82
 msgid "No se encontró un enlace válido para abrir."
-msgstr "Nenhum link válido encontrado para abrir."
+msgstr ""
 
 #: controller/menus/main_menu_controller.py:39
 msgid "Al parecer tienes la última versión del programa"
-msgstr "Você  tem a versão mais recente do programa"
+msgstr "Tampaknya aplikasi ini sudah versi terbaru"
 
 #: controller/menus/main_menu_controller.py:39
 #: controller/menus/main_menu_controller.py:45
 msgid "Información"
-msgstr "Informações: "
+msgstr "Informasi"
 
 #: controller/menus/main_menu_controller.py:43
 msgid "Creadores del proyecto:"
-msgstr "Criadores do projeto:"
+msgstr "Pembuat proyek:"
 
 #: controller/menus/main_menu_controller.py:44
 msgid ""
@@ -419,343 +421,328 @@ msgid ""
 "y la sala de  juegos, ajusta tus preferencias como quieras y disfruta más"
 " tus canales favoritos."
 msgstr ""
-"Descrição:\n"
-"Leia em voz alta as mensagens das transmições ao vivo no youtube, TikTok"
-"  e twitch, ajuste suas preferências como você gosta e aproveite mais "
-"seus canais favoritos."
+"Deskripsi:\n"
+"Membaca pesan langsung dari YouTube, TikTok, QuentinC's  playroom, Twitch"
+" dengan suara, sesuaikan preferensi Anda, dan nikmati saluran favorit "
+"Anda."
 
 #: controller/menus/main_menu_controller.py:58
 msgid ""
 "Estás apunto de reiniciar la configuración a sus valores predeterminados,"
 " ¿Deseas proceder?"
 msgstr ""
-"Você está prestes a redefinir as configurações para seus valores padrões "
-"¿Você deseja continuar?"
+"Anda akan mereset pengaturan menjadi default bawaan aplikasi, apakah Anda"
+" ingin melanjutkan?"
 
 #: controller/menus/main_menu_controller.py:63
 msgid "¿está seguro que desea salir del programa?"
-msgstr "Tem certeza que deseja sair do programa?"
+msgstr "Apakah Anda yakin ingin keluar dari aplikasi ini?"
 
 #: controller/menus/main_menu_controller.py:63
 msgid "¡atención!"
-msgstr "Atenção!"
+msgstr "Perhatian!"
 
 #: controller/menus/main_menu_controller.py:81
 #: controller/menus/main_menu_controller.py:92
 msgid "Actualización de idiomas"
-msgstr "Atualização de idiomas"
+msgstr ""
 
 #: controller/menus/main_menu_controller.py:92 utils/language_updater.py:106
 msgid "No hay actualizaciones ni nuevos idiomas disponibles."
-msgstr "Não há atualizações ou novos idiomas disponíveis."
+msgstr ""
 
 #: controller/menus/main_menu_controller.py:94
 msgid "Error de actualización"
-msgstr "Erro de atualização"
+msgstr ""
 
 #: controller/menus/main_menu_controller.py:109
 msgid ""
 "Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea "
 "reiniciarlo ahora?"
 msgstr ""
-"É necessário reiniciar o programa para aplicar o novo idioma. você "
-"querreiniciar agora?"
+"Aplikasi ini perlu dimulai ulang untuk menerapkan bahasa baru. Apakah "
+"Anda ingin memulai ulang sekarang?"
 
 #: globals/mensajes.py:2
 msgid "Silencia la voz sapy"
-msgstr "Silencie  a voz sapy"
+msgstr "Bisukan suara TTS SAPI"
 
 #: globals/mensajes.py:3
 msgid "Mensaje anterior."
-msgstr "mensagem anterior"
+msgstr "Pesan sebelumnya."
 
 #: globals/mensajes.py:4
 msgid "Mensaje siguiente"
-msgstr "próxima mensagem"
+msgstr "Pesan berikutnya"
 
 #: globals/mensajes.py:5
 msgid "Buffer anterior"
-msgstr "Buffer anterior."
+msgstr "Buffer sebelumnya"
 
 #: globals/mensajes.py:6
 msgid "Siguiente Buffer"
-msgstr "próximo buffer"
+msgstr "Buffer berikutnya"
 
 #: globals/mensajes.py:7
 msgid "Ir al comienzo del buffer"
-msgstr "ir ao início do buffer"
+msgstr "Pergi ke awal buffer"
 
 #: globals/mensajes.py:8
 msgid "Ir al final del buffer"
-msgstr "ir ao final do buffer"
+msgstr "Pergi ke akhir buffer"
 
 #: globals/mensajes.py:9
 msgid "Destaca un mensaje en el buffer de  favoritos"
-msgstr "Realce uma mensagem no buffer de favoritos"
+msgstr "Tandai pesan di buffer favorit"
 
 #: globals/mensajes.py:10
 msgid "Copia el mensaje actual"
-msgstr "Copie a mensagem atual"
+msgstr "Salin pesan saat ini"
 
 #: globals/mensajes.py:11
 msgid "Activa o desactiva la lectura automática"
-msgstr "Ativar ou desativar a leitura automática"
+msgstr "Aktifkan atau nonaktifkan pembacaan otomatis"
 
 #: globals/mensajes.py:12
 msgid "Busca una palabra en los mensajes actuales"
-msgstr "buscar uma palavra nas mensagens atuais"
+msgstr "Cari kata di pesan saat ini"
 
 #: globals/mensajes.py:13
 msgid "Muestra el mensaje actual en un cuadro de texto"
-msgstr "exibir a mensagem atual em uma janela de texto."
+msgstr "Tampilkan pesan saat ini dalam kotak teks"
 
 #: globals/mensajes.py:14
 msgid "borra el buffer seleccionado"
-msgstr "limpar o buffer selecionado"
+msgstr "hapus buffer terpilih"
 
 #: globals/mensajes.py:15
 msgid "activa o desactiva los sonidos del programa"
-msgstr "ativar ou desativar os sons do programa"
+msgstr "aktifkan atau nonaktifkan suara aplikasi"
 
 #: globals/mensajes.py:16
 msgid "Invocar el editor de combinaciones de teclado"
-msgstr "Chamar editor de atalhos de teclado"
+msgstr "Membuka editor pintasan keyboard"
 
 #: globals/mensajes.py:17
 msgid "Archivar un mensaje"
-msgstr "Arquivar mensagem"
+msgstr "Arsipkan pesan"
 
 #: globals/mensajes.py:21 utils/mensajes.py:2
 msgid "Mensajes"
-msgstr "mensagems"
+msgstr "Pesan"
 
 #: globals/mensajes.py:21
 msgid "eventos"
-msgstr "eventos"
+msgstr "Events"
 
 #: globals/mensajes.py:21 ui/chat_ui.py:25 ui/chat_ui.py:30 utils/mensajes.py:2
 msgid "Miembros"
-msgstr "Membros"
+msgstr "Members"
 
 #: globals/mensajes.py:21 utils/mensajes.py:2
 msgid "Donativos"
-msgstr "Doações."
+msgstr "Donasi"
 
 #: globals/mensajes.py:21 ui/chat_ui.py:31 utils/mensajes.py:2
 msgid "Moderadores"
-msgstr "Moderadores"
+msgstr "Moderator"
 
 #: globals/mensajes.py:22 utils/mensajes.py:3
 msgid "Usuarios Verificados"
-msgstr "Usuários verificados"
+msgstr "Pengguna Terverifikasi"
 
 #: globals/mensajes.py:26 utils/mensajes.py:7
 msgid "Sonido cuando llega un mensaje"
-msgstr "som quando chega uma mensagem"
+msgstr "Suara ketika pesan masuk"
 
 #: globals/mensajes.py:27 utils/mensajes.py:8
 msgid "Sonido cuando habla un miembro"
-msgstr "som quando um membro fala"
+msgstr "Suara ketika member berbicara"
 
 #: globals/mensajes.py:28 utils/mensajes.py:9
 msgid ""
 "Sonido cuando se conecta un miembro o cuando alguien se une a tu en vivo "
 "en tiktok"
 msgstr ""
-"Som quando um membro se conecta ou quando alguém se junta à sua "
-"transmissão ao vivo no TikTok."
+"Suara ketika anggota terhubung atau ketika seseorang bergabung dengan "
+"siaran langsung Anda di TikTok"
 
 #: globals/mensajes.py:29 utils/mensajes.py:10
 msgid "Sonido cuando llega un donativo"
-msgstr "som quando chegou uma doação"
+msgstr "Suara ketika menerima donasi"
 
 #: globals/mensajes.py:30 utils/mensajes.py:11
 msgid "Sonido cuando habla un moderador"
-msgstr "som quando um moderador falou"
+msgstr "Suara ketika moderator berbicara"
 
 #: globals/mensajes.py:31 utils/mensajes.py:12
 msgid "Sonido cuando habla un usuario verificado"
-msgstr "som quando um usuário verificado fala"
+msgstr "Suara ketika pengguna terverifikasi berbicara"
 
 #: globals/mensajes.py:32 utils/mensajes.py:13
 msgid "Sonido al ingresar al chat"
-msgstr "som ao Entrar no bate-papo."
+msgstr "Suara saat memasuki obrolan"
 
 #: globals/mensajes.py:33 utils/mensajes.py:14
 msgid "Sonido cuando habla el propietario del canal"
-msgstr "som quando o dono do canal fala"
+msgstr "Suara ketika pemilik saluran berbicara"
 
 #: globals/mensajes.py:34 utils/mensajes.py:15
 msgid "sonido al terminar la búsqueda de mensajes"
-msgstr "Som ao terminar a busca de mensagens"
+msgstr "suara saat pencarian pesan selesai"
 
 #: globals/mensajes.py:35 utils/mensajes.py:16
 msgid "sonido cuando le dan me gusta al en vivo (solo para tiktok)"
-msgstr "Som quando alguém curte a transmissão ao vivo (apenas para o TikTok)."
+msgstr "suara ketika ada yang menyukai siaran langsung (khusus TikTok)"
 
 #: globals/mensajes.py:36 utils/mensajes.py:17
 msgid "Sonido cuando alguien empieza a seguirte en tiktok"
-msgstr "Som quando alguém começa a te seguir no TikTok."
+msgstr "Suara ketika seseorang mulai mengikuti Anda di TikTok"
 
 #: globals/mensajes.py:37 utils/mensajes.py:18
 msgid "Sonido cuando alguien comparte el enlace de tu envivo en  tiktok"
-msgstr "Som quando alguém compartilha o link da sua transmissão ao vivo no TikTok."
+msgstr "Suara ketika seseorang membagikan tautan siaran langsung Anda di TikTok"
 
 #: globals/mensajes.py:38 utils/mensajes.py:19
 msgid "Sonido cuando alguien envía un cofre  en tiktok"
-msgstr "som quando chegou um baú no TikTok."
+msgstr "Suara ketika seseorang mengirim kotak di TikTok"
 
 #: globals/mensajes.py:42
 msgid "Cuando llega un mensaje"
-msgstr "quando chega uma mensagem"
+msgstr "ketika pesan masuk"
 
 #: globals/mensajes.py:43 utils/mensajes.py:23
 msgid "Cuando habla un miembro"
-msgstr "quando um membro fala"
+msgstr "Ketika member berbicara"
 
 #: globals/mensajes.py:44 utils/mensajes.py:24
 msgid ""
 "Cuando se conecta un miembro o cuando alguien se une a tu en vivo en "
 "tiktok"
 msgstr ""
-"Quando um membro se conecta ou quando alguém se junta à sua transmissão "
-"ao vivo no TikTok."
+"Ketika member terhubung atau ketika seseorang bergabung dengan siaran "
+"langsung Anda di TikTok"
 
 #: globals/mensajes.py:45 utils/mensajes.py:25
 msgid "Cuando llega un donativo"
-msgstr "quando chegou uma doação"
+msgstr "Ketika menerima donasi"
 
 #: globals/mensajes.py:46 utils/mensajes.py:26
 msgid "Cuando habla un moderador"
-msgstr "quando um moderador falou"
+msgstr "Ketika moderator berbicara"
 
 #: globals/mensajes.py:47 utils/mensajes.py:27
 msgid "Cuando habla un usuario verificado"
-msgstr "quando um usuário verificado fala"
+msgstr "Ketika pengguna terverifikasi berbicara"
 
 #: globals/mensajes.py:48 utils/mensajes.py:28
 msgid "Cuando le dan me gusta al en vivo (solo para tiktok)"
-msgstr "Quando alguém curte a transmissão ao vivo (apenas no TikTok)."
+msgstr "Ketika ada yang menyukai siaran langsung (khusus TikTok)"
 
 #: globals/mensajes.py:49 utils/mensajes.py:29
 msgid "Cuando alguien empieza a seguirte en tiktok"
-msgstr "Quando alguém começa a te seguir no TikTok."
+msgstr "Ketika seseorang mulai mengikuti Anda di TikTok"
 
 #: globals/mensajes.py:50 utils/mensajes.py:30
 msgid "Cuando alguien comparte el enlace de tu envivo en  tiktok"
-msgstr "Quando alguém compartilha o link da sua transmissão ao vivo no TikTok."
+msgstr "Ketika seseorang membagikan tautan siaran langsung Anda di TikTok"
 
 #: globals/mensajes.py:51 utils/mensajes.py:31
 msgid "Cuando alguien envía un cofre  en tiktok"
-msgstr "Quando alguém envia um baú no TikTok."
+msgstr "Ketika seseorang mengirim kotak di TikTok"
 
 #: globals/resources.py:27 servicios/twich.py:66 servicios/twich.py:69
 #: servicios/twich.py:78 servicios/twich.py:83
 msgid "Por defecto"
-msgstr "Por padrão."
+msgstr "Secara default"
 
 #: globals/resources.py:29 utils/app_utilitys.py:26
 msgid "No hay voces instaladas"
-msgstr "Não há vozes instaladas."
+msgstr "Tidak ada suara yang terinstal"
 
 #: servicios/sala.py:27 servicios/twich.py:23 servicios/youtube.py:23
 msgid "Ingresando al chat."
-msgstr "Entrando no bate-papo."
+msgstr "Memasuki obrolan."
 
 #: servicios/sala.py:29
 msgid "Chat de la sala de juegos"
-msgstr "Chat da sala de jogos"
+msgstr ""
 
 #: servicios/tiktok.py:40
 msgid "El usuario está en vivo. Conectando..."
-msgstr "O usuário está ao vivo. Conectando..."
+msgstr ""
 
 #: servicios/tiktok.py:45
 msgid "El usuario no está en vivo. Reintentando en un minuto."
-msgstr "O usuário não está ao vivo. Tentando novamente em um minuto."
+msgstr ""
 
 #: servicios/tiktok.py:76
 msgid "El directo ha finalizado. Se buscará de nuevo en un minuto."
-msgstr "A live terminou. Buscando novamente em um minuto."
+msgstr ""
 
 #: servicios/tiktok.py:81
 msgid "Se ha perdido la conexión. El servicio se ha detenido."
-msgstr "A conexão foi perdida. O serviço foi interrompido."
+msgstr ""
 
 #: servicios/tiktok.py:85
 msgid "Ingresando al chat"
-msgstr "Entrando no bate-papo."
+msgstr "Memasuki obrolan"
 
 #: servicios/tiktok.py:100 servicios/tiktok.py:102
 msgid " envió un emogi."
-msgstr " envió un emogi."
+msgstr " mengirim emoji."
 
 #: servicios/tiktok.py:105 servicios/tiktok.py:107
 msgid " ha enviado un cofre!"
-msgstr " Enviou um baú!"
+msgstr " telah mengirim kotak!"
 
 #: servicios/tiktok.py:112 servicios/tiktok.py:114
 msgid " comenzó a seguirte!"
-msgstr " Começou a seguir você!"
+msgstr " mulai mengikuti Anda!"
 
 #: servicios/tiktok.py:124 servicios/tiktok.py:132
 #, python-format
 msgid "%s ha enviado %s %s (%s %s)"
-msgstr "%s enviou %s %s (%s %s)"
+msgstr "%s telah mengirim %s %s (%s %s)"
 
 #: servicios/tiktok.py:125 servicios/tiktok.py:133
 #, python-format
 msgid "%s ha enviado %s %s (%s diamante)"
-msgstr "%s enviou %s %s (%s diamante)"
+msgstr "%s telah mengirim %s %s (%s diamond)"
 
 #: servicios/tiktok.py:143 servicios/tiktok.py:145
 msgid " se ha unido a tu en vivo."
-msgstr " Juntou-se à sua transmissão ao vivo."
+msgstr " telah bergabung dengan siaran langsung Anda."
 
 #: servicios/tiktok.py:150 servicios/tiktok.py:152
 msgid " le ha dado me gusta a tu en vivo."
-msgstr " Curtiu a sua transmissão ao vivo."
+msgstr " menyukai siaran langsung Anda."
 
 #: servicios/tiktok.py:157 servicios/tiktok.py:159
 msgid " ha compartido tu en vivo!"
-msgstr " \"Compartilhou a sua transmissão ao vivo!"
+msgstr " telah membagikan siaran langsung Anda!"
 
 #: servicios/tiktok.py:161
 msgid " en vivo, actualmente "
-msgstr " ao vivo, Atualmente"
-
-#: servicios/tiktok.py:161
-msgid " viendo ahora"
-msgstr "Agora"
+msgstr " siaran langsung, saat ini "
 
 #: servicios/twich.py:40
 msgid "Desconocido"
-msgstr "Desconhecido"
+msgstr "Tidak diketahui"
 
 #: servicios/twich.py:49
 #, python-brace-format
 msgid ""
 "{author_name} ha renovado su suscripción en el nivel "
 "{subscription_plan_name}. ¡Lleva suscrito por {cumulative_months} meses!"
-msgstr ""
-
-#: servicios/twich.py:54
-#, python-brace-format
-msgid ""
-"{author_name} se ha suscrito en el nivel {subscription_plan_name} por "
-"{cumulative_months} meses!"
-msgstr ""
-"{author_name} se inscreveu no nível {subscription_plan_name} por "
-"{cumulative_months} meses!"
+msgstr "{author_name} telah memperbarui langganannya di tingkat {subscription_plan_name}. Sudah berlangganan selama {cumulative_months} bulan!"
 
 #: servicios/twich.py:55
 #, python-brace-format
 msgid ""
 "{author_name} regaló una suscripción de nivel {subscription_type} a la "
 "comunidad, ¡ha regalado un total de {sender_count} suscripciones!"
-msgstr ""
-"{author_name} presenteou uma assinatura de nível {subscription_type} para"
-" a comunidade, já presenteou um total de {sender_count} assinaturas!"
+msgstr "{author_name} memberikan langganan tingkat {subscription_type} ke komunitas, total telah memberikan {sender_count} langganan!"
 
 #: servicios/twich.py:56
 #, python-brace-format
@@ -763,242 +750,239 @@ msgid ""
 "{author_name} ha regalado una suscripción a {gift_recipient_display_name}"
 " en el nivel {subscription_plan_name} por {number_of_months_gifted} "
 "meses!"
-msgstr ""
-"{author_name} presenteou uma assinatura para "
-"{gift_recipient_display_name} no nível {subscription_plan_name} por "
-"{number_of_months_gifted} meses!"
+msgstr "{author_name} telah memberikan langganan kepada {gift_recipient_display_name} di tingkat {subscription_plan_name} selama {number_of_months_gifted} bulan!"
 
 #: servicios/youtube.py:65
 msgid " se a conectado al chat. "
-msgstr "se conectou ao bate-papo."
+msgstr " terhubung ke obrolan. "
 
 #: ui/ajustes.py:9
 msgid "Configuración"
-msgstr "Configurações"
+msgstr "Pengaturan"
 
 #: ui/ajustes.py:14 ui/chat_ui.py:23 ui/chat_ui.py:28
 msgid "General"
-msgstr "geral"
+msgstr "Umum"
 
 #: ui/ajustes.py:16
 msgid "Opciones de la app"
-msgstr "opções do aplicativo"
+msgstr "Opsi Aplikasi"
 
 #: ui/ajustes.py:18
 msgid "Idioma de VeTube (Requiere reiniciar)"
-msgstr "Linguagem do programa, (requer reinicialização)"
+msgstr "Bahasa VeTube (diperlukan mulai ulang)"
 
 #: ui/ajustes.py:23
 msgid "Activar diálogo de donaciones al inicio de la app."
-msgstr "Ativar a caixa de diálogo de doação no início do aplicativo."
+msgstr "Aktifkan dialog donasi di awal aplikasi."
 
 #: ui/ajustes.py:26
 msgid "preguntar si desea salir de la app al cerrar."
-msgstr "Perguntar se deseja sair do aplicativo ao fechar."
+msgstr "menanyakan apakah ingin keluar dari aplikasi saat program ditutup."
 
 #: ui/ajustes.py:29
 msgid "Comprobar si hay actualizaciones al iniciar la app"
-msgstr "Verificar se há atualizações ao iniciar o aplicativo"
+msgstr "Periksa pembaruan saat menjalankan aplikasi"
 
 #: ui/ajustes.py:32
 msgid "intentar traducir las novedades cuando salga una actualización."
-msgstr "Tentar traduzir as novidades quando uma atualização for lançada"
+msgstr "menterjemahkan What's new ketika ada update."
 
 #: ui/ajustes.py:35
 msgid "traducción de mensajes: "
-msgstr "tradução de mensagens:"
+msgstr "terjemahan pesan: "
 
 #: ui/ajustes.py:40
 msgid "convertir las donaciones a la divisa: "
-msgstr "Converter as doações para a moeda: "
+msgstr "konversi donasi ke mata uang: "
 
 #: ui/ajustes.py:50
 msgid "Voz"
-msgstr "Voz"
+msgstr "Suara"
 
 #: ui/ajustes.py:52
 msgid "Opciones del habla"
-msgstr "opções de fala"
+msgstr "Opsi Ucapan"
 
 #: ui/ajustes.py:54
 msgid "Usar voz sapi en lugar de lector de pantalla."
-msgstr "Use a voz sapy em vez do leitor de tela."
+msgstr "Gunakan suara SAPI , bukan suara pembaca layar."
 
 #: ui/ajustes.py:57
 msgid "Sistema TTS a usar: "
-msgstr "Sistema TTS a ser usado: "
+msgstr "Sistem TTS yang akan digunakan: "
 
 #: ui/ajustes.py:62
 msgid "Activar lectura de mensajes automática"
-msgstr "Ativar a leitura automática de mensagens"
+msgstr "Aktifkan pembacaan pesan otomatis"
 
 #: ui/ajustes.py:65
 msgid "Voz: "
-msgstr "Voz: "
+msgstr "Suara: "
 
 #: ui/ajustes.py:70
 msgid "Instalar un paquete de voz..."
-msgstr "Instalar um pacote de voz..."
+msgstr "Instal paket suara..."
 
 #: ui/ajustes.py:72
 msgid "Tono: "
-msgstr "Ton da voz"
+msgstr "Nada ucapan: "
 
 #: ui/ajustes.py:76
 msgid "Volumen: "
-msgstr "Volume: "
+msgstr "Volume ucapan: "
 
 #: ui/ajustes.py:80
 msgid "Velocidad: "
-msgstr "Velocidade: "
+msgstr "Kecepatan ucapan: "
 
 #: ui/ajustes.py:84
 msgid "&Reproducir prueba."
-msgstr "&Reproduzir uma amostra."
+msgstr "&Putar uji coba."
 
 #: ui/ajustes.py:91
 msgid "Categorías"
-msgstr "categorias"
+msgstr "Kategori"
 
 #: ui/ajustes.py:94
 msgid "Categoría"
-msgstr "categoria"
+msgstr "Kategori"
 
 #: ui/ajustes.py:101
 msgid "Sonidos"
-msgstr "sons"
+msgstr "Suara"
 
 #: ui/ajustes.py:103
 msgid "Activar sonidos"
-msgstr "Tocar sons."
+msgstr "Aktifkan suara"
 
 #: ui/ajustes.py:107
 msgid "Sonido"
-msgstr "son"
+msgstr "Suara"
 
 #: ui/ajustes.py:111
 msgid "&Reproducir"
-msgstr "&reproduzir"
+msgstr "&Putar"
 
 #: ui/ajustes.py:114
 msgid "Seleccionar dispositivo de audio"
-msgstr "Selecionar dispositivo de áudio"
+msgstr "Pilih perangkat audio"
 
 #: ui/ajustes.py:119
 msgid "&Establecer"
-msgstr "&Definir"
+msgstr "&Tetapkan"
 
 #: ui/ajustes.py:125 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:56
 msgid "Eventos"
-msgstr "Eventos"
+msgstr "Event"
 
 #: ui/ajustes.py:127
 msgid "procesados: "
-msgstr "Não ignorados pelo VeTube"
+msgstr "diproses: "
 
 #: ui/ajustes.py:130 ui/ajustes.py:136
 msgid "Evento"
-msgstr "Evento"
+msgstr "Event"
 
 #: ui/ajustes.py:133
 msgid "leídos"
-msgstr "Não ignorados pelo leitor de tela"
+msgstr "dibaca"
 
 #: ui/ajustes.py:145 update/update.py:132
 msgid "&Aceptar"
-msgstr "&Aceitar"
+msgstr "&Oke"
 
 #: ui/ajustes.py:147 update/update.py:132
 msgid "&Cancelar"
-msgstr "&Cancelar"
+msgstr "&Batal"
 
 #: ui/chat_ui.py:7
 msgid "Chat en vivo"
-msgstr "Bate-papo ao vivo"
+msgstr "Obrolan siaran langsung"
 
 #: ui/chat_ui.py:10
 msgid "Lectura del chat en vivo..."
-msgstr "Leitura de bate-papo ao vivo..."
+msgstr "Sedang membaca obrolan siaran langsung..."
 
 #: ui/chat_ui.py:12
 msgid "&Detener chat"
-msgstr "&Encerrar"
+msgstr "&putuskan dari obrolan siaran langsung"
 
 #: ui/chat_ui.py:20
 msgid "conversaciones"
-msgstr "conversas"
+msgstr ""
 
 #: ui/chat_ui.py:21
 msgid "mensajes privados"
-msgstr "mensagens privadas"
+msgstr ""
 
 #: ui/chat_ui.py:26
 msgid "regalos"
-msgstr "presentes"
+msgstr ""
 
 #: ui/chat_ui.py:32
 msgid "Donaciones"
-msgstr "Doações."
+msgstr "Donasi"
 
 #: ui/chat_ui.py:33
 msgid "Verificados"
-msgstr "Usuários verificados"
+msgstr "Pengguna Terverifikasi"
 
 #: ui/chat_ui.py:40
 msgid "&Eliminar"
-msgstr "&Remover"
+msgstr "&Hapus"
 
 #: ui/chat_ui.py:42 ui/menus/main_menu.py:9
 msgid "&Opciones"
-msgstr "&Opções"
+msgstr "&Opsi"
 
 #: ui/chat_ui.py:57
 msgid "&Filtrar por"
-msgstr "&Filtrar por"
+msgstr ""
 
 #: ui/estadisticas_dialog.py:13
 msgid "Autor"
-msgstr "Autor"
+msgstr ""
 
 #: ui/estadisticas_dialog.py:14
 msgid "Cantidad de mensajes"
-msgstr "úmero de mensagens:"
+msgstr "Jumlah pesan: "
 
 #: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:73
 msgid "Cerrar"
-msgstr "&Fechar."
+msgstr "&Tutup"
 
 #: ui/list_urls.py:8
 msgid "Lista de URLS"
-msgstr "Lista de URLs"
+msgstr "Daftar URL"
 
 #: ui/editor/editor.py:24 ui/editor/nueva_combinacion.py:38 ui/list_urls.py:21
 msgid "&Cerrar"
-msgstr "&Fechar."
+msgstr "&Tutup"
 
 #: ui/list_urls.py:30
 msgid "No hay URLS en este mensaje"
-msgstr "Não há URLs nesta mensagem"
+msgstr "Tidak ada URL di pesan ini"
 
 #: ui/main_window.py:13
 msgid "&Más opciones"
-msgstr "&Mais opções"
+msgstr "&Opsi lainnya"
 
 #: ui/main_window.py:19
 msgid "Inicio"
-msgstr "início"
+msgstr "Beranda"
 
 #: ui/main_window.py:23
 msgid "Escriba o pegue una URL o usuario"
-msgstr "Digite ou cole um URL"
+msgstr "Silahkan ketik atau tempelkan URL, bisa juga nama pengguna"
 
 #: ui/main_window.py:28
 msgid "Capturar el chat de: "
-msgstr "capturar o chat da: "
+msgstr "Mengambil chat dari: "
 
 #: ui/main_window.py:30
 msgid "detectar"
-msgstr "detectar"
+msgstr "deteksi otomatis"
 
 #: ui/main_window.py:30
 msgid "YouTube"
@@ -1014,117 +998,117 @@ msgstr "TikTok"
 
 #: ui/main_window.py:30
 msgid "La sala de juegos"
-msgstr "Sala de Jogos"
+msgstr "QuentinC Playroom"
 
 #: ui/main_window.py:35
 msgid "&Acceder"
-msgstr "&Acessar"
+msgstr "&Sambungkan"
 
 #: ui/main_window.py:38
 msgid "&Borrar"
-msgstr "&Apagar"
+msgstr "&Hapus"
 
 #: ui/main_window.py:49
 msgid "&Tus favoritos: "
-msgstr "&Seus favoritos: "
+msgstr "&Favorit Anda: "
 
 #: ui/main_window.py:53
 #, python-format
 msgid "Favoritos (%s)"
-msgstr "favoritos (%s)"
+msgstr "Favorit (%s)"
 
 #: ui/main_window.py:57 ui/main_window.py:69
 msgid "&Seleccionar todos los elementos"
-msgstr "Selecionar todos os itens"
+msgstr "&Pilih semua item"
 
 #: ui/main_window.py:61
 msgid "mensajes archivados"
-msgstr "mensagens arquivadas"
+msgstr "pesan yang diarsipkan"
 
 #: ui/main_window.py:63
 msgid "&Mensajes archivados: "
-msgstr "&mensagens arquivadas"
+msgstr "&Pesan yang diarsipkan: "
 
 #: ui/show_comment.py:6
 msgid "Mensaje"
-msgstr "mensagem"
+msgstr "Pesan"
 
 #: ui/menus/chat_item_menu.py:7 ui/show_comment.py:13
 msgid "&Traducir"
-msgstr "&traduzir"
+msgstr "&Terjemahkan"
 
 #: ui/show_comment.py:20
 msgid "mensaje: "
-msgstr "mensagem"
+msgstr "pesan: "
 
 #: ui/show_comment.py:36
 msgid "&Traducir mensaje"
-msgstr "&traduzir a mensagem"
+msgstr "&Terjemahkan pesan"
 
 #: ui/show_comment.py:36
 msgid "&Traducir al idioma del programa"
-msgstr "&traduzir a mensagem para o idioma do programa"
+msgstr "&Terjemahkan ke bahasa aplikasi sekarang"
 
 #: ui/show_comment.py:42
 msgid "mensaje en "
-msgstr "mensagem em"
+msgstr "pesan dalam "
 
 #: ui/update_languages_dialog.py:5
 msgid "Actualizar idiomas"
-msgstr "Atualizar idiomas"
+msgstr ""
 
 #: ui/update_languages_dialog.py:9
 msgid "Selecciona los idiomas que deseas actualizar:"
-msgstr "Selecione os idiomas que deseja atualizar:"
+msgstr ""
 
 #: ui/update_languages_dialog.py:13
 msgid "Idioma"
-msgstr "Idioma"
+msgstr ""
 
 #: ui/update_languages_dialog.py:31
 msgid "Actualizar"
-msgstr "Atualizar"
+msgstr ""
 
 #: ui/editor/editor.py:7
 msgid "Editor de combinaciones de teclado para Vetube"
-msgstr "Editor de combinações de teclado para Vetube"
+msgstr "Editor Pintasan Keyboard untuk VeTube"
 
 #: ui/editor/editor.py:9
 msgid "&Selecciona la combinación de teclado a editar"
-msgstr "&Selecione a combinação de teclado para editar"
+msgstr "&Pilih pintasan keyboard yang akan diedit"
 
 #: ui/editor/editor.py:11
 msgid "acción: "
-msgstr "ação"
+msgstr "tindakan: "
 
 #: ui/editor/editor.py:12
 msgid "combinación de teclas: "
-msgstr "Combinação de teclas"
+msgstr "pintasan keyboard: "
 
 #: ui/editor/editor.py:21
 msgid "&Editar"
-msgstr "&Editar"
+msgstr "&Edit"
 
 #: ui/editor/editor.py:23
 msgid "&restaurar combinaciones por defecto"
-msgstr "&restaurar combinações de teclas ao  padrão"
+msgstr "&Kembalikan pintasan default"
 
 #: ui/editor/nueva_combinacion.py:8
 #, python-format
 msgid "Editando la combinación de teclas para %s"
-msgstr "Editando a combinação de teclas para %s"
+msgstr "Mengedit pintasan keyboard untuk %s"
 
 #: ui/editor/nueva_combinacion.py:10
 msgid "Selecciona las teclas que quieres usar"
-msgstr "Selecione as teclas que deseja usar"
+msgstr "Pilih tombol yang ingin Anda gunakan"
 
 #: ui/editor/nueva_combinacion.py:13
 msgid "&Control"
-msgstr "&CTRL"
+msgstr "&Control"
 
 #: ui/editor/nueva_combinacion.py:15
 msgid "&Alt"
-msgstr "&alte"
+msgstr "&Alt"
 
 #: ui/editor/nueva_combinacion.py:17
 msgid "&Shift"
@@ -1132,167 +1116,167 @@ msgstr "&Shift"
 
 #: ui/editor/nueva_combinacion.py:19
 msgid "&Windows"
-msgstr "&windows"
+msgstr "&Windows"
 
 #: ui/editor/nueva_combinacion.py:28
 msgid "Selecciona una tecla para la combinación"
-msgstr "&Selecione uma tecla para\\a combinação"
+msgstr "&Pilih tombol untuk pintasan"
 
 #: ui/editor/nueva_combinacion.py:37
 msgid "&Aplicar nueva combinación de teclado"
-msgstr "Aplicar nova combinação de teclado"
+msgstr "&Terapkan pintasan keyboard baru"
 
 #: ui/menus/chat_filter_menu.py:9
 msgid "Todos"
-msgstr "Todos"
+msgstr ""
 
 #: ui/menus/chat_filter_menu.py:10
 msgid "Unidos"
-msgstr "Unidos"
+msgstr ""
 
 #: ui/menus/chat_filter_menu.py:11
 msgid "Gustados"
-msgstr "Curtidos"
+msgstr ""
 
 #: ui/menus/chat_filter_menu.py:12
 msgid "Compartidas"
-msgstr "Compartilhadas"
+msgstr ""
 
 #: ui/menus/chat_filter_menu.py:13
 msgid "Seguidores"
-msgstr "Seguidores"
+msgstr ""
 
 #: ui/menus/chat_item_menu.py:8
 msgid "&Mostrar el mensaje en un cuadro de texto."
-msgstr "exibir a mensagem atual em uma janela de texto."
+msgstr "&Tampilkan pesan dalam kotak teks."
 
 #: ui/menus/chat_item_menu.py:9
 msgid "&Copiar mensaje al portapapeles"
-msgstr "&Copiar mensagem para a área de transferência"
+msgstr "&Salin pesan ke papan klip"
 
 #: ui/menus/chat_item_menu.py:10
 msgid "&Listado de Urls."
-msgstr "Lista de URLs"
+msgstr "&Daftar URL."
 
 #: ui/menus/chat_item_menu.py:11
 msgid "&Archivar mensaje"
-msgstr "Arquivar mensagem"
+msgstr "&Arsipkan pesan"
 
 #: ui/menus/chat_opciones_menu.py:7 ui/menus/main_menu.py:10
 msgid "&Editor de combinaciones de teclado para VeTube"
-msgstr "Editor de combinações de teclado para Vetube"
+msgstr "&Editor Pintasan Keyboard untuk VeTube"
 
 #: ui/menus/chat_opciones_menu.py:8
 msgid "&Añadir este canal a favoritos"
-msgstr "Adicionar o canal  aos &favoritos"
+msgstr "&Tambahkan saluran ini ke favorit"
 
 #: ui/menus/chat_opciones_menu.py:9
 msgid "&Ver estadísticas del chat"
-msgstr "&Ver estatísticas do bate-papo"
+msgstr "&Lihat statistik obrolan"
 
 #: ui/menus/chat_opciones_menu.py:10
 msgid "&Copiar enlace del chat al portapapeles"
-msgstr "&Copiar link de bate-papo para a área de transferência"
+msgstr "&Salin tautan obrolan ke papan klip"
 
 #: ui/menus/chat_opciones_menu.py:11
 msgid "&Reproducir video en el navegador"
-msgstr "Reproduzir o vídeo no navegador esterno"
+msgstr "&Putar video di browser"
 
 #: ui/menus/chat_opciones_menu.py:12
 msgid "Buscar mensajes..."
-msgstr "Buscar mensagens..."
+msgstr ""
 
 #: ui/menus/main_menu.py:11
 msgid "&Configuración"
-msgstr "&Configurações"
+msgstr "&Pengaturan"
 
 #: ui/menus/main_menu.py:12
 msgid "Actualizar &idiomas"
-msgstr "Atualizar &idiomas"
+msgstr ""
 
 #: ui/menus/main_menu.py:13
 msgid "&Restablecer los ajustes"
-msgstr "&Redefinir as configurações aos padrões"
+msgstr "&Setel ulang pengaturan"
 
 #: ui/menus/main_menu.py:14
 msgid "&Ayuda"
-msgstr "ajuda"
+msgstr "&Bantuan"
 
 #: ui/menus/main_menu.py:15
 msgid "¿Cómo usar &vetube? (documentación en línea)"
-msgstr "Como usar o vetube? (documentação online)"
+msgstr "Cara menggunakan &VeTube? (dokumentasi online)"
 
 #: ui/menus/main_menu.py:16
 msgid "Únete a nuestra &causa"
-msgstr "Junte-se à nossa &causa"
+msgstr "Gabung &komunitas kami"
 
 #: ui/menus/main_menu.py:17
 msgid "&Visita nuestra página de github"
-msgstr "&Visite nossa página no github"
+msgstr "&Kunjungi halaman GitHub kami"
 
 #: ui/menus/main_menu.py:18
 msgid "&buscar actualizaciones"
-msgstr "&buscar por atualizações"
+msgstr "&Periksa pembaruan"
 
 #: ui/menus/main_menu.py:19
 msgid "&Acerca de"
-msgstr "Sobre"
+msgstr "&Tentang"
 
 #: ui/menus/main_menu.py:20
 msgid "&Salir...\tAlt+F4"
-msgstr "&Sair...\tAlt+F4"
+msgstr "&Keluar...\tAlt+F4"
 
 #: update/update.py:131
 msgid ""
 "Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te "
 "unes a nuestra causa?"
 msgstr ""
-"Com o seu apoio você contribui para manter este programa gratuito. Você "
-"pode se Juntar à nossa causa?"
+"Dengan dukungan Anda, Anda berkontribusi agar program ini tetap gratis. "
+"Maukah anda bergabung dengan tujuan kami?"
 
 #: update/updater.py:13
 msgid "Hubo un error al actualizar VeTube."
-msgstr "Ocorreu um erro ao atualizar o VeTube."
+msgstr "Terjadi kesalahan saat memperbarui VeTube."
 
 #: update/utils.py:29
 #, python-format
 msgid "%d día, "
-msgstr "%d dia,"
+msgstr "%d hari, "
 
 #: update/utils.py:31
 #, python-format
 msgid "%d días, "
-msgstr "%d dias,"
+msgstr "%d hari, "
 
 #: update/utils.py:33
 #, python-format
 msgid "%d hora, "
-msgstr "%d hora,"
+msgstr "%d jam, "
 
 #: update/utils.py:35
 #, python-format
 msgid "%d horas, "
-msgstr "%d horas,"
+msgstr "%d jam, "
 
 #: update/utils.py:37
 #, python-format
 msgid "%d minuto, "
-msgstr "%d minuto, "
+msgstr "%d menit, "
 
 #: update/utils.py:39
 #, python-format
 msgid "%d minutos, "
-msgstr "%d Minutos,"
+msgstr "%d menit, "
 
 #: update/utils.py:41
 #, python-format
 msgid "%s segundo"
-msgstr "%s segundo,"
+msgstr "%s detik"
 
 #: update/utils.py:43
 #, python-format
 msgid "%s segundos"
-msgstr "%s segundos"
+msgstr "%s detik"
 
 #: update/wxUpdater.py:9
 #, python-format
@@ -1304,41 +1288,38 @@ msgid ""
 "Cambios:\n"
 "%s"
 msgstr ""
-"Há uma nova versão do VeTube. Deseja baixá-lo agora?\n"
+"Ada versi baru VeTube. Apakah Anda ingin mengunduhnya sekarang?\n"
 "\n"
-"Versão do VeTube: %s\n"
-"\n"
-"Alterações:\n"
+"Versi VeTube: %s\n"
+"Perubahan:\n"
 "%s"
 
 #: update/wxUpdater.py:9
 msgid "Nueva versión de VeTube"
-msgstr "Nova versão do VeTube"
+msgstr "Versi baru VeTube"
 
 #: update/wxUpdater.py:17
 msgid "Descarga en progreso"
-msgstr "Download em progresso..."
+msgstr "Pengunduhan sedang berlangsung"
 
 #: update/wxUpdater.py:17
 msgid "Descargando la actualización"
-msgstr "&baixando as atualizações..."
+msgstr "Mengunduh pembaruan"
 
 #: update/wxUpdater.py:27
 #, python-format
 msgid "Actualizando... %s de %s"
-msgstr "Atualizando... %s de %s"
+msgstr "Memperbarui... %s dari %s"
 
 #: update/wxUpdater.py:30
 msgid ""
 "La actualización se a descargado he instalado exitosamente. pulse en "
 "aceptar para continuar."
-msgstr ""
-"A atualização foi baixada e instalada com sucesso. Clique em aceito "
-"continuar."
+msgstr "Pembaruan berhasil diunduh dan diinstal. Tekan OK untuk melanjutkan."
 
 #: update/wxUpdater.py:30
 msgid "¡Hecho!"
-msgstr "Feito!"
+msgstr "Selesai!"
 
 #: utils/app_utilitys.py:26
 msgid ""
@@ -1347,46 +1328,45 @@ msgid ""
 "Si pulsas sÃ­, se abrirÃ¡ nuestra carpeta seguido de una ventana para "
 "instalar una una vez la descargues."
 msgstr ""
-"Você precisa de pelo menos uma voz para poder usar o sintetizador "
-"Piper.Você deseja abrir nossa pasta no Drive para baixar alguns "
-"modelos?Se você pressionar sim, nossa pasta será aberta, seguida por uma "
-"janela para instalar um uma vez que você o tenha baixado."
+"Anda memerlukan setidaknya satu suara untuk dapat menggunakan synthesizer"
+" Piper. Apakah Anda ingin membuka folder Drive kami untuk mengunduh "
+"beberapa model? Jika Anda menekan Ya, folder kami akan terbuka diikuti "
+"dengan tampilan untuk menginstal setelah Anda mengunduhnya."
 
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
-msgstr "idioma do sistema"
+msgstr "Bahasa sistem"
 
 #: utils/language_updater.py:40
 #, python-brace-format
 msgid "Error al cargar idiomas locales: {}"
-msgstr "Erro ao carregar idiomas locais: {}"
+msgstr "Kesalahan saat memuat bahasa lokal: {}"
 
 #: utils/language_updater.py:54
 msgid "Idiomas guardados exitosamente."
-msgstr "Idiomas salvos com sucesso."
+msgstr "Bahasa berhasil disimpan."
 
 #: utils/language_updater.py:56
 #, python-brace-format
 msgid "Error al guardar idiomas locales: {}"
-msgstr "Erro ao salvar idiomas locais: {}"
+msgstr "Kesalahan saat menyimpan bahasa lokal: {}"
 
 #: utils/language_updater.py:76 utils/language_updater.py:80
 #, python-brace-format
 msgid "Error al obtener idiomas remotos: {}"
-msgstr "Erro ao obter idiomas remotos: {}"
+msgstr "Kesalahan saat mengambil bahasa jarak jauh: {}"
 
 #: utils/language_updater.py:138
 #, python-brace-format
 msgid "Error al descargar el archivo .zip de {}: {}"
-msgstr "Erro ao baixar o arquivo .zip de {}: {}"
+msgstr "Kesalahan saat mengunduh file .zip dari {}: {}"
 
 #: utils/language_updater.py:172
 #, python-brace-format
 msgid "Error al descomprimir el archivo .zip de {}: {}"
-msgstr "Erro ao descompactar o arquivo .zip de {}: {}"
+msgstr "Kesalahan saat mengekstrak file .zip dari {}: {}"
 
 #: utils/language_updater.py:197
 #, python-brace-format
 msgid "Error al actualizar el idioma local {}: {}"
-msgstr "Erro ao atualizar o idioma local {}: {}"
-
+msgstr "Kesalahan saat memperbarui bahasa lokal {}: {}"

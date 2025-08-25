@@ -326,14 +326,6 @@ msgstr "Warning:"
 msgid "Iniciando descarga de idiomas..."
 msgstr "Starting language download..."
 
-#: controller/update_languages_controller.py:74
-msgid "data"
-msgstr "data"
-
-#: controller/update_languages_controller.py:76
-msgid "dataerror_msg"
-msgstr "dataerror_msg"
-
 #: controller/update_languages_controller.py:86
 #: ui/update_languages_dialog.py:72
 msgid "Actualización completada."

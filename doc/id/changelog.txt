@@ -1,0 +1,104 @@
+v3.0
+Sekarang kita dapat menentukan perangkat audio untuk suara dan pesan bacaan. Perlu dicatat, perubahan hanya berlaku pada mesin PiperTTS.
+Kita bisa mengambil chat platform hanya dengan nama pengguna. Contoh, ketik 4everzyanya, tekan tab, pilih TikTok, lalu enter akan membawa kita langsung ke siaran langsung TikTok pengguna.
+Editor pintasan keyboard bisa diakses sebelum dan saat chat berlangsung.
+v2.9
+Memperbaiki bug tidak bisa menambah saluran:
+*Untuk menambah saluran YouTube, tulis nama pengguna saluran diikuti /live. Contoh:
+www.youtube.com/@4everzyanya/live
+Memperbaiki kesalahan penyimpanan statistik dan ekspor akibat penambahan ruang permainan.
+Memperbaiki kesalahan: chat kini berhenti dengan benar di semua sesi.
+Menambahkan tab acara untuk mengabaikan jenis acara tertentu di program.
+Menambahkan fitur menerjemahkan pembaruan menggunakan Google Translate untuk pengguna non-Spanyol.
+v2.8
+Menambahkan dukungan membaca chat dari ruang permainan, terima kasih Oriol Gomez.
+v2.71
+Menambahkan opsi "daftar URL" di menu konteks pesan untuk akses cepat URL pengirim pesan.
+Menambahkan buffer baru bernama "pesan" untuk chat saja, berguna agar tidak bercampur dengan daftar umum di TikTok.
+Konverter mata uang sekarang tersedia untuk siaran TikTok.
+v2.7
+Menambahkan lebih banyak data statistik chat untuk siaran langsung TikTok.
+Menambahkan fitur memperbarui konfigurasi untuk mengatasi kesalahan yang tidak terduga.
+Bisa mengabaikan beberapa acara chat dari opsi tambahan.
+Menambahkan opsi menonaktifkan konfirmasi keluar.
+Memperbaiki pengambilan pesan Twitch dan menghindari duplikasi informasi.
+Menambahkan dukungan TikTok.
+Memperbaiki beberapa kesalahan minor.
+Memperbaiki kesalahan terkait jalur suara pada sintetis Piper.
+v2.6
+Terima kasih Mateo Celillo.
+Menambahkan pilihan sistem TTS di pengaturan jika sapi nonaktif.
+Menambahkan mesin TTS Piper.
+Memperbarui sistem suara.
+Menambahkan konfigurasi baru di data.json (sistemaTTS). Dianjurkan memulai ulang konfigurasi untuk menghindari masalah.
+Metalalchemist & Johan G.
+Memperbaiki kesalahan pengaturan yang berubah meski dibatalkan.
+Memperbaiki masalah mengambil chat dari URL YouTube.
+Menambahkan konverter mata uang untuk donasi.
+Memperbaiki kesalahan menambahkan judul Twitch ke favorit; kini menambahkan nama saluran.
+Menambahkan opsi salin tautan dan buka di browser.
+Memperbaiki buffer favorit agar tak menduplikasi pesan.
+Optimisasi kode minor.
+Menambahkan menu konteks chat untuk menerjemahkan pesan, salin pesan, dan arsipkan pesan (Johan G).
+Menambahkan fitur arsip pesan penting (Johan G).
+Menambahkan editor keyboard.
+Bisa menyimpan statistik saluran ke file teks (Johan G).
+Bisa menerjemahkan pesan.
+Menampilkan statistik pesan masuk dan pengguna aktif.
+Memperbaiki bug pesan campur dari siaran sebelumnya.
+Memperbaiki bug chat tidak dimulai otomatis.
+Dokumentasi daring tersedia dari menu bantuan.
+Memperbaiki penerjemah di Twitch.
+Mengelompokkan opsi chat di menu konteks (Johan G).
+v2.5
+Memperbaiki fungsi pencarian pesan.
+Memperbaiki bug pesan duplikat dan menambahkan ke kategori masing-masing.
+Bisa menerjemahkan chat ke berbagai bahasa.
+Menambahkan tombol simpan riwayat pesan ke file (Johan G).
+v2.2
+Mengubah updater, diadaptasi dari TWBlue.
+Menambahkan 2 opsi konfigurasi di pengaturan umum.
+Menambahkan pintasan untuk nonaktifkan suara: alt shift p.
+Memisahkan konfigurasi keyboard.
+Mengganti kombinasi nonaktifkan pesan sapi5: control p.
+Menambahkan pintasan hapus buffer pencarian & favorit: alt shift d.
+Bisa mencari pesan berdasarkan kata/nama penulis: alt shift s.
+v2.1
+Menampilkan pesan pemilik saluran.
+Memilih suara dari konfigurasi.
+Tidak memungkinkan 2 instansi VeTube.
+Mengaktifkan/nonaktifkan kategori dari konfigurasi.
+Memperbaiki bug favorit duplikat.
+Mode otomatis membaca hanya kategori aktif.
+Pintasan favorit: alt shift f.
+Kategori baru: anggota, donasi, moderator, pengguna verifikasi, favorit.
+Memperbaiki masalah judul/views pada chat otomatis.
+v2.0
+Menambahkan Twitch ke stream dukungan.
+Memperbaiki bug crash jika sapi atau pembaca aktif.
+Menambahkan favorit untuk menyimpan siaran langsung.
+Menambahkan bahasa Portugis (Eternal Legend).
+Memperbaiki pemuatan bahasa.
+v1.2.1
+Menghapus webbrowser, mengganti fungsi native wx-python (Hector).
+Menambahkan bahasa Inggris.
+Menambahkan opsi otomatis membaca dengan sapi atau pembaca layar.
+Mengubah pintasan otomatis baca pesan: alt shift m.
+Optimisasi pengambilan data judul/views (Hector).
+Memperbaiki bug instansi ganda.
+v1.2
+Katalog bahasa VeTube dibuat untuk penerjemahan.
+Menghapus pytchat, diganti chat_downloader.
+Memilih bahasa default di konfigurasi.
+Pemberitahuan update versi.
+Menambahkan suara untuk chat.
+Menghapus batas pesan.
+Memperbaiki crash interface.
+Menambahkan suara navigasi chat (Glein & Johan G).
+Link YouTube Studio dikenali langsung.
+v1.1
+Menambahkan dialog chat terpisah (Johan G).
+Menampilkan pesan dalam kotak teks.
+VeTube mengenali tautan offline.
+v1.0
+Versi pertama.
