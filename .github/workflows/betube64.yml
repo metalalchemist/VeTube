@@ -3,9 +3,9 @@ name: VeTube-x64
 on:
   push:
     tags: ["*"]
-    branches: [ master , piper ]
+    branches: [ master , reescrito ]
   pull_request:
-    branches: [ master , piper ]
+    branches: [ master , reescrito ]
   workflow_dispatch:
 
 jobs:
@@ -14,12 +14,12 @@ jobs:
 
     steps:
       - name: Source checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.12.4
+          python-version: 3.13.5
           architecture: x64
 
       - name: Install dependencies
@@ -32,18 +32,19 @@ jobs:
 
       - name: Compiling
         run: |
-          pyinstaller main.py --windowed
+          pyinstaller run_main.py --windowed
           gdown 1ZtF6zus0A7kC9Lwr_kTUbw0MiOoZq29H -O dist/VeTube/bootstrap.exe
           cd dist
-          Rename-Item main VeTube
+          Rename-Item run_main VeTube
           cd ..
           gdown 1ZtF6zus0A7kC9Lwr_kTUbw0MiOoZq29H -O dist/VeTube/bootstrap.exe
           cp -R chat_downloader dist/VeTube/_internal/
           cp -R doc dist/VeTube/
+          cp -R languages.json dist/VeTube/
           cp -R locales dist/VeTube/
           cp -R sounds dist/VeTube/
           cp -R espeak-phonemizer-windows/espeak_phonemizer dist/VeTube/_internal/
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: VeTube-x64
           path: dist/VeTube
@@ -54,7 +55,7 @@ jobs:
           7z a ../../VeTube-x64.zip .
           cd ../../
       - name: vetube_release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
         with:
           files: VeTube-x64.zip
