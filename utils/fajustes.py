@@ -11,14 +11,15 @@ configuraciones ={
 	'dispositivo': 1,
 	'sonidos': True,
 	'idioma': "system",
-	'categorias': [True,True, True, False, False, False],
+	'categorias': [True,True,True, True, False, False, False],
 	'listasonidos': [True, True, True, True, True, True, True, True,True,True,True,True,True],
-	'eventos': [True,True,True,True,True,True,True,True,True],
-	'unread': [True,True,True,True,True,True,True,True,True],
+	'eventos': [True,True,True,True,True,True,True,True,True,True],
+	'unread': [True,True,True,True,True,True,True,True,True,True],
 	'reader': True,
 	'donations': True,
 	'updates': True,
-	'traducir': False
+	'traducir': False,
+	'directorio':'default'
 }
 actualizar_configuracion = False
 
