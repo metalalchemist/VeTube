@@ -35,7 +35,7 @@ jobs:
           pyinstaller run_main_window.py --windowed
           gdown 1ZtF6zus0A7kC9Lwr_kTUbw0MiOoZq29H -O dist/VeTube/bootstrap.exe
           cd dist
-          Rename-Item run_main VeTube
+          Rename-Item run_main_window VeTube
           cd ..
           gdown 1ZtF6zus0A7kC9Lwr_kTUbw0MiOoZq29H -O dist/VeTube/bootstrap.exe
           cp -R chat_downloader dist/VeTube/_internal/
