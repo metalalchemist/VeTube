@@ -1,0 +1,1356 @@
+# Translations template for PROJECT.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-07-29 13:36-0700\n"
+"PO-Revision-Date: 2025-07-09 21:11+0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+"X-Generator: Poedit 3.6\n"
+
+#: vetube/VeTube.py:33
+msgid ""
+"Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Quieres "
+"abrir nuestra carpeta de Drive para descargar algunos modelos? Si pulsas sí, "
+"se abrirá nuestra carpeta seguido de una ventana para instalar una una vez "
+"la descargues."
+msgstr ""
+"Anda memerlukan setidaknya satu suara untuk dapat menggunakan synthesizer "
+"Piper. Apakah Anda ingin membuka folder Drive kami untuk mengunduh beberapa "
+"model? Jika Anda menekan Ya, folder kami akan terbuka diikuti dengan "
+"tampilan untuk menginstal setelah Anda mengunduhnya."
+
+#: vetube/VeTube.py:33 vetube/ajustes.py:58 vetube/ajustes.py:283
+msgid "No hay voces instaladas"
+msgstr "Tidak ada suara yang terinstal"
+
+#: vetube/VeTube.py:96
+msgid "Silencia la voz sapy"
+msgstr "Bisukan suara TTS SAPI"
+
+#: vetube/VeTube.py:97
+msgid "Mensaje anterior."
+msgstr "Pesan sebelumnya."
+
+#: vetube/VeTube.py:98
+msgid "Mensaje siguiente"
+msgstr "Pesan berikutnya"
+
+#: vetube/VeTube.py:99
+msgid "Buffer anterior"
+msgstr "Buffer sebelumnya"
+
+#: vetube/VeTube.py:100
+msgid "Siguiente Buffer"
+msgstr "Buffer berikutnya"
+
+#: vetube/VeTube.py:101
+msgid "Ir al comienzo del buffer"
+msgstr "Pergi ke awal buffer"
+
+#: vetube/VeTube.py:102
+msgid "Ir al final del buffer"
+msgstr "Pergi ke akhir buffer"
+
+#: vetube/VeTube.py:103
+msgid "Destaca un mensaje en el buffer de  favoritos"
+msgstr "Tandai pesan di buffer favorit"
+
+#: vetube/VeTube.py:104
+msgid "Copia el mensaje actual"
+msgstr "Salin pesan saat ini"
+
+#: vetube/VeTube.py:105
+msgid "Activa o desactiva la lectura automática"
+msgstr "Aktifkan atau nonaktifkan pembacaan otomatis"
+
+#: vetube/VeTube.py:106
+msgid "Busca una palabra en los mensajes actuales"
+msgstr "Cari kata di pesan saat ini"
+
+#: vetube/VeTube.py:107
+msgid "Muestra el mensaje actual en un cuadro de texto"
+msgstr "Tampilkan pesan saat ini dalam kotak teks"
+
+#: vetube/VeTube.py:108
+msgid "borra el buffer seleccionado"
+msgstr "hapus buffer terpilih"
+
+#: vetube/VeTube.py:109
+msgid "activa o desactiva los sonidos del programa"
+msgstr "aktifkan atau nonaktifkan suara aplikasi"
+
+#: vetube/VeTube.py:110
+msgid "Invocar el editor de combinaciones de teclado"
+msgstr "Membuka editor pintasan keyboard"
+
+#: vetube/VeTube.py:111
+msgid "Archivar un mensaje"
+msgstr "Arsipkan pesan"
+
+#: vetube/VeTube.py:115 vetube/ajustes.py:60
+msgid "Mensajes"
+msgstr "Pesan"
+
+#: vetube/VeTube.py:115 vetube/ajustes.py:60
+msgid "Miembros"
+msgstr "Members"
+
+#: vetube/VeTube.py:115 vetube/ajustes.py:60
+msgid "Donativos"
+msgstr "Donasi"
+
+#: vetube/VeTube.py:115 vetube/ajustes.py:60
+msgid "Moderadores"
+msgstr "Moderator"
+
+#: vetube/VeTube.py:115 vetube/ajustes.py:60
+msgid "Usuarios Verificados"
+msgstr "Pengguna Terverifikasi"
+
+#: vetube/VeTube.py:115 vetube/VeTube.py:160 vetube/VeTube.py:1311
+#: vetube/ajustes.py:60
+msgid "Favoritos"
+msgstr "Favorit"
+
+#: vetube/VeTube.py:118 vetube/ajustes.py:95
+msgid "General"
+msgstr "Umum"
+
+#: vetube/VeTube.py:127
+msgid ""
+"VeTube ya se encuentra en ejecución. Cierra la otra instancia antes de "
+"iniciar esta."
+msgstr ""
+"VeTube sudah berjalan. Silahkan Tutup aplikasi ini sebelum menjalankan "
+"aplikasi VeTube yang baru."
+
+#: vetube/VeTube.py:149
+msgid "&Más opciones"
+msgstr "&Opsi lainnya"
+
+#: vetube/VeTube.py:157
+msgid "Inicio"
+msgstr "Beranda"
+
+#: vetube/VeTube.py:162
+msgid "Escriba o pegue una URL o usuario"
+msgstr "Silahkan ketik atau tempelkan URL, bisa juga nama pengguna"
+
+#: vetube/VeTube.py:168
+msgid "Capturar el chat de: "
+msgstr "Mengambil chat dari: "
+
+#: vetube/VeTube.py:170
+msgid "detectar"
+msgstr "deteksi otomatis"
+
+#: vetube/VeTube.py:170
+msgid "YouTube"
+msgstr "YouTube"
+
+#: vetube/VeTube.py:170
+msgid "Twich"
+msgstr "Twitch"
+
+#: vetube/VeTube.py:170
+msgid "TikTok"
+msgstr "TikTok"
+
+#: vetube/VeTube.py:170
+msgid "La sala de juegos"
+msgstr "QuentinC Playroom"
+
+#: vetube/VeTube.py:174
+msgid "&Acceder"
+msgstr "&Sambungkan"
+
+#: vetube/VeTube.py:179
+msgid "&Borrar"
+msgstr "&Hapus"
+
+#: vetube/VeTube.py:184
+msgid "&Tus favoritos: "
+msgstr "&Favorit Anda: "
+
+#: vetube/VeTube.py:191
+#, python-format
+msgid "Favoritos (%s)"
+msgstr "Favorit (%s)"
+
+#: vetube/VeTube.py:193 vetube/VeTube.py:818 vetube/VeTube.py:836
+#: vetube/VeTube.py:853
+msgid "Tus favoritos aparecerán aquí"
+msgstr "Favorit Anda akan muncul di sini"
+
+#: vetube/VeTube.py:194 vetube/VeTube.py:1413
+msgid "&Borrar favorito"
+msgstr "&Hapus Favorit"
+
+#: vetube/VeTube.py:198 vetube/VeTube.py:215
+msgid "&Seleccionar todos los elementos"
+msgstr "&Pilih semua item"
+
+#: vetube/VeTube.py:203
+msgid "mensajes archivados"
+msgstr "pesan yang diarsipkan"
+
+#: vetube/VeTube.py:205
+msgid "&Mensajes archivados: "
+msgstr "&Pesan yang diarsipkan: "
+
+#: vetube/VeTube.py:211 vetube/VeTube.py:1404
+msgid "&Borrar mensaje"
+msgstr "&Hapus pesan"
+
+#: vetube/VeTube.py:230 vetube/VeTube.py:457
+msgid "&Opciones"
+msgstr "&Opsi"
+
+#: vetube/VeTube.py:231 vetube/VeTube.py:524
+msgid "&Editor de combinaciones de teclado para VeTube"
+msgstr "&Editor Pintasan Keyboard untuk VeTube"
+
+#: vetube/VeTube.py:233
+msgid "&Configuración"
+msgstr "&Pengaturan"
+
+#: vetube/VeTube.py:235
+msgid "&Restablecer los ajustes"
+msgstr "&Setel ulang pengaturan"
+
+#: vetube/VeTube.py:237
+msgid "&Ayuda"
+msgstr "&Bantuan"
+
+#: vetube/VeTube.py:238
+msgid "¿Cómo usar &vetube? (documentación en línea)"
+msgstr "Cara menggunakan &VeTube? (dokumentasi online)"
+
+#: vetube/VeTube.py:240
+msgid "Únete a nuestra &causa"
+msgstr "Gabung &komunitas kami"
+
+#: vetube/VeTube.py:242
+msgid "&Visita nuestra página de github"
+msgstr "&Kunjungi halaman GitHub kami"
+
+#: vetube/VeTube.py:244
+msgid "&buscar actualizaciones"
+msgstr "&Periksa pembaruan"
+
+#: vetube/VeTube.py:246
+msgid "&Acerca de"
+msgstr "&Tentang"
+
+#: vetube/VeTube.py:248
+msgid "&Salir...\tAlt+F4"
+msgstr "&Keluar...\tAlt+F4"
+
+#: vetube/VeTube.py:266
+msgid "Editor de combinaciones de teclado para Vetube"
+msgstr "Editor Pintasan Keyboard untuk VeTube"
+
+#: vetube/VeTube.py:268
+msgid "&Selecciona la combinación de teclado a editar"
+msgstr "&Pilih pintasan keyboard yang akan diedit"
+
+#: vetube/VeTube.py:270
+msgid "acción: "
+msgstr "tindakan: "
+
+#: vetube/VeTube.py:271
+msgid "combinación de teclas: "
+msgstr "pintasan keyboard: "
+
+#: vetube/VeTube.py:280
+msgid "&Editar"
+msgstr "&Edit"
+
+#: vetube/VeTube.py:283
+msgid "&restaurar combinaciones por defecto"
+msgstr "&Kembalikan pintasan default"
+
+#: vetube/VeTube.py:285 vetube/VeTube.py:331 vetube/VeTube.py:585
+#: vetube/VeTube.py:1337 vetube/VeTube.py:1456
+msgid "&Cerrar"
+msgstr "&Tutup"
+
+#: vetube/VeTube.py:306
+#, python-format
+msgid "Editando la combinación de teclas para %s"
+msgstr "Mengedit pintasan keyboard untuk %s"
+
+#: vetube/VeTube.py:312
+msgid "Selecciona las teclas que quieres usar"
+msgstr "Pilih tombol yang ingin Anda gunakan"
+
+#: vetube/VeTube.py:315
+msgid "&Control"
+msgstr "&Control"
+
+#: vetube/VeTube.py:317
+msgid "&Alt"
+msgstr "&Alt"
+
+#: vetube/VeTube.py:319
+msgid "&Shift"
+msgstr "&Shift"
+
+#: vetube/VeTube.py:321
+msgid "&Windows"
+msgstr "&Windows"
+
+#: vetube/VeTube.py:324
+msgid "&Selecciona una tecla para la combinación"
+msgstr "&Pilih tombol untuk pintasan"
+
+#: vetube/VeTube.py:328
+msgid "&Aplicar nueva combinación de teclado"
+msgstr "&Terapkan pintasan keyboard baru"
+
+#: vetube/VeTube.py:363
+msgid "Debe escoger al menos una tecla de las casillas de berificación"
+msgstr "Anda harus memilih setidaknya satu tombol dari kotak centang"
+
+#: vetube/VeTube.py:368
+#, python-format
+msgid "esta combinación ya está siendo usada en la función %s"
+msgstr "kombinasi ini sudah digunakan oleh fungsi %s"
+
+#: vetube/VeTube.py:378
+msgid "esa combinación está siendo usada por el sistema"
+msgstr "kombinasi ini sedang digunakan oleh sistem"
+
+#: vetube/VeTube.py:393
+msgid ""
+"Está apunto de restaurar las combinaciones a sus valores por defecto, ¿desea "
+"proceder? Esta acción no se puede desacer."
+msgstr ""
+"Anda akan mengembalikan pintasan menjadi pintasan bawaan, apakah Anda ingin "
+"melanjutkan? Tindakan ini tidak dapat dibatalkan."
+
+#: vetube/VeTube.py:393 vetube/VeTube.py:606 vetube/VeTube.py:681
+#: vetube/VeTube.py:688 vetube/update/update.py:131
+msgid "Atención:"
+msgstr "Perhatian:"
+
+#: vetube/VeTube.py:413
+msgid "Creadores del proyecto:"
+msgstr "Pembuat proyek:"
+
+#: vetube/VeTube.py:413
+msgid ""
+"Descripción:\n"
+" Lee en voz alta los mensajes de los directos en youtube y twitch, ajusta "
+"tus preferencias como quieras y disfruta más tus canales favoritos."
+msgstr ""
+"Deskripsi:\n"
+"Membaca pesan langsung dari YouTube, TikTok, QuentinC's  playroom, Twitch "
+"dengan suara, sesuaikan preferensi Anda, dan nikmati saluran favorit Anda."
+
+#: vetube/VeTube.py:414 vetube/VeTube.py:834
+msgid "Información"
+msgstr "Informasi"
+
+#: vetube/VeTube.py:438 vetube/VeTube.py:488
+msgid ""
+"¡Parece que el enlace al cual está intentando acceder no es un enlace válido."
+msgstr "Sepertinya tautan yang Anda coba akses tidak valid."
+
+#: vetube/VeTube.py:443
+msgid "Chat en vivo"
+msgstr "Obrolan siaran langsung"
+
+#: vetube/VeTube.py:445
+msgid "Lectura del chat en vivo..."
+msgstr "Sedang membaca obrolan siaran langsung..."
+
+#: vetube/VeTube.py:449
+msgid "historial  de mensajes: "
+msgstr "riwayat pesan: "
+
+#: vetube/VeTube.py:461
+msgid "&Detener chat"
+msgstr "&putuskan dari obrolan siaran langsung"
+
+#: vetube/VeTube.py:469
+msgid "Ingresando al chat."
+msgstr "Memasuki obrolan."
+
+#: vetube/VeTube.py:472
+msgid "cargando..."
+msgstr "memuat..."
+
+#: vetube/VeTube.py:490
+msgid ""
+"No ha sido posible engancharse al proceso de la sala de juegos. Debe estar "
+"ejecutándose antes de empezar a capturar chats. Si tienes dudas, por favor "
+"ponte en contacto con nosotros. Código de error: "
+msgstr ""
+"Tidak dapat terhubung ke aplikasi QuentinC's  Playroom. aplikasinya harus "
+"terbuka dulu sebelum Anda dapat mengambil obrolan. Jika Anda memiliki "
+"pertanyaan, silakan hubungi kami. Kode kesalahan: "
+
+#: vetube/VeTube.py:493
+msgid ""
+"No se puede  acceder porque el campo de  texto está vacío, debe escribir  "
+"algo."
+msgstr ""
+"Tidak dapat mengakses karena kolom teks kosong, Anda harus memasukkan "
+"sesuatu."
+
+#: vetube/VeTube.py:497
+msgid "&Traducir"
+msgstr "&Terjemahkan"
+
+#: vetube/VeTube.py:499
+msgid "&Mostrar el mensaje en un cuadro de texto."
+msgstr "&Tampilkan pesan dalam kotak teks."
+
+#: vetube/VeTube.py:501
+msgid "&Copiar mensaje al portapapeles"
+msgstr "&Salin pesan ke papan klip"
+
+#: vetube/VeTube.py:503
+msgid "&Listado de Urls."
+msgstr "&Daftar URL."
+
+#: vetube/VeTube.py:505
+msgid "&Archivar mensaje"
+msgstr "&Arsipkan pesan"
+
+#: vetube/VeTube.py:515
+msgid "Mensaje traducido"
+msgstr "Pesan diterjemahkan"
+
+#: vetube/VeTube.py:515
+msgid ""
+"el mensaje se ha traducido al idioma del programa y se  a  copiado en el "
+"portapapeles."
+msgstr ""
+"pesan telah diterjemahkan ke bahasa aplikasi saat ini, dan disalin ke papan "
+"klip."
+
+#: vetube/VeTube.py:519
+msgid "Mensaje copiado al portapapeles"
+msgstr "Pesan disalin ke papan klip"
+
+#: vetube/VeTube.py:519
+msgid "El mensaje seleccionado ha sido copiado al portapapeles."
+msgstr "Pesan yang dipilih telah disalin ke papan klip."
+
+#: vetube/VeTube.py:525
+msgid "&Borrar historial de mensajes"
+msgstr "&Hapus riwayat pesan"
+
+#: vetube/VeTube.py:526
+msgid "E&xportar los mensajes en un archivo de texto"
+msgstr "E&ekspor pesan ke file teks"
+
+#: vetube/VeTube.py:530 vetube/VeTube.py:531
+msgid "&Añadir este canal a favoritos"
+msgstr "&Tambahkan saluran ini ke favorit"
+
+#: vetube/VeTube.py:533
+msgid "&Ver estadísticas del chat"
+msgstr "&Lihat statistik obrolan"
+
+#: vetube/VeTube.py:535
+msgid "&Copiar enlace del chat al portapapeles"
+msgstr "&Salin tautan obrolan ke papan klip"
+
+#: vetube/VeTube.py:536
+msgid "&Reproducir video en el navegador"
+msgstr "&Putar video di browser"
+
+#: vetube/VeTube.py:546
+msgid "Enlace copiado al portapapeles"
+msgstr "Tautan disalin ke papan klip"
+
+#: vetube/VeTube.py:546
+msgid "El enlace del chat ha sido copiado al portapapeles."
+msgstr "Tautan obrolan telah disalin ke papan klip."
+
+#: vetube/VeTube.py:565
+msgid "Estadísticas del chat:"
+msgstr "Statistik obrolan:"
+
+#: vetube/VeTube.py:567
+msgid "&Usuarios y mensajes:"
+msgstr "&pengguna dan pesan:"
+
+#: vetube/VeTube.py:570
+msgid "Usuario: "
+msgstr "Pengguna: "
+
+#: vetube/VeTube.py:571
+msgid "Cantidad de mensajes: "
+msgstr "Jumlah pesan: "
+
+#: vetube/VeTube.py:576
+msgid "&Estadísticas totales:"
+msgstr "&Jumlah statistik:"
+
+#: vetube/VeTube.py:579
+#, python-format
+msgid ""
+"Total de usuarios: %s\n"
+"Total de mensajes: %s"
+msgstr ""
+"Jumlah pengguna: %s\n"
+"Jumlah pesan: %s"
+
+#: vetube/VeTube.py:580
+msgid ""
+"\n"
+"total de megusta del en vivo: "
+msgstr ""
+"\n"
+"Jumlah yang menyukai siaran langsung: "
+
+#: vetube/VeTube.py:580
+msgid ""
+"\n"
+"total de usuarios que compartieron el en vivo: "
+msgstr ""
+"\n"
+"Jumlah pengguna yang membagikan siaran langsung: "
+
+#: vetube/VeTube.py:580
+msgid ""
+"\n"
+"nuevos usuarios que siguen al moderador del en vivo: "
+msgstr ""
+"\n"
+"Pengguna baru yang mengikuti moderator siaran langsung: "
+
+#: vetube/VeTube.py:580
+msgid ""
+"\n"
+"nuevos usuarios que  se unieron al en vivo: "
+msgstr ""
+"\n"
+"Pengguna baru yang bergabung dengan siaran langsung: "
+
+#: vetube/VeTube.py:582
+msgid "&Guardar las estadísticas en un archivo de texto"
+msgstr "&Simpan statistik ke file teks"
+
+#: vetube/VeTube.py:591
+msgid "Guardar archivo de texto"
+msgstr "Simpan file teks"
+
+#: vetube/VeTube.py:591
+#, python-format
+msgid "estadísticas %s %s.txt"
+msgstr "statistik %s %s.txt"
+
+#: vetube/VeTube.py:591
+#, python-format
+msgid "estadísticas %s.txt"
+msgstr "statistik %s.txt"
+
+#: vetube/VeTube.py:591
+msgid "Archivos de texto (*.txt)|*.txt"
+msgstr "File teks (*.txt)|*.txt"
+
+#: vetube/VeTube.py:596
+#, python-format
+msgid "Estadísticas del canal: %s"
+msgstr "Statistik saluran: %s"
+
+#: vetube/VeTube.py:596
+msgid "estadísticas de la sala de juegos"
+msgstr "statistik QuentinC's Playroom"
+
+#: vetube/VeTube.py:598
+msgid "Usuarios y mensajes:"
+msgstr "Pengguna dan pesan:"
+
+#: vetube/VeTube.py:606
+msgid "¿Desea salir de esta ventana y detener la lectura de los mensajes?"
+msgstr ""
+"Apakah Anda ingin keluar dari aplikasi ini dan menghentikan pembacaan pesan?"
+
+#: vetube/VeTube.py:618
+msgid "ha finalizado la lectura del chat."
+msgstr "pembacaan obrolan telah dihentikan."
+
+#: vetube/VeTube.py:626
+msgid "Guardar lista de mensajes"
+msgstr "Simpan daftar pesan"
+
+#: vetube/VeTube.py:630
+msgid "Lista de mensajes guardada correctamente."
+msgstr "Daftar pesan berhasil disimpan."
+
+#: vetube/VeTube.py:632
+msgid "No hay mensajes para guardar."
+msgstr "Tidak ada pesan untuk disimpan."
+
+#: vetube/VeTube.py:660
+msgid ""
+"Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea "
+"reiniciarlo ahora?"
+msgstr ""
+"Aplikasi ini perlu dimulai ulang untuk menerapkan bahasa baru. Apakah Anda "
+"ingin memulai ulang sekarang?"
+
+#: vetube/VeTube.py:660 vetube/VeTube.py:842
+msgid "¡Atención!"
+msgstr "Perhatian!"
+
+#: vetube/VeTube.py:681
+msgid "Está apunto de eliminar del historial aproximadamente "
+msgstr "Anda akan menghapus sekitar "
+
+#: vetube/VeTube.py:681
+msgid " elementos, ¿desea proceder? Esta acción no se puede desacer."
+msgstr ""
+" item dari riwayat, apakah Anda ingin melanjutkan? Tindakan ini tidak dapat "
+"dibatalkan."
+
+#: vetube/VeTube.py:682
+msgid "&Eliminar"
+msgstr "&Hapus"
+
+#: vetube/VeTube.py:682 vetube/ajustes.py:257 vetube/update/update.py:132
+msgid "&Cancelar"
+msgstr "&Batal"
+
+#: vetube/VeTube.py:683
+msgid "No hay elementos que borrar"
+msgstr "Tidak ada item untuk dihapus"
+
+#: vetube/VeTube.py:688
+msgid ""
+"Estás apunto de reiniciar la configuración a sus valores predeterminados, "
+"¿Deseas proceder?"
+msgstr ""
+"Anda akan mereset pengaturan menjadi default bawaan aplikasi, apakah Anda "
+"ingin melanjutkan?"
+
+#: vetube/VeTube.py:723 vetube/VeTube.py:730 vetube/VeTube.py:731
+#: vetube/VeTube.py:738
+msgid "privado de "
+msgstr "pribadi dari "
+
+#: vetube/VeTube.py:775
+msgid "¡Copiado!"
+msgstr "Disalin!"
+
+#: vetube/VeTube.py:795
+msgid "Lectura automática activada."
+msgstr "Pembacaan otomatis diaktifkan."
+
+#: vetube/VeTube.py:795
+msgid "Lectura automática  desactivada."
+msgstr "Pembacaan otomatis dinonaktifkan."
+
+#: vetube/VeTube.py:798
+msgid "¿está seguro que desea salir del programa?"
+msgstr "Apakah Anda yakin ingin keluar dari aplikasi ini?"
+
+#: vetube/VeTube.py:798
+msgid "¡atención!"
+msgstr "Perhatian!"
+
+#: vetube/VeTube.py:804 vetube/VeTube.py:807
+msgid "no hay elementos en el historial"
+msgstr "tidak ada item dalam riwayat"
+
+#: vetube/VeTube.py:824
+msgid "Ya se encuentra en favoritos"
+msgstr "Sudah ada di favorit"
+
+#: vetube/VeTube.py:824 vetube/VeTube.py:830
+msgid "Aviso"
+msgstr "Pemberitahuan"
+
+#: vetube/VeTube.py:830
+msgid "Se ha agregado a favoritos"
+msgstr "Telah ditambahkan ke favorit"
+
+#: vetube/VeTube.py:834
+msgid "Al parecer tienes la última versión del programa"
+msgstr "Tampaknya aplikasi ini sudah versi terbaru"
+
+#: vetube/VeTube.py:837
+msgid "No hay favoritos que borrar"
+msgstr "Tidak ada favorit yang bisa dihapus"
+
+#: vetube/VeTube.py:837
+msgid "Error"
+msgstr "Kesalahan"
+
+#: vetube/VeTube.py:842
+msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
+msgstr "Apakah Anda yakin ingin menghapus semua favorit dari daftar?"
+
+#: vetube/VeTube.py:851
+msgid "Se a borrado el elemento de favoritos"
+msgstr "Item telah dihapus dari favorit"
+
+#: vetube/VeTube.py:869
+msgid " se a conectado al chat. "
+msgstr " terhubung ke obrolan. "
+
+#: vetube/VeTube.py:896
+msgid "Propietario "
+msgstr "Pemilik "
+
+#: vetube/VeTube.py:909
+msgid "Moderador "
+msgstr "Moderator "
+
+#: vetube/VeTube.py:922
+msgid "Miembro "
+msgstr "Members "
+
+#: vetube/VeTube.py:935
+msgid " (usuario verificado): "
+msgstr " (pengguna terverifikasi): "
+
+#: vetube/VeTube.py:972
+msgid "Ingresando al chat"
+msgstr "Memasuki obrolan"
+
+#: vetube/VeTube.py:991 vetube/VeTube.py:993 vetube/VeTube.py:996
+#: vetube/VeTube.py:997
+msgid " envió un emogi."
+msgstr " mengirim emoji."
+
+#: vetube/VeTube.py:1002
+msgid "ha enviado un cofre!"
+msgstr "telah mengirim kotak!"
+
+#: vetube/VeTube.py:1003 vetube/VeTube.py:1004
+msgid " ha enviado un cofre!"
+msgstr " telah mengirim kotak!"
+
+#: vetube/VeTube.py:1010 vetube/VeTube.py:1011 vetube/VeTube.py:1012
+msgid " comenzó a seguirte!"
+msgstr " mulai mengikuti Anda!"
+
+#: vetube/VeTube.py:1021 vetube/VeTube.py:1029
+#, python-format
+msgid "%s ha enviado %s %s (%s %s)"
+msgstr "%s telah mengirim %s %s (%s %s)"
+
+#: vetube/VeTube.py:1022 vetube/VeTube.py:1030
+#, python-format
+msgid "%s ha enviado %s %s (%s diamante)"
+msgstr "%s telah mengirim %s %s (%s diamond)"
+
+#: vetube/VeTube.py:1049 vetube/VeTube.py:1050 vetube/VeTube.py:1051
+msgid " se ha unido a tu en vivo."
+msgstr " telah bergabung dengan siaran langsung Anda."
+
+#: vetube/VeTube.py:1058 vetube/VeTube.py:1059 vetube/VeTube.py:1061
+msgid " le ha dado me gusta a tu en vivo."
+msgstr " menyukai siaran langsung Anda."
+
+#: vetube/VeTube.py:1067 vetube/VeTube.py:1069
+msgid " ha compartido tu en vivo!"
+msgstr " telah membagikan siaran langsung Anda!"
+
+#: vetube/VeTube.py:1068
+msgid " ha compartido el en vivo!"
+msgstr " telah membagikan siaran langsung!"
+
+#: vetube/VeTube.py:1072
+msgid " en vivo, actualmente "
+msgstr " siaran langsung, saat ini "
+
+#: vetube/VeTube.py:1072
+msgid " viendo ahora"
+msgstr " sedang menonton"
+
+#: vetube/VeTube.py:1101 vetube/VeTube.py:1103 vetube/VeTube.py:1106
+#: vetube/VeTube.py:1107 vetube/VeTube.py:1190 vetube/VeTube.py:1192
+#: vetube/VeTube.py:1195 vetube/VeTube.py:1196
+msgid " ha renovado su suscripción en el nivel "
+msgstr " telah memperbarui langganannya di level "
+
+#: vetube/VeTube.py:1101 vetube/VeTube.py:1103 vetube/VeTube.py:1106
+#: vetube/VeTube.py:1107 vetube/VeTube.py:1190 vetube/VeTube.py:1192
+#: vetube/VeTube.py:1195 vetube/VeTube.py:1196
+msgid ". lleva suscrito por"
+msgstr ". Telah berlangganan selama"
+
+#: vetube/VeTube.py:1101 vetube/VeTube.py:1103 vetube/VeTube.py:1190
+#: vetube/VeTube.py:1192
+msgid " meses! "
+msgstr " bulan! "
+
+#: vetube/VeTube.py:1106 vetube/VeTube.py:1107 vetube/VeTube.py:1114
+#: vetube/VeTube.py:1116 vetube/VeTube.py:1119 vetube/VeTube.py:1120
+#: vetube/VeTube.py:1175 vetube/VeTube.py:1177 vetube/VeTube.py:1180
+#: vetube/VeTube.py:1181 vetube/VeTube.py:1195 vetube/VeTube.py:1196
+msgid " meses!"
+msgstr " bulan!"
+
+#: vetube/VeTube.py:1114 vetube/VeTube.py:1116 vetube/VeTube.py:1119
+#: vetube/VeTube.py:1120
+msgid " se ha suscrito en el nivel "
+msgstr " telah berlangganan di level "
+
+#: vetube/VeTube.py:1114 vetube/VeTube.py:1116 vetube/VeTube.py:1119
+#: vetube/VeTube.py:1120 vetube/VeTube.py:1175 vetube/VeTube.py:1177
+#: vetube/VeTube.py:1180 vetube/VeTube.py:1181
+msgid " por "
+msgstr " untuk "
+
+#: vetube/VeTube.py:1162 vetube/VeTube.py:1164 vetube/VeTube.py:1167
+#: vetube/VeTube.py:1168
+msgid " regaló una suscripción de nivel "
+msgstr " memberikan langganan level "
+
+#: vetube/VeTube.py:1162 vetube/VeTube.py:1164 vetube/VeTube.py:1167
+#: vetube/VeTube.py:1168
+msgid " a la  comunidad, ha regalado un total de "
+msgstr " kepada komunitas, total telah memberikan "
+
+#: vetube/VeTube.py:1162 vetube/VeTube.py:1164 vetube/VeTube.py:1167
+#: vetube/VeTube.py:1168
+msgid " suscripciones!"
+msgstr " langganan!"
+
+#: vetube/VeTube.py:1175 vetube/VeTube.py:1177 vetube/VeTube.py:1180
+#: vetube/VeTube.py:1181
+msgid " a regalado una suscripción a "
+msgstr " memberikan langganan kepada "
+
+#: vetube/VeTube.py:1175 vetube/VeTube.py:1177 vetube/VeTube.py:1180
+#: vetube/VeTube.py:1181
+msgid " en el nivel "
+msgstr " di level "
+
+#: vetube/VeTube.py:1306
+msgid "no puedes agregar un Favorito del bufer de favoritos"
+msgstr "anda tidak dapat menambahkan Favorit dari buffer favorit"
+
+#: vetube/VeTube.py:1317 vetube/VeTube.py:1322
+msgid "este mensaje ya se encuentra en el buffer de favoritos."
+msgstr "pesan ini sudah ada di buffer favorit."
+
+#: vetube/VeTube.py:1325
+msgid "Se agregó el elemento a la lista de favoritos..."
+msgstr "Item telah ditambahkan ke daftar favorit..."
+
+#: vetube/VeTube.py:1328
+msgid "escriba el término de su búsqueda"
+msgstr "ketik istilah pencarian Anda"
+
+#: vetube/VeTube.py:1334
+msgid "&Buscar"
+msgstr "&Cari"
+
+#: vetube/VeTube.py:1355
+msgid ""
+"No hay ningún criterio de búsqueda que coincida con el término ingresado."
+msgstr ""
+"Tidak ada kriteria pencarian yang cocok dengan istilah yang dimasukkan."
+
+#: vetube/VeTube.py:1355
+msgid "información"
+msgstr "informasi"
+
+#: vetube/VeTube.py:1358
+#, python-format
+msgid "se encontraron %s resultados"
+msgstr "%s hasil ditemukan"
+
+#: vetube/VeTube.py:1360
+msgid ""
+"No hay nada que buscar porque el campo de  texto está vacío, debe escribir  "
+"algo."
+msgstr ""
+"Tidak ada yang bisa dicari karena kolom teks kosong, Anda harus mengetik "
+"sesuatu."
+
+#: vetube/VeTube.py:1366
+msgid "Se eliminó el buffer"
+msgstr "Buffer telah dihapus"
+
+#: vetube/VeTube.py:1367
+msgid "No es posible borrar este buffer"
+msgstr "Tidak dapat menghapus buffer ini"
+
+#: vetube/VeTube.py:1370
+msgid "Sonidos activados."
+msgstr "Suara diaktifkan."
+
+#: vetube/VeTube.py:1370
+msgid "Sonidos desactivados"
+msgstr "Suara dinonaktifkan"
+
+#: vetube/VeTube.py:1372 vetube/VeTube.py:1430 vetube/VeTube.py:1438
+msgid "Tus mensajes archivados aparecerán aquí"
+msgstr "Pesan arsip Anda akan muncul di sini"
+
+#: vetube/VeTube.py:1384 vetube/VeTube.py:1391
+msgid "El mensaje ya está archivado."
+msgstr "Pesan sudah diarsipkan."
+
+#: vetube/VeTube.py:1384 vetube/VeTube.py:1391
+msgid "error"
+msgstr "kesalahan"
+
+#: vetube/VeTube.py:1397
+msgid "se archivó el mensaje"
+msgstr "pesan telah diarsipkan"
+
+#: vetube/VeTube.py:1400
+msgid "&Borrar mensajes"
+msgstr "&Hapus pesan"
+
+#: vetube/VeTube.py:1401
+msgid "Borrar todos los mensajes destacados"
+msgstr "Hapus semua pesan yang dibintangi"
+
+#: vetube/VeTube.py:1405
+msgid "Borrar el mensaje destacado seleccionado"
+msgstr "Hapus pesan yang dipilih dan dibintangi"
+
+#: vetube/VeTube.py:1409
+msgid "&Borrar favoritos"
+msgstr "&Hapus favorit"
+
+#: vetube/VeTube.py:1410
+msgid "Borrar todos los favoritos"
+msgstr "Hapus semua favorit"
+
+#: vetube/VeTube.py:1414
+msgid "Borrar el favorito seleccionado"
+msgstr "Hapus favorit yang dipilih"
+
+#: vetube/VeTube.py:1424
+msgid "se eliminó el mensaje de tus mensajes archivados"
+msgstr "pesan telah dihapus dari pesan arsip Anda"
+
+#: vetube/VeTube.py:1426
+msgid "No hay más elementos que borrar"
+msgstr "Tidak ada lagi item yang bisa dihapus"
+
+#: vetube/VeTube.py:1428 vetube/VeTube.py:1442
+msgid "No hay mensajes que borrar"
+msgstr "Tidak ada pesan yang bisa dihapus"
+
+#: vetube/VeTube.py:1434
+msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
+msgstr "Apakah Anda yakin ingin menghapus semua pesan?"
+
+#: vetube/VeTube.py:1439
+msgid "se eliminaron los mensajes archivados"
+msgstr "pesan arsip telah dihapus"
+
+#: vetube/VeTube.py:1447
+msgid "Lista de URLS"
+msgstr "Daftar URL"
+
+#: vetube/VeTube.py:1462
+msgid "No hay URLS en este  mensaje"
+msgstr "Tidak ada URL di pesan ini"
+
+#: vetube/ajustes.py:50
+msgid "Por defecto"
+msgstr "Secara default"
+
+#: vetube/ajustes.py:63
+msgid "Sonido cuando llega un mensaje"
+msgstr "Suara ketika pesan masuk"
+
+#: vetube/ajustes.py:64
+msgid "Sonido cuando habla un miembro"
+msgstr "Suara ketika member berbicara"
+
+#: vetube/ajustes.py:65
+msgid ""
+"Sonido cuando se conecta un miembro o cuando alguien se une a tu en vivo en "
+"tiktok"
+msgstr ""
+"Suara ketika anggota terhubung atau ketika seseorang bergabung dengan siaran "
+"langsung Anda di TikTok"
+
+#: vetube/ajustes.py:66
+msgid "Sonido cuando llega un donativo"
+msgstr "Suara ketika menerima donasi"
+
+#: vetube/ajustes.py:67
+msgid "Sonido cuando habla un moderador"
+msgstr "Suara ketika moderator berbicara"
+
+#: vetube/ajustes.py:68
+msgid "Sonido cuando habla un usuario verificado"
+msgstr "Suara ketika pengguna terverifikasi berbicara"
+
+#: vetube/ajustes.py:69
+msgid "Sonido al ingresar al chat"
+msgstr "Suara saat memasuki obrolan"
+
+#: vetube/ajustes.py:70
+msgid "Sonido cuando habla el propietario del canal"
+msgstr "Suara ketika pemilik saluran berbicara"
+
+#: vetube/ajustes.py:71
+msgid "sonido al terminar la búsqueda de mensajes"
+msgstr "suara saat pencarian pesan selesai"
+
+#: vetube/ajustes.py:72
+msgid "sonido cuando le dan me gusta al en vivo (solo para tiktok)"
+msgstr "suara ketika ada yang menyukai siaran langsung (khusus TikTok)"
+
+#: vetube/ajustes.py:73
+msgid "Sonido cuando alguien empieza a seguirte en tiktok"
+msgstr "Suara ketika seseorang mulai mengikuti Anda di TikTok"
+
+#: vetube/ajustes.py:74
+msgid "Sonido cuando alguien comparte el enlace de tu envivo en  tiktok"
+msgstr ""
+"Suara ketika seseorang membagikan tautan siaran langsung Anda di TikTok"
+
+#: vetube/ajustes.py:75
+msgid "Sonido cuando alguien envía un cofre  en tiktok"
+msgstr "Suara ketika seseorang mengirim kotak di TikTok"
+
+#: vetube/ajustes.py:78
+msgid "Cuando habla un miembro"
+msgstr "Ketika member berbicara"
+
+#: vetube/ajustes.py:79
+msgid ""
+"Cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok"
+msgstr ""
+"Ketika member terhubung atau ketika seseorang bergabung dengan siaran "
+"langsung Anda di TikTok"
+
+#: vetube/ajustes.py:80
+msgid "Cuando llega un donativo"
+msgstr "Ketika menerima donasi"
+
+#: vetube/ajustes.py:81
+msgid "Cuando habla un moderador"
+msgstr "Ketika moderator berbicara"
+
+#: vetube/ajustes.py:82
+msgid "Cuando habla un usuario verificado"
+msgstr "Ketika pengguna terverifikasi berbicara"
+
+#: vetube/ajustes.py:83
+msgid "Cuando le dan me gusta al en vivo (solo para tiktok)"
+msgstr "Ketika ada yang menyukai siaran langsung (khusus TikTok)"
+
+#: vetube/ajustes.py:84
+msgid "Cuando alguien empieza a seguirte en tiktok"
+msgstr "Ketika seseorang mulai mengikuti Anda di TikTok"
+
+#: vetube/ajustes.py:85
+msgid "Cuando alguien comparte el enlace de tu envivo en  tiktok"
+msgstr "Ketika seseorang membagikan tautan siaran langsung Anda di TikTok"
+
+#: vetube/ajustes.py:86
+msgid "Cuando alguien envía un cofre  en tiktok"
+msgstr "Ketika seseorang mengirim kotak di TikTok"
+
+#: vetube/ajustes.py:88
+msgid "Configuración"
+msgstr "Pengaturan"
+
+#: vetube/ajustes.py:90 vetube/ajustes.py:205
+msgid "Categorías"
+msgstr "Kategori"
+
+#: vetube/ajustes.py:97
+msgid "Opciones de la app"
+msgstr "Opsi Aplikasi"
+
+#: vetube/ajustes.py:99
+msgid "Idioma de VeTube (Requiere reiniciar)"
+msgstr "Bahasa VeTube (diperlukan mulai ulang)"
+
+#: vetube/ajustes.py:104
+msgid "Activar diálogo de donaciones al inicio de la app."
+msgstr "Aktifkan dialog donasi di awal aplikasi."
+
+#: vetube/ajustes.py:108
+msgid "preguntar si desea salir de la app al cerrar."
+msgstr "menanyakan apakah ingin keluar dari aplikasi saat program ditutup."
+
+#: vetube/ajustes.py:112
+msgid "Comprobar si hay actualizaciones al iniciar la app"
+msgstr "Periksa pembaruan saat menjalankan aplikasi"
+
+#: vetube/ajustes.py:116
+msgid "intentar traducir las novedades cuando salga una actualización."
+msgstr "menterjemahkan What's new ketika ada update."
+
+#: vetube/ajustes.py:120
+msgid "traducción de mensajes: "
+msgstr "terjemahan pesan: "
+
+#: vetube/ajustes.py:125
+msgid "convertir las donaciones a la divisa: "
+msgstr "konversi donasi ke mata uang: "
+
+#: vetube/ajustes.py:132
+msgid "Voz"
+msgstr "Suara"
+
+#: vetube/ajustes.py:134
+msgid "Opciones del habla"
+msgstr "Opsi Ucapan"
+
+#: vetube/ajustes.py:136
+msgid "Usar voz sapi en lugar de lector de pantalla."
+msgstr "Gunakan suara SAPI , bukan suara pembaca layar."
+
+#: vetube/ajustes.py:140
+msgid "Sistema TTS a usar: "
+msgstr "Sistem TTS yang akan digunakan: "
+
+#: vetube/ajustes.py:150
+msgid "Activar lectura de mensajes automática"
+msgstr "Aktifkan pembacaan pesan otomatis"
+
+#: vetube/ajustes.py:154
+msgid "Voz: "
+msgstr "Suara: "
+
+#: vetube/ajustes.py:165
+msgid "Instalar un paquete de voz..."
+msgstr "Instal paket suara..."
+
+#: vetube/ajustes.py:170
+msgid "Tono: "
+msgstr "Nada ucapan: "
+
+#: vetube/ajustes.py:175
+msgid "Volumen: "
+msgstr "Volume ucapan: "
+
+#: vetube/ajustes.py:186
+msgid "Velocidad: "
+msgstr "Kecepatan ucapan: "
+
+#: vetube/ajustes.py:191
+msgid "&Reproducir prueba."
+msgstr "&Putar uji coba."
+
+#: vetube/ajustes.py:207
+msgid "Activar sonidos"
+msgstr "Aktifkan suara"
+
+#: vetube/ajustes.py:221
+msgid "&Reproducir"
+msgstr "&Putar"
+
+#: vetube/ajustes.py:227
+msgid "Seleccionar dispositivo de audio"
+msgstr "Pilih perangkat audio"
+
+#: vetube/ajustes.py:230
+msgid "&Establecer"
+msgstr "&Tetapkan"
+
+#: vetube/ajustes.py:233
+msgid "Sonidos"
+msgstr "Suara"
+
+#: vetube/ajustes.py:235
+msgid "procesados: "
+msgstr "diproses: "
+
+#: vetube/ajustes.py:241
+msgid "leídos"
+msgstr "dibaca"
+
+#: vetube/ajustes.py:253
+msgid "Eventos"
+msgstr "Event"
+
+#: vetube/ajustes.py:254 vetube/update/update.py:132
+msgid "&Aceptar"
+msgstr "&Oke"
+
+#: vetube/ajustes.py:274
+msgid "Hablaré a través de este dispositivo."
+msgstr "Saya akan berbicara melalui perangkat ini."
+
+#: vetube/ajustes.py:300 vetube/ajustes.py:302
+msgid ""
+"Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes "
+"de tus canales favoritos."
+msgstr ""
+"Halo, saya adalah suara yang akan menemani Anda membaca pesan dari saluran "
+"favorit Anda mulai sekarang. Bagus kan."
+
+#: vetube/TTS/list_voices.py:13
+msgid "Selecciona un paquete de voz"
+msgstr "Pilih paket suara"
+
+#: vetube/TTS/list_voices.py:13
+msgid "Archivos tar.gz (*.tar.gz)|*.tar.gz"
+msgstr "Berkas tar.gz (*.tar.gz)|*.tar.gz"
+
+#: vetube/TTS/list_voices.py:15
+msgid ""
+"Para usar piper como sistema TTS, necesitas tener al menos una voz. Si "
+"quieres hacerlo de forma manual, extrae el paquete de voz en la carpeta "
+"\"piper/voices/voice-nombre_de_paquete\" en VeTube."
+msgstr ""
+"Untuk menggunakan Piper sebagai sistem TTS, Anda memerlukan setidaknya satu "
+"suara. Jika Anda ingin melakukannya secara manual, ekstrak paket suara ke "
+"folder \"piper/voices/voice-nama_paket\" di VeTube."
+
+#: vetube/TTS/list_voices.py:15
+msgid "No se instaló ninguna voz"
+msgstr "Tidak ada suara yang terinstal"
+
+#: vetube/TTS/list_voices.py:21
+msgid ""
+"¡Voz instalada satosfactoriamente! esta será establecida en VeTube ahora. "
+"Para cambiar de modelo de voz, puedes hacerlo a través de las "
+"configuraciones."
+msgstr ""
+"Suara berhasil diinstal! Ini akan diatur di VeTube sekarang. Untuk mengubah "
+"model suara, Anda dapat melakukannya melalui pengaturan."
+
+#: vetube/TTS/list_voices.py:21
+msgid "Listo"
+msgstr "Selesai"
+
+#: vetube/update/update.py:131
+msgid ""
+"Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te unes "
+"a nuestra causa?"
+msgstr ""
+"Dengan dukungan Anda, Anda berkontribusi agar program ini tetap gratis. "
+"Maukah anda bergabung dengan tujuan kami?"
+
+#: vetube/update/updater.py:13
+msgid "Hubo un error al actualizar VeTube."
+msgstr "Terjadi kesalahan saat memperbarui VeTube."
+
+#: vetube/update/utils.py:29
+#, python-format
+msgid "%d día, "
+msgstr "%d hari, "
+
+#: vetube/update/utils.py:31
+#, python-format
+msgid "%d días, "
+msgstr "%d hari, "
+
+#: vetube/update/utils.py:33
+#, python-format
+msgid "%d hora, "
+msgstr "%d jam, "
+
+#: vetube/update/utils.py:35
+#, python-format
+msgid "%d horas, "
+msgstr "%d jam, "
+
+#: vetube/update/utils.py:37
+#, python-format
+msgid "%d minuto, "
+msgstr "%d menit, "
+
+#: vetube/update/utils.py:39
+#, python-format
+msgid "%d minutos, "
+msgstr "%d menit, "
+
+#: vetube/update/utils.py:41
+#, python-format
+msgid "%s segundo"
+msgstr "%s detik"
+
+#: vetube/update/utils.py:43
+#, python-format
+msgid "%s segundos"
+msgstr "%s detik"
+
+#: vetube/update/wxUpdater.py:9
+#, python-format
+msgid ""
+"Hay una nueva versión de VeTube. Te gustaría descargarla ahora?\n"
+"\n"
+" VeTube versión: %s\n"
+"\n"
+"Cambios:\n"
+"%s"
+msgstr ""
+"Ada versi baru VeTube. Apakah Anda ingin mengunduhnya sekarang?\n"
+"\n"
+"Versi VeTube: %s\n"
+"Perubahan:\n"
+"%s"
+
+#: vetube/update/wxUpdater.py:9
+msgid "Nueva versión de VeTube"
+msgstr "Versi baru VeTube"
+
+#: vetube/update/wxUpdater.py:17
+msgid "Descarga en progreso"
+msgstr "Pengunduhan sedang berlangsung"
+
+#: vetube/update/wxUpdater.py:17
+msgid "Descargando la actualización"
+msgstr "Mengunduh pembaruan"
+
+#: vetube/update/wxUpdater.py:27
+#, python-format
+msgid "Actualizando... %s de %s"
+msgstr "Memperbarui... %s dari %s"
+
+#: vetube/update/wxUpdater.py:30
+msgid ""
+"La actualización se a descargado he instalado exitosamente. pulse en aceptar "
+"para continuar."
+msgstr "Pembaruan berhasil diunduh dan diinstal. Tekan OK untuk melanjutkan."
+
+#: vetube/update/wxUpdater.py:30
+msgid "¡Hecho!"
+msgstr "Selesai!"
+
+#: vetube/utils/languageHandler.py:72
+msgid "Idioma del sistema"
+msgstr "Bahasa sistem"
+
+#: vetube/utils/mostrarchat.py:7
+msgid "Mensaje"
+msgstr "Pesan"
+
+#: vetube/utils/mostrarchat.py:9
+msgid "Idioma a traducir"
+msgstr "Bahasa yang akan diterjemahkan"
+
+#: vetube/utils/mostrarchat.py:13
+msgid "mensaje: "
+msgstr "pesan: "
+
+#: vetube/utils/mostrarchat.py:17 vetube/utils/mostrarchat.py:25
+msgid "&Traducir al idioma del programa"
+msgstr "&Terjemahkan ke bahasa aplikasi sekarang"
+
+#: vetube/utils/mostrarchat.py:25
+msgid "&Traducir mensaje"
+msgstr "&Terjemahkan pesan"
+
+#: vetube/utils/mostrarchat.py:31
+msgid "mensaje en "
+msgstr "pesan dalam "
