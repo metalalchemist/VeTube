@@ -1,8 +1,8 @@
 {
-    "current_version": "2.9",
-    "description": "poder ignorar eventos desde el cliente o el lector.",
+    "current_version": "3.0",
+    "description": "rediseñada la interfaz, actualizada librerías, actualizador automático de idiomas.",
     "downloads": {
-        "Windows32": "https://github.com/metalalchemist/VeTube/releases/download/v2.9/VeTube-x86.zip",
-        "Windows64": "https://github.com/metalalchemist/VeTube/releases/download/v2.9/VeTube-x64.zip"
+        "Windows32": "https://github.com/metalalchemist/VeTube/releases/download/v3.0/VeTube-x86.zip",
+        "Windows64": "https://github.com/metalalchemist/VeTube/releases/download/v3.0/VeTube-x64.zip"
     }
 }
