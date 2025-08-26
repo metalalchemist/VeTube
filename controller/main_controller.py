@@ -1,4 +1,5 @@
-from globals.data_store import favorite, mensajes_destacados, favs, msjs
+import wx
+from globals.data_store import favorite, mensajes_destacados, favs, msjs,config
 from ui.main_window import MyFrame
 from utils import funciones
 from os import remove
@@ -8,8 +9,7 @@ from servicios.youtube import ServicioYouTube
 from servicios.twich import ServicioTwich
 from servicios.sala import ServicioSala
 from servicios.tiktok import ServicioTiktok
-import wx
-
+from ui.dialog_response import response
 class MainController:
     def __init__(self):
         self.frame = MyFrame(None)
@@ -44,6 +44,7 @@ class MainController:
         # Bind global key events (CharHook) to the frame
         self.frame.Bind(wx.EVT_CHAR_HOOK, self.OnCharHook)
         self.frame.list_favorite.Bind(wx.EVT_KEY_UP, self.on_favorite_key_up)
+        self.frame.Bind(wx.EVT_CLOSE, self.cerrarVentana)
 
     def mostrarBoton(self, event):
         if self.frame.text_ctrl_1.GetValue() != "":
@@ -228,3 +229,7 @@ class MainController:
     def habilitarSala(self, evt):
         if evt.GetSelection() == 4:
             self.frame.button_1.Enable()
+    def cerrarVentana(self, event):
+        if config['salir']:
+            if response(_("¿está seguro que desea salir del programa?"), _("¡atención!"))==wx.ID_YES: wx.GetApp().ExitMainLoop()
+        else: wx.GetApp().ExitMainLoop()
