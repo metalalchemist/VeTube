@@ -1,8 +1,8 @@
 {
-    "current_version": "3.0",
-    "description": "rediseñada la interfaz, actualizada librerías, actualizador automático de idiomas.",
+    "current_version": "3.1",
+    "description": "corregido error al conectar en tiktok.",
     "downloads": {
-        "Windows32": "https://github.com/metalalchemist/VeTube/releases/download/v3.0/VeTube-x86.zip",
-        "Windows64": "https://github.com/metalalchemist/VeTube/releases/download/v3.0/VeTube-x64.zip"
+        "Windows32": "https://github.com/metalalchemist/VeTube/releases/download/v3.1/VeTube-x86.zip",
+        "Windows64": "https://github.com/metalalchemist/VeTube/releases/download/v3.1/VeTube-x64.zip"
     }
 }
