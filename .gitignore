@@ -6,5 +6,7 @@ piper/voices/*
 piper/voices/*/*.onnx
 piper/voices/*/*.onnx.json
 data.json
+venv/
+favoritos.json
 keys.txt
 .vscode
