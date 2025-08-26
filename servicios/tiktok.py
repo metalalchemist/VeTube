@@ -15,6 +15,7 @@ class ServicioTiktok:
         self.chat = None
         self.chat_controller = ChatController(frame, self, plataforma)
         self._detener = False
+        self.last_live_status = None
 
     def iniciar_chat(self):
         self.is_running = True
