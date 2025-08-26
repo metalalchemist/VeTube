@@ -17,7 +17,7 @@ class KeyUtils:
             'alt+shift+f': 'chat.agregar_mensajes_favoritos',
             'alt+shift+c': 'chat.copiarMensajeActual',
             'alt+shift+r': 'chat.toggle_lectura_automatica',
-            'alt+shift+b': 'chat.buscar_mensajes',
+            'alt+shift+s': 'chat.buscar_mensajes',
             'alt+shift+v': 'chat.mostrar_mensaje_actual',
             'alt+shift+d': 'chat.borrar_pagina_actual',
             'alt+shift+p': 'chat.toggle_sounds',

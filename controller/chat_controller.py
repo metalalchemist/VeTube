@@ -1,7 +1,9 @@
 import wx
+import configparser
 import wx.adv
+from globals import data_store, resources
 from pyperclip import copy
-from setup import reader
+from setup import reader, player
 from ui.chat_ui import ChatDialog
 from ui.menus.chat_item_menu import ChatItemMenu
 from ui.show_comment import ShowCommentDialog
@@ -10,11 +12,8 @@ from controller.menus.chat_menu_controller import ChatMenuController
 from controller.menus.chat_filter_controller import ChatFilterController
 from controller.editor_controller import EditorController
 from ui.dialog_response import response
-from globals import data_store
-from globals.data_store import mensajes_destacados
 from utils.estadisticas_manager import EstadisticasManager
 from utils.funciones import escribirJsonLista, extractUser
-import configparser
 from helpers.keyboard_handler.wx_handler import WXKeyboardHandler
 
 class ChatController:
@@ -185,6 +184,7 @@ class ChatController:
                 list_box.Set(resultados)
                 self.ui.treebook.SetSelection(page_index)
                 self.actualizar_estado_boton_eliminar()
+                if data_store.config['sonidos'] and data_store.config['listasonidos'][8]: player.playsound(resources.rutasonidos[8],False)
             else: wx.MessageBox(_("No se encontraron mensajes que coincidan con el criterio de búsqueda."), _("Búsqueda sin resultados"), wx.OK | wx.ICON_INFORMATION)
         dialogo.Destroy()
 
@@ -232,6 +232,7 @@ class ChatController:
         elif selection > 0:
             selection -= 1
         listbox.SetSelection(selection)
+        self.reproducirMsg()
         reader.leer_auto(listbox.GetString(selection))
 
     def elementoSiguiente(self):
@@ -243,12 +244,24 @@ class ChatController:
         elif selection < listbox.GetCount() - 1:
             selection += 1
         listbox.SetSelection(selection)
+        self.reproducirMsg()
         reader.leer_auto(listbox.GetString(selection))
+
+    def reproducirMsg(self):
+        listbox = self.current_listbox
+        if not listbox:
+            return
+        selection = listbox.GetSelection()
+        if selection == 0 or selection == listbox.GetCount() - 1:
+            player.playsound(f"sounds/{data_store.config['directorio']}/orilla.mp3", False)
+        else:
+            player.playsound(f"sounds/{data_store.config['directorio']}/msj.mp3", False)
 
     def elemento_inicial(self):
         listbox = self.current_listbox
         if not listbox or listbox.GetCount() == 0: return
         listbox.SetSelection(0)
+        self.reproducirMsg()
         reader.leer_auto(listbox.GetString(0))
 
     def elemento_final(self):
@@ -256,6 +269,7 @@ class ChatController:
         if not listbox or listbox.GetCount() == 0: return
         last_index = listbox.GetCount() - 1
         listbox.SetSelection(last_index)
+        self.reproducirMsg()
         reader.leer_auto(listbox.GetString(last_index))
 
     def copiarMensajeActual(self):
@@ -301,7 +315,7 @@ class ChatController:
         if list_mensajes.GetCount() > 0 and list_mensajes.GetStrings()[0] == _("Tus mensajes archivados aparecerán aquí"):
             list_mensajes.Delete(0)
         
-        ya_archivado = any(mensaje == d.get('mensaje', '') for d in mensajes_destacados)
+        ya_archivado = any(mensaje == d.get('mensaje', '') for d in data_store.mensajes_destacados)
         if not ya_archivado:
             # Determinar el título
             if self.plataforma == 'TikTok':
@@ -311,9 +325,9 @@ class ChatController:
 
             # Añadir a la lista de la UI y al almacenamiento de datos
             list_mensajes.Append(f"{mensaje}: {titulo}")
-            mensajes_destacados.append({'mensaje': mensaje, 'titulo': titulo})
+            data_store.mensajes_destacados.append({'mensaje': mensaje, 'titulo': titulo})
             
-            escribirJsonLista('mensajes_destacados.json', mensajes_destacados)
+            escribirJsonLista('mensajes_destacados.json', data_store.mensajes_destacados)
             reader.leer_auto(_("El mensaje ha sido archivado correctamente."))
         else: 
             reader.leer_auto(_("Este mensaje ya está en la lista de archivados."))
