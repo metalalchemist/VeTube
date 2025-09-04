@@ -156,9 +156,7 @@ class MainController:
             elif 'twitch' in url:
                 self.set_plataforma(2)
             elif 'tiktok' in url:
-                if 'vm.tiktok' in url:
-                    url=canonical_scraper.get_username_from_canonical_link(url)
-                    print (url)
+                if 'vm.tiktok' in url: url=canonical_scraper.get_simplified_tiktok_live_url(url)
                 self.set_plataforma(3)
             elif "sala" in url:
                 self.set_plataforma(4)
