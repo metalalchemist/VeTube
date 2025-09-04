@@ -14,4 +14,3 @@ git+https://github.com/accessibleapps/sound_lib
 uiautomation
 psutil
 requests
-beautifulsoup4
