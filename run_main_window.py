@@ -1,11 +1,12 @@
-import wx
-import setup
+import asyncio,sys,wx,setup
 from globals.data_store import config
 from globals.resources import carpeta_voces,lista_voces_piper
 from controller.main_controller import MainController
 from update import updater,update
 from TTS.lector import detect_onnx_models
 from utils.app_utilitys import configurar_piper
+if sys.platform == "win32": asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 def run_app():
     app = wx.App(False)
     if config['sistemaTTS'] == "piper":
@@ -15,10 +16,8 @@ def run_app():
             salida_actual = setup.reader._lector.find_device_id(setup.player.devicenames[config["dispositivo"]-1])
             setup.reader._lector.set_device(salida_actual)
         configurar_piper(carpeta_voces)
-    if config['donations']:
-        update.donation()
-    if config.get('updates', False):
-        updater.do_update()
+    if config['donations']: update.donation()
+    if config.get('updates', False): updater.do_update()
     name = 'vetube-instance-checker'
     instance = wx.SingleInstanceChecker(name)
     if instance.IsAnotherRunning():

@@ -13,3 +13,5 @@ git+https://github.com/mush42/espeak-phonemizer-windows
 git+https://github.com/accessibleapps/sound_lib
 uiautomation
 psutil
+requests
+beautifulsoup4

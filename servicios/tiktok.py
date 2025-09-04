@@ -1,4 +1,4 @@
-import json, google_currency, threading, asyncio
+import json, google_currency, threading, asyncio, wx, traceback
 from TikTokLive.client.client import TikTokLiveClient
 from TikTokLive.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent, LikeEvent, JoinEvent, FollowEvent, ShareEvent, RoomUserSeqEvent, EnvelopeEvent, EmoteChatEvent,LiveEndEvent
 from globals import data_store
@@ -14,8 +14,9 @@ class ServicioTiktok:
         self.frame = frame
         self.chat = None
         self.chat_controller = ChatController(frame, self, plataforma)
-        self._detener = False
+        self.is_running = False
         self.last_live_status = None
+        self.loop = None
 
     def iniciar_chat(self):
         self.is_running = True
@@ -26,37 +27,60 @@ class ServicioTiktok:
 
     def _start_async_loop(self):
         try:
+            self.loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(self.loop)
+            self.loop.create_task(self._initialize_and_run_client())
+            self.loop.run_forever()
+        except Exception as e:
+            print(f"Error fatal en el hilo de conexión: {e}")
+            traceback.print_exc()
+        finally:
+            if self.loop.is_running():
+                pending = asyncio.all_tasks(loop=self.loop)
+                for task in pending:
+                    task.cancel()
+                self.loop.run_until_complete(self.loop.shutdown_asyncgens())
+            self.loop.close()
+
+    async def _initialize_and_run_client(self):
+        try:
             user_id = funciones.extractUser(self.url)
             self.chat = TikTokLiveClient(unique_id=user_id)
             self._add_listeners()
-            asyncio.run(self._run_client_async())
-        except Exception as e: print(f"Error fatal en el hilo de conexión: {e}")
+            await self._run_client_async()
+        except Exception as e:
+            print(f"Error during client initialization: {e}")
+            traceback.print_exc()
+            self.detener()
 
     async def _run_client_async(self):
-        self.loop = asyncio.get_running_loop()
         while self.is_running:
             try:
                 is_live_now = await self.chat.is_live()
                 if is_live_now:
-                    if self.last_live_status is not True: reader.leer_sapi(_("El usuario está en vivo. Conectando..."))
+                    if self.last_live_status is not True:
+                        wx.CallAfter(reader.leer_sapi, _("El usuario está en vivo. Conectando..."))
                     self.last_live_status = True
                     if data_store.dst: self.translator = translator.TranslatorWrapper()
                     await self.chat.connect()
                 else:
-                    if self.last_live_status is not False: reader.leer_sapi(_("El usuario no está en vivo. Reintentando en un minuto."))
+                    if self.last_live_status is not False:
+                        wx.CallAfter(reader.leer_sapi, _("El usuario no está en vivo. Reintentando en un minuto."))
                     self.last_live_status = False
                     if self.is_running: await asyncio.sleep(60)
+            except asyncio.CancelledError:
+                break
             except Exception as e:
                 if self.is_running:
                     print(f"Error en el bucle del cliente: {e}.")
+                    traceback.print_exc()
                     self.detener()
 
     def detener(self):
-        if self.is_running and self.loop:
+        if self.is_running and self.loop and self.loop.is_running():
             self.is_running = False
             asyncio.run_coroutine_threadsafe(self.chat.disconnect(), self.loop)
-        self.loop = None
-        self.chat = None
+            self.loop.call_soon_threadsafe(self.loop.stop)
 
     def _add_listeners(self):
         self.chat.add_listener(ConnectEvent, self.on_connect)
@@ -74,48 +98,59 @@ class ServicioTiktok:
 
     async def finalizado(self, event: LiveEndEvent):
         self.last_live_status = False
-        reader.leer_sapi(_("El directo ha finalizado. Se buscará de nuevo en un minuto."))
+        wx.CallAfter(reader.leer_sapi, _("El directo ha finalizado. Se buscará de nuevo en un minuto."))
 
     async def on_disconnect(self, event: DisconnectEvent):
         if self.is_running:
             self.is_running = False
-            reader.leer_sapi(_("Se ha perdido la conexión. El servicio se ha detenido."))
+            wx.CallAfter(reader.leer_sapi, _("Se ha perdido la conexión. El servicio se ha detenido."))
 
     async def on_connect(self,event: ConnectEvent):
         self.last_live_status = True
-        reader.leer_sapi(_("Ingresando al chat"))
-        if data_store.config['sonidos'] and data_store.config['listasonidos'][6]: player.playsound(rutasonidos[6],False)
+        wx.CallAfter(reader.leer_sapi, _("Ingresando al chat"))
+        if data_store.config['sonidos'] and data_store.config['listasonidos'][6]:
+            wx.CallAfter(player.playsound, rutasonidos[6],False)
 
     async def on_comment(self,event: CommentEvent):
         if data_store.config['eventos'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
-            EstadisticasManager().agregar_mensaje(event.user.nickname)
+            wx.CallAfter(EstadisticasManager().agregar_mensaje, event.user.nickname)
             cadena = event.comment if event.comment is not None else ''
             if data_store.dst: cadena = self.translator.translate(text=cadena, target=data_store.dst)
-            self.chat_controller.agregar_mensaje_general(event.user.nickname + ": " + cadena)
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][0]: player.playsound(rutasonidos[0],False)
-            if data_store.config['reader'] and data_store.config['unread'][0]: reader.leer_mensaje(event.user.nickname + ": " + cadena)
+            wx.CallAfter(self.chat_controller.agregar_mensaje_general, event.user.nickname + ": " + cadena)
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][0]:
+                wx.CallAfter(player.playsound, rutasonidos[0],False)
+            if data_store.config['reader'] and data_store.config['unread'][0]:
+                wx.CallAfter(reader.leer_mensaje, event.user.nickname + ": " + cadena)
 
     async def on_emote(self,event: EmoteChatEvent):
         if data_store.config['eventos'][1] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
-            EstadisticasManager().agregar_mensaje(event.user.nickname)
-            self.chat_controller.agregar_mensaje_miembro(event.user.nickname + _(" envió un emogi."))
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][1]: player.playsound(rutasonidos[1],False)
-            if data_store.config['reader'] and data_store.config['unread'][1]: reader.leer_mensaje(event.user.nickname + _(" envió un emogi."))
+            wx.CallAfter(EstadisticasManager().agregar_mensaje, event.user.nickname)
+            wx.CallAfter(self.chat_controller.agregar_mensaje_miembro, event.user.nickname + _(" envió un emogi."))
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][1]:
+                wx.CallAfter(player.playsound, rutasonidos[1],False)
+            if data_store.config['reader'] and data_store.config['unread'][1]:
+                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" envió un emogi."))
+
     async def on_chest(self,event: EnvelopeEvent):
         if data_store.config['eventos'][9] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
-            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" ha enviado un cofre!"), "chest")
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][12]: player.playsound(rutasonidos[12],False)
-            if data_store.config['reader'] and data_store.config['unread'][9]: reader.leer_mensaje(event.user.nickname + _(" ha enviado un cofre!"))
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname + _(" ha enviado un cofre!"), "chest")
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][12]:
+                wx.CallAfter(player.playsound, rutasonidos[12],False)
+            if data_store.config['reader'] and data_store.config['unread'][9]:
+                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" ha enviado un cofre!"))
 
     async def on_follow(self,event: FollowEvent):
         if data_store.config['eventos'][7] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
-            EstadisticasManager().agregar_seguidor()
-            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" comenzó a seguirte!"), "follow")
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][10]: player.playsound(rutasonidos[10],False)
-            if data_store.config['reader'] and data_store.config['unread'][7]: reader.leer_mensaje(event.user.nickname + _(" comenzó a seguirte!"))
+            wx.CallAfter(EstadisticasManager().agregar_seguidor)
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname + _(" comenzó a seguirte!"), "follow")
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][10]:
+                wx.CallAfter(player.playsound, rutasonidos[10],False)
+            if data_store.config['reader'] and data_store.config['unread'][7]:
+                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" comenzó a seguirte!"))
 
     async def on_gift(self,event: GiftEvent):
         if data_store.config['eventos'][3] and hasattr(self.chat_controller.ui, 'list_box_donaciones'):
+            mensajito = ""
             if event.gift.streakable and not event.streaking:
                 if data_store.divisa!="Por defecto":
                     if data_store.divisa=='USD': total=float((event.gift.diamond_count*event.repeat_count)/100)
@@ -132,31 +167,40 @@ class ServicioTiktok:
                         if moneda['converted']: total=moneda['amount']
                     mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(total),data_store.divisa)
                 else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(event.gift.diamond_count))
-            try:
-                self.chat_controller.agregar_mensaje_donacion(mensajito)
-                if data_store.config['sonidos'] and data_store.config['listasonidos'][3]: player.playsound(rutasonidos[3],False)
-                if data_store.config['reader'] and data_store.config['unread'][3]: reader.leer_mensaje(mensajito)
-            except Exception as e: pass
+            
+            if mensajito:
+                wx.CallAfter(self.chat_controller.agregar_mensaje_donacion, mensajito)
+                if data_store.config['sonidos'] and data_store.config['listasonidos'][3]:
+                    wx.CallAfter(player.playsound, rutasonidos[3],False)
+                if data_store.config['reader'] and data_store.config['unread'][3]:
+                    wx.CallAfter(reader.leer_mensaje, mensajito)
 
     async def on_join(self,event: JoinEvent):
         if data_store.config['eventos'][2] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
-            EstadisticasManager().agregar_unido()
-            self.chat_controller.agregar_mensaje_evento(event.user.nickname+_(" se ha unido a tu en vivo."), "join")
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][2]: player.playsound(rutasonidos[2],False)
-            if data_store.config['reader'] and data_store.config['unread'][2]: reader.leer_mensaje(event.user.nickname + _(" se ha unido a tu en vivo."))
+            wx.CallAfter(EstadisticasManager().agregar_unido)
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname+_(" se ha unido a tu en vivo."), "join")
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][2]:
+                wx.CallAfter(player.playsound, rutasonidos[2],False)
+            if data_store.config['reader'] and data_store.config['unread'][2]:
+                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" se ha unido a tu en vivo."))
 
     async def on_like(self,event: LikeEvent):
         if data_store.config['eventos'][6] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
-            EstadisticasManager().actualizar_megusta(event.total)
-            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" le ha dado me gusta a tu en vivo."), "like")
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][9]: player.playsound(rutasonidos[9],False)
-            if data_store.config['reader'] and data_store.config['unread'][6]: reader.leer_mensaje(event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+            wx.CallAfter(EstadisticasManager().actualizar_megusta, event.total)
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname + _(" le ha dado me gusta a tu en vivo."), "like")
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][9]:
+                wx.CallAfter(player.playsound, rutasonidos[9],False)
+            if data_store.config['reader'] and data_store.config['unread'][6]:
+                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
 
     async def on_share(self,event: ShareEvent):
         if data_store.config['eventos'][8] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
-            EstadisticasManager().agregar_compartida()
-            self.chat_controller.agregar_mensaje_evento(event.user.nickname + _(" ha compartido tu en vivo!"), "share")
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][11]: player.playsound(rutasonidos[11],False)
-            if data_store.config['reader'] and data_store.config['unread'][8]: reader.leer_mensaje(event.user.nickname + _(" ha compartido tu en vivo!"))
+            wx.CallAfter(EstadisticasManager().agregar_compartida)
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname + _(" ha compartido tu en vivo!"), "share")
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][11]:
+                wx.CallAfter(player.playsound, rutasonidos[11],False)
+            if data_store.config['reader'] and data_store.config['unread'][8]:
+                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" ha compartido tu en vivo!"))
 
-    async def on_view(self,event: RoomUserSeqEvent): self.chat_controller.agregar_titulo(self.chat.unique_id+_(' en vivo, actualmente ')+str(event.m_total)+_(' viendo ahora'))
+    async def on_view(self,event: RoomUserSeqEvent):
+        wx.CallAfter(self.chat_controller.agregar_titulo, self.chat.unique_id+_(' en vivo, actualmente ')+str(event.m_total)+_(' viendo ahora'))

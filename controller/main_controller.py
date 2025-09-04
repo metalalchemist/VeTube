@@ -3,7 +3,7 @@ from globals.data_store import favorite, mensajes_destacados, favs, msjs,config
 from ui.main_window import MyFrame
 from utils import funciones
 from os import remove
-from utils import languageHandler
+from utils import languageHandler,canonical_scraper
 from controller.menus.main_menu_controller import MainMenuController
 from servicios.youtube import ServicioYouTube
 from servicios.twich import ServicioTwich
@@ -156,6 +156,9 @@ class MainController:
             elif 'twitch' in url:
                 self.set_plataforma(2)
             elif 'tiktok' in url:
+                if 'vm.tiktok' in url:
+                    url=canonical_scraper.get_username_from_canonical_link(url)
+                    print (url)
                 self.set_plataforma(3)
             elif "sala" in url:
                 self.set_plataforma(4)
