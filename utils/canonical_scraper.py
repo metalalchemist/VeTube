@@ -26,6 +26,19 @@ def get_simplified_tiktok_live_url(url):
             return None
 
     except requests.exceptions.RequestException as e:
+        # Try to extract the URL from the exception object
+        failed_url = url
+        if e.response is not None:
+            failed_url = e.response.url
+        elif e.request is not None:
+            failed_url = e.request.url
+
+        match = re.search(r'@([^/]+)', failed_url)
+        if match:
+            username = match.group(1)
+            simplified_url = f"https://www.tiktok.com/@{username}/live"
+            print(f"Request failed, but extracted username: {username}")
+            return simplified_url
         print(f"An error occurred with the request: {e}")
         return None
     except Exception as e:
