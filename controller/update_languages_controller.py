@@ -2,7 +2,7 @@ import wx
 import concurrent.futures
 import tempfile
 from ui.update_languages_dialog import UpdateLanguagesDialog
-from utils.language_updater import GestorRepositorios
+from servicios.language_updater import GestorRepositorios
 from ui.dialog_response import response
 from utils import app_utilitys
 

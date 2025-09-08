@@ -1,5 +1,4 @@
-import json, google_currency,threading
-import wx
+import json, google_currency,threading,wx
 from chat_downloader import ChatDownloader
 from globals import data_store
 from globals.resources import rutasonidos
@@ -35,7 +34,7 @@ class ServicioYouTube:
         if data_store.dst: self.translator=translator.translatorWrapper()
         self.chat = ChatDownloader().get_chat(self.url, message_groups=["messages", "superchat"], interruptible_retry=False)
         if self.chat.status == 'past':
-            dialog = wx.MessageDialog(self.chat_controller.ui, _("Esta transmisión ha finalizado. ¿Deseas intentar conectarte con el servicio en tiempo real de todos modos?"), _("Transmisión finalizada"), wx.YES_NO | wx.ICON_QUESTION)
+            dialog = wx.MessageDialog(self.chat_controller.ui, _("Se ha detectado una transmisión pasada. ¿Deseas conectarte con el servicio en tiempo real del chat?"), _("Transmisión pasada"), wx.YES_NO | wx.ICON_QUESTION)
             result = dialog.ShowModal()
             if result == wx.ID_YES:
                 self.detener()

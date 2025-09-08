@@ -40,7 +40,7 @@ jobs:
           gdown 1ZtF6zus0A7kC9Lwr_kTUbw0MiOoZq29H -O dist/VeTube/bootstrap.exe
           cp -R chat_downloader dist/VeTube/_internal/
           cp -R doc dist/VeTube/
-          cp -R languages.json dist/VeTube/
+          cp -R translates/languages.json dist/VeTube/
           cp -R locales dist/VeTube/
           cp -R sounds dist/VeTube/
           cp -R espeak-phonemizer-windows/espeak_phonemizer dist/VeTube/_internal/

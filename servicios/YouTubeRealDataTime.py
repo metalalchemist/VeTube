@@ -1,13 +1,10 @@
-import pytchat
-import threading
-import wx
+import pytchat, wx, json, threading, google_currency
 from globals import data_store
 from globals.resources import rutasonidos
 from utils import translator
 from setup import player, reader
 from controller.chat_controller import ChatController
 from utils.estadisticas_manager import EstadisticasManager
-import json, google_currency
 
 class YouTubeRealTimeService:
     def __init__(self, url, frame, plataforma, title=None, chat_controller=None):
@@ -22,26 +19,10 @@ class YouTubeRealTimeService:
             self.chat_controller = ChatController(frame, self, plataforma)
         self._detener = False
 
-    def iniciar_chat(self):
-        self._detener = False
-        self._hilo = threading.Thread(target=self.recibir, daemon=True)
-        self._hilo.start()
-        player.playsound(rutasonidos[6], False)
-        wx.CallAfter(reader.leer_sapi, "Ingresando al chat.")
-        self.chat_controller.mostrar_dialogo()
-        self.chat_controller.show()
-
     def iniciar_chat_reutilizando_ui(self):
         self._detener = False
         self._hilo = threading.Thread(target=self.recibir, daemon=True)
         self._hilo.start()
-        # Clear lists
-        ui = self.chat_controller.ui
-        for i in range(ui.treebook.GetPageCount()):
-            page = ui.treebook.GetPage(i)
-            for child in page.GetChildren():
-                if isinstance(child, wx.ListBox):
-                    child.Clear()
         wx.CallAfter(reader.leer_sapi, "Cambiando a servicio de tiempo real.")
 
     def detener(self):
@@ -54,11 +35,7 @@ class YouTubeRealTimeService:
             self.translator = translator.translatorWrapper()
         try:
             self.chat = pytchat.create(video_id=self.url, interruptable=False)
-            display_title = ""
-            if self.title:
-                display_title = self.title + " (En tiempo real)"
-            else:
-                display_title = self.chat.title + " (En tiempo real)"
+            display_title = self.title + " (En tiempo real)"
             wx.CallAfter(self.chat_controller.agregar_titulo, display_title)
 
             while self.chat.is_alive() and not self._detener:

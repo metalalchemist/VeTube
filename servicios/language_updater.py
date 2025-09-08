@@ -16,7 +16,7 @@ class GestorRepositorios:
     """
     Clase para gestionar la descarga y actualización de idiomas desde un repositorio de GitHub.
     """
-    def __init__(self, frame, github_repo, rama='reescrito', local_dir='.', json_file='languages.json'):
+    def __init__(self, frame, github_repo, rama='master', local_dir='.', json_file='languages.json'):
         self.frame = frame
         self.github_repo = github_repo
         self.rama = rama

@@ -1,6 +1,4 @@
-import wx
-import configparser
-import wx.adv
+import wx,wx.adv, configparser
 from globals import data_store, resources
 from pyperclip import copy
 from setup import reader, player
@@ -12,7 +10,7 @@ from controller.menus.chat_menu_controller import ChatMenuController
 from controller.menus.chat_filter_controller import ChatFilterController
 from controller.editor_controller import EditorController
 from ui.dialog_response import response
-from utils.estadisticas_manager import EstadisticasManager
+from servicios.estadisticas_manager import EstadisticasManager
 from utils.funciones import escribirJsonLista, extractUser
 from helpers.keyboard_handler.wx_handler import WXKeyboardHandler
 
