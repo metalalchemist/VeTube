@@ -19,7 +19,6 @@ Read and manage YouTube and Twitch  chats in an accessible way on your own live 
   - Set the preferences of the sapi voice.
 - Change the reading mode for chats easily: decide if you want to read all the chats or only members and donations.
 - Save your livestreams on a favorites section; repeat the chat as many times as you like without trying to get the link again.
-- Save a history with the messages.
 - Translate a livestreaming chat from one language to another of your preference.
 
 ## Keyboard shortcuts.
@@ -36,7 +35,7 @@ Read and manage YouTube and Twitch  chats in an accessible way on your own live 
 |Copy the current message | alt shift c |
 | Delete a previously-created buffer       | alt shift d           |
 | Add the message to the favorites buffer      | alt shift f           |
-|Toggle on or off automatic mode  | alt shift m |
+|Toggle on or off automatic mode  | alt shift r |
 | Dishable the sounds of the program      | alt shift p           |
 | Find a message which contains a certain word      | alt shift s           |
 |Show the current message in a text box |alt shift v |

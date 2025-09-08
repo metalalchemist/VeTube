@@ -32,7 +32,6 @@ Kelola dan baca chat dari siaran langsung milikmu atau dari kreator favoritmu de
 - Mudah mengubah mode pembacaan chat: baca semua chat atau hanya kategori tertentu.
 - Simpan siaran langsung favoritmu. Putar ulang chat sebanyak yang diinginkan tanpa perlu mencari ulang tautan.
 - Arsipkan pesan untuk pengingat penting.
-- Menyimpan riwayat pesan.
 - Terjemahkan chat dalam siaran langsung ke dalam bahasa yang diinginkan.
 
 ## Pintasan Keyboard
@@ -52,7 +51,7 @@ Kelola dan baca chat dari siaran langsung milikmu atau dari kreator favoritmu de
 | Salin pesan saat ini                | Alt + Shift + C           |
 | Hapus buffer yang dibuat sebelumnya | Alt + Shift + D           |
 | Tambahkan pesan ke favorit          | Alt + Shift + F           |
-| Aktifkan/nonaktifkan mode otomatis  | Alt + Shift + M           |
+| Aktifkan/nonaktifkan mode otomatis  | Alt + Shift + R           |
 | Nonaktifkan suara aplikasi          | Alt + Shift + P           |
 | Cari kata dalam pesan               | Alt + Shift + S           |
 | Tampilkan pesan dalam kotak teks    | Alt + Shift + V           |

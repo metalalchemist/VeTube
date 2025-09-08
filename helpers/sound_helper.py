@@ -28,12 +28,20 @@ class playsound:
 			raise Exception("device is less than 1 or greater than the available devices.")
 
 	def playsound(self, filename, block = False):
-		if self.sound is not None:
-			if self.sound.is_playing:
-				self.sound.stop()
-			if self.device != self.output.get_device():
-				self.output.set_device(self.device)
-		self.sound = stream.FileStream(file = filename)
+		if self.sound is not None and hasattr(self.sound, 'is_playing') and self.sound.is_playing:
+			self.sound.stop()
+		if self.device != self.output.get_device():
+			self.output.set_device(self.device)
+		try:
+			self.sound = stream.FileStream(file=filename)
+		except BassError as e:
+			if e.code == 2 and (filename.startswith("http://") or filename.startswith("https://")):
+				try:
+					self.sound = stream.URLStream(url=filename)
+				except:
+					raise e
+			else:
+				raise e
 		if not block:
 			self.sound.play()
 		else:

@@ -1,14 +1,18 @@
 import pytchat, wx, json, threading, google_currency
+from utils.play_mp4 import play_video_url
 from globals import data_store
 from globals.resources import rutasonidos
 from utils import translator
 from setup import player, reader
 from controller.chat_controller import ChatController
-from utils.estadisticas_manager import EstadisticasManager
+from servicios.estadisticas_manager import EstadisticasManager
+from helpers.sound_helper import playsound
 
 class YouTubeRealTimeService:
     def __init__(self, url, frame, plataforma, title=None, chat_controller=None):
         self.url = url
+        self.player = playsound()
+        threading.Thread(target=play_video_url, args=(url, self.player,), daemon=True).start()
         self.frame = frame
         self.title = title
         self.chat = None
@@ -29,6 +33,8 @@ class YouTubeRealTimeService:
         self._detener = True
         if self.chat:
             self.chat.terminate()
+        if hasattr(self, 'player') and self.player and self.player.sound:
+            self.player.sound.stop()
 
     def recibir(self):
         if data_store.dst:

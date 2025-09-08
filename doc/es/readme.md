@@ -26,7 +26,6 @@ Lee y gestiona de manera accesible el chat de tus propios directos o en los de t
 - cambia de modalidad de lectura de chats fácilmente: decide si quieres leer todos los chats o solo los de alguna categoría en específico.
 - guarda tus envivos en una sección de favoritos. repite cuantas veces  desees el chat sin necesidad de ir a buscar el enlace nuevamente.
 - archiva unmensaje: útil para tener recordatorios.
-- guarda un historial de los mensajes.
 - traduce el chat de un streaming al idiomma que  gustes.
 
 ## Atajos de teclado.
@@ -44,7 +43,7 @@ Lee y gestiona de manera accesible el chat de tus propios directos o en los de t
 | Copia el mensaje actual      | alt shift c           |
 | Borra un buffer previamente creado      | alt shift d           |
 | añade el mensaje al buffer de favoritos      | alt shift f           |
-| Activa o desactiva el modo automático      | alt shift m           |
+| Activa o desactiva el modo automático      | alt shift r           |
 | desactiva los sonidos del programa      | alt shift p           |
 | buscar una palabra entre  los mensajes      | alt shift s           |
 | muestra el mensaje actual en un cuadro de texto      | alt shift v           |

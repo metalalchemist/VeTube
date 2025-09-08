@@ -1,4 +1,13 @@
+v3.2
+se ha creado un nuevo servicio que nos permite vivir nuestro en vivo de youtube en tiempo real con reproducción de audio.
+se pueden extraer nombres de usuario de tiktok con las urls que contienen vm.tiktok.
+v3.1
+un bug el cual no iniciaba el chat de tiktok ha sido corregido.
 v3.0
+se ha creado un actualizador de idiomas.
+removido guardar historial.
+bugs con la plataforma tiktok han sido corregidos.
+mejorada la interfaz. los buffers son visibles y remodularisado el programa.
 Ahora podemos establecer un dispositivo de audio para los sonidos y los mensajes de lectura. Hay que tener en cuenta que, en los mensajes de lectura, el cambio solo se aplicará en el motor piperTTS.
 Podremos capturar el chat de una plataforma solo con el usuario de la persona. por ejemplo, si escribimos 4everzyanya, damos tab, elejimos tiktok y al dar enter nos llevará al en vivo de tiktok de la persona.
 El editor de cominaciones se podrá acceder antes del chat como durante el chat.

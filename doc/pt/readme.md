@@ -21,7 +21,6 @@ system access
 - altere facilmente o modo de leitura do bate-papo: decida se deseja ler todos os bate-papos ou apenas os de uma categoria específica.
 - salve seus shows ao vivo em uma seção de favoritos. repita o chat quantas vezes quiser sem precisar ir procurar o link novamente.
 - arquivar uma mensagem: útil ter lembretes.
-- salvar um histórico das mensagens.
 - Traduza o chat de um streaming para o idioma que você gosta.
 
 ## Atalhos do teclado.
@@ -39,7 +38,7 @@ system access
 | Copie a mensagem atual | alt xift c |
 | Excluir um buffer criado anteriormente | alt xift d |
 | adiciona a mensagem ao buffer de favoritos | Alt shift f |
-| Ativar ou desativar o modo automático | alt xift m |
+| Ativar ou desativar o modo automático | alt xift r |
 | desativar sons do programa | Alt shift p |
 | procurar uma palavra entre as mensagens | alt shift s |
 | exibe a mensagem atual em uma caixa de texto | Alt shift v |
