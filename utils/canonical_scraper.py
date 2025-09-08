@@ -27,11 +27,8 @@ def get_simplified_tiktok_live_url(url):
 
     except requests.exceptions.RequestException as e:
         # Try to extract the URL from the exception object
-        failed_url = url
-        if e.response is not None:
-            failed_url = e.response.url
-        elif e.request is not None:
-            failed_url = e.request.url
+        if e.response is not None: failed_url = e.response.url
+        elif e.request is not None: failed_url = e.request.url
 
         match = re.search(r'@([^/]+)', failed_url)
         if match:
