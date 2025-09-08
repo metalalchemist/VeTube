@@ -4,7 +4,7 @@ from ui.menus.chat_opciones_menu import ChatOpcionesMenu
 from controller.editor_controller import EditorController
 from utils import funciones
 from controller.estadisticas_controller import EstadisticasController
-from utils.estadisticas_manager import EstadisticasManager
+from servicios.estadisticas_manager import EstadisticasManager
 
 class ChatMenuController:
     def __init__(self, parent, plataforma, chat_controller):
@@ -47,6 +47,8 @@ class ChatMenuController:
             return
 
         if self.plataforma == 'TikTok':
+            titulo = funciones.extractUser(url)
+        elif self.plataforma == 'Twich' and self.chat_controller.servicio.chat.status != 'past':
             titulo = funciones.extractUser(url)
         else:
             titulo = self.parent.label_dialog.GetLabel()
