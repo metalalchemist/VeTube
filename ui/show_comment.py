@@ -6,7 +6,6 @@ class ShowCommentDialog(wx.Dialog):
         super().__init__(parent, title=_('Mensaje'), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
         main_sizer = wx.BoxSizer(wx.VERTICAL)
         self.text_message = wx.TextCtrl(self, wx.ID_ANY, text, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_PROCESS_ENTER)
-        self.text_message.SetFocus()
         self.text_message.Bind(wx.EVT_TEXT_ENTER, lambda event: self.Destroy())
         main_sizer.Add(self.text_message, 1, wx.EXPAND | wx.ALL, 5)
         translation_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -29,6 +28,11 @@ class ShowCommentDialog(wx.Dialog):
         self.SetSizer(main_sizer)
         self.SetSize((500, 350))
         self.Centre()
+    def ShowModal(self):
+        self.Raise()
+        self.text_message.SetFocus()
+        return super(ShowCommentDialog, self).ShowModal()
+
     def cambiarTraducir(self,event): self.traducir.SetLabel(_("&Traducir mensaje") if self.choice_idiomas.GetString(self.choice_idiomas.GetSelection()) != self.tw.LANGUAGES[languageHandler.curLang[:2]] else _("&Traducir al idioma del programa"))
     def traducirMensaje(self,event):
         for k in self.tw.LANGUAGES:

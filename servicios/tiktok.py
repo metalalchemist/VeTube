@@ -6,7 +6,7 @@ from globals.resources import rutasonidos
 from utils import translator,funciones
 from setup import player,reader
 from controller.chat_controller import ChatController
-from utils.estadisticas_manager import EstadisticasManager
+from servicios.estadisticas_manager import EstadisticasManager
 
 class ServicioTiktok:
     def __init__(self, url, frame, plataforma):

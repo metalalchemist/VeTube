@@ -11,7 +11,7 @@ from controller.editor_controller import EditorController
 from controller.ajustes_controller import AjustesController
 from setup import reader,player
 from googletrans import LANGUAGES
-from utils.language_updater import GestorRepositorios
+from servicios.language_updater import GestorRepositorios
 from ui.update_languages_dialog import UpdateLanguagesDialog
 from controller.update_languages_controller import UpdateLanguagesController
 class MainMenuController:
@@ -69,7 +69,7 @@ class MainMenuController:
 
     def on_update_languages(self, event):
         # Hardcode the repo URL for now
-        github_repo_url = "metalalchemist/VeTube"
+        github_repo_url = "metalalchemist/vetube"
         
         # Instantiate the GestorRepositorios
         gestor = GestorRepositorios(self.frame, github_repo=github_repo_url, local_dir=".")

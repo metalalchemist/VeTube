@@ -8,7 +8,7 @@ def play_video_url(youtube_url, reproductor):
     try:
         ydl_opts = {
             'format': 'mp4',
-            'quiet': False,
+            'quiet': True,
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(youtube_url, download=False)

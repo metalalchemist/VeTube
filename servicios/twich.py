@@ -5,7 +5,7 @@ from globals.resources import rutasonidos
 from utils import translator
 from setup import player,reader
 from controller.chat_controller import ChatController
-from utils.estadisticas_manager import EstadisticasManager
+from servicios.estadisticas_manager import EstadisticasManager
 
 class ServicioTwich:
     def __init__(self, url, frame, plataforma):
