@@ -34,13 +34,12 @@ class YouTubeRealTimeService:
         if self.chat:
             self.chat.terminate()
         if hasattr(self, 'player') and self.player and self.player.sound:
-            self.player.sound.stop()
-            self.player.sound = None # Explicitly release the sound object
+            self.player.sound.free()
 
     def toggle_pause_player(self):
         if hasattr(self, 'player') and self.player and self.player.sound:
             if self.player.sound.is_playing:
-                self.player.sound.stop()
+                self.player.sound.pause()
             else:
                 self.player.sound.play()
 
