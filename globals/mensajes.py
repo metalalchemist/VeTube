@@ -14,7 +14,8 @@ mensaje_teclas=[
 	_('borra el buffer seleccionado'),
 	_('activa o desactiva los sonidos del programa'),
 	_('Invocar el editor de combinaciones de teclado'),
-	_('Archivar un mensaje')
+	_('Archivar un mensaje'),
+	_('Pausa o reanuda la reproducción del video')
 ]
 
 mensajes_categorias = [
@@ -68,8 +69,7 @@ comandos_ordenados = [
     'chat.toggle_sounds',
     'chat.mostrar_editor_combinaciones',
     'chat.archivar_mensaje',
+    'youtube_service.toggle_pause_player',
 ]
 
 comandos_a_descripcion = dict(zip(comandos_ordenados, mensaje_teclas))
-
-

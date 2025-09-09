@@ -27,6 +27,10 @@ class ChatController:
         self.keyboard_handler = None
         self.chat_shortcuts = {}
 
+    def set_active_service(self, service_instance):
+        self.servicio = service_instance
+        self.reload_shortcuts()
+
     def _bind_events(self):
         self.ui.button_mensaje_detener.Bind(wx.EVT_BUTTON, self.on_close_dialog)
         self.ui.boton_opciones.Bind(wx.EVT_BUTTON, self.on_opciones_btn)
@@ -124,6 +128,8 @@ class ChatController:
         self.ui = ChatDialog(self.frame, self.plataforma)
         self.keyboard_handler = WXKeyboardHandler(self.ui)
         command_objects = {'chat': self, 'reader': reader}
+        if self.servicio:
+            command_objects['youtube_service'] = self.servicio
         config = configparser.ConfigParser(interpolation=None)
         config.read("keymaps/keys.txt")
         if 'atajos_chat' in config:
@@ -352,6 +358,8 @@ class ChatController:
         
         self.chat_shortcuts = {}
         command_objects = {'chat': self, 'reader': reader}
+        if self.servicio:
+            command_objects['youtube_service'] = self.servicio
         config = configparser.ConfigParser(interpolation=None)
         config.read("keymaps/keys.txt")
         if 'atajos_chat' in config:

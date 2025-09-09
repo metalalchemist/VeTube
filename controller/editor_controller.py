@@ -41,7 +41,11 @@ class EditorController:
 
     def on_restore_defaults(self, event):
         if response(_("Está apunto de restaurar las combinaciones a sus valores por defecto, ¿desea proceder? Esta acción no se puede desacer."), _("Atención:"))==wx.ID_YES:
-            editor.escribirTeclas() # This writes the default keys.txt
+            try:
+                remove("keymaps/keys.txt")
+            except FileNotFoundError:
+                pass
+            editor.leerTeclas()
             self._load_combinations() # This reloads the UI from the new keys.txt
             self.ui.combinaciones.Focus(0)
             self.ui.combinaciones.SetFocus()

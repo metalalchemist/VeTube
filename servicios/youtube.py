@@ -5,7 +5,7 @@ from globals.resources import rutasonidos
 from utils import translator
 from setup import player,reader
 from controller.chat_controller import ChatController
-from utils.estadisticas_manager import EstadisticasManager
+from servicios.estadisticas_manager import EstadisticasManager
 
 class ServicioYouTube:
     def __init__(self, url, frame, plataforma):
@@ -29,6 +29,7 @@ class ServicioYouTube:
         from servicios.YouTubeRealDataTime import YouTubeRealTimeService
         realtime_service = YouTubeRealTimeService(self.url, self.frame, 'youtube_realtime', title=title, chat_controller=self.chat_controller)
         realtime_service.iniciar_chat_reutilizando_ui()
+        self.chat_controller.set_active_service(realtime_service)
 
     def recibir(self):
         if data_store.dst: self.translator=translator.translatorWrapper()
