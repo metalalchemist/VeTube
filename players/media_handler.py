@@ -29,7 +29,6 @@ class MediaHandler:
             # Reproduce el sonido y actualiza el estado
             self.player.playsound(self.url)
             self.sonando = True
-            print(f"Reproduciendo con {self.player_type}")
         import threading
         thread = threading.Thread(target=playback_task, daemon=True)
         thread.start()

@@ -26,8 +26,8 @@ class MinimalVlcPlayer:
         self.player.play()
 
     def toggle_player(self):
-        if self.player.is_playing(): self.player.play()
-        else: self.player.pause()
+        if self.player.is_playing(): self.player.pause()
+        else: self.player.play()
     def tiempotranscurrido(self): return self.player.get_time()
 
     def adelantar(self, segundos):

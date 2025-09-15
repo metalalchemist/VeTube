@@ -1,5 +1,6 @@
 v3.2
-se ha creado un nuevo servicio que nos permite vivir nuestro en vivo de youtube en tiempo real con reproducción de audio.
+se ha creado un nuevo reproductor que puede reproducir tanto los en vivos pasados como los en vivos en tiempo real. para mas información mirar readme.
+se ha creado un nuevo servicio que nos permite disfrutar nuestro en vivo de youtube en tiempo real con reproducción de audio.
 se pueden extraer nombres de usuario de tiktok con las urls que contienen vm.tiktok.
 v3.1
 un bug el cual no iniciaba el chat de tiktok ha sido corregido.
