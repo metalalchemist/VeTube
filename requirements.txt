@@ -16,3 +16,4 @@ psutil
 requests
 git+https://github.com/KaitoCross/pytchat
 yt-dlp
+python-vlc

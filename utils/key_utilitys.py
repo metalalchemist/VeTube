@@ -31,7 +31,9 @@ class KeyUtils:
             'alt+shift+p': 'chat.toggle_sounds',
             'alt+shift+k': 'chat.mostrar_editor_combinaciones',
             'alt+shift+a': 'chat.archivar_mensaje',
-            'control+shift+p': 'youtube_service.toggle_pause_player',
+            'control+shift+p': 'media_player.toggle_pause',
+            'control+shift+right': 'media_player.adelantar',
+            'control+shift+left': 'media_player.atrasar',
         }
         config_path = "keymaps/keys.txt"
         makedirs("keymaps", exist_ok=True)

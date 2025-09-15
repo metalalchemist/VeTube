@@ -3,8 +3,10 @@ from chat_downloader import ChatDownloader
 from globals import data_store
 from globals.resources import rutasonidos
 from utils import translator
+from utils.play_mp4 import extract_stream_url
 from setup import player,reader
 from controller.chat_controller import ChatController
+from controller.media_controller import MediaController
 from servicios.estadisticas_manager import EstadisticasManager
 
 class ServicioYouTube:
@@ -13,6 +15,7 @@ class ServicioYouTube:
         self.frame = frame
         self.chat = None
         self.chat_controller = ChatController(frame, self, plataforma)
+        self.media_controller = None
         self._detener = False
 
     def iniciar_chat(self):
@@ -23,7 +26,11 @@ class ServicioYouTube:
         reader.leer_sapi(_("Ingresando al chat."))
         self.chat_controller.mostrar_dialogo()
         self.chat_controller.show()
-    def detener(self): self._detener = True
+
+    def detener(self):
+        self._detener = True
+        if self.media_controller:
+            self.media_controller.release()
 
     def do_switch(self, title):
         from servicios.YouTubeRealDataTime import YouTubeRealTimeService
@@ -31,9 +38,20 @@ class ServicioYouTube:
         realtime_service.iniciar_chat_reutilizando_ui()
         self.chat_controller.set_active_service(realtime_service)
 
+    def prepare_player(self, status):
+        try:
+            format_pref = 'mp4' if status == "past" else 'best'
+            video_url = extract_stream_url(self.url, format_preference=format_pref)
+            if video_url:
+                self.media_controller = MediaController(url=video_url, frame=self.frame)
+                self.chat_controller.set_media_controller(self.media_controller)
+        except Exception as e:
+            print(f"Error al iniciar la reproducción de video en YouTube: {e}")
+
     def recibir(self):
         if data_store.dst: self.translator=translator.translatorWrapper()
         self.chat = ChatDownloader().get_chat(self.url, message_groups=["messages", "superchat"], interruptible_retry=False)
+        threading.Thread(target=self.prepare_player, args=(self.chat.status,), daemon=True).start()
         if self.chat.status == 'past':
             dialog = wx.MessageDialog(self.chat_controller.ui, _("Se ha detectado una transmisión pasada. ¿Deseas conectarte con el servicio en tiempo real del chat?"), _("Transmisión pasada"), wx.YES_NO | wx.ICON_QUESTION)
             result = dialog.ShowModal()

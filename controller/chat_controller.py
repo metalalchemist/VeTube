@@ -26,9 +26,13 @@ class ChatController:
         self.filtro_eventos = "todos"
         self.keyboard_handler = None
         self.chat_shortcuts = {}
+        self.media_controller = None
 
     def set_active_service(self, service_instance):
         self.servicio = service_instance
+
+    def set_media_controller(self, controller):
+        self.media_controller = controller
         self.reload_shortcuts()
 
     def _bind_events(self):
@@ -127,29 +131,7 @@ class ChatController:
     def mostrar_dialogo(self):
         self.ui = ChatDialog(self.frame, self.plataforma)
         self.keyboard_handler = WXKeyboardHandler(self.ui)
-        command_objects = {'chat': self, 'reader': reader}
-        if self.servicio:
-            command_objects['youtube_service'] = self.servicio
-        config = configparser.ConfigParser(interpolation=None)
-        config.read("keymaps/keys.txt")
-        if 'atajos_chat' in config:
-            for key, command_str in config['atajos_chat'].items():
-                try:
-                    obj_name, method_path = command_str.split('.', 1)
-                    if obj_name in command_objects:
-                        target_obj = command_objects[obj_name]
-                        attrs = method_path.split('.')
-                        final_callable = target_obj
-                        for attr in attrs:
-                            final_callable = getattr(final_callable, attr)
-                        if callable(final_callable):
-                            self.chat_shortcuts[key] = final_callable
-                        else:
-                            print(f"Warning: Command '{command_str}' did not resolve to a callable function.")
-                    else:
-                        print(f"Warning: Object '{obj_name}' not defined for commands")
-                except Exception as e:
-                    print(f"Error parsing shortcut {key}={command_str}: {e}")
+        # self._load_and_register_shortcuts() # Eliminado para evitar doble carga
         self.ui.actualizar_filtro_eventos = self.actualizar_filtro_eventos
         self.menu_opciones_controller = ChatMenuController(self.ui, self.plataforma, self)
         if self.plataforma == 'TikTok':
@@ -352,14 +334,15 @@ class ChatController:
         editor = EditorController(self.ui, self)
         editor.ShowModal()
 
-    def reload_shortcuts(self):
+    def _load_and_register_shortcuts(self):
         if self.keyboard_handler:
             self.keyboard_handler.unregister_all_keys()
         
         self.chat_shortcuts = {}
         command_objects = {'chat': self, 'reader': reader}
-        if self.servicio:
-            command_objects['youtube_service'] = self.servicio
+        if self.media_controller:
+            command_objects['media_player'] = self.media_controller
+
         config = configparser.ConfigParser(interpolation=None)
         config.read("keymaps/keys.txt")
         if 'atajos_chat' in config:
@@ -374,15 +357,14 @@ class ChatController:
                             final_callable = getattr(final_callable, attr)
                         if callable(final_callable):
                             self.chat_shortcuts[key] = final_callable
-                        else:
-                            print(f"Warning: Command '{command_str}' did not resolve to a callable function.")
-                    else:
-                        print(f"Warning: Object '{obj_name}' not defined for commands")
                 except Exception as e:
                     print(f"Error parsing shortcut {key}={command_str}: {e}")
         
         if self.keyboard_handler:
             self.keyboard_handler.register_keys(self.chat_shortcuts)
+
+    def reload_shortcuts(self):
+        self._load_and_register_shortcuts()
 
     def toggle_lectura_automatica(self):
         if data_store.config['reader']:

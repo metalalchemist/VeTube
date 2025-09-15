@@ -48,6 +48,7 @@ Lee y gestiona de manera accesible el chat de tus propios directos o en los de t
 | buscar una palabra entre  los mensajes      | alt shift s           |
 | muestra el mensaje actual en un cuadro de texto      | alt shift v           |
 | invocar el editor de teclado de vetube      | alt shift k           |
+| pausa o reanuda la reproducción de un en vivo (válido para transmisiones pasadas)      | control shift p           |
 
 ### En el historial  del chat:
 | acción                    | combinación de teclas |

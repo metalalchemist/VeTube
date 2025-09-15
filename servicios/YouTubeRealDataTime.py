@@ -1,21 +1,20 @@
 import pytchat, wx, json, threading, google_currency
-from utils.play_mp4 import play_video_url
+from utils.play_mp4 import extract_stream_url
 from globals import data_store
 from globals.resources import rutasonidos
 from utils import translator
 from setup import player, reader
 from controller.chat_controller import ChatController
+from controller.media_controller import MediaController
 from servicios.estadisticas_manager import EstadisticasManager
-from helpers.sound_helper import playsound
 
 class YouTubeRealTimeService:
     def __init__(self, url, frame, plataforma, title=None, chat_controller=None):
         self.url = url
-        self.player = playsound()
-        threading.Thread(target=play_video_url, args=(url, self.player,), daemon=True).start()
         self.frame = frame
         self.title = title
         self.chat = None
+        self.media_controller = None
         if chat_controller:
             self.chat_controller = chat_controller
             self.chat_controller.servicio = self
@@ -25,24 +24,24 @@ class YouTubeRealTimeService:
 
     def iniciar_chat_reutilizando_ui(self):
         self._detener = False
+        threading.Thread(target=self.prepare, daemon=True).start()
         self._hilo = threading.Thread(target=self.recibir, daemon=True)
         self._hilo.start()
         wx.CallAfter(reader.leer_sapi, "Cambiando a servicio de tiempo real.")
 
     def detener(self):
-        self._detener = True
         if self.chat:
             self.chat.terminate()
-        if hasattr(self, 'player') and self.player and self.player.sound:
-            self.player.sound.free()
+        if self.media_controller:
+            self.media_controller.release()
+        self._detener = True
 
-    def toggle_pause_player(self):
-        if hasattr(self, 'player') and self.player and self.player.sound:
-            if self.player.sound.is_playing:
-                self.player.sound.pause()
-            else:
-                self.player.sound.play()
-
+    def prepare(self):
+        video_url = extract_stream_url(self.url, format_preference='mp4')
+        if video_url:
+            self.media_controller = MediaController(url=video_url, frame=self.frame)
+            self.chat_controller.set_media_controller(self.media_controller)
+            print(video_url)
     def recibir(self):
         if data_store.dst:
             self.translator = translator.translatorWrapper()
@@ -53,26 +52,17 @@ class YouTubeRealTimeService:
 
             while self.chat.is_alive() and not self._detener:
                 for c in self.chat.get().sync_items():
-                    if self._detener:
-                        break
+                    if self._detener: break
                     author_name = c.author.name
                     msg = c.message
                     EstadisticasManager().agregar_mensaje(author_name)
-                    if data_store.dst:
-                        msg = self.translator.translate(text=msg, target=data_store.dst)
-
+                    if data_store.dst: msg = self.translator.translate(text=msg, target=data_store.dst)
                     message_type = 'general'
-                    if c.author.isChatOwner:
-                        message_type = 'propietario'
-                    elif c.author.isChatModerator:
-                        message_type = 'moderador'
-                    elif c.author.isChatSponsor:
-                        message_type = 'miembro'
-                    elif c.author.isVerified:
-                        message_type = 'verificado'
-
-                    if c.type == "superChat" or c.type == "superSticker":
-                        message_type = 'donacion'
+                    if c.author.isChatOwner: message_type = 'propietario'
+                    elif c.author.isChatModerator: message_type = 'moderador'
+                    elif c.author.isChatSponsor: message_type = 'miembro'
+                    elif c.author.isVerified: message_type = 'verificado'
+                    if c.type == "superChat" or c.type == "superSticker": message_type = 'donacion'
 
                     if message_type == 'donacion':
                         if data_store.config['eventos'][3] and data_store.config['categorias'][3] and hasattr(self.chat_controller.ui, 'list_box_donaciones'):
@@ -125,8 +115,6 @@ class YouTubeRealTimeService:
                             wx.CallAfter(self.chat_controller.agregar_mensaje_verificado, full_message)
                             if data_store.config['reader'] and data_store.config['unread'][5]:
                                 wx.CallAfter(reader.leer_mensaje, full_message)
-        except Exception as e:
-            print(f"Error en el servicio de YouTube en tiempo real: {e}")
+        except Exception as e: print(f"Error en el servicio de YouTube en tiempo real: {e}")
         finally:
-            if self.chat:
-                self.chat.terminate()
+            if self.chat: self.chat.terminate()
