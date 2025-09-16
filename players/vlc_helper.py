@@ -1,8 +1,9 @@
-import os
+import os,platform
 # Configurar las variables de entorno para que python-vlc encuentre las DLLs
 dir_current_script = os.path.dirname(os.path.abspath(__file__))
+arch="64" if platform.architecture()[0][:2] == "64" else "32"
 # Subir un nivel para llegar a la raíz del proyecto y luego entrar a la carpeta 64
-path_to_vlc_dir = os.path.abspath(os.path.join(dir_current_script, '..', '64'))
+path_to_vlc_dir = os.path.abspath(os.path.join(dir_current_script, '..', arch))
 # La ruta a la carpeta que contiene libvlccore.dll y la carpeta de plugins
 os.environ['PYTHON_VLC_MODULE_PATH'] = path_to_vlc_dir
 # La ruta al archivo libvlc.dll
