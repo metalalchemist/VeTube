@@ -82,6 +82,16 @@ class MediaHandler:
             else:
                 self.player.volume_down(step)
 
+    def set_volume(self, volume):
+        """Establece el volumen del reproductor."""
+        if self.player and hasattr(self.player, 'set_volume'):
+            if self.player_type == 'sound':
+                # Convert volume from 0-100 scale to 0.0-1.0 scale
+                sound_volume = volume / 100.0
+                self.player.set_volume(sound_volume)
+            else:
+                self.player.set_volume(volume)
+
     def release(self):
         """Libera los recursos del reproductor actual."""
         if self.player:

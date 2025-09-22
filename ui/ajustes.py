@@ -103,6 +103,10 @@ class configuracionDialog(wx.Dialog):
 		boxSizer_reproduccion.Add(label_volumen_reproductor, 0, wx.ALL, 5)
 		self.slider_volumen_reproductor = wx.Slider(self.treeItem_reproduccion, wx.ID_ANY, config.get('volumen', 100), 0, 100)
 		boxSizer_reproduccion.Add(self.slider_volumen_reproductor, 0, wx.EXPAND | wx.ALL, 5)
+		label_cambiovolumen = wx.StaticText(self.treeItem_reproduccion, wx.ID_ANY, _("cambio de volumen con las teclas de volumen (1-25)"))
+		boxSizer_reproduccion.Add(label_cambiovolumen, 0, wx.ALL, 5)
+		self.slider_cambiovolumen = wx.Slider(self.treeItem_reproduccion, wx.ID_ANY, config.get('cambiovolumen', 10), 1, 25)
+		boxSizer_reproduccion.Add(self.slider_cambiovolumen, 0, wx.EXPAND | wx.ALL, 5)
 		panel_sizer_reproduccion.Add(boxSizer_reproduccion, 1, wx.EXPAND | wx.ALL, 5)
 		self.treeItem_reproduccion.SetSizer(panel_sizer_reproduccion)
 

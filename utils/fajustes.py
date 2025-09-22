@@ -22,7 +22,9 @@ configuraciones ={
 	'directorio':'default',
 	'reproducir': False,
 	'tiempo': 10,
-	'volumen': 100
+	'volumen': 100,
+	"cambiovolumen": 10
+
 }
 actualizar_configuracion = False
 

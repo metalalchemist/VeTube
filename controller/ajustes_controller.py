@@ -28,6 +28,10 @@ class AjustesController:
         self.dialog.check_reproducir.Bind(wx.EVT_CHECKBOX, self.on_check_reproducir)
         self.dialog.spin_tiempo.Bind(wx.EVT_SPINCTRL, self.on_spin_tiempo)
         self.dialog.slider_volumen_reproductor.Bind(wx.EVT_SLIDER, self.on_slider_volumen_reproductor)
+        self.dialog.slider_cambiovolumen.Bind(wx.EVT_SLIDER, self.on_slider_cambiovolumen)
+
+    def on_slider_cambiovolumen(self, event):
+        config['cambiovolumen'] = event.GetEventObject().GetValue()
 
     def on_check_reproducir(self, event):
         config['reproducir'] = event.IsChecked()
