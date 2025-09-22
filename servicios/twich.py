@@ -37,7 +37,7 @@ class ServicioTwich:
             format_pref = 'mp4' if status == "past" else 'best'
             video_url = extract_stream_url(self.url, format_preference=format_pref)
             if video_url:
-                self.media_controller = MediaController(url=video_url, frame=self.frame)
+                self.media_controller = MediaController(url=video_url)
                 self.chat_controller.set_media_controller(self.media_controller)
         except Exception as e:
             print(f"Error al iniciar la reproducción de video en Twitch: {e}")

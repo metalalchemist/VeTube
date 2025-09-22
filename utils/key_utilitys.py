@@ -25,7 +25,7 @@ class KeyUtils:
             'alt+shift+f': 'chat.agregar_mensajes_favoritos',
             'alt+shift+c': 'chat.copiarMensajeActual',
             'alt+shift+r': 'chat.toggle_lectura_automatica',
-            'alt+shift+s': 'chat.buscar_mensajes',
+            'alt+shift+b': 'chat.buscar_mensajes',
             'alt+shift+v': 'chat.mostrar_mensaje_actual',
             'alt+shift+d': 'chat.borrar_pagina_actual',
             'alt+shift+p': 'chat.toggle_sounds',
@@ -34,6 +34,8 @@ class KeyUtils:
             'control+shift+p': 'media_player.toggle_pause',
             'control+shift+right': 'media_player.adelantar',
             'control+shift+left': 'media_player.atrasar',
+            'control+shift+up': 'media_player.volume_up',
+            'control+shift+down': 'media_player.volume_down',
         }
         config_path = "keymaps/keys.txt"
         makedirs("keymaps", exist_ok=True)

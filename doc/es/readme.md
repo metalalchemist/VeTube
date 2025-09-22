@@ -45,12 +45,14 @@ Lee y gestiona de manera accesible el chat de tus propios directos o en los de t
 | añade el mensaje al buffer de favoritos      | alt shift f           |
 | Activa o desactiva el modo automático      | alt shift r           |
 | desactiva los sonidos del programa      | alt shift p           |
-| buscar una palabra entre  los mensajes      | alt shift s           |
+| buscar una palabra entre  los mensajes      | alt shift b           |
 | muestra el mensaje actual en un cuadro de texto      | alt shift v           |
 | invocar el editor de teclado de vetube      | alt shift k           |
 | pausa o reanuda la reproducción de un en vivo      | control shift p           |
 | adelantar la reproducción del en vivo      | control shift flecha derecha           |
 | atrazar la reproducción del en vivo      | control shift flecha izquierda           |
+| subir el volumen      | control shift flecha arriba           |
+| bajar el volumen      | control shift flecha abajo           |
 
 ### En el historial  del chat:
 | acción                    | combinación de teclas |

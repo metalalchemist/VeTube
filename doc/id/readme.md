@@ -56,6 +56,11 @@ Kelola dan baca chat dari siaran langsung milikmu atau dari kreator favoritmu de
 | Cari kata dalam pesan               | Alt + Shift + S           |
 | Tampilkan pesan dalam kotak teks    | Alt + Shift + V           |
 | Buka editor keyboard VeTube         | Alt + Shift + K           |
+| jeda atau lanjutkan pemutaran langsung      | control shift p           |
+| maju cepat pemutaran langsung      | control shift panah kanan           |
+| mundur cepat pemutaran langsung      | control shift panah kiri           |
+| volume naik      | control shift panah atas           |
+| volume turun      | control shift panah bawah           |
 
 ### Dalam Riwayat Chat:
 

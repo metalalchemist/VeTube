@@ -43,7 +43,7 @@ class ServicioYouTube:
             format_pref = 'mp4' if status == "past" else 'best'
             video_url = extract_stream_url(self.url, format_preference=format_pref)
             if video_url:
-                self.media_controller = MediaController(url=video_url, frame=self.frame)
+                self.media_controller = MediaController(url=video_url)
                 self.chat_controller.set_media_controller(self.media_controller)
         except Exception as e:
             print(f"Error al iniciar la reproducción de video en YouTube: {e}")
@@ -51,7 +51,6 @@ class ServicioYouTube:
     def recibir(self):
         if data_store.dst: self.translator=translator.translatorWrapper()
         self.chat = ChatDownloader().get_chat(self.url, message_groups=["messages", "superchat"], interruptible_retry=False)
-        threading.Thread(target=self.prepare_player, args=(self.chat.status,), daemon=True).start()
         if self.chat.status == 'past':
             dialog = wx.MessageDialog(self.chat_controller.ui, _("Se ha detectado una transmisión pasada. ¿Deseas conectarte con el servicio en tiempo real del chat?"), _("Transmisión pasada"), wx.YES_NO | wx.ICON_QUESTION)
             result = dialog.ShowModal()
@@ -59,7 +58,7 @@ class ServicioYouTube:
                 self.detener()
                 wx.CallAfter(self.do_switch, self.chat.title)
                 return
-
+        threading.Thread(target=self.prepare_player, args=(self.chat.status,), daemon=True).start()
         wx.CallAfter(self.chat_controller.agregar_titulo, self.chat.title)
         for message in self.chat:
             if self._detener: break

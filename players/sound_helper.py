@@ -70,5 +70,30 @@ class playsound:
 			new_pos = total_length
 		self.sound.set_position(new_pos)
 
+	def get_volume(self):
+		"""Devuelve el volumen actual del reproductor (0.0 a 1.0)."""
+		if self.sound:
+			return self.sound.volume
+		return 1.0 # Default volume
+
+	def set_volume(self, volume):
+		"""Establece el volumen del reproductor."""
+		if self.sound:
+			# Asegurarse de que el volumen esté en el rango de 0.0 a 1.0
+			vol = max(0.0, min(1.0, volume))
+			self.sound.volume = vol
+
+	def volume_up(self, step=0.1):
+		"""Sube el volumen."""
+		current_volume = self.get_volume()
+		new_volume = current_volume + step
+		self.set_volume(new_volume)
+
+	def volume_down(self, step=0.1):
+		"""Baja el volumen."""
+		current_volume = self.get_volume()
+		new_volume = current_volume - step
+		self.set_volume(new_volume)
+
 	def release(self):
 		self.sound.free()

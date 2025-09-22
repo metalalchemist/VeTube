@@ -131,7 +131,7 @@ class ChatController:
     def mostrar_dialogo(self):
         self.ui = ChatDialog(self.frame, self.plataforma)
         self.keyboard_handler = WXKeyboardHandler(self.ui)
-        # self._load_and_register_shortcuts() # Eliminado para evitar doble carga
+        self._load_and_register_shortcuts() # Activado para carga inicial de atajos
         self.ui.actualizar_filtro_eventos = self.actualizar_filtro_eventos
         self.menu_opciones_controller = ChatMenuController(self.ui, self.plataforma, self)
         if self.plataforma == 'TikTok':
@@ -140,8 +140,6 @@ class ChatController:
         self.actualizar_estado_boton_eliminar()
 
     def show(self):
-        if self.keyboard_handler:
-            self.keyboard_handler.register_keys(self.chat_shortcuts)
         self.ui.ShowModal()
 
     def buscar_mensajes(self):
@@ -342,23 +340,26 @@ class ChatController:
         command_objects = {'chat': self, 'reader': reader}
         if self.media_controller:
             command_objects['media_player'] = self.media_controller
+            command_objects['player'] = self.media_controller
 
         config = configparser.ConfigParser(interpolation=None)
         config.read("keymaps/keys.txt")
-        if 'atajos_chat' in config:
-            for key, command_str in config['atajos_chat'].items():
-                try:
-                    obj_name, method_path = command_str.split('.', 1)
-                    if obj_name in command_objects:
-                        target_obj = command_objects[obj_name]
-                        attrs = method_path.split('.')
-                        final_callable = target_obj
-                        for attr in attrs:
-                            final_callable = getattr(final_callable, attr)
-                        if callable(final_callable):
-                            self.chat_shortcuts[key] = final_callable
-                except Exception as e:
-                    print(f"Error parsing shortcut {key}={command_str}: {e}")
+
+        for section in ['atajos_chat', 'atajos_player']:
+            if section in config:
+                for key, command_str in config[section].items():
+                    try:
+                        obj_name, method_path = command_str.split('.', 1)
+                        if obj_name in command_objects:
+                            target_obj = command_objects[obj_name]
+                            attrs = method_path.split('.')
+                            final_callable = target_obj
+                            for attr in attrs:
+                                final_callable = getattr(final_callable, attr)
+                            if callable(final_callable):
+                                self.chat_shortcuts[key] = final_callable
+                    except Exception as e:
+                        print(f"Error parsing shortcut {key}={command_str}: {e}")
         
         if self.keyboard_handler:
             self.keyboard_handler.register_keys(self.chat_shortcuts)

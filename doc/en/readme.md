@@ -26,20 +26,28 @@ Read and manage YouTube and Twitch  chats in an accessible way on your own live 
 ### Using the invisible interface.
 |action |key combination |
 | ------------------------- | ------------- |
-|interrupts sapi speech| control |
-|Cycles between different buffers including all chats or only members and donations | alt shift left or right arrow |
-|Jump to Previous item | alt shift up arrow |
-|Jump to Next item | alt shift down arrow |
-|Jump to First item | alt shift home |
-|Jump to Last item | alt shift end |
-|Copy the current message | alt shift c |
-| Delete a previously-created buffer       | alt shift d           |
-| Add the message to the favorites buffer      | alt shift f           |
-|Toggle on or off automatic mode  | alt shift r |
-| Dishable the sounds of the program      | alt shift p           |
-| Find a message which contains a certain word      | alt shift s           |
-|Show the current message in a text box |alt shift v |
-|Add a message to the favourites buffer | Alt Shift F |
+| Mute sapy voice      | control+p           |
+| previous buffer      | alt shift left arrow            |
+| next buffer      | alt shift right arrow            |
+| Previous element      | alt shift up arrow           |
+| Next element      | alt shift down arrow           |
+| First element      | alt shift home           |
+| Last element      | alt shift end           |
+| archive a message      | alt shift a           |
+| Copy current message      | alt shift c           |
+| Delete a previously created buffer      | alt shift d           |
+| add message to favorites buffer      | alt shift f           |
+| Activate or deactivate automatic mode      | alt shift r           |
+| deactivate program sounds      | alt shift p           |
+| search for a word among the messages      | alt shift b           |
+| show current message in a text box      | alt shift v           |
+| invoke vetube keyboard editor      | alt shift k           |
+| pause or resume live playback      | control shift p           |
+| fast-forward live playback      | control shift right arrow           |
+| rewind live playback      | control shift left arrow           |
+| volume up      | control shift up arrow           |
+| volume down      | control shift down arrow           |
+
 ### In the chat history:
 |action |key combination |
 | ------------------------- | ------------- |

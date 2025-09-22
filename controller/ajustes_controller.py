@@ -25,6 +25,18 @@ class AjustesController:
         self.dialog.slider_1.Bind(wx.EVT_SLIDER, self.cambiarTono)
         self.dialog.slider_3.Bind(wx.EVT_SLIDER, self.cambiarVelocidad)
         self.dialog.instala_voces.Bind(wx.EVT_BUTTON, self.instalar_voz_piper)
+        self.dialog.check_reproducir.Bind(wx.EVT_CHECKBOX, self.on_check_reproducir)
+        self.dialog.spin_tiempo.Bind(wx.EVT_SPINCTRL, self.on_spin_tiempo)
+        self.dialog.slider_volumen_reproductor.Bind(wx.EVT_SLIDER, self.on_slider_volumen_reproductor)
+
+    def on_check_reproducir(self, event):
+        config['reproducir'] = event.IsChecked()
+
+    def on_spin_tiempo(self, event):
+        config['tiempo'] = event.GetEventObject().GetValue()
+
+    def on_slider_volumen_reproductor(self, event):
+        config['volumen'] = event.GetEventObject().GetValue()
 
     def mostrarSonidos(self, event):
         if event.IsChecked():
@@ -58,7 +70,6 @@ class AjustesController:
             self.dialog.instala_voces.Disable()
             self.dialog.choice_2.Clear()
             self.dialog.choice_2.AppendItems(lista_voces)
-            #reader=reader
         try:
             self.dialog.choice_2.SetSelection(config['voz'])
         except:

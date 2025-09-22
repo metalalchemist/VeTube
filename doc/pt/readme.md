@@ -40,8 +40,14 @@ system access
 | adiciona a mensagem ao buffer de favoritos | Alt shift f |
 | Ativar ou desativar o modo automático | alt xift r |
 | desativar sons do programa | Alt shift p |
-| procurar uma palavra entre as mensagens | alt shift s |
+| procurar uma palavra entre as mensagens | alt shift b |
 | exibe a mensagem atual em uma caixa de texto | Alt shift v |
+| invocar editor de teclado vetube      | alt shift k           |
+| pausar ou retomar a reprodução ao vivo      | control shift p           |
+| avançar a reprodução ao vivo      | control shift seta direita           |
+| retroceder a reprodução ao vivo      | control shift seta esquerda           |
+| aumentar o volume      | control shift seta para cima           |
+| diminuir o volume      | control shift seta para baixo           |
 
 ### No histórico de bate-papo:
 | ação | combinação de teclas |

@@ -19,7 +19,10 @@ configuraciones ={
 	'donations': True,
 	'updates': True,
 	'traducir': False,
-	'directorio':'default'
+	'directorio':'default',
+	'reproducir': False,
+	'tiempo': 10,
+	'volumen': 100
 }
 actualizar_configuracion = False
 

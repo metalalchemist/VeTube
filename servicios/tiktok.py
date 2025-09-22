@@ -17,6 +17,7 @@ class ServicioTiktok:
         self.is_running = False
         self.last_live_status = None
         self.loop = None
+        self.media_controller = None
 
     def iniciar_chat(self):
         self.is_running = True
@@ -77,10 +78,23 @@ class ServicioTiktok:
                     self.detener()
 
     def detener(self):
+        if self.media_controller:
+            self.media_controller.release()
         if self.is_running and self.loop and self.loop.is_running():
             self.is_running = False
             asyncio.run_coroutine_threadsafe(self.chat.disconnect(), self.loop)
             self.loop.call_soon_threadsafe(self.loop.stop)
+
+    def prepare_player(self):
+        try:
+            from utils.play_mp4 import extract_stream_url
+            video_url = extract_stream_url(self.url, format_preference='best')
+            if video_url:
+                from controller.media_controller import MediaController
+                self.media_controller = MediaController(url=video_url)
+                self.chat_controller.set_media_controller(self.media_controller)
+        except Exception as e:
+            print(f"Error al iniciar la reproducción de video en TikTok: {e}")
 
     def _add_listeners(self):
         self.chat.add_listener(ConnectEvent, self.on_connect)
@@ -108,6 +122,8 @@ class ServicioTiktok:
     async def on_connect(self,event: ConnectEvent):
         self.last_live_status = True
         wx.CallAfter(reader.leer_sapi, _("Ingresando al chat"))
+        if not self.media_controller:
+            threading.Thread(target=self.prepare_player, daemon=True).start()
         if data_store.config['sonidos'] and data_store.config['listasonidos'][6]:
             wx.CallAfter(player.playsound, rutasonidos[6],False)
 

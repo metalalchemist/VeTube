@@ -17,7 +17,9 @@ mensaje_teclas=[
 	_('Archivar un mensaje'),
 	_('Pausar o reanudar el reproductor'),
 	_('Adelantar la reproducción'),
-	_('Atrasar la reproducción')
+	_('Atrasar la reproducción'),
+	_('Sube el volumen del reproductor'),
+	_('Baja el volumen del reproductor')
 ]
 
 mensajes_categorias = [
@@ -74,6 +76,8 @@ comandos_ordenados = [
     'media_player.toggle_pause',
     'media_player.adelantar',
     'media_player.atrasar',
+    'media_player.volume_up',
+    'media_player.volume_down',
 ]
 
 comandos_a_descripcion = dict(zip(comandos_ordenados, mensaje_teclas))

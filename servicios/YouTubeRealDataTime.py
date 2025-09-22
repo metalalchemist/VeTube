@@ -39,7 +39,7 @@ class YouTubeRealTimeService:
     def prepare(self):
         video_url = extract_stream_url(self.url, format_preference='mp4')
         if video_url:
-            self.media_controller = MediaController(url=video_url, frame=self.frame)
+            self.media_controller = MediaController(url=video_url)
             self.chat_controller.set_media_controller(self.media_controller)
             print(video_url)
     def recibir(self):
