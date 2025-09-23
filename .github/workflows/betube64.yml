@@ -3,9 +3,9 @@ name: VeTube-x64
 on:
   push:
     tags: ["*"]
-    branches: [ master , reescrito ]
+    branches: [ master ]
   pull_request:
-    branches: [ master , reescrito ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
       - name: Configure Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.13.5
+          python-version: 3.13.7
           architecture: x64
 
       - name: Install dependencies
