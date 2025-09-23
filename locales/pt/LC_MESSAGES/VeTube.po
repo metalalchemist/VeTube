@@ -351,7 +351,6 @@ msgid "Actualización completada."
 msgstr "Atualização concluída."
 
 #: controller/update_languages_controller.py:93
-#, fuzzy
 msgid ""
 "Es necesario reiniciar el programa para aplicar los nuevos idiomas. "
 "¿Desea reiniciarlo ahora?"
@@ -542,23 +541,23 @@ msgstr "Arquivar mensagem"
 
 #: globals/mensajes.py:18
 msgid "Pausar o reanudar el reproductor"
-msgstr ""
+msgstr "pausar ou retomar a reprodução ao vivo"
 
 #: globals/mensajes.py:19
 msgid "Adelantar la reproducción"
-msgstr ""
+msgstr "avançar a reprodução ao vivo"
 
 #: globals/mensajes.py:20
 msgid "Atrasar la reproducción"
-msgstr ""
+msgstr "retroceder a reprodução ao vivo"
 
 #: globals/mensajes.py:21
 msgid "Sube el volumen del reproductor"
-msgstr ""
+msgstr "aumentar o volume"
 
 #: globals/mensajes.py:22
 msgid "Baja el volumen del reproductor"
-msgstr ""
+msgstr "diminuir o volume"
 
 #: globals/mensajes.py:26
 msgid "Mensajes"
@@ -936,9 +935,8 @@ msgid "&Reproducir prueba."
 msgstr "&Reproduzir uma amostra."
 
 #: ui/ajustes.py:91
-#, fuzzy
 msgid "reproducción"
-msgstr "&reproduzir"
+msgstr "reprodutor"
 
 #: ui/ajustes.py:93
 msgid "ajustes de reproducción"

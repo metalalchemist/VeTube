@@ -543,23 +543,23 @@ msgstr "Arsipkan pesan"
 
 #: globals/mensajes.py:18
 msgid "Pausar o reanudar el reproductor"
-msgstr ""
+msgstr "jeda atau lanjutkan pemutaran langsung"
 
 #: globals/mensajes.py:19
 msgid "Adelantar la reproducción"
-msgstr ""
+msgstr "maju cepat pemutaran langsung"
 
 #: globals/mensajes.py:20
 msgid "Atrasar la reproducción"
-msgstr ""
+msgstr "mundur cepat pemutaran langsung"
 
 #: globals/mensajes.py:21
 msgid "Sube el volumen del reproductor"
-msgstr ""
+msgstr "volume naik"
 
 #: globals/mensajes.py:22
 msgid "Baja el volumen del reproductor"
-msgstr ""
+msgstr "volume turun"
 
 #: globals/mensajes.py:26
 msgid "Mensajes"
@@ -940,9 +940,8 @@ msgid "&Reproducir prueba."
 msgstr "&Putar uji coba."
 
 #: ui/ajustes.py:91
-#, fuzzy
 msgid "reproducción"
-msgstr "&Putar"
+msgstr "Putar"
 
 #: ui/ajustes.py:93
 msgid "ajustes de reproducción"

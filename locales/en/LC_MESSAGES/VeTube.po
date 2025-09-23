@@ -337,14 +337,6 @@ msgstr "Warning:"
 msgid "Iniciando descarga de idiomas..."
 msgstr "Starting language download..."
 
-#: controller/update_languages_controller.py:74
-msgid "data"
-msgstr ""
-
-#: controller/update_languages_controller.py:76
-msgid "dataerror_msg"
-msgstr ""
-
 #: controller/update_languages_controller.py:86
 #: ui/update_languages_dialog.py:72
 msgid "Actualización completada."
@@ -541,23 +533,23 @@ msgstr "Archive a message"
 
 #: globals/mensajes.py:18
 msgid "Pausar o reanudar el reproductor"
-msgstr ""
+msgstr "pause or resume live playback"
 
 #: globals/mensajes.py:19
 msgid "Adelantar la reproducción"
-msgstr ""
+msgstr "fast-forward live playback"
 
 #: globals/mensajes.py:20
 msgid "Atrasar la reproducción"
-msgstr ""
+msgstr "rewind live playback"
 
 #: globals/mensajes.py:21
 msgid "Sube el volumen del reproductor"
-msgstr ""
+msgstr "volume up"
 
 #: globals/mensajes.py:22
 msgid "Baja el volumen del reproductor"
-msgstr ""
+msgstr "volume down"
 
 # | msgid "mensaje"
 #: globals/mensajes.py:26
@@ -802,7 +794,7 @@ msgstr "Unknown"
 msgid ""
 "{author_name} ha renovado su suscripción en el nivel "
 "{subscription_plan_name}. ¡Lleva suscrito por {cumulative_months} meses!"
-msgstr ""
+msgstr "{author_name} has renewed their subscription at the {subscription_plan_name} level. They've been a loyal member for {cumulative_months} months!"
 
 #: servicios/twich.py:71
 #, python-brace-format
@@ -836,11 +828,11 @@ msgstr ""
 msgid ""
 "Se ha detectado una transmisión pasada. ¿Deseas conectarte con el "
 "servicio en tiempo real del chat?"
-msgstr ""
+msgstr "A past livestream has been detected. Would you like to connect to the real-time chat service?"
 
 #: servicios/youtube.py:55
 msgid "Transmisión pasada"
-msgstr ""
+msgstr "past livestream"
 
 #: servicios/youtube.py:96
 msgid " se a conectado al chat. "
@@ -931,29 +923,28 @@ msgid "&Reproducir prueba."
 msgstr "&Play test."
 
 #: ui/ajustes.py:91
-#, fuzzy
 msgid "reproducción"
-msgstr "&play"
+msgstr "player"
 
 #: ui/ajustes.py:93
 msgid "ajustes de reproducción"
-msgstr ""
+msgstr "player settings"
 
 #: ui/ajustes.py:95
 msgid "activar reproducción automática al iniciar un en vivo."
-msgstr ""
+msgstr "play automatically when a livestream start"
 
 #: ui/ajustes.py:98
 msgid "tiempo para adelantar y atrazar el en vivo en segundos"
-msgstr ""
+msgstr "time to forward and rewind the livestream in seconds"
 
 #: ui/ajustes.py:102
 msgid "volumen del reproductor"
-msgstr ""
+msgstr "player volumme"
 
 #: ui/ajustes.py:106
 msgid "cambio de volumen con las teclas de volumen (1-25)"
-msgstr ""
+msgstr "change the volume using the volume keys (1-25)"
 
 #: ui/ajustes.py:115
 msgid "Categorías"

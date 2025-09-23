@@ -337,14 +337,6 @@ msgstr "Attention :"
 msgid "Iniciando descarga de idiomas..."
 msgstr "Démarrage du téléchargement des langues..."
 
-#: controller/update_languages_controller.py:74
-msgid "data"
-msgstr ""
-
-#: controller/update_languages_controller.py:76
-msgid "dataerror_msg"
-msgstr ""
-
 #: controller/update_languages_controller.py:86
 #: ui/update_languages_dialog.py:72
 msgid "Actualización completada."
@@ -541,23 +533,23 @@ msgstr "Archiver un message"
 
 #: globals/mensajes.py:18
 msgid "Pausar o reanudar el reproductor"
-msgstr ""
+msgstr "mettre en pause ou reprendre la lecture d'une diffusion en direct"
 
 #: globals/mensajes.py:19
 msgid "Adelantar la reproducción"
-msgstr ""
+msgstr "avancer la lecture de la diffusion en direct"
 
 #: globals/mensajes.py:20
 msgid "Atrasar la reproducción"
-msgstr ""
+msgstr "reculer la lecture de la diffusion en direct"
 
 #: globals/mensajes.py:21
 msgid "Sube el volumen del reproductor"
-msgstr ""
+msgstr "augmenter le volume"
 
 #: globals/mensajes.py:22
 msgid "Baja el volumen del reproductor"
-msgstr ""
+msgstr "baisser le volume"
 
 #: globals/mensajes.py:26
 msgid "Mensajes"
@@ -936,9 +928,8 @@ msgid "&Reproducir prueba."
 msgstr "&Lire un essai."
 
 #: ui/ajustes.py:91
-#, fuzzy
 msgid "reproducción"
-msgstr "&Lire"
+msgstr "Lire"
 
 #: ui/ajustes.py:93
 msgid "ajustes de reproducción"

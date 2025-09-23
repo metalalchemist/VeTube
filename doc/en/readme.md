@@ -43,7 +43,7 @@ Read and manage YouTube and Twitch  chats in an accessible way on your own live 
 | show current message in a text box      | alt shift v           |
 | invoke vetube keyboard editor      | alt shift k           |
 | pause or resume live playback      | control shift p           |
-| fast-forward live playback      | control shift right arrow           |
+| forward live playback      | control shift right arrow           |
 | rewind live playback      | control shift left arrow           |
 | volume up      | control shift up arrow           |
 | volume down      | control shift down arrow           |
@@ -83,5 +83,5 @@ cesar.verastegui17@gmail.com
 With your support, you contribute  for this program to keep on growing.
 
 [Want to join our cause?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
-[Download the program here for 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v2.8/VeTube-x64.zip)
-[Download the program here for 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v2.8/VeTube-x86.zip)
+[Download the program here for 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x64.zip)
+[Download the program here for 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x86.zip)
