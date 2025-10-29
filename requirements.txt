@@ -1,7 +1,7 @@
 sounddevice
 TikTokLive
 pyperclip
-git+https://github.com/owsombra/chat-downloader.git
+git+https://github.com/metalalchemist/chat-downloader
 git+https://github.com/metalalchemist/google-currency
 git+https://github.com/accessibleapps/sound_lib
 git+https://github.com/accessibleapps/accessible_output2
