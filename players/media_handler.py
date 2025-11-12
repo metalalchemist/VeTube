@@ -1,12 +1,20 @@
-from setup import reader
+from setup import reader, player
+from players.sound_helper import SoundPlayer
 from globals import data_store
+import threading
+
 class MediaHandler:
-    def __init__(self, url=None):
+    def __init__(self, url=None, state_callback=None):
         self.url = url
         self.sonando = False
         self.player = None
         self.player_type = None
-        self.cargando=False
+        self.cargando = False
+        self.state_callback = state_callback
+
+    def _notify_state_change(self, state):
+        if self.state_callback:
+            self.state_callback(state)
 
     def play(self):
         if not self.url:
@@ -15,8 +23,13 @@ class MediaHandler:
         if self.cargando:
             reader.leer_auto("ya está cargando un reproductor")
             return
+        if self.sonando and self.player and self.player.is_playing(): # Already playing
+            self._notify_state_change('playing') # Re-confirm playing state
+            return
+
         self.cargando = True
         reader.leer_auto("Cargando el reproductor")
+        self._notify_state_change('loading')
 
         def playback_task():
             try:
@@ -26,32 +39,59 @@ class MediaHandler:
                         self.player.release()
 
                     if new_player_type == 'sound':
-                        from players.sound_helper import playsound
-                        self.player = playsound()
-                        self.cargando = False
+                        self.player = SoundPlayer()
                     else:
                         from players.vlc_helper import MinimalVlcPlayer
                         def vlc_playing_callback(event):
                             self.cargando = False
+                            if self.player and self.player.is_playing():
+                                self.sonando = True
+                                self._notify_state_change('playing')
+                            else:
+                                self.sonando = False
+                                self._notify_state_change('stopped')
                         self.player = MinimalVlcPlayer(playing_callback=vlc_playing_callback)
 
                     self.player_type = new_player_type
 
                 self.sonando = True
-                self.player.playsound(self.url)
+                self.player.play(self.url)
+                self.cargando = False
+                self._notify_state_change('playing')
             except Exception as e:
                 print(f"Error in playback_task: {e}")
                 self.cargando = False
+                self.sonando = False
+                self._notify_state_change('stopped')
 
-        import threading
         thread = threading.Thread(target=playback_task, daemon=True)
         thread.start()
+
+    def pause(self):
+        """Pausa la reproducción del medio."""
+        if self.sonando and self.player and self.player.is_playing():
+            self.player.toggle_player()
+            self.sonando = False
+            self._notify_state_change('paused')
+
+    def stop(self):
+        """Detiene la reproducción y libera los recursos del reproductor."""
+        if self.player:
+            self.player.release()
+            self.player = None
+            self.player_type = None
+        self.sonando = False
+        self._notify_state_change('stopped')
 
     def toggle_pause(self):
         """Alterna el estado de reproducción/pausa del medio."""
         if self.sonando and self.player:
             self.player.toggle_player()
-        else: self.play()
+            self.sonando = self.player.is_playing()
+            self._notify_state_change('playing' if self.sonando else 'paused')
+        else:
+            self.play()
+
     def adelantar(self, seconds):
         """Avanza la reproducción un número de segundos."""
         if self.sonando and self.player:
@@ -99,3 +139,7 @@ class MediaHandler:
             self.player = None
             self.player_type = None
         self.sonando = False
+        self._notify_state_change('stopped')
+
+    def is_playing(self):
+        return self.sonando and self.player and self.player.is_playing()

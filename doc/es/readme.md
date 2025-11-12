@@ -19,10 +19,11 @@ Lee y gestiona de manera accesible el chat de tus propios directos o en los de t
   - ZDSR
 - Posibilidad de configurar según las necesidades del usuario.
   - activa o desactiva los sonidos del programa.
-  - activa o desactiva el modo automático. 
+  - activa o desactiva la lectura automática. 
   - configura el listado de los mensajes en la interfaz invisible.
   - Configura las preferencias de la voz sapy.
   - personaliza los atajos de teclado globales
+- mantén múltiples capturas de chats.
 - cambia de modalidad de lectura de chats fácilmente: decide si quieres leer todos los chats o solo los de alguna categoría en específico.
 - guarda tus envivos en una sección de favoritos. repite cuantas veces  desees el chat sin necesidad de ir a buscar el enlace nuevamente.
 - archiva unmensaje: útil para tener recordatorios.
@@ -33,6 +34,9 @@ Lee y gestiona de manera accesible el chat de tus propios directos o en los de t
 | acción                    | combinación de teclas |
 | ------------------------- | ----------- |
 | Silencia la voz sapy      | control+p           |
+| iniciar/cancelar la captura de un nuevo en vivo      | alt shift h            |
+| ir al en vivo anterior      | control alt shift flecha izquierda            |
+| ir al siguiente en vivo     | control alt shift flecha derecha            |
 | buffer anterior      | alt shift flecha izquierda            |
 | buffer siguiente      | alt shift flecha derecha            |
 | Elemento anterior      | alt shift flecha arriba           |
@@ -43,7 +47,7 @@ Lee y gestiona de manera accesible el chat de tus propios directos o en los de t
 | Copia el mensaje actual      | alt shift c           |
 | Borra un buffer previamente creado      | alt shift d           |
 | añade el mensaje al buffer de favoritos      | alt shift f           |
-| Activa o desactiva el modo automático      | alt shift r           |
+| Activa o desactiva la lectura automática      | alt shift r           |
 | desactiva los sonidos del programa      | alt shift p           |
 | buscar una palabra entre  los mensajes      | alt shift b           |
 | muestra el mensaje actual en un cuadro de texto      | alt shift v           |
@@ -53,6 +57,7 @@ Lee y gestiona de manera accesible el chat de tus propios directos o en los de t
 | atrazar la reproducción del en vivo      | control shift flecha izquierda           |
 | subir el volumen      | control shift flecha arriba           |
 | bajar el volumen      | control shift flecha abajo           |
+| detener y liberar el reproductor      | control shift s           |
 
 ### En el historial  del chat:
 | acción                    | combinación de teclas |
@@ -90,5 +95,5 @@ Con tu apoyo contribuyes a que este programa siga en crecimiento.
 
 [¿Te unes a nuestra causa?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
-[descarga el programa para 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x64.zip)
-[descarga el programa para 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x86.zip)
+[descarga el programa para 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x64.zip)
+[descarga el programa para 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x86.zip)

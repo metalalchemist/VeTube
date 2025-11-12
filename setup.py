@@ -1,9 +1,9 @@
 from utils import languageHandler
 from globals.data_store import config
-from players.sound_helper import playsound
+from players.sound_helper import SoundPlayer
 from helpers.reader_handler import ReaderHandler
 languageHandler.setLanguage(config['idioma'])
-player=playsound()
+player=SoundPlayer()
 reader = ReaderHandler()
 reader._leer.set_rate(config['speed'])
 reader._leer.set_pitch(config['tono'])

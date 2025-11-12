@@ -9,11 +9,12 @@ from globals.data_store import mensajes_destacados
 from utils.funciones import escribirJsonLista,extractUser
 
 class ChatItemController:
-    def __init__(self, menu, list_box,plataforma, label_dialog):
+    def __init__(self, menu, list_box, chat_controller):
         self.menu = menu
         self.list_box = list_box
-        self.plataforma = plataforma
-        self.label_dialog = label_dialog
+        self.chat_controller = chat_controller
+        self.plataforma = chat_controller.plataforma
+        self.label_dialog = chat_controller.ui.label_dialog
         
         # Bind events
         self.menu.menu.Bind(wx.EVT_MENU, self.on_copy, id=self.menu.copiar.GetId())
@@ -57,7 +58,7 @@ class ChatItemController:
         if not ya_archivado:
             # Determinar el título primero
             if self.plataforma == 'TikTok':
-                titulo = extractUser(main_frame.text_ctrl_1.GetValue())
+                titulo = extractUser(self.chat_controller.servicio.url)
             else:
                 titulo = self.label_dialog.GetLabelText()
             

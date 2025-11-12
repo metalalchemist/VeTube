@@ -28,6 +28,9 @@ system access
 | ação | combinação de teclas |
 | ------------------------- | ----------- |
 | Silencie a voz sapy | CTRL+p |
+| iniciar/cancelar a captura de outra transmissão ao vivo | Alt shift h |
+| ir para a transmissão ao vivo anterior | Control Alt shift seta para a esquerda |
+| ir para a próxima transmissão ao vivo | Control Alt shift seta para a direita |
 | buffer anterior | Alt shift seta para a esquerda |
 | próximo buffer | Alt shift seta para a direita |
 | Item anterior | Alt shift seta para cima |
@@ -84,5 +87,5 @@ Com o seu apoio, você ajuda este programa a continuar a crescer.
 
 [Você se junta à nossa causa?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
-[baixar o programa para 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x64.zip)
-[baixe o programa para 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x86.zip)
+[baixar o programa para 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x64.zip)
+[baixe o programa para 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x86.zip)

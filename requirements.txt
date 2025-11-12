@@ -13,7 +13,7 @@ uiautomation
 psutil
 requests
 git+https://github.com/KaitoCross/pytchat
-yt-dlp
+yt-dlp[default,curl-cffi]
 python-vlc
 wxPython==4.2.2; sys_platform == "win32" and platform_machine == "x86"
 wxPython; sys_platform == "win32" and (platform_machine == "AMD64" or platform_machine == "x86_64")

@@ -2,44 +2,44 @@ import wx,wx.adv, configparser
 from globals import data_store, resources
 from pyperclip import copy
 from setup import reader, player
-from ui.chat_ui import ChatDialog
+from ui.chat_ui import ChatPanel
+from controller.menus.chat_menu_controller import ChatMenuController
+from controller.menus.chat_filter_controller import ChatFilterController
+from servicios.estadisticas_manager import EstadisticasManager
 from ui.menus.chat_item_menu import ChatItemMenu
 from ui.show_comment import ShowCommentDialog
 from controller.menus.chat_item_controller import ChatItemController
-from controller.menus.chat_menu_controller import ChatMenuController
-from controller.menus.chat_filter_controller import ChatFilterController
-from controller.editor_controller import EditorController
-from ui.dialog_response import response
-from servicios.estadisticas_manager import EstadisticasManager
 from utils.funciones import escribirJsonLista, extractUser
-from helpers.keyboard_handler.wx_handler import WXKeyboardHandler
 
 class ChatController:
-    def __init__(self, frame, servicio=None, plataforma=None):
+    def __init__(self, main_controller, frame, plataforma, servicio=None, chat_dialog=None):
+        self.main_controller = main_controller
         self.frame = frame
         self.servicio = servicio
         self.plataforma = plataforma
+        self.estadisticas_manager = EstadisticasManager()
         self.ui = None
-        self.menu_opciones_controller = None
-        self.menu_filter_controller = None
+        self.chat_dialog = chat_dialog
         self.todos_los_eventos = []
         self.filtro_eventos = "todos"
-        self.keyboard_handler = None
-        self.chat_shortcuts = {}
-        self.media_controller = None
 
-    def set_active_service(self, service_instance):
-        self.servicio = service_instance
-
-    def set_media_controller(self, controller):
-        self.media_controller = controller
-        self.reload_shortcuts()
+    def create_ui(self, parent):
+        self.ui = ChatPanel(parent, self.plataforma)
+        self.ui.Layout()
+        self.ui.actualizar_filtro_eventos = self.actualizar_filtro_eventos
+        self.menu_opciones_controller = ChatMenuController(self.ui, self.plataforma, self, self.estadisticas_manager)
+        if self.plataforma == 'TikTok':
+            self.menu_filter_controller = ChatFilterController(self)
+        self._bind_events()
+        self.actualizar_estado_boton_eliminar()
 
     def _bind_events(self):
-        self.ui.button_mensaje_detener.Bind(wx.EVT_BUTTON, self.on_close_dialog)
-        self.ui.boton_opciones.Bind(wx.EVT_BUTTON, self.on_opciones_btn)
+        self.ui.button_mensaje_detener.Bind(wx.EVT_BUTTON, self.on_cerrar_chat)
         self.ui.boton_eliminar.Bind(wx.EVT_BUTTON, self.on_eliminar_pestaña)
-        if self.plataforma == 'TikTok' and hasattr(self.ui, 'boton_filtrar'): self.ui.boton_filtrar.Bind(wx.EVT_BUTTON, self.on_filter_btn)
+        self.ui.boton_opciones.Bind(wx.EVT_BUTTON, self.on_opciones_btn)
+        if self.plataforma == 'TikTok' and hasattr(self.ui, 'boton_filtrar'):
+            self.ui.boton_filtrar.Bind(wx.EVT_BUTTON, self.on_filter_btn)
+
         list_boxes = []
         if self.plataforma == 'La sala de juegos':
             if data_store.config['categorias'][0]: list_boxes.append(self.ui.list_box_general)
@@ -56,17 +56,51 @@ class ChatController:
             if data_store.config['categorias'][3]: list_boxes.append(self.ui.list_box_donaciones)
             if data_store.config['categorias'][4]: list_boxes.append(self.ui.list_box_moderadores)
             if data_store.config['categorias'][5]: list_boxes.append(self.ui.list_box_verificados)
-        if data_store.config['categorias'][6]: list_boxes.append(self.ui.list_box_favoritos)
+        if hasattr(self.ui, 'list_box_favoritos'):
+            if data_store.config['categorias'][6]: list_boxes.append(self.ui.list_box_favoritos)
+
         for lb in list_boxes:
             lb.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
             lb.Bind(wx.EVT_KEY_UP, self.on_listbox_keyup)
+
+    def set_media_controller(self, media_controller):
+        self.media_controller = media_controller
+
+    def agregar_titulo(self, titulo):
+        self.ui.label_dialog.SetLabel(titulo)
+
+    def on_cerrar_chat(self, event):
+        self.chat_dialog.close_chat_session(self)
+
+    def on_eliminar_pestaña(self, event):
+        page_index = self.ui.treebook.GetSelection()
+        if page_index == wx.NOT_FOUND: return
+        self.ui.treebook.DeletePage(page_index)
+        if self.ui.treebook.GetPageCount() == 0:
+            self.chat_dialog.close_chat_session(self)
+        else:
+            self.actualizar_estado_boton_eliminar()
+
+    def actualizar_estado_boton_eliminar(self):
+        if self.ui.treebook.GetPageCount() <= 1:
+            self.ui.boton_eliminar.Hide()
+        else:
+            self.ui.boton_eliminar.Show()
+        self.ui.Layout()
+
+    def actualizar_filtro_eventos(self, filtro):
+        self.filtro_eventos = filtro
+        self.ui.list_box_eventos.Clear()
+        for mensaje, tipo in self.todos_los_eventos:
+            if self.filtro_eventos == "todos" or self.filtro_eventos == tipo:
+                self.ui.list_box_eventos.Append(mensaje)
 
     def on_context_menu(self, event):
         list_box = event.GetEventObject()
         if list_box.GetSelection() == wx.NOT_FOUND: return
         
         menu = ChatItemMenu(self.ui)
-        ChatItemController(menu, list_box, self.plataforma, self.ui.label_dialog)
+        ChatItemController(menu, list_box, self, self.ui.label_dialog)
         self.ui.PopupMenu(menu.menu)
 
     def on_opciones_btn(self, event):
@@ -82,65 +116,35 @@ class ChatController:
             list_box = event.GetEventObject()
             reader.leer_auto(list_box.GetString(list_box.GetSelection()))
 
-    def on_close_dialog(self, event):
-        if response(_("¿Desea salir de esta ventana y detener la lectura de los mensajes?"), _("Atención:")) == wx.ID_YES:
-            if self.keyboard_handler:
-                self.keyboard_handler.unregister_all_keys()
-            EstadisticasManager().resetear_estadisticas()
-            self.servicio.detener()
-            main_frame = self.ui.GetParent()
-            self.ui.Destroy()
-            reader._leer.silence()
-            reader.leer_sapi(_("ha finalizado la lectura del chat."))
-            main_frame.text_ctrl_1.SetValue("")
-            main_frame.text_ctrl_1.SetFocus()
-            main_frame.plataforma.SetSelection(0)
+    def agregar_mensaje_general(self, mensaje):
+        if hasattr(self.ui, 'list_box_general'):
+            self.ui.list_box_general.Append(mensaje)
 
-    def on_eliminar_pestaña(self, event):
-        page_index = self.ui.treebook.GetSelection()
-        if page_index == wx.NOT_FOUND: return
-        self.ui.treebook.DeletePage(page_index)
-        self.actualizar_estado_boton_eliminar()
+    def agregar_mensaje_miembro(self, mensaje):
+        if hasattr(self.ui, 'list_box_miembros'):
+            self.ui.list_box_miembros.Append(mensaje)
 
-    def agregar_mensaje_general(self, mensaje): self.ui.list_box_general.Append(mensaje)
+    def agregar_mensaje_donacion(self, mensaje):
+        if hasattr(self.ui, 'list_box_donaciones'):
+            self.ui.list_box_donaciones.Append(mensaje)
+
+    def agregar_mensaje_moderador(self, mensaje):
+        if hasattr(self.ui, 'list_box_moderadores'):
+            self.ui.list_box_moderadores.Append(mensaje)
+
+    def agregar_mensaje_verificado(self, mensaje):
+        if hasattr(self.ui, 'list_box_verificados'):
+            self.ui.list_box_verificados.Append(mensaje)
+
     def agregar_mensaje_evento(self, mensaje, tipo=None):
-        if self.plataforma=='TikTok':
-            self.todos_los_eventos.append((mensaje, tipo))
-            if self.filtro_eventos == "todos" or self.filtro_eventos == tipo: self.ui.list_box_eventos.Append(mensaje)
-        else: self.ui.list_box_eventos.Append(mensaje)
-    def agregar_mensaje_miembro(self, mensaje): self.ui.list_box_miembros.Append(mensaje)
-    def agregar_mensaje_donacion(self, mensaje): self.ui.list_box_donaciones.Append(mensaje)
-    def agregar_mensaje_moderador(self, mensaje): self.ui.list_box_moderadores.Append(mensaje)
-    def agregar_mensaje_verificado(self, mensaje): self.ui.list_box_verificados.Append(mensaje)
-    def agregar_titulo(self, titulo): self.ui.label_dialog.SetLabel(titulo)
-
-    def actualizar_filtro_eventos(self, filtro):
-        self.filtro_eventos = filtro
-        self.ui.list_box_eventos.Clear()
-        for mensaje, tipo in self.todos_los_eventos:
-            if self.filtro_eventos == "todos" or self.filtro_eventos == tipo:
-                self.ui.list_box_eventos.Append(mensaje)
-
-    def actualizar_estado_boton_eliminar(self):
-        if self.ui.treebook.GetPageCount() <= 1:
-            self.ui.boton_eliminar.Hide()
-        else:
-            self.ui.boton_eliminar.Show()
-        self.ui.Layout()
+        if hasattr(self.ui, 'list_box_eventos'):
+            if self.plataforma=='TikTok':
+                self.todos_los_eventos.append((mensaje, tipo))
+                if self.filtro_eventos == "todos" or self.filtro_eventos == tipo: self.ui.list_box_eventos.Append(mensaje)
+            else: self.ui.list_box_eventos.Append(f"{tipo}: {mensaje}")
 
     def mostrar_dialogo(self):
-        self.ui = ChatDialog(self.frame, self.plataforma)
-        self.keyboard_handler = WXKeyboardHandler(self.ui)
-        self._load_and_register_shortcuts() # Activado para carga inicial de atajos
-        self.ui.actualizar_filtro_eventos = self.actualizar_filtro_eventos
-        self.menu_opciones_controller = ChatMenuController(self.ui, self.plataforma, self)
-        if self.plataforma == 'TikTok':
-            self.menu_filter_controller = ChatFilterController(self)
-        self._bind_events()
-        self.actualizar_estado_boton_eliminar()
-
-    def show(self):
-        self.ui.ShowModal()
+        return self.ui
 
     def buscar_mensajes(self):
         dialogo = wx.TextEntryDialog(self.ui, _("Introduce el criterio de búsqueda"), _("Buscar mensajes"))
@@ -168,7 +172,7 @@ class ChatController:
                 list_box.Set(resultados)
                 self.ui.treebook.SetSelection(page_index)
                 self.actualizar_estado_boton_eliminar()
-                if data_store.config['sonidos'] and data_store.config['listasonidos'][8]: player.playsound(resources.rutasonidos[8],False)
+                if data_store.config['sonidos'] and data_store.config['listasonidos'][8]: player.play(resources.rutasonidos[8])
             else: wx.MessageBox(_("No se encontraron mensajes que coincidan con el criterio de búsqueda."), _("Búsqueda sin resultados"), wx.OK | wx.ICON_INFORMATION)
         dialogo.Destroy()
 
@@ -192,7 +196,6 @@ class ChatController:
         if next_selection >= page_count:
             next_selection = 0
         self.ui.treebook.SetSelection(next_selection)
-        self.ui.treebook.SetFocus()
         reader.leer_auto(self.ui.treebook.GetPageText(next_selection))
 
     def retrocederCategorias(self):
@@ -204,7 +207,6 @@ class ChatController:
         if next_selection < 0:
             next_selection = page_count - 1
         self.ui.treebook.SetSelection(next_selection)
-        self.ui.treebook.SetFocus()
         reader.leer_auto(self.ui.treebook.GetPageText(next_selection))
 
     def elementoAnterior(self):
@@ -237,9 +239,9 @@ class ChatController:
             return
         selection = listbox.GetSelection()
         if selection == 0 or selection == listbox.GetCount() - 1:
-            player.playsound(f"sounds/{data_store.config['directorio']}/orilla.mp3", False)
+            player.play(f"sounds/{data_store.config['directorio']}/orilla.mp3")
         else:
-            player.playsound(f"sounds/{data_store.config['directorio']}/msj.mp3", False)
+            player.play(f"sounds/{data_store.config['directorio']}/msj.mp3")
 
     def elemento_inicial(self):
         listbox = self.current_listbox
@@ -303,7 +305,7 @@ class ChatController:
         if not ya_archivado:
             # Determinar el título
             if self.plataforma == 'TikTok':
-                titulo = extractUser(main_frame.text_ctrl_1.GetValue())
+                titulo = extractUser(self.servicio.url)
             else:
                 titulo = self.ui.label_dialog.GetLabelText()
 
@@ -314,7 +316,7 @@ class ChatController:
             escribirJsonLista('mensajes_destacados.json', data_store.mensajes_destacados)
             reader.leer_auto(_("El mensaje ha sido archivado correctamente."))
         else: 
-            reader.leer_auto(_("Este mensaje ya está en la lista de archivados."))
+            reader.leer_sapi(_("Este mensaje ya está en la lista de archivados."))
 
     def borrar_pagina_actual(self):
         page_index = self.ui.treebook.GetSelection()
@@ -327,45 +329,6 @@ class ChatController:
         self.ui.treebook.DeletePage(page_index)
         reader.leer_auto(_("Página borrada."))
         self.actualizar_estado_boton_eliminar()
-
-    def mostrar_editor_combinaciones(self):
-        editor = EditorController(self.ui, self)
-        editor.ShowModal()
-
-    def _load_and_register_shortcuts(self):
-        if self.keyboard_handler:
-            self.keyboard_handler.unregister_all_keys()
-        
-        self.chat_shortcuts = {}
-        command_objects = {'chat': self, 'reader': reader}
-        if self.media_controller:
-            command_objects['media_player'] = self.media_controller
-            command_objects['player'] = self.media_controller
-
-        config = configparser.ConfigParser(interpolation=None)
-        config.read("keymaps/keys.txt")
-
-        for section in ['atajos_chat', 'atajos_player']:
-            if section in config:
-                for key, command_str in config[section].items():
-                    try:
-                        obj_name, method_path = command_str.split('.', 1)
-                        if obj_name in command_objects:
-                            target_obj = command_objects[obj_name]
-                            attrs = method_path.split('.')
-                            final_callable = target_obj
-                            for attr in attrs:
-                                final_callable = getattr(final_callable, attr)
-                            if callable(final_callable):
-                                self.chat_shortcuts[key] = final_callable
-                    except Exception as e:
-                        print(f"Error parsing shortcut {key}={command_str}: {e}")
-        
-        if self.keyboard_handler:
-            self.keyboard_handler.register_keys(self.chat_shortcuts)
-
-    def reload_shortcuts(self):
-        self._load_and_register_shortcuts()
 
     def toggle_lectura_automatica(self):
         if data_store.config['reader']:

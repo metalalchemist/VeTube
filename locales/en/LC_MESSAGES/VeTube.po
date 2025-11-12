@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-09-21 22:38-0700\n"
+"POT-Creation-Date: 2025-11-12 00:42-0800\n"
 "PO-Revision-Date: 2023-10-09 05:35+0200\n"
 "Last-Translator: \n"
 "Language: en\n"
@@ -73,90 +73,77 @@ msgstr ""
 "Hello, i'm the voice that will read the messages of your favorite "
 "channels."
 
-#: controller/chat_controller.py:86
-msgid "¿Desea salir de esta ventana y detener la lectura de los mensajes?"
-msgstr "Would you like to exit this window and stop reading messages?"
-
-#: controller/chat_controller.py:86 controller/editor_controller.py:43
-#: controller/menus/main_menu_controller.py:58 update/update.py:131
-msgid "Atención:"
-msgstr "Warning:"
-
-#: controller/chat_controller.py:94
-msgid "ha finalizado la lectura del chat."
-msgstr "chat reading was ended."
-
-#: controller/chat_controller.py:146
+#: controller/chat_controller.py:150
 msgid "Introduce el criterio de búsqueda"
 msgstr "enter your search term"
 
-#: controller/chat_controller.py:146
+#: controller/chat_controller.py:150
 msgid "Buscar mensajes"
 msgstr "&search"
 
-#: controller/chat_controller.py:172
+#: controller/chat_controller.py:176
 msgid "No se encontraron mensajes que coincidan con el criterio de búsqueda."
 msgstr "No messages matching the search criteria were found."
 
-#: controller/chat_controller.py:172
+#: controller/chat_controller.py:176
 msgid "Búsqueda sin resultados"
 msgstr "No results found"
 
-#: controller/chat_controller.py:264
+#: controller/chat_controller.py:266
 msgid "Mensaje copiado"
 msgstr "¡copied!"
 
-#: controller/chat_controller.py:280 globals/mensajes.py:27 ui/chat_ui.py:34
+#: controller/chat_controller.py:282 globals/mensajes.py:31 ui/chat_ui.py:34
 #: ui/main_window.py:47
 msgid "Favoritos"
 msgstr "Favorites"
 
-#: controller/chat_controller.py:284
+#: controller/chat_controller.py:286
 msgid "Este mensaje ya se encuentra en favoritos"
 msgstr "this message is already in favorites"
 
-#: controller/chat_controller.py:287
+#: controller/chat_controller.py:289
 msgid "Mensaje agregado a favoritos"
 msgstr "It has been added to favorites"
 
-#: controller/chat_controller.py:299 controller/main_controller.py:31
+#: controller/chat_controller.py:301 controller/main_controller.py:33
 #: controller/main_controller.py:105 controller/main_controller.py:118
 #: controller/main_controller.py:125
-#: controller/menus/chat_item_controller.py:51
+#: controller/menus/chat_item_controller.py:52
 msgid "Tus mensajes archivados aparecerán aquí"
 msgstr "Your archived messages will appear here"
 
-#: controller/chat_controller.py:315
-#: controller/menus/chat_item_controller.py:69
+#: controller/chat_controller.py:317
+#: controller/menus/chat_item_controller.py:70
 msgid "El mensaje ha sido archivado correctamente."
 msgstr "Message archived successfully."
 
-#: controller/chat_controller.py:317
-#: controller/menus/chat_item_controller.py:71
+#: controller/chat_controller.py:319
+#: controller/menus/chat_item_controller.py:72
 msgid "Este mensaje ya está en la lista de archivados."
 msgstr "The message is already archived."
 
-#: controller/chat_controller.py:324
+#: controller/chat_controller.py:326
 msgid "No se puede borrar la última página."
 msgstr "The last page cannot be deleted."
 
-#: controller/chat_controller.py:328
+#: controller/chat_controller.py:330
 msgid "Página borrada."
 msgstr "Page deleted."
 
-#: controller/chat_controller.py:375
+#: controller/chat_controller.py:338
 msgid "Lectura automática activada."
 msgstr "Automatic reading enabled."
 
-#: controller/chat_controller.py:375
+#: controller/chat_controller.py:338
 msgid "Lectura automática  desactivada."
 msgstr "Automatic reading disabled."
 
-#: controller/chat_controller.py:379
+#: controller/chat_controller.py:342
 msgid "sonidos activados."
 msgstr "Sounds enabled."
 
-#: controller/chat_controller.py:379
+#: controller/chat_controller.py:342
 msgid "sonidos desactivados."
 msgstr "Sounds disabled"
 
@@ -167,6 +154,11 @@ msgid ""
 msgstr ""
 "You are about to reset the settings to their default values, do you want "
 "to proceed? This action cannot be undone."
+
+#: controller/editor_controller.py:43
+#: controller/menus/main_menu_controller.py:58 update/update.py:131
+msgid "Atención:"
+msgstr "Warning:"
 
 #: controller/editor_controller.py:63 controller/editor_controller.py:92
 msgid "Función desconocida"
@@ -247,12 +239,12 @@ msgstr "Error saving file: {}"
 msgid "Error"
 msgstr "Error"
 
-#: controller/main_controller.py:25
+#: controller/main_controller.py:28
 #, python-format
 msgid "Favoritos(%s)"
 msgstr "Favorites (%s)"
 
-#: controller/main_controller.py:27 controller/main_controller.py:63
+#: controller/main_controller.py:30 controller/main_controller.py:63
 #: controller/main_controller.py:80 controller/menus/chat_menu_controller.py:53
 msgid "Tus favoritos aparecerán aquí"
 msgstr "Your favorites  will be appear here"
@@ -267,7 +259,7 @@ msgstr "Are you sure to delete all favorites from the list?"
 
 #: controller/main_controller.py:68
 #: controller/menus/main_menu_controller.py:109
-#: controller/update_languages_controller.py:93
+#: controller/update_languages_controller.py:93 ui/chat_dialog.py:98
 msgid "¡Atención!"
 msgstr "Warning!"
 
@@ -315,12 +307,20 @@ msgstr "There are no messages to delete"
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr "Are you sure you want to delete all messages?"
 
-#: controller/main_controller.py:235
+#: controller/main_controller.py:137
+msgid "Lectura de chats en vivo"
+msgstr "Live chats reading..."
+
+#: controller/main_controller.py:204
+msgid "Conectando..."
+msgstr "conecting..."
+
+#: controller/main_controller.py:255
 #: controller/menus/main_menu_controller.py:63
 msgid "¿está seguro que desea salir del programa?"
 msgstr "Are you sure you want to exit the program?"
 
-#: controller/main_controller.py:235
+#: controller/main_controller.py:255
 #: controller/menus/main_menu_controller.py:63
 msgid "¡atención!"
 msgstr "Warning!"
@@ -350,19 +350,19 @@ msgstr ""
 "It's necessary to restart the program to apply new languages. Would you "
 "like to restart it now?"
 
-#: controller/menus/chat_item_controller.py:28
+#: controller/menus/chat_item_controller.py:29
 msgid "Mensaje copiado al portapapeles"
 msgstr "Message copied to clipboard"
 
-#: controller/menus/chat_item_controller.py:28
+#: controller/menus/chat_item_controller.py:29
 msgid "El mensaje seleccionado ha sido copiado al portapapeles."
 msgstr "The selected message has been copied to the clipboard."
 
-#: controller/menus/chat_item_controller.py:42
+#: controller/menus/chat_item_controller.py:43
 msgid "Mensaje traducido"
 msgstr "Translated message"
 
-#: controller/menus/chat_item_controller.py:42
+#: controller/menus/chat_item_controller.py:43
 msgid ""
 "el mensaje se ha traducido al idioma del programa y se  a  copiado en el "
 "portapapeles."
@@ -388,27 +388,27 @@ msgstr "Already in favorites"
 msgid "Se ha agregado a favoritos"
 msgstr "It has been added to favorites"
 
-#: controller/menus/chat_menu_controller.py:65
+#: controller/menus/chat_menu_controller.py:64
 msgid "Enlace copiado al portapapeles"
 msgstr "Link copied to clipboard"
 
-#: controller/menus/chat_menu_controller.py:65
+#: controller/menus/chat_menu_controller.py:64
 msgid "El enlace del chat ha sido copiado al portapapeles."
 msgstr "The live stream link has been copied to the clipboard."
 
-#: controller/menus/chat_menu_controller.py:67
+#: controller/menus/chat_menu_controller.py:66
 msgid "No se pudo copiar el enlace"
 msgstr "Could not copy the link"
 
-#: controller/menus/chat_menu_controller.py:67
+#: controller/menus/chat_menu_controller.py:66
 msgid "No se encontró un enlace válido para copiar."
 msgstr "No valid link found to copy."
 
-#: controller/menus/chat_menu_controller.py:73
+#: controller/menus/chat_menu_controller.py:71
 msgid "No se pudo abrir el enlace"
 msgstr "Could not open the link"
 
-#: controller/menus/chat_menu_controller.py:73
+#: controller/menus/chat_menu_controller.py:71
 msgid "No se encontró un enlace válido para abrir."
 msgstr "No valid link found to open."
 
@@ -468,207 +468,223 @@ msgstr ""
 "you like to restart it now?"
 
 #: globals/mensajes.py:2
+msgid "iniciar/cancelar la captura de otro en vivo"
+msgstr "start/cancel capture of new chat livestream"
+
+#: globals/mensajes.py:3
 msgid "Silencia la voz sapy"
 msgstr "Mute sapi voice"
 
-#: globals/mensajes.py:3
+#: globals/mensajes.py:4
 msgid "Mensaje anterior."
 msgstr "Previous message."
 
-#: globals/mensajes.py:4
+#: globals/mensajes.py:5
 msgid "Mensaje siguiente"
 msgstr "Next message"
 
-#: globals/mensajes.py:5
+#: globals/mensajes.py:6
 msgid "Buffer anterior"
 msgstr "Previous buffer"
 
-#: globals/mensajes.py:6
+#: globals/mensajes.py:7
 msgid "Siguiente Buffer"
 msgstr "Next buffer"
 
-#: globals/mensajes.py:7
+#: globals/mensajes.py:8
 msgid "Ir al comienzo del buffer"
 msgstr "Go to the top of the buffer"
 
-#: globals/mensajes.py:8
+#: globals/mensajes.py:9
 msgid "Ir al final del buffer"
 msgstr "Go to the end of the buffer"
 
-#: globals/mensajes.py:9
+#: globals/mensajes.py:10
 msgid "Destaca un mensaje en el buffer de  favoritos"
 msgstr "Highlight a message in the favorites buffer"
 
-#: globals/mensajes.py:10
+#: globals/mensajes.py:11
 msgid "Copia el mensaje actual"
 msgstr "Copies the current message"
 
-#: globals/mensajes.py:11
+#: globals/mensajes.py:12
 msgid "Activa o desactiva la lectura automática"
 msgstr "Turns automatic message reading on or off"
 
-#: globals/mensajes.py:12
+#: globals/mensajes.py:13
 msgid "Busca una palabra en los mensajes actuales"
 msgstr "Searches a word among the current messages"
 
-#: globals/mensajes.py:13
+#: globals/mensajes.py:14
 msgid "Muestra el mensaje actual en un cuadro de texto"
 msgstr "Shows the current message in a text field"
 
-#: globals/mensajes.py:14
+#: globals/mensajes.py:15
 msgid "borra el buffer seleccionado"
 msgstr "delete the selected buffer"
 
-#: globals/mensajes.py:15
+#: globals/mensajes.py:16
 msgid "activa o desactiva los sonidos del programa"
 msgstr "turn on or off program sounds"
 
-#: globals/mensajes.py:16
+#: globals/mensajes.py:17
 msgid "Invocar el editor de combinaciones de teclado"
 msgstr "Show the keystroke editor"
 
-#: globals/mensajes.py:17
+#: globals/mensajes.py:18
 msgid "Archivar un mensaje"
 msgstr "Archive a message"
 
-#: globals/mensajes.py:18
+#: globals/mensajes.py:19
 msgid "Pausar o reanudar el reproductor"
 msgstr "pause or resume live playback"
 
-#: globals/mensajes.py:19
+#: globals/mensajes.py:20
 msgid "Adelantar la reproducción"
 msgstr "fast-forward live playback"
 
-#: globals/mensajes.py:20
+#: globals/mensajes.py:21
 msgid "Atrasar la reproducción"
 msgstr "rewind live playback"
 
-#: globals/mensajes.py:21
+#: globals/mensajes.py:22
 msgid "Sube el volumen del reproductor"
 msgstr "volume up"
 
-#: globals/mensajes.py:22
+#: globals/mensajes.py:23
 msgid "Baja el volumen del reproductor"
 msgstr "volume down"
 
-# | msgid "mensaje"
+#: globals/mensajes.py:24
+msgid "Detener y liberar el reproductor"
+msgstr "stop live playback"
+
+#: globals/mensajes.py:25
+msgid "ir al Siguiente en vivo"
+msgstr "go to next live stream"
+
 #: globals/mensajes.py:26
+msgid "ir al en vivo anterior"
+msgstr "go to previous live stream"
+
+# | msgid "mensaje"
+#: globals/mensajes.py:30
 msgid "Mensajes"
 msgstr "messages"
 
-#: globals/mensajes.py:26
+#: globals/mensajes.py:30
 msgid "eventos"
 msgstr "events"
 
-#: globals/mensajes.py:26 ui/chat_ui.py:25 ui/chat_ui.py:30
+#: globals/mensajes.py:30 ui/chat_ui.py:25 ui/chat_ui.py:30
 msgid "Miembros"
 msgstr "Members"
 
-#: globals/mensajes.py:26
+#: globals/mensajes.py:30
 msgid "Donativos"
 msgstr "Donations"
 
-#: globals/mensajes.py:26 ui/chat_ui.py:31
+#: globals/mensajes.py:30 ui/chat_ui.py:31
 msgid "Moderadores"
 msgstr "Moderators"
 
-#: globals/mensajes.py:27
+#: globals/mensajes.py:31
 msgid "Usuarios Verificados"
 msgstr "Verified users"
 
-#: globals/mensajes.py:31
+#: globals/mensajes.py:35
 msgid "Sonido cuando llega un mensaje"
 msgstr "Sound when message received"
 
-#: globals/mensajes.py:32
+#: globals/mensajes.py:36
 msgid "Sonido cuando habla un miembro"
 msgstr "Sound when a member speaks"
 
-#: globals/mensajes.py:33
+#: globals/mensajes.py:37
 msgid ""
 "Sonido cuando se conecta un miembro o cuando alguien se une a tu en vivo "
 "en tiktok"
 msgstr "Sound when a member connects or when someone joins your live on tiktok"
 
-#: globals/mensajes.py:34
+#: globals/mensajes.py:38
 msgid "Sonido cuando llega un donativo"
 msgstr "Sound when donation received"
 
-#: globals/mensajes.py:35
+#: globals/mensajes.py:39
 msgid "Sonido cuando habla un moderador"
 msgstr "Sound when a moderator speaks"
 
-#: globals/mensajes.py:36
+#: globals/mensajes.py:40
 msgid "Sonido cuando habla un usuario verificado"
 msgstr "Sound when a verified user speaks"
 
-#: globals/mensajes.py:37
+#: globals/mensajes.py:41
 msgid "Sonido al ingresar al chat"
 msgstr "Sound when entering chat"
 
-#: globals/mensajes.py:38
+#: globals/mensajes.py:42
 msgid "Sonido cuando habla el propietario del canal"
 msgstr "Sound when channel owner speaks"
 
-#: globals/mensajes.py:39
+#: globals/mensajes.py:43
 msgid "sonido al terminar la búsqueda de mensajes"
 msgstr "sound when searching for messages is over"
 
-#: globals/mensajes.py:40
+#: globals/mensajes.py:44
 msgid "sonido cuando le dan me gusta al en vivo (solo para tiktok)"
 msgstr "sound when someone like the live (only for tiktok)"
 
-#: globals/mensajes.py:41
+#: globals/mensajes.py:45
 msgid "Sonido cuando alguien empieza a seguirte en tiktok"
 msgstr "Sound when someone starts following you on tiktok"
 
-#: globals/mensajes.py:42
+#: globals/mensajes.py:46
 msgid "Sonido cuando alguien comparte el enlace de tu envivo en  tiktok"
 msgstr "Sound when someone shares the link of your live on tiktok"
 
-#: globals/mensajes.py:43
+#: globals/mensajes.py:47
 msgid "Sonido cuando alguien envía un cofre  en tiktok"
 msgstr "Sound when someone sends a chest on tiktok"
 
-#: globals/mensajes.py:47
+#: globals/mensajes.py:51
 msgid "Cuando llega un mensaje"
 msgstr "when a message arrives"
 
-#: globals/mensajes.py:48
+#: globals/mensajes.py:52
 msgid "Cuando habla un miembro"
 msgstr "When a member speaks"
 
-#: globals/mensajes.py:49
+#: globals/mensajes.py:53
 msgid ""
 "Cuando se conecta un miembro o cuando alguien se une a tu en vivo en "
 "tiktok"
 msgstr "When a member connects or when someone joins your live on tiktok"
 
-#: globals/mensajes.py:50
+#: globals/mensajes.py:54
 msgid "Cuando llega un donativo"
 msgstr "When donation received"
 
-#: globals/mensajes.py:51
+#: globals/mensajes.py:55
 msgid "Cuando habla un moderador"
 msgstr "When a moderator speaks"
 
-#: globals/mensajes.py:52
+#: globals/mensajes.py:56
 msgid "Cuando habla un usuario verificado"
 msgstr "When a verified user speaks"
 
-#: globals/mensajes.py:53
+#: globals/mensajes.py:57
 msgid "Cuando le dan me gusta al en vivo (solo para tiktok)"
 msgstr "When someone like the live (only for tiktok)"
 
-#: globals/mensajes.py:54
+#: globals/mensajes.py:58
 msgid "Cuando alguien empieza a seguirte en tiktok"
 msgstr "When someone starts following you on tiktok"
 
-#: globals/mensajes.py:55
+#: globals/mensajes.py:59
 msgid "Cuando alguien comparte el enlace de tu envivo en  tiktok"
 msgstr "When someone shares the link of your live on tiktok"
 
-#: globals/mensajes.py:56
+#: globals/mensajes.py:60
 msgid "Cuando alguien envía un cofre  en tiktok"
 msgstr "When someone sends a chest on tiktok"
 
@@ -715,11 +731,11 @@ msgstr "Error extracting .zip file from {}: {}"
 msgid "Error al actualizar el idioma local {}: {}"
 msgstr "Error updating local language {}: {}"
 
-#: servicios/sala.py:27 servicios/twich.py:26 servicios/youtube.py:26
+#: servicios/sala.py:30 servicios/twich.py:28 servicios/youtube.py:28
 msgid "Ingresando al chat."
 msgstr "Entering chat."
 
-#: servicios/sala.py:29
+#: servicios/sala.py:31
 msgid "Chat de la sala de juegos"
 msgstr "QuentinC Playroom's chat"
 
@@ -794,7 +810,10 @@ msgstr "Unknown"
 msgid ""
 "{author_name} ha renovado su suscripción en el nivel "
 "{subscription_plan_name}. ¡Lleva suscrito por {cumulative_months} meses!"
-msgstr "{author_name} has renewed their subscription at the {subscription_plan_name} level. They've been a loyal member for {cumulative_months} months!"
+msgstr ""
+"{author_name} has renewed their subscription at the "
+"{subscription_plan_name} level. They've been a loyal member for "
+"{cumulative_months} months!"
 
 #: servicios/twich.py:71
 #, python-brace-format
@@ -824,17 +843,19 @@ msgstr ""
 "{author_name} gifted a subscription to {gift_recipient_display_name} at "
 "level {subscription_plan_name} for {number_of_months_gifted} months!"
 
-#: servicios/youtube.py:55
+#: servicios/youtube.py:63
 msgid ""
 "Se ha detectado una transmisión pasada. ¿Deseas conectarte con el "
 "servicio en tiempo real del chat?"
-msgstr "A past livestream has been detected. Would you like to connect to the real-time chat service?"
+msgstr ""
+"A past livestream has been detected. Would you like to connect to the "
+"real-time chat service?"
 
-#: servicios/youtube.py:55
+#: servicios/youtube.py:63
 msgid "Transmisión pasada"
 msgstr "past livestream"
 
-#: servicios/youtube.py:96
+#: servicios/youtube.py:104
 msgid " se a conectado al chat. "
 msgstr " has been connected to the chat. "
 
@@ -978,7 +999,7 @@ msgstr "Select an audio device"
 msgid "&Establecer"
 msgstr "&set"
 
-#: ui/ajustes.py:149 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:56
+#: ui/ajustes.py:149 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:53
 msgid "Eventos"
 msgstr "events"
 
@@ -1002,17 +1023,17 @@ msgstr "&OK"
 msgid "&Cancelar"
 msgstr "&Cancel"
 
-#: ui/chat_ui.py:7
-msgid "Chat en vivo"
-msgstr "Live chat"
+#: ui/chat_dialog.py:98
+msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
+msgstr "Would you like to exit this window and stop reading messages?"
 
 #: ui/chat_ui.py:10
 msgid "Lectura del chat en vivo..."
 msgstr "Live chat reading..."
 
 #: ui/chat_ui.py:12
-msgid "&Detener chat"
-msgstr "&Stop chat"
+msgid "&Cerrar chat"
+msgstr "&Close"
 
 #: ui/chat_ui.py:20
 msgid "conversaciones"
@@ -1042,7 +1063,7 @@ msgstr "&Delete"
 msgid "&Opciones"
 msgstr "&Options"
 
-#: ui/chat_ui.py:57
+#: ui/chat_ui.py:54
 msgid "&Filtrar por"
 msgstr "&Filter by"
 
@@ -1445,4 +1466,3 @@ msgstr ""
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
 msgstr "System language"
-

@@ -1,4 +1,4 @@
-# VeTube
+  # VeTube
 Accessably Read and manage YouTube and TikTok live chats on your own streams or those of your favorite creators.
 ## Features
 
@@ -27,6 +27,9 @@ Accessably Read and manage YouTube and TikTok live chats on your own streams or 
 |action |key combination |
 | ------------------------- | ------------- |
 | Mute sapy voice      | control+p           |
+| start/cancel capture of new chat livestream      | alt shift h           |
+| previous stream      | control alt shift left arrow            |
+| next stream      | control alt shift right arrow            |
 | previous buffer      | alt shift left arrow            |
 | next buffer      | alt shift right arrow            |
 | Previous element      | alt shift up arrow           |
@@ -47,6 +50,7 @@ Accessably Read and manage YouTube and TikTok live chats on your own streams or 
 | rewind live playback      | control shift left arrow           |
 | volume up      | control shift up arrow           |
 | volume down      | control shift down arrow           |
+| stop live playback      | control shift s           |
 
 ### In the chat history:
 |action |key combination |
@@ -83,5 +87,5 @@ cesar.verastegui17@gmail.com
 With your support, you can help this program continue to grow.
 
 [Want to donate to VeTube?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
-[Download the 64-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x64.zip)
-[Download the 32-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x86.zip)
+[Download the 64-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x64.zip)
+[Download the 32-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x86.zip)

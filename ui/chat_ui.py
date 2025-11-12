@@ -2,14 +2,14 @@ import wx
 from utils.menu_accesible import Accesible
 from globals import data_store
 
-class ChatDialog(wx.Dialog):
+class ChatPanel(wx.Panel):
     def __init__(self, parent, plataforma):
-        super().__init__(parent, wx.ID_ANY, _(u"Chat en vivo"), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
+        super().__init__(parent, wx.ID_ANY)
         main_sizer = wx.BoxSizer(wx.VERTICAL)
         top_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.label_dialog = wx.StaticText(self, wx.ID_ANY, _(u"Lectura del chat en vivo..."))
         top_sizer.Add(self.label_dialog, 1, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
-        self.button_mensaje_detener = wx.Button(self, wx.ID_ANY, _(u"&Detener chat"))
+        self.button_mensaje_detener = wx.Button(self, wx.ID_ANY, _(u"&Cerrar chat"))
         top_sizer.Add(self.button_mensaje_detener, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
         main_sizer.Add(top_sizer, 0, wx.EXPAND)
 
@@ -44,9 +44,6 @@ class ChatDialog(wx.Dialog):
         bottom_sizer.Add(self.boton_opciones, 0, wx.ALL, 5)
         main_sizer.Add(bottom_sizer, 0, wx.EXPAND)
         self.SetSizer(main_sizer)
-        self.SetSize((400, 500))
-        self.Centre()
-        self.SetEscapeId(self.button_mensaje_detener.GetId())
 
     def create_page_with_listbox(self, parent, name, plataforma=None):
         page = wx.Panel(parent)
@@ -60,6 +57,3 @@ class ChatDialog(wx.Dialog):
         page.SetSizer(sizer)
         page_index = parent.AddPage(page, str(name))
         return list_box, page_index
-
-    def ShowModal(self):
-        return super().ShowModal()

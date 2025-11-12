@@ -41,6 +41,9 @@ Kelola dan baca chat dari siaran langsung milikmu atau dari kreator favoritmu de
 | Aksi                                | Pintasan Keyboard         |
 | ----------------------------------- | ------------------------- |
 | Nonaktifkan suara sapi              | Control + P               |
+| mulai/batalkan penangkapan obrolan siaran langsung lain              | Alt + Shift + h               |
+| pergi ke siaran langsung sebelumnya                   | control + Alt + Shift + panah kiri  |
+| pergi ke siaran langsung berikutnya                   | control + Alt + Shift + panah kanan |
 | Buffer sebelumnya                   | Alt + Shift + panah kiri  |
 | Buffer berikutnya                   | Alt + Shift + panah kanan |
 | Elemen sebelumnya                   | Alt + Shift + panah atas  |
@@ -61,6 +64,7 @@ Kelola dan baca chat dari siaran langsung milikmu atau dari kreator favoritmu de
 | mundur cepat pemutaran langsung      | control shift panah kiri           |
 | volume naik      | control shift panah atas           |
 | volume turun      | control shift panah bawah           |
+| Hentikan dan lepaskan pemutar      | control shift s           |
 
 ### Dalam Riwayat Chat:
 
@@ -105,5 +109,5 @@ Dengan dukunganmu, program ini akan terus berkembang.
 
 [Bergabunglah dengan kami](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
-[Unduh program untuk 64-bit](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x64.zip)  
-[Unduh program untuk 32-bit](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x86.zip)
+[Unduh program untuk 64-bit](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x64.zip)  
+[Unduh program untuk 32-bit](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x86.zip)

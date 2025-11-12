@@ -5,33 +5,34 @@ from utils import funciones
 from os import remove
 from utils import languageHandler,canonical_scraper
 from controller.menus.main_menu_controller import MainMenuController
+from ui.chat_dialog import ChatDialog
 from servicios.youtube import ServicioYouTube
 from servicios.twich import ServicioTwich
 from servicios.sala import ServicioSala
 from servicios.tiktok import ServicioTiktok
 from ui.dialog_response import response
+from setup import reader
+from controller.chat_controller import ChatController
+
 class MainController:
     def __init__(self):
         self.frame = MyFrame(None)
         self.menu_controller = MainMenuController(self.frame)
+        self.chat_dialog = None # Initialize ChatDialog instance here
         self.inicializar_datos()
         self.establecer_eventos()
-        # Aquí puedes enlazar eventos futuros
 
     def inicializar_datos(self):
-        # Favoritos
         self.frame.list_favorite.Set(favs)
         self.frame.favoritos_num = self.frame.list_favorite.GetCount()
         self.frame.notebook_1.SetPageText(1, _( "Favoritos(%s)") % self.frame.favoritos_num)
         if not favs or self.frame.list_favorite.GetCount() == 0:
             self.frame.list_favorite.Append(_( "Tus favoritos aparecerán aquí"), 0)
-        # Mensajes destacados
         self.frame.list_mensajes.Set(msjs)
         if not self.frame.list_mensajes.GetCount():
             self.frame.list_mensajes.Append(_("Tus mensajes archivados aparecerán aquí"), 0)
 
     def establecer_eventos(self):
-        # Menú y botones principales
         self.frame.menu_1.Bind(wx.EVT_BUTTON, lambda evt: self.menu_controller.menu.mostrar(self.frame.menu_1))
         self.frame.text_ctrl_1.Bind(wx.EVT_TEXT, self.mostrarBoton)
         self.frame.button_2.Bind(wx.EVT_BUTTON, self.borrarContenido)
@@ -41,7 +42,6 @@ class MainController:
         self.frame.button_borrar_mensajes.Bind(wx.EVT_BUTTON, self.borraRecuerdo)
         self.frame.button_1.Bind(wx.EVT_BUTTON, self.abrir_chat_dialog)
         self.frame.plataforma.Bind(wx.EVT_CHOICE, self.habilitarSala)
-        # Bind global key events (CharHook) to the frame
         self.frame.Bind(wx.EVT_CHAR_HOOK, self.OnCharHook)
         self.frame.list_favorite.Bind(wx.EVT_KEY_UP, self.on_favorite_key_up)
         self.frame.Bind(wx.EVT_CLOSE, self.cerrarVentana)
@@ -131,6 +131,22 @@ class MainController:
     def abrir_chat_dialog(self, event=None, url=""):
         if not url:
             url = self.frame.text_ctrl_1.GetValue()
+        
+        # Check if chat dialog exists, if not create it
+        if not self.chat_dialog:
+            self.chat_dialog = ChatDialog(self.frame, self, title=_("Lectura de chats en vivo"))
+
+        # Check if session already exists in chat_dialog
+        if url in self.chat_dialog.chat_sessions:
+            # Find the page index and set selection
+            page_index = self.chat_dialog.chat_sessions[url][1]
+            self.chat_dialog.notebook.SetSelection(page_index)
+            self.chat_dialog.Show()
+            self.chat_dialog.Raise()
+            self.chat_dialog.active_chat_session = self.chat_dialog.chat_sessions[url][0]
+            self.frame.text_ctrl_1.SetValue("")
+            return
+
         plataforma_ids = self.frame.plataforma.GetSelection()
         if plataforma_ids == 4:
             url = "sala"
@@ -145,7 +161,6 @@ class MainController:
                     url = "https://www.twitch.tv/@" + self.frame.text_ctrl_1.GetValue()
                 elif plataforma_ids == 3:
                     url = "https://www.tiktok.com/@" + self.frame.text_ctrl_1.GetValue() + "/live"
-            # Normaliza url de YouTube
             if 'yout' in url:
                 if 'studio' in url:
                     url = url.replace('https://studio.youtube.com/video/','https://www.youtube.com/watch?v=')
@@ -166,53 +181,57 @@ class MainController:
             self.frame.text_ctrl_1.SetValue(url)
             plataforma_ids = self.frame.plataforma.GetSelection()
             plataforma = self.frame.plataforma.GetString(plataforma_ids)
-            if plataforma_ids == 1:
-                try:
-                    servicio = ServicioYouTube(url, self.frame, plataforma)
+            
+            # Create ChatController first
+            chat_controller = ChatController(self, self.frame, plataforma=plataforma, chat_dialog=self.chat_dialog)
+
+            servicio = None
+            try:
+                if plataforma_ids == 1:
+                    servicio = ServicioYouTube(self, url, self.frame, plataforma, chat_controller)
+                elif plataforma_ids == 2:
+                    servicio = ServicioTwich(self, url, self.frame, plataforma, chat_controller)
+                elif plataforma_ids == 3:
+                    servicio = ServicioTiktok(self, url, self.frame, plataforma, chat_controller)
+                elif plataforma_ids == 4:
+                    servicio = ServicioSala(self, url, self.frame, plataforma, chat_controller)
+                
+                if servicio:
+                    chat_controller.servicio = servicio # Set the service in chat_controller
                     servicio.iniciar_chat()
-                except Exception as e:
-                    wx.MessageBox(f"Error al iniciar el chat de YouTube: {str(e)}", "error.", wx.ICON_ERROR)
-                    self.frame.text_ctrl_1.SetFocus()
-                    return
-            elif plataforma_ids == 2:
-                try:
-                    servicio = ServicioTwich(url, self.frame, plataforma)
-                    servicio.iniciar_chat()
-                except Exception as e:
-                    wx.MessageBox(f"Error al iniciar el chat de Twich: {str(e)}", "error.", wx.ICON_ERROR)
-                    self.frame.text_ctrl_1.SetFocus()
-                    return
-            elif plataforma_ids == 3:
-                try:
-                    servicio = ServicioTiktok(url, self.frame, plataforma)
-                    servicio.iniciar_chat()
-                except Exception as e:
-                    wx.MessageBox(f"Error al iniciar el chat de Tiktok: {str(e)}", "error.", wx.ICON_ERROR)
-                    self.frame.text_ctrl_1.SetFocus()
-                    return
-            elif plataforma_ids == 4:
-                try:
-                    servicio = ServicioSala(url, self.frame, plataforma)
-                    servicio.iniciar_chat()
-                except Exception as e:
-                    wx.MessageBox(f"Error al iniciar el chat de La sala de juegos: {str(e)}", "error.", wx.ICON_ERROR)
-                    self.frame.text_ctrl_1.SetFocus()
-                    return
+                    chat_controller.create_ui(self.chat_dialog.notebook)
+                    chat_panel = chat_controller.mostrar_dialogo() # This now returns a ChatPanel instance
+                    self.chat_dialog.add_chat_page(chat_panel, _("Conectando..."), chat_controller) # Add panel to ChatDialog
+                    self.chat_dialog.Show() # Show the chat dialog
+                    self.chat_dialog.Raise() # Bring to front
+                    self.frame.menu_1.Disable() # Deshabilitar botón
+                    self.frame.text_ctrl_1.SetValue("")
+
+            except Exception as e:
+                wx.MessageBox(f"Error al iniciar el chat: {str(e)}", "error.", wx.ICON_ERROR)
+                self.frame.text_ctrl_1.SetFocus()
+                return
         else:
             wx.MessageBox("No se puede  acceder porque el campo de  texto está vacío, debe escribir  algo.", "error.", wx.ICON_ERROR)
             self.frame.text_ctrl_1.SetFocus()
 
+    def mostrar_editor_combinaciones(self):
+        editor = EditorController(self.frame, self)
+        editor.ShowModal()
+
     def OnCharHook(self, event):
         code = event.GetKeyCode()
-        # alt + m
         if code == 77 and event.AltDown():
-            self.menu_controller.menu.mostrar(self.frame.menu_1)
+            # Solo mostrar el menú si no hay sesiones de chat cargadas
+            if not (self.chat_dialog and self.chat_dialog.chat_sessions):
+                self.menu_controller.menu.mostrar(self.frame.menu_1)
         elif wx.GetKeyState(wx.WXK_F1):
             wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube/tree/master/doc/'+languageHandler.curLang[:2]+'/readme.md')
         elif code == wx.WXK_RETURN or code == wx.WXK_NUMPAD_ENTER:
             if self.frame.FindFocus()== self.frame.plataforma or self.frame.FindFocus()==self.frame.text_ctrl_1: self.abrir_chat_dialog()
         else:
             event.Skip()
+
     def set_plataforma(self, idx):
         self.frame.plataforma.SetSelection(idx)
 
@@ -230,7 +249,14 @@ class MainController:
     def habilitarSala(self, evt):
         if evt.GetSelection() == 4:
             self.frame.button_1.Enable()
+
     def cerrarVentana(self, event):
         if config['salir']:
-            if response(_("¿está seguro que desea salir del programa?"), _("¡atención!"))==wx.ID_YES: wx.GetApp().ExitMainLoop()
-        else: wx.GetApp().ExitMainLoop()
+            if response(_("¿está seguro que desea salir del programa?"), _("¡atención!"))==wx.ID_YES:
+                if self.chat_dialog:
+                    self.chat_dialog.unregister_all_keys()
+                wx.GetApp().ExitMainLoop()
+        else:
+            if self.chat_dialog:
+                self.chat_dialog.unregister_all_keys()
+            wx.GetApp().ExitMainLoop()

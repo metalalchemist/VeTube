@@ -1,13 +1,20 @@
 from players.media_handler import MediaHandler
 from globals import data_store
 class MediaController:
-    def __init__(self, url):
-        self.player = MediaHandler(url=url)
+    def __init__(self, url, state_callback=None):
+        handler_callback = None
+        if state_callback:
+            handler_callback = lambda state: state_callback(self, state)
+        self.player = MediaHandler(url=url, state_callback=handler_callback)
         self.player.set_volume(data_store.config.get('volumen', 100))
         if data_store.config['reproducir']: self.play()
 
     def play(self):
         self.player.play()
+
+    def pause(self):
+        if self.player:
+            self.player.pause()
 
     def toggle_pause(self):
         self.player.toggle_pause()
@@ -27,3 +34,8 @@ class MediaController:
     def release(self):
         if self.player:
             self.player.release()
+
+    def is_playing(self):
+        if self.player:
+            return self.player.is_playing()
+        return False

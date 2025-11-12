@@ -19,7 +19,9 @@ class YouTubeRealTimeService:
             self.chat_controller = chat_controller
             self.chat_controller.servicio = self
         else:
-            self.chat_controller = ChatController(frame, self, plataforma)
+            # If no chat_controller is provided, create a new one with its own EstadisticasManager
+            self.chat_controller = ChatController(None, frame, self, plataforma) # main_controller is None here, will be set by ChatController.servicio
+        self.estadisticas_manager = self.chat_controller.estadisticas_manager
         self._detener = False
 
     def iniciar_chat_reutilizando_ui(self):
@@ -39,7 +41,7 @@ class YouTubeRealTimeService:
     def prepare(self):
         video_url = extract_stream_url(self.url, format_preference='mp4')
         if video_url:
-            self.media_controller = MediaController(url=video_url)
+            self.media_controller = MediaController(url=video_url, state_callback=self.chat_controller.chat_dialog.on_media_player_state_change)
             self.chat_controller.set_media_controller(self.media_controller)
             print(video_url)
     def recibir(self):
@@ -49,13 +51,14 @@ class YouTubeRealTimeService:
             self.chat = pytchat.create(video_id=self.url, interruptable=False)
             display_title = self.title + " (En tiempo real)"
             wx.CallAfter(self.chat_controller.agregar_titulo, display_title)
+            wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, display_title)
 
             while self.chat.is_alive() and not self._detener:
                 for c in self.chat.get().sync_items():
                     if self._detener: break
                     author_name = c.author.name
                     msg = c.message
-                    EstadisticasManager().agregar_mensaje(author_name)
+                    self.estadisticas_manager.agregar_mensaje(author_name)
                     if data_store.dst: msg = self.translator.translate(text=msg, target=data_store.dst)
                     message_type = 'general'
                     if c.author.isChatOwner: message_type = 'propietario'
@@ -76,7 +79,7 @@ class YouTubeRealTimeService:
                             
                             full_message = f"{amount} {currency}, {author_name}: {msg}"
                             if data_store.config['sonidos'] and data_store.config['listasonidos'][3]:
-                                player.playsound(rutasonidos[3], False)
+                                player.play(rutasonidos[3])
                             wx.CallAfter(self.chat_controller.agregar_mensaje_donacion, full_message)
                             if data_store.config['reader'] and data_store.config['unread'][3]:
                                 wx.CallAfter(reader.leer_mensaje, full_message)
@@ -87,14 +90,14 @@ class YouTubeRealTimeService:
                     if message_type == 'general':
                         if data_store.config['eventos'][0] and data_store.config['categorias'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
                             if data_store.config['sonidos'] and data_store.config['listasonidos'][0]:
-                                player.playsound(rutasonidos[0], False)
+                                player.play(rutasonidos[0])
                             wx.CallAfter(self.chat_controller.agregar_mensaje_general, full_message)
                             if data_store.config['reader'] and data_store.config['unread'][0]:
                                 wx.CallAfter(reader.leer_mensaje, full_message)
                     elif message_type == 'miembro':
                         if data_store.config['eventos'][1] and data_store.config['categorias'][2] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
                             if data_store.config['sonidos'] and data_store.config['listasonidos'][1]:
-                                player.playsound(rutasonidos[1], False)
+                                player.play(rutasonidos[1])
                             wx.CallAfter(self.chat_controller.agregar_mensaje_miembro, full_message)
                             if data_store.config['reader'] and data_store.config['unread'][1]:
                                 wx.CallAfter(reader.leer_mensaje, full_message)
@@ -102,16 +105,16 @@ class YouTubeRealTimeService:
                         if data_store.config['eventos'][4] and data_store.config['categorias'][4] and hasattr(self.chat_controller.ui, 'list_box_moderadores'):
                             if data_store.config['sonidos'] and data_store.config['listasonidos'][4]:
                                 if message_type == 'moderador':
-                                    player.playsound(rutasonidos[4], False)
+                                    player.play(rutasonidos[4])
                                 if message_type == 'propietario':
-                                    player.playsound(rutasonidos[7], False)
+                                    player.play(rutasonidos[7])
                             wx.CallAfter(self.chat_controller.agregar_mensaje_moderador, full_message)
                             if data_store.config['reader'] and data_store.config['unread'][4]:
                                 wx.CallAfter(reader.leer_mensaje, full_message)
                     elif message_type == 'verificado':
                         if data_store.config['eventos'][5] and data_store.config['categorias'][5] and hasattr(self.chat_controller.ui, 'list_box_verificados'):
                             if data_store.config['sonidos'] and data_store.config['listasonidos'][5]:
-                                player.playsound(rutasonidos[5], False)
+                                player.play(rutasonidos[5])
                             wx.CallAfter(self.chat_controller.agregar_mensaje_verificado, full_message)
                             if data_store.config['reader'] and data_store.config['unread'][5]:
                                 wx.CallAfter(reader.leer_mensaje, full_message)

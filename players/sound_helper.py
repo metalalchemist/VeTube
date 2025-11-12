@@ -2,7 +2,7 @@ from sound_lib import stream
 from sound_lib.output import Output
 from sound_lib.main import BassError
 
-class playsound:
+class SoundPlayer:
 	def __init__(self):
 		try:
 			output = Output(device=-1)
@@ -27,7 +27,7 @@ class playsound:
 		else:
 			raise Exception("device is less than 1 or greater than the available devices.")
 
-	def playsound(self, filename, block = False):
+	def play(self, filename, block = False):
 		if self.sound is not None and hasattr(self.sound, 'is_playing') and self.sound.is_playing:
 			self.sound.stop()
 		if self.device != self.output.get_device():

@@ -1,4 +1,5 @@
 mensaje_teclas=[
+	_('iniciar/cancelar la captura de otro en vivo'),
 	_('Silencia la voz sapy'),
 	_('Mensaje anterior.'),
 	_('Mensaje siguiente'),
@@ -19,7 +20,10 @@ mensaje_teclas=[
 	_('Adelantar la reproducción'),
 	_('Atrasar la reproducción'),
 	_('Sube el volumen del reproductor'),
-	_('Baja el volumen del reproductor')
+	_('Baja el volumen del reproductor'),
+	_('Detener y liberar el reproductor'),
+	_('ir al Siguiente en vivo'),
+	_('ir al en vivo anterior')
 ]
 
 mensajes_categorias = [
@@ -57,6 +61,7 @@ eventos_lista = [
 ]
 
 comandos_ordenados = [
+    'chat_dialog.toggle_chat_window_visibility',
     'reader._leer.silence',
     'chat.elementoAnterior',
     'chat.elementoSiguiente',
@@ -73,11 +78,14 @@ comandos_ordenados = [
     'chat.toggle_sounds',
     'chat.mostrar_editor_combinaciones',
     'chat.archivar_mensaje',
-    'media_player.toggle_pause',
+    'chat_dialog.toggle_global_media_pause',
     'media_player.adelantar',
     'media_player.atrasar',
     'media_player.volume_up',
     'media_player.volume_down',
+    'media_player.release',
+    'chat_dialog.next_session',
+    'chat_dialog.previous_session'
 ]
 
 comandos_a_descripcion = dict(zip(comandos_ordenados, mensaje_teclas))

@@ -10,11 +10,13 @@ from controller.media_controller import MediaController
 from servicios.estadisticas_manager import EstadisticasManager
 
 class ServicioYouTube:
-    def __init__(self, url, frame, plataforma):
+    def __init__(self, main_controller, url, frame, plataforma, chat_controller):
+        self.main_controller = main_controller
         self.url = url
         self.frame = frame
         self.chat = None
-        self.chat_controller = ChatController(frame, self, plataforma)
+        self.chat_controller = chat_controller
+        self.estadisticas_manager = chat_controller.estadisticas_manager
         self.media_controller = None
         self._detener = False
 
@@ -22,15 +24,21 @@ class ServicioYouTube:
         self._detener = False
         self._hilo = threading.Thread(target=self.recibir, daemon=True)
         self._hilo.start()
-        player.playsound(rutasonidos[6], False)
+        player.play(rutasonidos[6])
         reader.leer_sapi(_("Ingresando al chat."))
-        self.chat_controller.mostrar_dialogo()
-        self.chat_controller.show()
 
     def detener(self):
         self._detener = True
+        # Primero, liberar el reproductor de medios
         if self.media_controller:
             self.media_controller.release()
+            self.media_controller = None # Importante para evitar referencias a objetos liberados
+
+        # Ya no esperamos al hilo de recepción de chat aquí para evitar bloquear la interfaz.
+        # Confiamos en que el flag _detener y el break del bucle sean suficientes.
+
+        # Finalmente, limpiar el objeto chat si es necesario
+        self.chat = None # Eliminar la referencia al objeto ChatDownloader
 
     def do_switch(self, title):
         from servicios.YouTubeRealDataTime import YouTubeRealTimeService
@@ -43,7 +51,7 @@ class ServicioYouTube:
             format_pref = 'mp4' if status == "past" else 'best'
             video_url = extract_stream_url(self.url, format_preference=format_pref)
             if video_url:
-                self.media_controller = MediaController(url=video_url)
+                self.media_controller = MediaController(url=video_url, state_callback=self.chat_controller.chat_dialog.on_media_player_state_change)
                 self.chat_controller.set_media_controller(self.media_controller)
         except Exception as e:
             print(f"Error al iniciar la reproducción de video en YouTube: {e}")
@@ -59,7 +67,7 @@ class ServicioYouTube:
                 wx.CallAfter(self.do_switch, self.chat.title)
                 return
         threading.Thread(target=self.prepare_player, args=(self.chat.status,), daemon=True).start()
-        wx.CallAfter(self.chat_controller.agregar_titulo, self.chat.title)
+        wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, self.chat.title)
         for message in self.chat:
             if self._detener: break
             if not message: continue
@@ -67,7 +75,7 @@ class ServicioYouTube:
             if data_store.dst: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
 
             author_name = message['author']['display_name']
-            EstadisticasManager().agregar_mensaje(author_name)
+            self.estadisticas_manager.agregar_mensaje(author_name)
             msg = message['message']
 
             # Default message type
@@ -96,7 +104,7 @@ class ServicioYouTube:
                         mensajito=author_name+ _(' se a conectado al chat. ')+t['title']
                         break
                     wx.CallAfter(self.chat_controller.agregar_mensaje_evento, mensajito)
-                    if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][2]: player.playsound(rutasonidos[2],False)
+                    if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][2]: player.play(rutasonidos[2])
                     if data_store.config['reader'] and data_store.config['unread'][2]: wx.CallAfter(reader.leer_mensaje, mensajito)
                 continue
             # Construct the message string
@@ -108,7 +116,7 @@ class ServicioYouTube:
                             message['money']['currency'] = data_store.divisa
                             message['money']['amount'] = moneda['amount']
                     full_message = f"{message['money']['amount']} {message['money']['currency']}, {author_name}: {msg}"
-                    if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][3]: player.playsound(rutasonidos[3], False)
+                    if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][3]: player.play(rutasonidos[3])
                     wx.CallAfter(self.chat_controller.agregar_mensaje_donacion, full_message)
                     if data_store.config['reader'] and data_store.config['unread'][3]: wx.CallAfter(reader.leer_mensaje, full_message)
                 continue
@@ -117,23 +125,23 @@ class ServicioYouTube:
 
             if message_type == 'general':
                 if data_store.config['eventos'][0] and data_store.config['categorias'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
-                    if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][0]: player.playsound(rutasonidos[0], False)
+                    if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][0]: player.play(rutasonidos[0])
                     wx.CallAfter(self.chat_controller.agregar_mensaje_general, full_message)
                     if data_store.config['reader'] and data_store.config['unread'][0]: wx.CallAfter(reader.leer_mensaje, full_message)
             elif message_type == 'miembro':
                 if data_store.config['eventos'][1] and data_store.config['categorias'][2] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
-                    if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][1]: player.playsound(rutasonidos[1], False)
+                    if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][1]: player.play(rutasonidos[1])
                     wx.CallAfter(self.chat_controller.agregar_mensaje_miembro, full_message)
                     if data_store.config['reader'] and data_store.config['unread'][1]: wx.CallAfter(reader.leer_mensaje, full_message)
             elif message_type == 'moderador' or message_type=='propietario':
                 if data_store.config['eventos'][4] and data_store.config['categorias'][4] and hasattr(self.chat_controller.ui, 'list_box_moderadores'):
                     if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][4]:
-                        if message_type=='moderador': player.playsound(rutasonidos[4], False)
-                        if message_type=='propietario': player.playsound(rutasonidos[7], False)
+                        if message_type=='moderador': player.play(rutasonidos[4])
+                        if message_type=='propietario': player.play(rutasonidos[7])
                     wx.CallAfter(self.chat_controller.agregar_mensaje_moderador, full_message)
                     if data_store.config['reader'] and data_store.config['unread'][4]: wx.CallAfter(reader.leer_mensaje, full_message)
             elif message_type == 'verificado':
                 if data_store.config['eventos'][5] and data_store.config['categorias'][5] and hasattr(self.chat_controller.ui, 'list_box_verificados'):
-                    if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][5]: player.playsound(rutasonidos[5], False)
+                    if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][5]: player.play(rutasonidos[5])
                     wx.CallAfter(self.chat_controller.agregar_mensaje_verificado, f"{author_name}: {msg}")
                     if data_store.config['reader'] and data_store.config['unread'][5]: wx.CallAfter(reader.leer_mensaje, f'{author_name}: {msg}')

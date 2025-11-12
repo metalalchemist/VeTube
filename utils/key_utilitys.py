@@ -15,6 +15,9 @@ class KeyUtils:
         4. Reescribe el archivo solo si se han realizado cambios.
         """
         default_keys = {
+            'control+alt+shift+right': 'chat_dialog.next_session',
+            'control+alt+shift+left': 'chat_dialog.previous_session',
+            'alt+shift+h': 'chat_dialog.toggle_chat_window_visibility',
             'control+p': 'reader._leer.silence',
             'alt+shift+up': 'chat.elementoAnterior',
             'alt+shift+down': 'chat.elementoSiguiente',
@@ -31,11 +34,12 @@ class KeyUtils:
             'alt+shift+p': 'chat.toggle_sounds',
             'alt+shift+k': 'chat.mostrar_editor_combinaciones',
             'alt+shift+a': 'chat.archivar_mensaje',
-            'control+shift+p': 'media_player.toggle_pause',
+            'control+shift+p': 'chat_dialog.toggle_global_media_pause',
             'control+shift+right': 'media_player.adelantar',
             'control+shift+left': 'media_player.atrasar',
             'control+shift+up': 'media_player.volume_up',
             'control+shift+down': 'media_player.volume_down',
+            'control+shift+s': 'media_player.release',
         }
         config_path = "keymaps/keys.txt"
         makedirs("keymaps", exist_ok=True)

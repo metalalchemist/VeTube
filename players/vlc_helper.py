@@ -26,15 +26,54 @@ class MinimalVlcPlayer:
         else:
             self.event_manager = None
 
-    def playsound(self, valor):
+    def _load_and_play(self, valor):
         self.Media = self.Instance.media_new(valor)
         self.player.set_media(self.Media)
         self.url = valor
         self.player.play()
 
+    def play(self, url=None):
+        if url and self.url != url:
+            self.release()
+            self.player = self.Instance.media_player_new()
+            self.player.video_set_mouse_input(False)
+            self.player.video_set_key_input(False)
+            if self.playing_callback:
+                self.event_manager = self.player.event_manager()
+                self.event_manager.event_attach(vlc.EventType.MediaPlayerPlaying, self.playing_callback)
+            self._load_and_play(url)
+        elif self.player and self.player.get_state() == vlc.State.Paused:
+            self.player.play()
+        elif not self.player and url:
+            self.player = self.Instance.media_player_new()
+            self.player.video_set_mouse_input(False)
+            self.player.video_set_key_input(False)
+            if self.playing_callback:
+                self.event_manager = self.player.event_manager()
+                self.event_manager.event_attach(vlc.EventType.MediaPlayerPlaying, self.playing_callback)
+            self._load_and_play(url)
+
+    def pause(self):
+        if self.player and self.player.is_playing():
+            self.player.pause()
+
+    def release(self):
+        if self.player:
+            if self.event_manager and self.playing_callback:
+                self.event_manager.event_detach(vlc.EventType.MediaPlayerPlaying)
+            # Stop playback if currently playing or paused
+            if self.player.get_state() == vlc.State.Playing or self.player.get_state() == vlc.State.Paused:
+                self.player.stop()
+            self.player.release()
+            self.player = None
+
+    def is_playing(self):
+        return self.player and self.player.is_playing()
+
     def toggle_player(self):
         if self.player.is_playing(): self.player.pause()
         else: self.player.play()
+
     def tiempotranscurrido(self): return self.player.get_time()
 
     def adelantar(self, segundos):
@@ -76,11 +115,3 @@ class MinimalVlcPlayer:
         new_volume = current_volume - step
         self.set_volume(new_volume)
         return new_volume
-
-    def release(self):
-        if self.player:
-            if self.event_manager and self.playing_callback:
-                self.event_manager.event_detach(vlc.EventType.MediaPlayerPlaying)
-            self.player.release()
-        if self.Instance:
-            self.Instance.release()

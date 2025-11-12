@@ -1,18 +1,13 @@
 import json
 
 class EstadisticasManager:
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super(EstadisticasManager, cls).__new__(cls)
-            cls._instance.usuarios = []
-            cls._instance.mensajes_por_usuario = []
-            cls._instance.unidos = 0
-            cls._instance.seguidores = 0
-            cls._instance.megusta = 0
-            cls._instance.compartidas = 0
-        return cls._instance
+    def __init__(self):
+        self.usuarios = []
+        self.mensajes_por_usuario = []
+        self.unidos = 0
+        self.seguidores = 0
+        self.megusta = 0
+        self.compartidas = 0
 
     def agregar_mensaje(self, autor):
         """

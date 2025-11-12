@@ -16,7 +16,7 @@ class AjustesController:
         self.dialog.check_salir.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'salir'))
         self.dialog.check_donaciones.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'donations'))
         self.dialog.check_2.Bind(wx.EVT_CHECKBOX, self.mostrarSonidos)
-        self.dialog.reproducir.Bind(wx.EVT_BUTTON, lambda event: player.playsound(rutasonidos[self.dialog.soniditos.GetFocusedItem()], False))
+        self.dialog.reproducir.Bind(wx.EVT_BUTTON, lambda event: player.play(rutasonidos[self.dialog.soniditos.GetFocusedItem()]))
         self.dialog.seleccionar_TTS.Bind(wx.EVT_CHOICE, self.cambiar_sintetizador)
         self.dialog.establecer_dispositivo.Bind(wx.EVT_BUTTON, self.establecer_dispositivo)
         self.dialog.boton_prueva.Bind(wx.EVT_BUTTON, self.reproducirPrueva)
@@ -83,7 +83,7 @@ class AjustesController:
         valor_str = self.dialog.lista_dispositivos.GetStringSelection()
         config['dispositivo'] = valor
         player.setdevice(config["dispositivo"])
-        player.playsound("sounds/cambiardispositivo.wav")
+        player.play("sounds/cambiardispositivo.wav")
         if config['sistemaTTS'] == "piper":
             if reader._lector.get_devices() is not None and lista_voces_piper[0]!='No hay voces instaladas':
                 reader._lector.set_device(reader._lector.find_device_id(valor_str))

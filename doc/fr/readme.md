@@ -28,8 +28,11 @@ Lisez et gérez le chat youtube et twitch de manière accessible dans vos propre
 | agir | combinaison de touches |
 | -------------------- | ----------- |
 | Faire taire la voix sape | ctrl+p |
+| Démarrer / annuler la capture d’un autre direct | alt majuscule h |
 | tampon précédent | alt majuscule flèche gauche |
 | tampon suivant | alt majuscule flèche droite |
+| Aller au direct suivant | control alt majuscule flèche droite |
+| Aller au direct précédent | control alt majuscule flèche gauche |
 | Article précédent | alt maj flèche vers le haut |
 | Article suivant | alt Maj flèche vers le bas |
 | Élément initial | alt shift home |
@@ -48,7 +51,7 @@ Lisez et gérez le chat youtube et twitch de manière accessible dans vos propre
 | reculer la lecture de la diffusion en direct | control shift flèche gauche |
 | augmenter le volume | control shift flèche vers le haut |
 | baisser le volume | control shift flèche vers le bas |
-
+| Arrêter et libérer le lecteur | control majuscule s |
 ### Dans l'historique des discussions :
 | agir | combinaison de touches |
 | -------------------- | ----------- |
@@ -85,5 +88,5 @@ Avec votre soutien, vous aidez ce programme à continuer à se développer.
 
 [Rejoindrez-vous notre cause ?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
-[télécharger le programme pour 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x64.zip)
-[télécharger le programme pour 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x86.zip)
+[télécharger le programme pour 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x64.zip)
+[télécharger le programme pour 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x86.zip)

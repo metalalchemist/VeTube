@@ -7,10 +7,11 @@ from controller.estadisticas_controller import EstadisticasController
 from servicios.estadisticas_manager import EstadisticasManager
 
 class ChatMenuController:
-    def __init__(self, parent, plataforma, chat_controller):
+    def __init__(self, parent, plataforma, chat_controller, estadisticas_manager):
         self.parent = parent
         self.plataforma = plataforma
         self.chat_controller = chat_controller
+        self.estadisticas_manager = estadisticas_manager
         self.menu = ChatOpcionesMenu(parent)
         self._bind_menu_events()
         self._customize_menu()
@@ -24,7 +25,7 @@ class ChatMenuController:
 
     def _bind_menu_events(self):
         # Bind all menu items here
-        self.parent.Bind(wx.EVT_MENU, self.mostrar_editor_combinaciones, self.menu.editor_combinaciones)
+        self.parent.Bind(wx.EVT_MENU, lambda evt: self.chat_controller.main_controller.mostrar_editor_combinaciones(), self.menu.editor_combinaciones)
         self.parent.Bind(wx.EVT_MENU, self.addFavoritos, self.menu.favoritos)
         self.parent.Bind(wx.EVT_MENU, self.mostrar_estadisticas, self.menu.ver_estadisticas)
         self.parent.Bind(wx.EVT_MENU, self.copiarEnlace, self.menu.copiar_enlace)
@@ -35,8 +36,7 @@ class ChatMenuController:
         from globals.data_store import favorite
         main_frame = self.parent.GetParent()
         list_favorite = main_frame.list_favorite
-        text_ctrl_1 = main_frame.text_ctrl_1
-        url = text_ctrl_1.GetValue()
+        url = self.chat_controller.servicio.url
 
         if not url:
             wx.MessageBox(_("No hay una URL para agregar a favoritos."), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
@@ -58,8 +58,7 @@ class ChatMenuController:
         wx.MessageBox(_("Se ha agregado a favoritos"), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
 
     def copiarEnlace(self, event):
-        main_frame = self.parent.GetParent()
-        url = main_frame.text_ctrl_1.GetValue()
+        url = self.chat_controller.servicio.url
         if url:
             copy(url)
             noti = wx.adv.NotificationMessage(_("Enlace copiado al portapapeles"), _("El enlace del chat ha sido copiado al portapapeles."))
@@ -67,16 +66,12 @@ class ChatMenuController:
         else: wx.adv.NotificationMessage(_("No se pudo copiar el enlace"), _("No se encontró un enlace válido para copiar.")).Show(timeout=5)
 
     def reproducirVideo(self, event):
-        main_frame = self.parent.GetParent()
-        url = main_frame.text_ctrl_1.GetValue()
+        url = self.chat_controller.servicio.url
         if url: wx.LaunchDefaultBrowser(url)
         else: wx.adv.NotificationMessage(_("No se pudo abrir el enlace"), _("No se encontró un enlace válido para abrir.")).Show(timeout=5)
 
-    def mostrar_editor_combinaciones(self, event):
-        editor_ctrl = EditorController(self.parent, self.chat_controller)
-        editor_ctrl.ShowModal()
+
 
     def mostrar_estadisticas(self, event):
-        estadisticas_manager = EstadisticasManager()
-        controller = EstadisticasController(self.parent, estadisticas_manager, self.plataforma)
+        controller = EstadisticasController(self.parent, self.estadisticas_manager, self.plataforma)
         controller.show()
