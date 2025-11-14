@@ -13,11 +13,12 @@ from servicios.tiktok import ServicioTiktok
 from ui.dialog_response import response
 from setup import reader
 from controller.chat_controller import ChatController
+from controller.editor_controller import EditorController
 
 class MainController:
     def __init__(self):
         self.frame = MyFrame(None)
-        self.menu_controller = MainMenuController(self.frame)
+        self.menu_controller = MainMenuController(self.frame, self)
         self.chat_dialog = None # Initialize ChatDialog instance here
         self.inicializar_datos()
         self.establecer_eventos()
@@ -215,9 +216,17 @@ class MainController:
             wx.MessageBox("No se puede  acceder porque el campo de  texto está vacío, debe escribir  algo.", "error.", wx.ICON_ERROR)
             self.frame.text_ctrl_1.SetFocus()
 
-    def mostrar_editor_combinaciones(self):
-        editor = EditorController(self.frame, self)
+    def mostrar_editor_combinaciones(self, event=None):
+        parent = self.frame  # Padre por defecto es la ventana principal
+        if self.chat_dialog and self.chat_dialog.IsShown():
+            parent = self.chat_dialog # Si el chat dialog está visible, él es el padre
+        
+        editor = EditorController(parent, self)
         editor.ShowModal()
+
+    def reload_shortcuts(self):
+        if self.chat_dialog and self.chat_dialog.activo:
+            self.chat_dialog.reiniciar_atajos_teclado()
 
     def OnCharHook(self, event):
         code = event.GetKeyCode()

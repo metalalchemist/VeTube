@@ -15,8 +15,9 @@ from servicios.language_updater import GestorRepositorios
 from ui.update_languages_dialog import UpdateLanguagesDialog
 from controller.update_languages_controller import UpdateLanguagesController
 class MainMenuController:
-    def __init__(self, frame):
+    def __init__(self, frame, main_controller):
         self.frame = frame
+        self.main_controller = main_controller
         self.menu = MainMenu(frame)
         self._bind_menu_events()
 
@@ -29,7 +30,7 @@ class MainMenuController:
         self.frame.Bind(wx.EVT_MENU, self.mostrar_ajustes, self.menu.opcion_1)
         self.frame.Bind(wx.EVT_MENU, self.restaurar, self.menu.opcion_3)
         self.frame.Bind(wx.EVT_MENU, self.cerrarVentana, self.menu.salir)
-        self.frame.Bind(wx.EVT_MENU, self.mostrar_editor_combinaciones, self.menu.opcion_0)
+        self.frame.Bind(wx.EVT_MENU, self.main_controller.mostrar_editor_combinaciones, self.menu.opcion_0)
         self.frame.Bind(wx.EVT_MENU, self.on_update_languages, self.menu.update_langs)
 
     def enlazar_actualizador(self, event):
@@ -62,10 +63,6 @@ class MainMenuController:
         if data_store.config['salir']:
             if response(_("¿está seguro que desea salir del programa?"), _("¡atención!"))==wx.ID_YES: wx.GetApp().ExitMainLoop()
         else: wx.GetApp().ExitMainLoop()
-
-    def mostrar_editor_combinaciones(self, event):
-        editor_ctrl = EditorController(self.frame)
-        editor_ctrl.ShowModal()
 
     def on_update_languages(self, event):
         # Hardcode the repo URL for now

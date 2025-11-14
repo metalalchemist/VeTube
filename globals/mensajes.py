@@ -76,7 +76,7 @@ comandos_ordenados = [
     'chat.mostrar_mensaje_actual',
     'chat.borrar_pagina_actual',
     'chat.toggle_sounds',
-    'chat.mostrar_editor_combinaciones',
+    'main.mostrar_editor_combinaciones',
     'chat.archivar_mensaje',
     'chat_dialog.toggle_global_media_pause',
     'media_player.adelantar',

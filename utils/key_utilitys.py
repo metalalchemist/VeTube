@@ -32,7 +32,7 @@ class KeyUtils:
             'alt+shift+v': 'chat.mostrar_mensaje_actual',
             'alt+shift+d': 'chat.borrar_pagina_actual',
             'alt+shift+p': 'chat.toggle_sounds',
-            'alt+shift+k': 'chat.mostrar_editor_combinaciones',
+            'alt+shift+k': 'main.mostrar_editor_combinaciones',
             'alt+shift+a': 'chat.archivar_mensaje',
             'control+shift+p': 'chat_dialog.toggle_global_media_pause',
             'control+shift+right': 'media_player.adelantar',

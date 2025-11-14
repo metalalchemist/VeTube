@@ -15,6 +15,7 @@ class ChatDialog(wx.Dialog):
         self.active_chat_session = None
         self.keyboard_handler = WXKeyboardHandler(self)
         self.is_programmatic_close = False
+        self.activo = True
         
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.notebook, 1, wx.EXPAND | wx.ALL, 5)
@@ -24,6 +25,11 @@ class ChatDialog(wx.Dialog):
         self.Bind(wx.EVT_CLOSE, self.on_close)
         self.notebook.Bind(wx.EVT_TREEBOOK_PAGE_CHANGED, self.on_page_changed)
         
+        self._initialize_shortcuts()
+
+    def reiniciar_atajos_teclado(self):
+        """Recarga la configuración de atajos de teclado desregistrando los antiguos y registrando los nuevos desde el archivo."""
+        self.keyboard_handler.unregister_all_keys()
         self._initialize_shortcuts()
 
     def _initialize_shortcuts(self):
@@ -61,7 +67,7 @@ class ChatDialog(wx.Dialog):
                         if method and callable(method):
                             self.keyboard_handler.register_key(key, method)
                 except Exception as e:
-                    logging.error(f"Error parsing shortcut {key}={command_str}: {e}")
+                    print(f"Error parsing shortcut {key}={command_str}: {e}")
 
     def add_chat_page(self, chat_panel, title, chat_controller):
         self.notebook.AddPage(chat_panel, title)
@@ -100,6 +106,7 @@ class ChatDialog(wx.Dialog):
                 return
 
         # Si el usuario confirma o el cierre es programático, proceder con la limpieza.
+        self.activo = False
         self.main_controller.frame.menu_1.Enable()
         self.keyboard_handler.unregister_all_keys()
         for url, (controller, page_index) in list(self.chat_sessions.items()):
