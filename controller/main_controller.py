@@ -10,6 +10,7 @@ from servicios.youtube import ServicioYouTube
 from servicios.twich import ServicioTwich
 from servicios.sala import ServicioSala
 from servicios.tiktok import ServicioTiktok
+from servicios.kick import ServicioKick # Importar ServicioKick
 from ui.dialog_response import response
 from setup import reader
 from controller.chat_controller import ChatController
@@ -162,6 +163,8 @@ class MainController:
                     url = "https://www.twitch.tv/@" + self.frame.text_ctrl_1.GetValue()
                 elif plataforma_ids == 3:
                     url = "https://www.tiktok.com/@" + self.frame.text_ctrl_1.GetValue() + "/live"
+                elif plataforma_ids == 5: # Nuevo: Kick
+                    url = "https://www.kick.com/" + self.frame.text_ctrl_1.GetValue()
             if 'yout' in url:
                 if 'studio' in url:
                     url = url.replace('https://studio.youtube.com/video/','https://www.youtube.com/watch?v=')
@@ -176,6 +179,18 @@ class MainController:
                 self.set_plataforma(3)
             elif "sala" in url:
                 self.set_plataforma(4)
+            elif 'kick' in url: # Nuevo: Detección de URL para Kick
+                self.set_plataforma(5)
+                # Lógica para extraer solo el nombre del canal de Kick
+                from urllib.parse import urlparse
+                parsed_url = urlparse(url)
+                path_parts = [part for part in parsed_url.path.split('/') if part]
+                if path_parts:
+                    url = path_parts[-1] # El último segmento no vacío es el nombre del canal
+                else:
+                    # Si la URL es solo el dominio (ej. "kick.com"), usar el valor del text_ctrl
+                    url = self.frame.text_ctrl_1.GetValue()
+                
             else:
                 wx.MessageBox("¡Parece que el enlace al cual está intentando acceder no es un enlace válido.", "error.", wx.ICON_ERROR)
                 return
@@ -196,6 +211,8 @@ class MainController:
                     servicio = ServicioTiktok(self, url, self.frame, plataforma, chat_controller)
                 elif plataforma_ids == 4:
                     servicio = ServicioSala(self, url, self.frame, plataforma, chat_controller)
+                elif plataforma_ids == 5: # Nuevo: Instanciar ServicioKick
+                    servicio = ServicioKick(self, url, self.frame, plataforma, chat_controller)
                 
                 if servicio:
                     chat_controller.servicio = servicio # Set the service in chat_controller

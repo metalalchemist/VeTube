@@ -27,7 +27,7 @@ class MyFrame(wx.Frame):
         content_sizer.Add(self.text_ctrl_1, 0, wx.EXPAND | wx.ALL, 5)
         label_plataforma = wx.StaticText(self.tap_1, wx.ID_ANY, _("Capturar el chat de: "))
         content_sizer.Add(label_plataforma, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-        self.plataforma = wx.Choice(self.tap_1, wx.ID_ANY, choices=[_("detectar"), _("YouTube"), _("Twich"), _("TikTok"), _("La sala de juegos")])
+        self.plataforma = wx.Choice(self.tap_1, wx.ID_ANY, choices=[_("detectar"), _("YouTube"), _("Twich"), _("TikTok"), _("La sala de juegos"), _("Kick")])
         self.plataforma.SetSelection(0)
         content_sizer.Add(self.plataforma, 0, wx.EXPAND | wx.ALL, 5)
         content_sizer.AddSpacer(10)

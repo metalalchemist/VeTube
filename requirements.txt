@@ -1,5 +1,6 @@
 sounddevice
 TikTokLive
+git+https://github.com/iamoverit/kick.py
 pyperclip
 git+https://github.com/metalalchemist/chat-downloader
 git+https://github.com/metalalchemist/google-currency

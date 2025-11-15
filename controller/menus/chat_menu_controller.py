@@ -44,6 +44,9 @@ class ChatMenuController:
 
         if self.plataforma == 'TikTok': titulo = funciones.extractUser(url)
         elif self.plataforma == 'Twich' and self.chat_controller.servicio.chat.status != 'past': titulo = funciones.extractUser(url)
+        elif self.plataforma == 'Kick':
+            titulo = url
+            url = "https://www.kick.com/" + titulo
         else: titulo = self.parent.label_dialog.GetLabel()
 
         if any(fav.get('url') == url for fav in favorite):
@@ -60,6 +63,8 @@ class ChatMenuController:
     def copiarEnlace(self, event):
         url = self.chat_controller.servicio.url
         if url:
+            if self.plataforma == 'Kick':
+                url = "https://www.kick.com/" + url
             copy(url)
             noti = wx.adv.NotificationMessage(_("Enlace copiado al portapapeles"), _("El enlace del chat ha sido copiado al portapapeles."))
             noti.Show(timeout=5)
@@ -67,7 +72,10 @@ class ChatMenuController:
 
     def reproducirVideo(self, event):
         url = self.chat_controller.servicio.url
-        if url: wx.LaunchDefaultBrowser(url)
+        if url:
+            if self.plataforma == 'Kick':
+                url = "https://www.kick.com/" + url
+            wx.LaunchDefaultBrowser(url)
         else: wx.adv.NotificationMessage(_("No se pudo abrir el enlace"), _("No se encontró un enlace válido para abrir.")).Show(timeout=5)
 
 
