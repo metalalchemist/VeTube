@@ -1,5 +1,5 @@
 ﻿# vetube
-Leia e gerencie de forma acessível o bate-papo do youtube e do twitch em suas próprias transmissões ou nas de seus criadores favoritos.
+Leia e gerencie de forma acessível o bate-papo do youtube, TikTok, Kick e twitch em suas próprias transmissões ou nas de seus criadores favoritos.
 [demonstração do produto em funcionamento](https://www.youtube.com/watch?v=KljpMJNVYCw)
 ## Caracteristicas
 - Modo automático: leia mensagens de bate-papo em tempo real usando a voz sapy5
@@ -87,5 +87,5 @@ Com o seu apoio, você ajuda este programa a continuar a crescer.
 
 [Você se junta à nossa causa?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
-[baixar o programa para 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x64.zip)
-[baixe o programa para 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x86.zip)
+[baixar o programa para 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x64.zip)
+[baixe o programa para 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x86.zip)

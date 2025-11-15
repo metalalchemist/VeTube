@@ -5,6 +5,7 @@ Lee y gestiona de manera accesible el chat de tus propios directos o en los de t
 - youtube (extrenos y directos en curso y pasados)
 - twich.tv(directos en curso y pasados)
 - tiktok(directos en curso)
+- kick (directos en curso)
 - la sala dejuegos(chat de las diversas mesas)
 ## Características
 - Modo automático: Lee los mensajes de chat en tiempo real utilizando la voz sapy5
@@ -95,5 +96,5 @@ Con tu apoyo contribuyes a que este programa siga en crecimiento.
 
 [¿Te unes a nuestra causa?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
-[descarga el programa para 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x64.zip)
-[descarga el programa para 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x86.zip)
+[descarga el programa para 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x64.zip)
+[descarga el programa para 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x86.zip)

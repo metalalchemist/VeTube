@@ -1,5 +1,5 @@
 #vetube
-Lisez et gérez le chat youtube et twitch de manière accessible dans vos propres diffusions ou celles de vos créateurs préférés.
+Lisez et gérez le chat youtube, tiktok, kick et twitch de manière accessible dans vos propres diffusions ou celles de vos créateurs préférés.
 ## Caractéristiques
 - Mode automatique : lisez les messages de chat en temps réel à l'aide de la voix sapy5
 - Interface invisible : gérez les discussions depuis n'importe quelle fenêtre à l'aide de simples commandes au clavier. Vous devez avoir un lecteur d'écran actif.
@@ -88,5 +88,5 @@ Avec votre soutien, vous aidez ce programme à continuer à se développer.
 
 [Rejoindrez-vous notre cause ?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
-[télécharger le programme pour 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x64.zip)
-[télécharger le programme pour 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x86.zip)
+[télécharger le programme pour 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x64.zip)
+[télécharger le programme pour 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x86.zip)

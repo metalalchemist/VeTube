@@ -1,3 +1,6 @@
+v3.4
+se ha agregado en modo beta la captura del chat de la plataforma de kick
+corregidos errores con el editor de combinaciones de teclado.
 v3.3
 ahora se pueden capturar múltiples en vivos.
 el reproductor es un reproductor global. cada ves que nos desplasemos a un en vivo anterior o al siguiente en vivo , detengamos el reproductor y lo volvamos a activar, reproducirá la URL de ese en vivo en el cual estamos posicionados.

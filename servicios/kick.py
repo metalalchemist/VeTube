@@ -28,6 +28,7 @@ class ServicioKick:
         self.bypass_process = None
         self.thread = None
         self.media_controller = None
+        self.client_task = None
 
     def iniciar_chat(self):
         self.is_running = True
@@ -87,15 +88,13 @@ class ServicioKick:
             self.client = kick.Client()
             self._add_listeners()
             
-            # Iniciar el cliente como una tarea para no bloquear
-            self.loop.create_task(self.client.run())
-            self.loop.run_forever() # Esto se ejecutará hasta que se llame a loop.stop()
+            self.client_task = self.loop.create_task(self.client.start())
+            self.loop.run_forever()
         except Exception as e:
             if self.is_running:
                 print(f"Error fatal en el hilo de conexión de Kick: {e}")
                 traceback.print_exc()
         finally:
-            # Limpieza final del bucle
             if self.loop.is_running():
                 self.loop.close()
             print("Hilo de Kick finalizado.")
@@ -138,14 +137,13 @@ class ServicioKick:
             wx.CallAfter(player.play, rutasonidos[0])
 
     async def on_follow(self, user: kick.User):
-        mensaje = f"{user.username} {_('comenzó a seguirte')}"
         if data_store.config['eventos'][7] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
             wx.CallAfter(self.estadisticas_manager.agregar_seguidor)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, mensaje, "follow")
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, user.username + _(" comenzó a seguirte!"), "follow")
             if data_store.config['sonidos'] and data_store.config['listasonidos'][10]:
                 wx.CallAfter(player.play, rutasonidos[10])
             if data_store.config['reader'] and data_store.config['unread'][7]:
-                wx.CallAfter(reader.leer_mensaje, mensaje)
+                wx.CallAfter(reader.leer_mensaje, user.username + _(" comenzó a seguirte!"))
 
     def detener(self):
         if not self.is_running:
@@ -158,10 +156,8 @@ class ServicioKick:
             self.media_controller = None
 
         if self.loop and self.loop.is_running():
-            # Cancelar todas las tareas pendientes (principalmente client.run())
-            for task in asyncio.all_tasks(loop=self.loop):
-                task.cancel()
-            # Detener el bucle de eventos
+            if self.client:
+                asyncio.run_coroutine_threadsafe(self.client.close(), self.loop)
             self.loop.call_soon_threadsafe(self.loop.stop)
 
         if self.bypass_process:
@@ -173,8 +169,5 @@ class ServicioKick:
             except Exception as e:
                 print(f"Error al terminar el proceso de bypass: {e}")
             self.bypass_process = None
-        
-        if self.thread and self.thread.is_alive():
-            self.thread.join()
         
         print("Servicio de Kick detenido completamente.")

@@ -2,13 +2,12 @@
 
 Kelola dan baca chat dari siaran langsung milikmu atau dari kreator favoritmu dengan mudah.
 
-[Lihat demonstrasi penggunaan produk](https://youtu.be/4XawJoBymPs)
-
 ## Platform yang Didukung:
 
 - YouTube (tayangan perdana, siaran langsung, dan yang sudah selesai)
 - Twitch.tv (siaran langsung dan yang sudah selesai)
 - TikTok (siaran langsung)
+- Kick (siaran langsung)
 - QuentinC's playroom (chat dari berbagai meja permainan)
 
 ## Fitur
@@ -109,5 +108,5 @@ Dengan dukunganmu, program ini akan terus berkembang.
 
 [Bergabunglah dengan kami](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
-[Unduh program untuk 64-bit](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x64.zip)  
-[Unduh program untuk 32-bit](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x86.zip)
+[Unduh program untuk 64-bit](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x64.zip)  
+[Unduh program untuk 32-bit](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x86.zip)

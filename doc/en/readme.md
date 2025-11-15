@@ -1,5 +1,5 @@
   # VeTube
-Accessably Read and manage YouTube and TikTok live chats on your own streams or those of your favorite creators.
+Accessably Read and manage YouTube, twich, kick and TikTok live chats on your own streams or those of your favorite creators.
 ## Features
 
 - Automatic mode: Read incoming  chat messages in real time using your preferred sapi5 voice
@@ -87,5 +87,5 @@ cesar.verastegui17@gmail.com
 With your support, you can help this program continue to grow.
 
 [Want to donate to VeTube?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
-[Download the 64-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x64.zip)
-[Download the 32-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.3/VeTube-x86.zip)
+[Download the 64-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x64.zip)
+[Download the 32-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x86.zip)
