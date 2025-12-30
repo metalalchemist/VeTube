@@ -1,18 +1,10 @@
-
-import asyncio
-import threading
-import subprocess
-import os
-import platform
-import wx
-import traceback
-import kick
+import asyncio, threading, subprocess, os, platform, wx, kick
 from globals import data_store
 from globals.resources import rutasonidos
-from utils import funciones
 from setup import reader, player
 from controller.media_controller import MediaController
 from utils.play_mp4 import extract_stream_url
+from utils import translator
 
 class ServicioKick:
     def __init__(self, main_controller, url, frame, plataforma, chat_controller):
@@ -46,7 +38,6 @@ class ServicioKick:
             wx.CallAfter(reader.leer_sapi, _("error_bypass_no_encontrado"))
             return False
 
-        print("Iniciando bypass.exe en segundo plano...")
         creation_flags = subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
         
         try:
@@ -63,15 +54,11 @@ class ServicioKick:
             print(f"Error al intentar ejecutar {bypass_executable}: {e}")
             return False
 
-        print("Esperando el mensaje 'starting' desde bypass.exe...")
         for line in iter(self.bypass_process.stdout.readline, ''):
             if not self.is_running:
                 return False
             if "starting" in line.lower():
-                print("Mensaje 'starting' detectado. Procediendo a conectar con Kick.")
                 return True
-        
-        print("Error: bypass.exe terminó inesperadamente.")
         return False
 
     def _start_async_loop(self):
@@ -93,7 +80,6 @@ class ServicioKick:
         except Exception as e:
             if self.is_running:
                 print(f"Error fatal en el hilo de conexión de Kick: {e}")
-                traceback.print_exc()
         finally:
             if self.loop.is_running():
                 self.loop.close()
@@ -105,7 +91,6 @@ class ServicioKick:
         self.client.event(self.on_follow)
 
     async def on_ready(self):
-        print("Cliente de Kick listo.")
         wx.CallAfter(reader.leer_sapi, _("Ingresando al chat"))
         if data_store.config['sonidos'] and data_store.config['listasonidos'][6]:
             wx.CallAfter(player.play, rutasonidos[6])
@@ -118,10 +103,6 @@ class ServicioKick:
             
             kick_page_url = f"https://kick.com/{self.url}"
             video_url = extract_stream_url(kick_page_url)
-            
-            print(f"URL de la página de Kick: {kick_page_url}")
-            print(f"URL de stream extraída: {video_url}")
-
             if video_url and not self.media_controller:
                 self.media_controller = MediaController(url=video_url, state_callback=self.chat_controller.chat_dialog.on_media_player_state_change)
                 self.chat_controller.set_media_controller(self.media_controller)
@@ -131,19 +112,54 @@ class ServicioKick:
             self.detener()
 
     async def on_message(self, message: kick.Message):
-        mensaje = f"{message.author.username}: {message.content}"
-        wx.CallAfter(self.chat_controller.agregar_mensaje_general, mensaje)
-        if data_store.config['sonidos'] and data_store.config['listasonidos'][0]:
-            wx.CallAfter(player.play, rutasonidos[0])
+        wx.CallAfter(self.estadisticas_manager.agregar_mensaje, message.author.username)
+        cadena = message.content
+        if data_store.dst: cadena = self.translator.translate(text=cadena, target=data_store.dst)
+        
+        # Obtener los tipos de insignias de forma segura
+        badge_types = []
+        if message.author.badges:
+            for b in message.author.badges:
+                if isinstance(b, dict):
+                    badge_types.append(b.get('type'))
+                else:
+                    badge_types.append(getattr(b, 'type', ''))
+
+        full_message = f"{message.author.username}: {cadena}"
+
+        # 1. Prioridad: Moderador o Propietario (broadcaster)
+        if ('moderator' in badge_types or 'broadcaster' in badge_types) and data_store.config['eventos'][4] and data_store.config['categorias'][4] and hasattr(self.chat_controller.ui, 'list_box_moderadores'):
+            wx.CallAfter(self.chat_controller.agregar_mensaje_moderador, full_message)
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][4]: wx.CallAfter(player.play, rutasonidos[4])
+            if data_store.config['reader'] and data_store.config['unread'][4]: wx.CallAfter(reader.leer_mensaje, full_message)
+            return
+
+        # 2. Prioridad: Suscriptor (miembro)
+        if 'subscriber' in badge_types and data_store.config['eventos'][1] and data_store.config['categorias'][2] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
+            wx.CallAfter(self.chat_controller.agregar_mensaje_miembro, full_message)
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][1]: wx.CallAfter(player.play, rutasonidos[1])
+            if data_store.config['reader'] and data_store.config['unread'][1]: wx.CallAfter(reader.leer_mensaje, full_message)
+            return
+
+        # 3. Prioridad: Verificado
+        if 'verified' in badge_types and data_store.config['eventos'][5] and data_store.config['categorias'][5] and hasattr(self.chat_controller.ui, 'list_box_verificados'):
+            wx.CallAfter(self.chat_controller.agregar_mensaje_verificado, full_message)
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][5]: wx.CallAfter(player.play, rutasonidos[5])
+            if data_store.config['reader'] and data_store.config['unread'][5]: wx.CallAfter(reader.leer_mensaje, full_message)
+            return
+
+        # 4. Fallback: General
+        if data_store.config['eventos'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
+            wx.CallAfter(self.chat_controller.agregar_mensaje_general, full_message)
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][0]: wx.CallAfter(player.play, rutasonidos[0])
+            if data_store.config['reader'] and data_store.config['unread'][0]: wx.CallAfter(reader.leer_mensaje, full_message)
 
     async def on_follow(self, user: kick.User):
         if data_store.config['eventos'][7] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
             wx.CallAfter(self.estadisticas_manager.agregar_seguidor)
             wx.CallAfter(self.chat_controller.agregar_mensaje_evento, user.username + _(" comenzó a seguirte!"), "follow")
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][10]:
-                wx.CallAfter(player.play, rutasonidos[10])
-            if data_store.config['reader'] and data_store.config['unread'][7]:
-                wx.CallAfter(reader.leer_mensaje, user.username + _(" comenzó a seguirte!"))
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][10]: wx.CallAfter(player.play, rutasonidos[10])
+            if data_store.config['reader'] and data_store.config['unread'][7]: wx.CallAfter(reader.leer_mensaje, user.username + _(" comenzó a seguirte!"))
 
     def detener(self):
         if not self.is_running:

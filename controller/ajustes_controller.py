@@ -12,6 +12,7 @@ class AjustesController:
         self.dialog.check_1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar_sapi(event))
         self.dialog.chk1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'reader'))
         self.dialog.check_traduccion.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'traducir'))
+        self.dialog.check_interface.Bind(wx.EVT_CHECKBOX, self.on_check_interface)
         self.dialog.check_actualizaciones.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'updates'))
         self.dialog.check_salir.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'salir'))
         self.dialog.check_donaciones.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'donations'))
@@ -32,6 +33,9 @@ class AjustesController:
 
     def on_slider_cambiovolumen(self, event):
         config['cambiovolumen'] = event.GetEventObject().GetValue()
+
+    def on_check_interface(self, event):
+        config['interface'] = event.IsChecked()
 
     def on_check_reproducir(self, event):
         config['reproducir'] = event.IsChecked()

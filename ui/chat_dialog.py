@@ -37,6 +37,9 @@ class ChatDialog(wx.Dialog):
         Lee los atajos del archivo de configuración y los registra una sola vez.
         Usa lambdas para que los métodos se llamen en el contexto del chat activo dinámicamente.
         """
+        if data_store.config.get('interface', False):
+            return
+
         config = configparser.ConfigParser(interpolation=None)
         config.read("keymaps/keys.txt")
 

@@ -68,6 +68,39 @@ J'ai ajouté pour les futures mises à jour à venir
 - Nom du canal utilisateur
 - Parmi beaucoup d'autres choses.
 
+## Contribuer à la traduction
+Si vous souhaitez collaborer en traduisant VeTube dans votre langue, vous devrez installer les outils d'internationalisation.
+
+1.  **Installer Babel :**
+    ```bash
+    pip install Babel
+    ```
+    *Remarque : Assurez-vous d'installer le paquet `Babel` (évitez les paquets incorrects de très petite taille).*
+
+2.  **Extraire les textes pour mettre à jour le modèle (.pot) :**
+    Si de nouvelles chaînes ont été ajoutées au code, mettez à jour le fichier modèle :
+    ```bash
+    pybabel extract -F babel.cfg -o vetube.pot .
+    ```
+
+3.  **Commencer une nouvelle traduction :**
+    Si vous traduisez vers une nouvelle langue (par exemple `it` pour l'italien) :
+    ```bash
+    pybabel init -i vetube.pot -d locales -l it -D vetube
+    ```
+
+4.  **Mettre à jour les traductions existantes :**
+    Si la langue existe déjà et que vous avez mis à jour le `.pot`, synchronisez les fichiers `.po` :
+    ```bash
+    pybabel update -i vetube.pot -d locales -D vetube
+    ```
+
+5.  **Compiler les traductions :**
+    Pour que le programme reconnaisse les changements, compilez les fichiers `.po` en `.mo` :
+    ```bash
+    pybabel compile -d locales -D vetube
+    ```
+
 # merci:
 Je remercie:
 
@@ -88,5 +121,5 @@ Avec votre soutien, vous aidez ce programme à continuer à se développer.
 
 [Rejoindrez-vous notre cause ?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
-[télécharger le programme pour 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x64.zip)
-[télécharger le programme pour 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x86.zip)
+[télécharger le programme pour 64 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.5/VeTube-x64.zip)
+[télécharger le programme pour 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.5/VeTube-x86.zip)

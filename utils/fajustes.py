@@ -23,7 +23,8 @@ configuraciones ={
 	'reproducir': False,
 	'tiempo': 10,
 	'volumen': 100,
-	"cambiovolumen": 10
+	"cambiovolumen": 10,
+	'interface': False
 
 }
 actualizar_configuracion = False

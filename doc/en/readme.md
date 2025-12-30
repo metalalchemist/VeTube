@@ -67,6 +67,38 @@ I plan to add the following features in future updates:
   - The user's channel name
   - Additional relevant details
 
+## Contribute to translation
+If you want to collaborate by translating VeTube into your language, you will need to install the internationalization tools.
+
+1.  **Install Babel:**
+    ```bash
+    pip install Babel
+    ```
+
+2.  **Extract texts to update the template (.pot):**
+    If new strings have been added to the code, update the template file:
+    ```bash
+    pybabel extract -F babel.cfg -o vetube.pot .
+    ```
+
+3.  **Start a new translation:**
+    If you are translating to a new language (e.g., `it` for Italian):
+    ```bash
+    pybabel init -i vetube.pot -d locales -l it -D vetube
+    ```
+
+4.  **Update existing translations:**
+    If the language already exists and you have updated the `.pot`, synchronize the `.po` files:
+    ```bash
+    pybabel update -i vetube.pot -d locales -D vetube
+    ```
+
+5.  **Compile translations:**
+    For the program to recognize the changes, compile the `.po` files to `.mo`:
+    ```bash
+    pybabel compile -d locales -D vetube
+    ```
+
 # Acknowledgements::
 I'd like to thank the following people:
 
@@ -87,5 +119,5 @@ cesar.verastegui17@gmail.com
 With your support, you can help this program continue to grow.
 
 [Want to donate to VeTube?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
-[Download the 64-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x64.zip)
-[Download the 32-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x86.zip)
+[Download the 64-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.5/VeTube-x64.zip)
+[Download the 32-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.5/VeTube-x86.zip)

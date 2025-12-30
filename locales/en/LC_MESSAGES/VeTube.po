@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-15 02:12-0800\n"
+"POT-Creation-Date: 2025-12-29 20:21-0800\n"
 "PO-Revision-Date: 2023-10-09 05:35+0200\n"
 "Last-Translator: \n"
 "Language: en\n"
@@ -61,11 +61,11 @@ msgstr ""
 msgid "Listo"
 msgstr "Ready"
 
-#: controller/ajustes_controller.py:90
+#: controller/ajustes_controller.py:94
 msgid "Hablaré a través  de este dispositivo."
 msgstr "I will speak through this device."
 
-#: controller/ajustes_controller.py:94 controller/ajustes_controller.py:96
+#: controller/ajustes_controller.py:98 controller/ajustes_controller.py:100
 msgid ""
 "Hola, soy la voz que te acompañará de ahora en adelante a leer los "
 "mensajes de tus canales favoritos."
@@ -259,7 +259,7 @@ msgstr "Are you sure to delete all favorites from the list?"
 
 #: controller/main_controller.py:70
 #: controller/menus/main_menu_controller.py:106
-#: controller/update_languages_controller.py:93 ui/chat_dialog.py:104
+#: controller/update_languages_controller.py:93 ui/chat_dialog.py:107
 msgid "¡Atención!"
 msgstr "Warning!"
 
@@ -434,8 +434,8 @@ msgid ""
 msgstr ""
 "Description:\n"
 "Read aloud the messages from live streams on YouTube, TikTok, playroom, "
-"kick and Twitch, customize your preferences as you desire, and enhance your "
-"enjoyment of your favorite channels."
+"kick and Twitch, customize your preferences as you desire, and enhance "
+"your enjoyment of your favorite channels."
 
 #: controller/menus/main_menu_controller.py:59
 msgid ""
@@ -697,27 +697,27 @@ msgstr "Default"
 msgid "No hay voces instaladas"
 msgstr "No voices installed"
 
-#: servicios/kick.py:46
+#: servicios/kick.py:38
 msgid "error_bypass_no_encontrado"
 msgstr "bypass not found"
 
-#: servicios/kick.py:81
+#: servicios/kick.py:68
 msgid "Cargando..."
 msgstr "conecting..."
 
-#: servicios/kick.py:84
+#: servicios/kick.py:71
 msgid "error_iniciar_bypass"
 msgstr "there's an error to start bypass"
 
-#: servicios/kick.py:109 servicios/tiktok.py:124
+#: servicios/kick.py:94 servicios/tiktok.py:124
 msgid "Ingresando al chat"
 msgstr "Entering the chat"
 
-#: servicios/kick.py:130
+#: servicios/kick.py:111
 msgid "error_conectar_kick_chatroom"
 msgstr ""
 
-#: servicios/kick.py:142 servicios/kick.py:146 servicios/tiktok.py:161
+#: servicios/kick.py:160 servicios/kick.py:162 servicios/tiktok.py:161
 #: servicios/tiktok.py:165
 msgid " comenzó a seguirte!"
 msgstr " started following you!"
@@ -909,138 +909,142 @@ msgid "intentar traducir las novedades cuando salga una actualización."
 msgstr "try translate changes when an update is receibed"
 
 #: ui/ajustes.py:35
+msgid "Desactivar la interfaz invisible"
+msgstr "disable invisible interface"
+
+#: ui/ajustes.py:38
 msgid "traducción de mensajes: "
 msgstr "message translation: "
 
-#: ui/ajustes.py:40
+#: ui/ajustes.py:43
 msgid "convertir las donaciones a la divisa: "
 msgstr "convert donations to currency: "
 
-#: ui/ajustes.py:50
+#: ui/ajustes.py:53
 msgid "Voz"
 msgstr "Voice"
 
-#: ui/ajustes.py:52
+#: ui/ajustes.py:55
 msgid "Opciones del habla"
 msgstr "Speech options"
 
-#: ui/ajustes.py:54
+#: ui/ajustes.py:57
 msgid "Usar voz sapi en lugar de lector de pantalla."
 msgstr "Use sapi voice instead of screen reader."
 
-#: ui/ajustes.py:57
+#: ui/ajustes.py:60
 msgid "Sistema TTS a usar: "
 msgstr "TTS system to use: "
 
-#: ui/ajustes.py:62
+#: ui/ajustes.py:65
 msgid "Activar lectura de mensajes automática"
 msgstr "Enable automatic message reading"
 
-#: ui/ajustes.py:65
+#: ui/ajustes.py:68
 msgid "Voz: "
 msgstr "Voice: "
 
-#: ui/ajustes.py:70
+#: ui/ajustes.py:73
 msgid "Instalar un paquete de voz..."
 msgstr "Install a voice package..."
 
-#: ui/ajustes.py:72
+#: ui/ajustes.py:75
 msgid "Tono: "
 msgstr "Pitch: "
 
-#: ui/ajustes.py:76
+#: ui/ajustes.py:79
 msgid "Volumen: "
 msgstr "Volume: "
 
-#: ui/ajustes.py:80
+#: ui/ajustes.py:83
 msgid "Velocidad: "
 msgstr "Speed: "
 
-#: ui/ajustes.py:84
+#: ui/ajustes.py:87
 msgid "&Reproducir prueba."
 msgstr "&Play test."
 
-#: ui/ajustes.py:91
+#: ui/ajustes.py:94
 msgid "reproducción"
 msgstr "player"
 
-#: ui/ajustes.py:93
+#: ui/ajustes.py:96
 msgid "ajustes de reproducción"
 msgstr "player settings"
 
-#: ui/ajustes.py:95
+#: ui/ajustes.py:98
 msgid "activar reproducción automática al iniciar un en vivo."
 msgstr "play automatically when a livestream start"
 
-#: ui/ajustes.py:98
+#: ui/ajustes.py:101
 msgid "tiempo para adelantar y atrazar el en vivo en segundos"
 msgstr "time to forward and rewind the livestream in seconds"
 
-#: ui/ajustes.py:102
+#: ui/ajustes.py:105
 msgid "volumen del reproductor"
 msgstr "player volumme"
 
-#: ui/ajustes.py:106
+#: ui/ajustes.py:109
 msgid "cambio de volumen con las teclas de volumen (1-25)"
 msgstr "change the volume using the volume keys (1-25)"
 
-#: ui/ajustes.py:115
+#: ui/ajustes.py:118
 msgid "Categorías"
 msgstr "Categories"
 
-#: ui/ajustes.py:118
+#: ui/ajustes.py:121
 msgid "Categoría"
 msgstr "Category"
 
-#: ui/ajustes.py:125
+#: ui/ajustes.py:128
 msgid "Sonidos"
 msgstr "Sounds"
 
-#: ui/ajustes.py:127
+#: ui/ajustes.py:130
 msgid "Activar sonidos"
 msgstr "enable sounds."
 
-#: ui/ajustes.py:131
+#: ui/ajustes.py:134
 msgid "Sonido"
 msgstr "Sound"
 
-#: ui/ajustes.py:135
+#: ui/ajustes.py:138
 msgid "&Reproducir"
 msgstr "&play"
 
-#: ui/ajustes.py:138
+#: ui/ajustes.py:141
 msgid "Seleccionar dispositivo de audio"
 msgstr "Select an audio device"
 
-#: ui/ajustes.py:143
+#: ui/ajustes.py:146
 msgid "&Establecer"
 msgstr "&set"
 
-#: ui/ajustes.py:149 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:53
+#: ui/ajustes.py:152 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:53
 msgid "Eventos"
 msgstr "events"
 
-#: ui/ajustes.py:151
+#: ui/ajustes.py:154
 msgid "procesados: "
 msgstr "no ignored by vetube"
 
-#: ui/ajustes.py:154 ui/ajustes.py:160
+#: ui/ajustes.py:157 ui/ajustes.py:163
 msgid "Evento"
 msgstr "event"
 
-#: ui/ajustes.py:157
+#: ui/ajustes.py:160
 msgid "leídos"
 msgstr "no ignored by screen reader"
 
-#: ui/ajustes.py:169 update/update.py:132
+#: ui/ajustes.py:172 update/update.py:132
 msgid "&Aceptar"
 msgstr "&OK"
 
-#: ui/ajustes.py:171 update/update.py:132
+#: ui/ajustes.py:174 update/update.py:132
 msgid "&Cancelar"
 msgstr "&Cancel"
 
-#: ui/chat_dialog.py:104
+#: ui/chat_dialog.py:107
 msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
 msgstr "Would you like to exit this window and stop reading messages?"
 

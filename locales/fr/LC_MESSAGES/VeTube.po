@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-15 02:12-0800\n"
+"POT-Creation-Date: 2025-12-29 20:21-0800\n"
 "PO-Revision-Date: 2024-07-29 11:01-0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -61,11 +61,11 @@ msgstr ""
 msgid "Listo"
 msgstr "Prêt"
 
-#: controller/ajustes_controller.py:90
+#: controller/ajustes_controller.py:94
 msgid "Hablaré a través  de este dispositivo."
 msgstr "Je parlerai via cet appareil."
 
-#: controller/ajustes_controller.py:94 controller/ajustes_controller.py:96
+#: controller/ajustes_controller.py:98 controller/ajustes_controller.py:100
 msgid ""
 "Hola, soy la voz que te acompañará de ahora en adelante a leer los "
 "mensajes de tus canales favoritos."
@@ -259,7 +259,7 @@ msgstr "Êtes-vous sûr de vouloir supprimer tous les favoris de la liste ?"
 
 #: controller/main_controller.py:70
 #: controller/menus/main_menu_controller.py:106
-#: controller/update_languages_controller.py:93 ui/chat_dialog.py:104
+#: controller/update_languages_controller.py:93 ui/chat_dialog.py:107
 msgid "¡Atención!"
 msgstr "Attention !"
 
@@ -336,6 +336,14 @@ msgstr "Attention :"
 #: controller/update_languages_controller.py:64
 msgid "Iniciando descarga de idiomas..."
 msgstr "Démarrage du téléchargement des langues..."
+
+#: controller/update_languages_controller.py:74
+msgid "data"
+msgstr ""
+
+#: controller/update_languages_controller.py:76
+msgid "dataerror_msg"
+msgstr ""
 
 #: controller/update_languages_controller.py:86
 #: ui/update_languages_dialog.py:72
@@ -433,9 +441,9 @@ msgid ""
 " tus canales favoritos."
 msgstr ""
 "Description :\n"
-"\" \" Lit à haute voix les messages en direct sur YouTube, TikTok, kick et "
-"Twitch, ajuste tes préférences comme tu le souhaites et profite davantage"
-" de tes chaînes\" \" préférées."
+"\" \" Lit à haute voix les messages en direct sur YouTube, TikTok, kick "
+"et Twitch, ajuste tes préférences comme tu le souhaites et profite "
+"davantage de tes chaînes\" \" préférées."
 
 #: controller/menus/main_menu_controller.py:59
 msgid ""
@@ -700,27 +708,27 @@ msgstr "Par défaut"
 msgid "No hay voces instaladas"
 msgstr "Aucune voix n'est installée"
 
-#: servicios/kick.py:46
+#: servicios/kick.py:38
 msgid "error_bypass_no_encontrado"
 msgstr ""
 
-#: servicios/kick.py:81
+#: servicios/kick.py:68
 msgid "Cargando..."
 msgstr "Connexion..."
 
-#: servicios/kick.py:84
+#: servicios/kick.py:71
 msgid "error_iniciar_bypass"
 msgstr ""
 
-#: servicios/kick.py:109 servicios/tiktok.py:124
+#: servicios/kick.py:94 servicios/tiktok.py:124
 msgid "Ingresando al chat"
 msgstr "Connexion au chat"
 
-#: servicios/kick.py:130
+#: servicios/kick.py:111
 msgid "error_conectar_kick_chatroom"
 msgstr ""
 
-#: servicios/kick.py:142 servicios/kick.py:146 servicios/tiktok.py:161
+#: servicios/kick.py:160 servicios/kick.py:162 servicios/tiktok.py:161
 #: servicios/tiktok.py:165
 msgid " comenzó a seguirte!"
 msgstr " a commencé à vous suivre !"
@@ -911,138 +919,142 @@ msgid "intentar traducir las novedades cuando salga una actualización."
 msgstr "essayer de traduire les nouveautés lorsqu'une mise à jour est disponible."
 
 #: ui/ajustes.py:35
+msgid "Desactivar la interfaz invisible"
+msgstr ""
+
+#: ui/ajustes.py:38
 msgid "traducción de mensajes: "
 msgstr "traduction des messages :"
 
-#: ui/ajustes.py:40
+#: ui/ajustes.py:43
 msgid "convertir las donaciones a la divisa: "
 msgstr "convertir les dons en devise :"
 
-#: ui/ajustes.py:50
+#: ui/ajustes.py:53
 msgid "Voz"
 msgstr "Voix"
 
-#: ui/ajustes.py:52
+#: ui/ajustes.py:55
 msgid "Opciones del habla"
 msgstr "Options vocales"
 
-#: ui/ajustes.py:54
+#: ui/ajustes.py:57
 msgid "Usar voz sapi en lugar de lector de pantalla."
 msgstr "Utiliser la voix SAPI plutôt que le lecteur d'écran."
 
-#: ui/ajustes.py:57
+#: ui/ajustes.py:60
 msgid "Sistema TTS a usar: "
 msgstr "Système TTS à utiliser :"
 
-#: ui/ajustes.py:62
+#: ui/ajustes.py:65
 msgid "Activar lectura de mensajes automática"
 msgstr "Activer la lecture automatique des messages"
 
-#: ui/ajustes.py:65
+#: ui/ajustes.py:68
 msgid "Voz: "
 msgstr "Voix :"
 
-#: ui/ajustes.py:70
+#: ui/ajustes.py:73
 msgid "Instalar un paquete de voz..."
 msgstr "Installer un paquet de voix..."
 
-#: ui/ajustes.py:72
+#: ui/ajustes.py:75
 msgid "Tono: "
 msgstr "Tonalité :"
 
-#: ui/ajustes.py:76
+#: ui/ajustes.py:79
 msgid "Volumen: "
 msgstr "Volume :"
 
-#: ui/ajustes.py:80
+#: ui/ajustes.py:83
 msgid "Velocidad: "
 msgstr "Vitesse :"
 
-#: ui/ajustes.py:84
+#: ui/ajustes.py:87
 msgid "&Reproducir prueba."
 msgstr "&Lire un essai."
 
-#: ui/ajustes.py:91
+#: ui/ajustes.py:94
 msgid "reproducción"
 msgstr "Lire"
 
-#: ui/ajustes.py:93
+#: ui/ajustes.py:96
 msgid "ajustes de reproducción"
 msgstr "Paramètres de lecture"
 
-#: ui/ajustes.py:95
+#: ui/ajustes.py:98
 msgid "activar reproducción automática al iniciar un en vivo."
 msgstr "Activer la lecture automatique au démarrage d’un direct."
 
-#: ui/ajustes.py:98
+#: ui/ajustes.py:101
 msgid "tiempo para adelantar y atrazar el en vivo en segundos"
 msgstr "Temps pour avancer et reculer le direct en secondes"
 
-#: ui/ajustes.py:102
+#: ui/ajustes.py:105
 msgid "volumen del reproductor"
 msgstr "Volume du lecteur"
 
-#: ui/ajustes.py:106
+#: ui/ajustes.py:109
 msgid "cambio de volumen con las teclas de volumen (1-25)"
 msgstr "Changement du volume avec les touches de volume (1-25)"
 
-#: ui/ajustes.py:115
+#: ui/ajustes.py:118
 msgid "Categorías"
 msgstr "Catégories"
 
-#: ui/ajustes.py:118
+#: ui/ajustes.py:121
 msgid "Categoría"
 msgstr "Catégorie"
 
-#: ui/ajustes.py:125
+#: ui/ajustes.py:128
 msgid "Sonidos"
 msgstr "Sons"
 
-#: ui/ajustes.py:127
+#: ui/ajustes.py:130
 msgid "Activar sonidos"
 msgstr "Lire les sons."
 
-#: ui/ajustes.py:131
+#: ui/ajustes.py:134
 msgid "Sonido"
 msgstr "Son"
 
-#: ui/ajustes.py:135
+#: ui/ajustes.py:138
 msgid "&Reproducir"
 msgstr "&Lire"
 
-#: ui/ajustes.py:138
+#: ui/ajustes.py:141
 msgid "Seleccionar dispositivo de audio"
 msgstr "Sélectionner le périphérique audio"
 
-#: ui/ajustes.py:143
+#: ui/ajustes.py:146
 msgid "&Establecer"
 msgstr "Configurer"
 
-#: ui/ajustes.py:149 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:53
+#: ui/ajustes.py:152 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:53
 msgid "Eventos"
 msgstr "Événements"
 
-#: ui/ajustes.py:151
+#: ui/ajustes.py:154
 msgid "procesados: "
 msgstr "traités :"
 
-#: ui/ajustes.py:154 ui/ajustes.py:160
+#: ui/ajustes.py:157 ui/ajustes.py:163
 msgid "Evento"
 msgstr "Événement"
 
-#: ui/ajustes.py:157
+#: ui/ajustes.py:160
 msgid "leídos"
 msgstr "lus"
 
-#: ui/ajustes.py:169 update/update.py:132
+#: ui/ajustes.py:172 update/update.py:132
 msgid "&Aceptar"
 msgstr "&Accepter"
 
-#: ui/ajustes.py:171 update/update.py:132
+#: ui/ajustes.py:174 update/update.py:132
 msgid "&Cancelar"
 msgstr "&Annuler"
 
-#: ui/chat_dialog.py:104
+#: ui/chat_dialog.py:107
 msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
 msgstr "Voulez-vous quitter cette fenêtre et arrêter la lecture des messages ?"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-15 02:12-0800\n"
+"POT-Creation-Date: 2025-12-29 20:21-0800\n"
 "PO-Revision-Date: 2025-08-26 21:14+0700\n"
 "Last-Translator: \n"
 "Language: id\n"
@@ -61,11 +61,11 @@ msgstr ""
 msgid "Listo"
 msgstr "Selesai"
 
-#: controller/ajustes_controller.py:90
+#: controller/ajustes_controller.py:94
 msgid "Hablaré a través  de este dispositivo."
 msgstr "Saya akan berbicara melalui perangkat ini."
 
-#: controller/ajustes_controller.py:94 controller/ajustes_controller.py:96
+#: controller/ajustes_controller.py:98 controller/ajustes_controller.py:100
 msgid ""
 "Hola, soy la voz que te acompañará de ahora en adelante a leer los "
 "mensajes de tus canales favoritos."
@@ -259,7 +259,7 @@ msgstr "Apakah Anda yakin ingin menghapus semua favorit dari daftar?"
 
 #: controller/main_controller.py:70
 #: controller/menus/main_menu_controller.py:106
-#: controller/update_languages_controller.py:93 ui/chat_dialog.py:104
+#: controller/update_languages_controller.py:93 ui/chat_dialog.py:107
 msgid "¡Atención!"
 msgstr "Perhatian!"
 
@@ -336,6 +336,14 @@ msgstr "Peringatan"
 #: controller/update_languages_controller.py:64
 msgid "Iniciando descarga de idiomas..."
 msgstr "Memulai pengunduhan bahasa..."
+
+#: controller/update_languages_controller.py:74
+msgid "data"
+msgstr ""
+
+#: controller/update_languages_controller.py:76
+msgid "dataerror_msg"
+msgstr ""
 
 #: controller/update_languages_controller.py:86
 #: ui/update_languages_dialog.py:72
@@ -433,9 +441,9 @@ msgid ""
 " tus canales favoritos."
 msgstr ""
 "Deskripsi:\n"
-"Membaca pesan langsung dari YouTube, TikTok, QuentinC's  playroom, Twitch, ckick"
-" dengan suara, sesuaikan preferensi Anda, dan nikmati saluran favorit "
-"Anda."
+"Membaca pesan langsung dari YouTube, TikTok, QuentinC's  playroom, "
+"Twitch, ckick dengan suara, sesuaikan preferensi Anda, dan nikmati "
+"saluran favorit Anda."
 
 #: controller/menus/main_menu_controller.py:59
 msgid ""
@@ -700,27 +708,27 @@ msgstr "Secara default"
 msgid "No hay voces instaladas"
 msgstr "Tidak ada suara yang terinstal"
 
-#: servicios/kick.py:46
+#: servicios/kick.py:38
 msgid "error_bypass_no_encontrado"
 msgstr ""
 
-#: servicios/kick.py:81
+#: servicios/kick.py:68
 msgid "Cargando..."
 msgstr "Menghubungkan..."
 
-#: servicios/kick.py:84
+#: servicios/kick.py:71
 msgid "error_iniciar_bypass"
 msgstr ""
 
-#: servicios/kick.py:109 servicios/tiktok.py:124
+#: servicios/kick.py:94 servicios/tiktok.py:124
 msgid "Ingresando al chat"
 msgstr "Memasuki obrolan"
 
-#: servicios/kick.py:130
+#: servicios/kick.py:111
 msgid "error_conectar_kick_chatroom"
 msgstr ""
 
-#: servicios/kick.py:142 servicios/kick.py:146 servicios/tiktok.py:161
+#: servicios/kick.py:160 servicios/kick.py:162 servicios/tiktok.py:161
 #: servicios/tiktok.py:165
 msgid " comenzó a seguirte!"
 msgstr " mulai mengikuti Anda!"
@@ -913,138 +921,142 @@ msgid "intentar traducir las novedades cuando salga una actualización."
 msgstr "menterjemahkan What's new ketika ada update."
 
 #: ui/ajustes.py:35
+msgid "Desactivar la interfaz invisible"
+msgstr ""
+
+#: ui/ajustes.py:38
 msgid "traducción de mensajes: "
 msgstr "terjemahan pesan: "
 
-#: ui/ajustes.py:40
+#: ui/ajustes.py:43
 msgid "convertir las donaciones a la divisa: "
 msgstr "konversi donasi ke mata uang: "
 
-#: ui/ajustes.py:50
+#: ui/ajustes.py:53
 msgid "Voz"
 msgstr "Suara"
 
-#: ui/ajustes.py:52
+#: ui/ajustes.py:55
 msgid "Opciones del habla"
 msgstr "Opsi Ucapan"
 
-#: ui/ajustes.py:54
+#: ui/ajustes.py:57
 msgid "Usar voz sapi en lugar de lector de pantalla."
 msgstr "Gunakan suara SAPI , bukan suara pembaca layar."
 
-#: ui/ajustes.py:57
+#: ui/ajustes.py:60
 msgid "Sistema TTS a usar: "
 msgstr "Sistem TTS yang akan digunakan: "
 
-#: ui/ajustes.py:62
+#: ui/ajustes.py:65
 msgid "Activar lectura de mensajes automática"
 msgstr "Aktifkan pembacaan pesan otomatis"
 
-#: ui/ajustes.py:65
+#: ui/ajustes.py:68
 msgid "Voz: "
 msgstr "Suara: "
 
-#: ui/ajustes.py:70
+#: ui/ajustes.py:73
 msgid "Instalar un paquete de voz..."
 msgstr "Instal paket suara..."
 
-#: ui/ajustes.py:72
+#: ui/ajustes.py:75
 msgid "Tono: "
 msgstr "Nada ucapan: "
 
-#: ui/ajustes.py:76
+#: ui/ajustes.py:79
 msgid "Volumen: "
 msgstr "Volume ucapan: "
 
-#: ui/ajustes.py:80
+#: ui/ajustes.py:83
 msgid "Velocidad: "
 msgstr "Kecepatan ucapan: "
 
-#: ui/ajustes.py:84
+#: ui/ajustes.py:87
 msgid "&Reproducir prueba."
 msgstr "&Putar uji coba."
 
-#: ui/ajustes.py:91
+#: ui/ajustes.py:94
 msgid "reproducción"
 msgstr "Putar"
 
-#: ui/ajustes.py:93
+#: ui/ajustes.py:96
 msgid "ajustes de reproducción"
 msgstr "pengaturan pemutaran"
 
-#: ui/ajustes.py:95
+#: ui/ajustes.py:98
 msgid "activar reproducción automática al iniciar un en vivo."
 msgstr "aktifkan pemutaran otomatis saat memulai siaran langsung."
 
-#: ui/ajustes.py:98
+#: ui/ajustes.py:101
 msgid "tiempo para adelantar y atrazar el en vivo en segundos"
 msgstr "waktu untuk memajukan dan memundurkan siaran langsung dalam detik"
 
-#: ui/ajustes.py:102
+#: ui/ajustes.py:105
 msgid "volumen del reproductor"
 msgstr "volume pemutar"
 
-#: ui/ajustes.py:106
+#: ui/ajustes.py:109
 msgid "cambio de volumen con las teclas de volumen (1-25)"
 msgstr "perubahan volume dengan tombol volume (1-25)"
 
-#: ui/ajustes.py:115
+#: ui/ajustes.py:118
 msgid "Categorías"
 msgstr "Kategori"
 
-#: ui/ajustes.py:118
+#: ui/ajustes.py:121
 msgid "Categoría"
 msgstr "Kategori"
 
-#: ui/ajustes.py:125
+#: ui/ajustes.py:128
 msgid "Sonidos"
 msgstr "Suara"
 
-#: ui/ajustes.py:127
+#: ui/ajustes.py:130
 msgid "Activar sonidos"
 msgstr "Aktifkan suara"
 
-#: ui/ajustes.py:131
+#: ui/ajustes.py:134
 msgid "Sonido"
 msgstr "Suara"
 
-#: ui/ajustes.py:135
+#: ui/ajustes.py:138
 msgid "&Reproducir"
 msgstr "&Putar"
 
-#: ui/ajustes.py:138
+#: ui/ajustes.py:141
 msgid "Seleccionar dispositivo de audio"
 msgstr "Pilih perangkat audio"
 
-#: ui/ajustes.py:143
+#: ui/ajustes.py:146
 msgid "&Establecer"
 msgstr "&Tetapkan"
 
-#: ui/ajustes.py:149 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:53
+#: ui/ajustes.py:152 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:53
 msgid "Eventos"
 msgstr "Event"
 
-#: ui/ajustes.py:151
+#: ui/ajustes.py:154
 msgid "procesados: "
 msgstr "diproses: "
 
-#: ui/ajustes.py:154 ui/ajustes.py:160
+#: ui/ajustes.py:157 ui/ajustes.py:163
 msgid "Evento"
 msgstr "Event"
 
-#: ui/ajustes.py:157
+#: ui/ajustes.py:160
 msgid "leídos"
 msgstr "dibaca"
 
-#: ui/ajustes.py:169 update/update.py:132
+#: ui/ajustes.py:172 update/update.py:132
 msgid "&Aceptar"
 msgstr "&Oke"
 
-#: ui/ajustes.py:171 update/update.py:132
+#: ui/ajustes.py:174 update/update.py:132
 msgid "&Cancelar"
 msgstr "&Batal"
 
-#: ui/chat_dialog.py:104
+#: ui/chat_dialog.py:107
 msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
 msgstr ""
 "Apakah Anda ingin keluar dari aplikasi ini dan menghentikan pembacaan "

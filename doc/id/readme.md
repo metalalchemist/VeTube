@@ -108,5 +108,5 @@ Dengan dukunganmu, program ini akan terus berkembang.
 
 [Bergabunglah dengan kami](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
-[Unduh program untuk 64-bit](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x64.zip)  
-[Unduh program untuk 32-bit](https://github.com/metalalchemist/VeTube/releases/download/v3.4/VeTube-x86.zip)
+[Unduh program untuk 64-bit](https://github.com/metalalchemist/VeTube/releases/download/v3.5/VeTube-x64.zip)  
+[Unduh program untuk 32-bit](https://github.com/metalalchemist/VeTube/releases/download/v3.5/VeTube-x86.zip)

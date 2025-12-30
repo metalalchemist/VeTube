@@ -1,3 +1,6 @@
+v3.5
+nuevos métodos para agregar mensajes en sus diferentes categorías para kick. moderadores, usuarios berificados y miembros o suscriptores.
+posibilidad de desabilitar la interfaz invisible del programa.
 v3.4
 se ha agregado en modo beta la captura del chat de la plataforma de kick
 corregidos errores con el editor de combinaciones de teclado.

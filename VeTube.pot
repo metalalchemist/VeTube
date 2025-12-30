@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-12 00:42-0800\n"
+"POT-Creation-Date: 2025-12-29 20:21-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,11 +53,11 @@ msgstr ""
 msgid "Listo"
 msgstr ""
 
-#: controller/ajustes_controller.py:90
+#: controller/ajustes_controller.py:94
 msgid "Hablaré a través  de este dispositivo."
 msgstr ""
 
-#: controller/ajustes_controller.py:94 controller/ajustes_controller.py:96
+#: controller/ajustes_controller.py:98 controller/ajustes_controller.py:100
 msgid ""
 "Hola, soy la voz que te acompañará de ahora en adelante a leer los "
 "mensajes de tus canales favoritos."
@@ -96,9 +96,9 @@ msgstr ""
 msgid "Mensaje agregado a favoritos"
 msgstr ""
 
-#: controller/chat_controller.py:301 controller/main_controller.py:33
-#: controller/main_controller.py:105 controller/main_controller.py:118
-#: controller/main_controller.py:125
+#: controller/chat_controller.py:301 controller/main_controller.py:35
+#: controller/main_controller.py:107 controller/main_controller.py:120
+#: controller/main_controller.py:127
 #: controller/menus/chat_item_controller.py:52
 msgid "Tus mensajes archivados aparecerán aquí"
 msgstr ""
@@ -144,7 +144,7 @@ msgid ""
 msgstr ""
 
 #: controller/editor_controller.py:43
-#: controller/menus/main_menu_controller.py:58 update/update.py:131
+#: controller/menus/main_menu_controller.py:59 update/update.py:131
 msgid "Atención:"
 msgstr ""
 
@@ -221,95 +221,95 @@ msgstr ""
 msgid "Error al guardar el archivo: {}"
 msgstr ""
 
-#: controller/estadisticas_controller.py:46 controller/main_controller.py:64
+#: controller/estadisticas_controller.py:46 controller/main_controller.py:66
 #: controller/update_languages_controller.py:82
 #: servicios/language_updater.py:13
 msgid "Error"
 msgstr ""
 
-#: controller/main_controller.py:28
+#: controller/main_controller.py:30
 #, python-format
 msgid "Favoritos(%s)"
 msgstr ""
 
-#: controller/main_controller.py:30 controller/main_controller.py:63
-#: controller/main_controller.py:80 controller/menus/chat_menu_controller.py:53
+#: controller/main_controller.py:32 controller/main_controller.py:65
+#: controller/main_controller.py:82 controller/menus/chat_menu_controller.py:56
 msgid "Tus favoritos aparecerán aquí"
 msgstr ""
 
-#: controller/main_controller.py:64
+#: controller/main_controller.py:66
 msgid "No hay favoritos que borrar"
 msgstr ""
 
-#: controller/main_controller.py:68
+#: controller/main_controller.py:70
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr ""
 
-#: controller/main_controller.py:68
-#: controller/menus/main_menu_controller.py:109
-#: controller/update_languages_controller.py:93 ui/chat_dialog.py:98
+#: controller/main_controller.py:70
+#: controller/menus/main_menu_controller.py:106
+#: controller/update_languages_controller.py:93 ui/chat_dialog.py:107
 msgid "¡Atención!"
 msgstr ""
 
-#: controller/main_controller.py:84
+#: controller/main_controller.py:86
 msgid "&Borrar mensajes"
 msgstr ""
 
-#: controller/main_controller.py:85
+#: controller/main_controller.py:87
 msgid "Borrar todos los mensajes destacados"
 msgstr ""
 
-#: controller/main_controller.py:88 ui/main_window.py:67
+#: controller/main_controller.py:90 ui/main_window.py:67
 msgid "&Borrar mensaje"
 msgstr ""
 
-#: controller/main_controller.py:89
+#: controller/main_controller.py:91
 msgid "Borrar el mensaje destacado seleccionado"
 msgstr ""
 
-#: controller/main_controller.py:94
+#: controller/main_controller.py:96
 msgid "&Borrar favoritos"
 msgstr ""
 
-#: controller/main_controller.py:95
+#: controller/main_controller.py:97
 msgid "Borrar todos los favoritos"
 msgstr ""
 
-#: controller/main_controller.py:98 ui/main_window.py:55
+#: controller/main_controller.py:100 ui/main_window.py:55
 msgid "&Borrar favorito"
 msgstr ""
 
-#: controller/main_controller.py:99
+#: controller/main_controller.py:101
 msgid "Borrar el favorito seleccionado"
 msgstr ""
 
-#: controller/main_controller.py:113
+#: controller/main_controller.py:115
 msgid "No hay más elementos que borrar"
 msgstr ""
 
-#: controller/main_controller.py:115 controller/main_controller.py:128
+#: controller/main_controller.py:117 controller/main_controller.py:130
 msgid "No hay mensajes que borrar"
 msgstr ""
 
-#: controller/main_controller.py:121
+#: controller/main_controller.py:123
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr ""
 
-#: controller/main_controller.py:137
+#: controller/main_controller.py:139
 msgid "Lectura de chats en vivo"
 msgstr ""
 
-#: controller/main_controller.py:204
+#: controller/main_controller.py:222
 msgid "Conectando..."
 msgstr ""
 
-#: controller/main_controller.py:255
-#: controller/menus/main_menu_controller.py:63
+#: controller/main_controller.py:281
+#: controller/menus/main_menu_controller.py:64
 msgid "¿está seguro que desea salir del programa?"
 msgstr ""
 
-#: controller/main_controller.py:255
-#: controller/menus/main_menu_controller.py:63
+#: controller/main_controller.py:281
+#: controller/menus/main_menu_controller.py:64
 msgid "¡atención!"
 msgstr ""
 
@@ -367,57 +367,57 @@ msgid "No hay una URL para agregar a favoritos."
 msgstr ""
 
 #: controller/menus/chat_menu_controller.py:42
-#: controller/menus/chat_menu_controller.py:50
-#: controller/menus/chat_menu_controller.py:58
+#: controller/menus/chat_menu_controller.py:53
+#: controller/menus/chat_menu_controller.py:61
 msgid "Aviso"
 msgstr ""
 
-#: controller/menus/chat_menu_controller.py:50
+#: controller/menus/chat_menu_controller.py:53
 msgid "Ya se encuentra en favoritos"
 msgstr ""
 
-#: controller/menus/chat_menu_controller.py:58
+#: controller/menus/chat_menu_controller.py:61
 msgid "Se ha agregado a favoritos"
 msgstr ""
 
-#: controller/menus/chat_menu_controller.py:64
+#: controller/menus/chat_menu_controller.py:69
 msgid "Enlace copiado al portapapeles"
 msgstr ""
 
-#: controller/menus/chat_menu_controller.py:64
+#: controller/menus/chat_menu_controller.py:69
 msgid "El enlace del chat ha sido copiado al portapapeles."
 msgstr ""
 
-#: controller/menus/chat_menu_controller.py:66
+#: controller/menus/chat_menu_controller.py:71
 msgid "No se pudo copiar el enlace"
 msgstr ""
 
-#: controller/menus/chat_menu_controller.py:66
+#: controller/menus/chat_menu_controller.py:71
 msgid "No se encontró un enlace válido para copiar."
 msgstr ""
 
-#: controller/menus/chat_menu_controller.py:71
+#: controller/menus/chat_menu_controller.py:79
 msgid "No se pudo abrir el enlace"
 msgstr ""
 
-#: controller/menus/chat_menu_controller.py:71
+#: controller/menus/chat_menu_controller.py:79
 msgid "No se encontró un enlace válido para abrir."
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:39
+#: controller/menus/main_menu_controller.py:40
 msgid "Al parecer tienes la última versión del programa"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:39
-#: controller/menus/main_menu_controller.py:45
+#: controller/menus/main_menu_controller.py:40
+#: controller/menus/main_menu_controller.py:46
 msgid "Información"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:43
+#: controller/menus/main_menu_controller.py:44
 msgid "Creadores del proyecto:"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:44
+#: controller/menus/main_menu_controller.py:45
 msgid ""
 "Descripción:\n"
 " Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch "
@@ -425,27 +425,27 @@ msgid ""
 " tus canales favoritos."
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:58
+#: controller/menus/main_menu_controller.py:59
 msgid ""
 "Estás apunto de reiniciar la configuración a sus valores predeterminados,"
 " ¿Deseas proceder?"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:81
-#: controller/menus/main_menu_controller.py:92
+#: controller/menus/main_menu_controller.py:78
+#: controller/menus/main_menu_controller.py:89
 msgid "Actualización de idiomas"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:92
+#: controller/menus/main_menu_controller.py:89
 #: servicios/language_updater.py:106
 msgid "No hay actualizaciones ni nuevos idiomas disponibles."
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:94
+#: controller/menus/main_menu_controller.py:91
 msgid "Error de actualización"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:109
+#: controller/menus/main_menu_controller.py:106
 msgid ""
 "Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea "
 "reiniciarlo ahora?"
@@ -680,6 +680,31 @@ msgstr ""
 msgid "No hay voces instaladas"
 msgstr ""
 
+#: servicios/kick.py:38
+msgid "error_bypass_no_encontrado"
+msgstr ""
+
+#: servicios/kick.py:68
+msgid "Cargando..."
+msgstr ""
+
+#: servicios/kick.py:71
+msgid "error_iniciar_bypass"
+msgstr ""
+
+#: servicios/kick.py:94 servicios/tiktok.py:124
+msgid "Ingresando al chat"
+msgstr ""
+
+#: servicios/kick.py:111
+msgid "error_conectar_kick_chatroom"
+msgstr ""
+
+#: servicios/kick.py:160 servicios/kick.py:162 servicios/tiktok.py:161
+#: servicios/tiktok.py:165
+msgid " comenzó a seguirte!"
+msgstr ""
+
 #: servicios/language_updater.py:40
 #, python-brace-format
 msgid "Error al cargar idiomas locales: {}"
@@ -738,20 +763,12 @@ msgstr ""
 msgid "Se ha perdido la conexión. El servicio se ha detenido."
 msgstr ""
 
-#: servicios/tiktok.py:124
-msgid "Ingresando al chat"
-msgstr ""
-
 #: servicios/tiktok.py:144 servicios/tiktok.py:148
 msgid " envió un emogi."
 msgstr ""
 
 #: servicios/tiktok.py:152 servicios/tiktok.py:156
 msgid " ha enviado un cofre!"
-msgstr ""
-
-#: servicios/tiktok.py:161 servicios/tiktok.py:165
-msgid " comenzó a seguirte!"
 msgstr ""
 
 #: servicios/tiktok.py:176 servicios/tiktok.py:184
@@ -864,138 +881,142 @@ msgid "intentar traducir las novedades cuando salga una actualización."
 msgstr ""
 
 #: ui/ajustes.py:35
+msgid "Desactivar la interfaz invisible"
+msgstr ""
+
+#: ui/ajustes.py:38
 msgid "traducción de mensajes: "
 msgstr ""
 
-#: ui/ajustes.py:40
+#: ui/ajustes.py:43
 msgid "convertir las donaciones a la divisa: "
 msgstr ""
 
-#: ui/ajustes.py:50
+#: ui/ajustes.py:53
 msgid "Voz"
 msgstr ""
 
-#: ui/ajustes.py:52
+#: ui/ajustes.py:55
 msgid "Opciones del habla"
 msgstr ""
 
-#: ui/ajustes.py:54
+#: ui/ajustes.py:57
 msgid "Usar voz sapi en lugar de lector de pantalla."
 msgstr ""
 
-#: ui/ajustes.py:57
+#: ui/ajustes.py:60
 msgid "Sistema TTS a usar: "
 msgstr ""
 
-#: ui/ajustes.py:62
+#: ui/ajustes.py:65
 msgid "Activar lectura de mensajes automática"
 msgstr ""
 
-#: ui/ajustes.py:65
+#: ui/ajustes.py:68
 msgid "Voz: "
 msgstr ""
 
-#: ui/ajustes.py:70
+#: ui/ajustes.py:73
 msgid "Instalar un paquete de voz..."
 msgstr ""
 
-#: ui/ajustes.py:72
+#: ui/ajustes.py:75
 msgid "Tono: "
 msgstr ""
 
-#: ui/ajustes.py:76
+#: ui/ajustes.py:79
 msgid "Volumen: "
 msgstr ""
 
-#: ui/ajustes.py:80
+#: ui/ajustes.py:83
 msgid "Velocidad: "
 msgstr ""
 
-#: ui/ajustes.py:84
+#: ui/ajustes.py:87
 msgid "&Reproducir prueba."
 msgstr ""
 
-#: ui/ajustes.py:91
+#: ui/ajustes.py:94
 msgid "reproducción"
 msgstr ""
 
-#: ui/ajustes.py:93
+#: ui/ajustes.py:96
 msgid "ajustes de reproducción"
 msgstr ""
 
-#: ui/ajustes.py:95
+#: ui/ajustes.py:98
 msgid "activar reproducción automática al iniciar un en vivo."
 msgstr ""
 
-#: ui/ajustes.py:98
+#: ui/ajustes.py:101
 msgid "tiempo para adelantar y atrazar el en vivo en segundos"
 msgstr ""
 
-#: ui/ajustes.py:102
+#: ui/ajustes.py:105
 msgid "volumen del reproductor"
 msgstr ""
 
-#: ui/ajustes.py:106
+#: ui/ajustes.py:109
 msgid "cambio de volumen con las teclas de volumen (1-25)"
 msgstr ""
 
-#: ui/ajustes.py:115
+#: ui/ajustes.py:118
 msgid "Categorías"
 msgstr ""
 
-#: ui/ajustes.py:118
+#: ui/ajustes.py:121
 msgid "Categoría"
 msgstr ""
 
-#: ui/ajustes.py:125
+#: ui/ajustes.py:128
 msgid "Sonidos"
 msgstr ""
 
-#: ui/ajustes.py:127
+#: ui/ajustes.py:130
 msgid "Activar sonidos"
 msgstr ""
 
-#: ui/ajustes.py:131
+#: ui/ajustes.py:134
 msgid "Sonido"
 msgstr ""
 
-#: ui/ajustes.py:135
+#: ui/ajustes.py:138
 msgid "&Reproducir"
 msgstr ""
 
-#: ui/ajustes.py:138
+#: ui/ajustes.py:141
 msgid "Seleccionar dispositivo de audio"
 msgstr ""
 
-#: ui/ajustes.py:143
+#: ui/ajustes.py:146
 msgid "&Establecer"
 msgstr ""
 
-#: ui/ajustes.py:149 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:53
+#: ui/ajustes.py:152 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:53
 msgid "Eventos"
 msgstr ""
 
-#: ui/ajustes.py:151
+#: ui/ajustes.py:154
 msgid "procesados: "
 msgstr ""
 
-#: ui/ajustes.py:154 ui/ajustes.py:160
+#: ui/ajustes.py:157 ui/ajustes.py:163
 msgid "Evento"
 msgstr ""
 
-#: ui/ajustes.py:157
+#: ui/ajustes.py:160
 msgid "leídos"
 msgstr ""
 
-#: ui/ajustes.py:169 update/update.py:132
+#: ui/ajustes.py:172 update/update.py:132
 msgid "&Aceptar"
 msgstr ""
 
-#: ui/ajustes.py:171 update/update.py:132
+#: ui/ajustes.py:174 update/update.py:132
 msgid "&Cancelar"
 msgstr ""
 
-#: ui/chat_dialog.py:98
+#: ui/chat_dialog.py:107
 msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
 msgstr ""
 
@@ -1097,6 +1118,10 @@ msgstr ""
 
 #: ui/main_window.py:30
 msgid "La sala de juegos"
+msgstr ""
+
+#: ui/main_window.py:30
+msgid "Kick"
 msgstr ""
 
 #: ui/main_window.py:35
