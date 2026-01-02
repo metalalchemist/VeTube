@@ -108,7 +108,7 @@ def execute_bootstrap(bootstrap_path, source_path):
     if is_frozen:
         dest_path = os.path.dirname(sys.executable)
     else:
-        dest_path = os.path.abspath(os.path.join(paths.app_path(), ".."))
+        dest_path = os.path.abspath(os.path.join(paths.app_path(),))
     print(f"DEBUG: Ruta de extracción final: {dest_path}")
     arguments = r'"%s" "%s" "%s" "%s"' % (os.getpid(), source_path, dest_path, paths.get_executable())
     if platform.system() == 'Windows':

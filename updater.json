@@ -1,5 +1,5 @@
 {
-    "current_version": "3.6",
+    "current_version": "3.5",
     "description": "nuevos métodos para identificar los chats en sus diferentes categorías y la posibilidad de deshabilitar la interfaz invisible",
     "downloads": {
         "Windows32": "https://github.com/metalalchemist/VeTube/releases/download/v3.6/VeTube-x86.zip",
