@@ -104,11 +104,8 @@ def move_bootstrap(extracted_path):
 
 def execute_bootstrap(bootstrap_path, source_path):
     is_frozen = getattr(sys, 'frozen', False)
-        if is_frozen:
-            dest_path = os.path.dirname(sys.executable)
-        else:
-            dest_path = os.path.abspath(os.path.join(paths.app_path()))
-
+    if is_frozen: dest_path = os.path.dirname(sys.executable)
+    else: dest_path = os.path.abspath(os.path.join(paths.app_path()))
     arguments = r'"%s" "%s" "%s" "%s"' % (os.getpid(), source_path, dest_path, paths.get_executable())
     if platform.system() == 'Windows':
         import win32api
