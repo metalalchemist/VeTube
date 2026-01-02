@@ -104,27 +104,10 @@ def move_bootstrap(extracted_path):
 
 def execute_bootstrap(bootstrap_path, source_path):
     is_frozen = getattr(sys, 'frozen', False)
-    
-    try:
-        with open('update_debug.log', 'a', encoding='utf-8') as log_file:
-            log_file.write(f"\n--- Update Debug Start ---\n")
-            log_file.write(f"Frozen state: {is_frozen}\n")
-            log_file.write(f"Sys Executable: {sys.executable}\n")
-            
-            if is_frozen:
-                dest_path = os.path.dirname(sys.executable)
-            else:
-                dest_path = os.path.abspath(os.path.join(paths.app_path(), ".."))
-            
-            log_file.write(f"Calculated Destination Path: {dest_path}\n")
-            log_file.write(f"--- Update Debug End ---\n")
-    except Exception as e:
-        logger.error(f"Failed to write to debug log: {e}")
-        # Fallback to defaults if logging fails, though logic above should be safe
         if is_frozen:
             dest_path = os.path.dirname(sys.executable)
         else:
-            dest_path = os.path.abspath(os.path.join(paths.app_path(), ".."))
+            dest_path = os.path.abspath(os.path.join(paths.app_path()))
 
     arguments = r'"%s" "%s" "%s" "%s"' % (os.getpid(), source_path, dest_path, paths.get_executable())
     if platform.system() == 'Windows':
