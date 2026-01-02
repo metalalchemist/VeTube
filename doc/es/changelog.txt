@@ -1,3 +1,5 @@
+v3.6
+corregido un error con el actualizador
 v3.5
 nuevos métodos para agregar mensajes en sus diferentes categorías para kick. moderadores, usuarios berificados y miembros o suscriptores.
 posibilidad de desabilitar la interfaz invisible del programa.

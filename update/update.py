@@ -102,7 +102,8 @@ def move_bootstrap(extracted_path):
     return new_bootstrap_path
 
 def execute_bootstrap(bootstrap_path, source_path):
-    arguments = r'"%s" "%s" "%s" "%s"' % (os.getpid(), source_path, paths.app_path(), paths.get_executable())
+    dest_path = os.path.abspath(os.path.join(paths.app_path(), ".."))
+    arguments = r'"%s" "%s" "%s" "%s"' % (os.getpid(), source_path, dest_path, paths.get_executable())
     if platform.system() == 'Windows':
         import win32api
         win32api.ShellExecute(0, 'open', bootstrap_path, arguments, '', 5)
