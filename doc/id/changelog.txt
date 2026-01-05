@@ -1,3 +1,22 @@
+v3.6
+Memperbaiki kesalahan pada pembaruan
+v3.5
+Metode baru untuk menambahkan pesan dalam kategori mereka yang berbeda untuk Kick. moderator, pengguna terverifikasi, dan anggota atau pelanggan.
+Sekarang dimungkinkan untuk menonaktifkan antarmuka program yang tidak terlihat.
+v3.4
+tangkapan obrolan platform kick telah ditambahkan dalam mode beta
+Memperbaiki bug pada editor pintasan keyboard.
+v3.3
+Sekarang dapat monitor beberapa siaran langsung.
+Pemutar ini adalah pemutar global. Setiap kali kita berpindah ke siaran langsung sebelumnya atau siaran langsung berikutnya, kita menghentikan pemutar dan mengaktifkannya kembali, pemutar tersebut akan memutar URL dari siaran langsung tempat kita diposisikan.
+Tab konfigurasi pemutar telah dibuat di pengaturan.
+Statistik tercermin untuk setiap siaran langsung secara individual
+v3.2
+Pemutar baru telah dibuat yang dapat memutar siaran langsung yang lalu maupun siaran langsung waktu nyata. Untuk informasi lebih lanjut, lihat readme.
+Layanan baru telah dibuat yang memungkinkan kita menikmati siaran langsung YouTube kita secara waktu nyata dengan pemutaran audio.
+Nama pengguna Tiktok dapat diekstraksi dengan url yang berisi vm.tiktok.
+v3.1
+Bug yang tidak memulai obrolan TikTok telah diperbaiki.
 v3.0
 Sekarang kita dapat menentukan perangkat audio untuk suara dan pesan bacaan. Perlu dicatat, perubahan hanya berlaku pada mesin PiperTTS.
 Kita bisa mengambil chat platform hanya dengan nama pengguna. Contoh, ketik 4everzyanya, tekan tab, pilih TikTok, lalu enter akan membawa kita langsung ke siaran langsung TikTok pengguna.
