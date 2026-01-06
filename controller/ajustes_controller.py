@@ -124,9 +124,11 @@ class AjustesController:
             reader._lector.set_rate(app_utilitys.porcentaje_a_escala(value))
         config['speed'] = value
     def instalar_voz_piper(self, event):
+        global config
         reader.set_tts("sapi5")
         reader.set_tts("piper")
         config, reader._lector = install_piper_voice(config, reader._lector)
+        print(config,'hola')
         lista_voces_piper = piper_list_voices()
         if lista_voces_piper:
             self.dialog.choice_2.Clear()
