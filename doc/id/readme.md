@@ -1,6 +1,7 @@
 # VeTube
 
 Kelola dan baca chat dari siaran langsung milikmu atau dari kreator favoritmu dengan mudah.
+[Demonstrasi fungsi program ini](https://youtu.be/4XawJoBymPs)
 
 ## Platform yang Didukung:
 
@@ -12,9 +13,9 @@ Kelola dan baca chat dari siaran langsung milikmu atau dari kreator favoritmu de
 
 ## Fitur
 
-- Mode otomatis: Membaca pesan chat secara real-time menggunakan suara sapi5.
-- Antarmuka tidak terlihat: Kelola chat dari jendela mana pun menggunakan pintasan keyboard sederhana. Diperlukan screen reader yang aktif.
-- Screen reader yang didukung:
+- Mode otomatis: Membaca pesan chat secara real-time menggunakan suara sapi5, atau melalui pembaca layar yang digunakan.
+- Antarmuka tidak terlihat: Kelola chat dari jendela mana pun menggunakan pintasan keyboard sederhana. Diperlukan pembaca layar yang aktif.
+- Pembaca layar yang didukung:
   - NVDA
   - JAWS
   - Window-Eyes
@@ -28,8 +29,10 @@ Kelola dan baca chat dari siaran langsung milikmu atau dari kreator favoritmu de
   - Konfigurasikan daftar pesan dalam antarmuka tak terlihat.
   - Atur preferensi suara sapi.
   - Personalisasi pintasan keyboard global.
+- simpan beberapa obrolan yang dimonitor.
 - Mudah mengubah mode pembacaan chat: baca semua chat atau hanya kategori tertentu.
 - Simpan siaran langsung favoritmu. Putar ulang chat sebanyak yang diinginkan tanpa perlu mencari ulang tautan.
+- simpan pesan Anda di bagian favorit. Ulangi chat tersebut sebanyak yang Anda mau tanpa harus mencari link lagi.
 - Arsipkan pesan untuk pengingat penting.
 - Terjemahkan chat dalam siaran langsung ke dalam bahasa yang diinginkan.
 
@@ -84,6 +87,39 @@ Pembaruan yang akan datang mencakup:
 - Menampilkan informasi pengguna yang sedang chatting dari antarmuka tidak terlihat:
   - Nama channel pengguna
   - Dan fitur tambahan lainnya
+
+## Berkolaborasi dalam terjemahan
+Jika Anda ingin berkontribusi menerjemahkan VeTube ke bahasa Anda, Anda perlu menginstal alat internasionalisasi.
+1.  **Instal Babel:**
+    ```bash
+    pip install Babel
+    ```
+    *Catatan: Pastikan Anda menginstal paket `Babel` (huruf besar B direkomendasikan di PyPI, meskipun pip tidak peka huruf besar-kecil), hindari paket berukuran kecil yang salah.*
+
+2.  **Ekstrak teks untuk memperbarui template (.pot):**
+    Jika string baru telah ditambahkan ke kode, perbarui file template dengan perintah ini:
+    ```bash
+    pybabel extract -F babel.cfg -o VeTube.pot .
+    ```
+
+3.  **Mulai terjemahan baru:**
+    Apabila Anda ingin menerjemahkan ke bahasa baru (contoh `it` untuk bahasa Italia), bisa gunakan perintah ini, perhatikan ada huruf local it nya:
+    ```bash
+    pybabel init -i vetube.pot -d locales -l it -D vetube
+    ```
+
+4.  **Memperbaharui terjemahan yang ada:**
+    Jika bahasa sudah ada dan Anda telah mengextrak `.pot`, sinkronkan file `.po`:
+    ```bash
+    pybabel update -i VeTube.pot -d locales -D VeTube
+    ```
+
+5.  **Kompilasi terjemahan:**
+    Agar program mengenali perubahan tersebut, kompilasi file `.po` menjadi `.mo`:
+    ```bash
+    pybabel compile -d locales -D VeTube
+    ```
+
 
 ## Ucapan Terima Kasih:
 
