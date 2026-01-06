@@ -5,18 +5,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  \n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-12-29 20:21-0800\n"
-"PO-Revision-Date: 2025-08-26 21:14+0700\n"
+"POT-Creation-Date: 2026-01-05 09:53+0700\n"
+"PO-Revision-Date: 2026-01-05 10:01+0700\n"
 "Last-Translator: \n"
-"Language: id\n"
 "Language-Team: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 2.17.0\n"
+"X-Generator: Poedit 3.8\n"
 
 #: run_main_window.py:24
 msgid ""
@@ -40,9 +41,9 @@ msgid ""
 "quieres hacerlo de forma manual, extrae el paquete de voz en la carpeta "
 "\"piper/voices/voice-nombre_de_paquete\" en VeTube."
 msgstr ""
-"Untuk menggunakan Piper sebagai sistem TTS, Anda memerlukan setidaknya "
-"satu suara. Jika Anda ingin melakukannya secara manual, ekstrak paket "
-"suara ke folder \"piper/voices/voice-nama_paket\" di VeTube."
+"Untuk menggunakan Piper sebagai sistem TTS, Anda memerlukan setidaknya satu "
+"suara. Jika Anda ingin melakukannya secara manual, ekstrak paket suara ke "
+"folder \"piper/voices/voice-nama_paket\" di VeTube."
 
 #: TTS/list_voices.py:15
 msgid "No se instaló ninguna voz"
@@ -50,12 +51,11 @@ msgstr "Tidak ada suara yang terinstal"
 
 #: TTS/list_voices.py:21
 msgid ""
-"¡Voz instalada satosfactoriamente! esta será establecida en VeTube ahora."
-" Para cambiar de modelo de voz, puedes hacerlo a través de las "
-"configuraciones."
+"¡Voz instalada satosfactoriamente! esta será establecida en VeTube ahora. "
+"Para cambiar de modelo de voz, puedes hacerlo a través de las configuraciones."
 msgstr ""
-"Suara berhasil diinstal! Ini akan diatur di VeTube sekarang. Untuk "
-"mengubah model suara, Anda dapat melakukannya melalui pengaturan."
+"Suara berhasil diinstal! Ini akan diatur di VeTube sekarang. Untuk mengubah "
+"model suara, Anda dapat melakukannya melalui pengaturan."
 
 #: TTS/list_voices.py:21
 msgid "Listo"
@@ -67,11 +67,11 @@ msgstr "Saya akan berbicara melalui perangkat ini."
 
 #: controller/ajustes_controller.py:98 controller/ajustes_controller.py:100
 msgid ""
-"Hola, soy la voz que te acompañará de ahora en adelante a leer los "
-"mensajes de tus canales favoritos."
+"Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes "
+"de tus canales favoritos."
 msgstr ""
-"Halo, saya adalah suara yang akan menemani Anda membaca pesan dari "
-"saluran favorit Anda mulai sekarang. Bagus kan."
+"Halo, saya adalah suara yang akan menemani Anda membaca pesan dari saluran "
+"favorit Anda mulai sekarang. Bagus kan."
 
 #: controller/chat_controller.py:150
 msgid "Introduce el criterio de búsqueda"
@@ -108,18 +108,15 @@ msgstr "Telah ditambahkan ke favorit"
 
 #: controller/chat_controller.py:301 controller/main_controller.py:35
 #: controller/main_controller.py:107 controller/main_controller.py:120
-#: controller/main_controller.py:127
-#: controller/menus/chat_item_controller.py:52
+#: controller/main_controller.py:127 controller/menus/chat_item_controller.py:52
 msgid "Tus mensajes archivados aparecerán aquí"
 msgstr "Pesan arsip Anda akan muncul di sini"
 
-#: controller/chat_controller.py:317
-#: controller/menus/chat_item_controller.py:70
+#: controller/chat_controller.py:317 controller/menus/chat_item_controller.py:70
 msgid "El mensaje ha sido archivado correctamente."
 msgstr "Pesan berhasil diarsipkan."
 
-#: controller/chat_controller.py:319
-#: controller/menus/chat_item_controller.py:72
+#: controller/chat_controller.py:319 controller/menus/chat_item_controller.py:72
 msgid "Este mensaje ya está en la lista de archivados."
 msgstr "Pesan ini sudah ada dalam daftar yang diarsipkan."
 
@@ -149,14 +146,14 @@ msgstr "suara dinonaktifkan."
 
 #: controller/editor_controller.py:43
 msgid ""
-"Está apunto de restaurar las combinaciones a sus valores por defecto, "
-"¿desea proceder? Esta acción no se puede desacer."
+"Está apunto de restaurar las combinaciones a sus valores por defecto, ¿desea "
+"proceder? Esta acción no se puede desacer."
 msgstr ""
-"Anda akan mengembalikan pintasan menjadi pintasan bawaan, apakah Anda "
-"ingin melanjutkan? Tindakan ini tidak dapat dibatalkan."
+"Anda akan mengembalikan pintasan menjadi pintasan bawaan, apakah Anda ingin "
+"melanjutkan? Tindakan ini tidak dapat dibatalkan."
 
 #: controller/editor_controller.py:43
-#: controller/menus/main_menu_controller.py:59 update/update.py:131
+#: controller/menus/main_menu_controller.py:59 update/update.py:135
 msgid "Atención:"
 msgstr "Perhatian:"
 
@@ -234,8 +231,7 @@ msgid "Error al guardar el archivo: {}"
 msgstr "Gagal menyimpan berkas: {}"
 
 #: controller/estadisticas_controller.py:46 controller/main_controller.py:66
-#: controller/update_languages_controller.py:82
-#: servicios/language_updater.py:13
+#: controller/update_languages_controller.py:82 servicios/language_updater.py:13
 msgid "Error"
 msgstr "Kesalahan"
 
@@ -257,8 +253,7 @@ msgstr "Tidak ada favorit yang bisa dihapus"
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr "Apakah Anda yakin ingin menghapus semua favorit dari daftar?"
 
-#: controller/main_controller.py:70
-#: controller/menus/main_menu_controller.py:106
+#: controller/main_controller.py:70 controller/menus/main_menu_controller.py:106
 #: controller/update_languages_controller.py:93 ui/chat_dialog.py:107
 msgid "¡Atención!"
 msgstr "Perhatian!"
@@ -309,19 +304,17 @@ msgstr "Apakah Anda yakin ingin menghapus semua pesan?"
 
 #: controller/main_controller.py:139
 msgid "Lectura de chats en vivo"
-msgstr "Sedang membaca obrolan siaran langsung..."
+msgstr "Membaca obrolan langsung"
 
 #: controller/main_controller.py:222
 msgid "Conectando..."
 msgstr "Menghubungkan..."
 
-#: controller/main_controller.py:281
-#: controller/menus/main_menu_controller.py:64
+#: controller/main_controller.py:281 controller/menus/main_menu_controller.py:64
 msgid "¿está seguro que desea salir del programa?"
 msgstr "Apakah Anda yakin ingin keluar dari aplikasi ini?"
 
-#: controller/main_controller.py:281
-#: controller/menus/main_menu_controller.py:64
+#: controller/main_controller.py:281 controller/menus/main_menu_controller.py:64
 msgid "¡atención!"
 msgstr "Perhatian!"
 
@@ -339,24 +332,23 @@ msgstr "Memulai pengunduhan bahasa..."
 
 #: controller/update_languages_controller.py:74
 msgid "data"
-msgstr ""
+msgstr "data"
 
 #: controller/update_languages_controller.py:76
 msgid "dataerror_msg"
-msgstr ""
+msgstr "dataerror_msg"
 
-#: controller/update_languages_controller.py:86
-#: ui/update_languages_dialog.py:72
+#: controller/update_languages_controller.py:86 ui/update_languages_dialog.py:72
 msgid "Actualización completada."
 msgstr "Pembaruan selesai."
 
 #: controller/update_languages_controller.py:93
 msgid ""
-"Es necesario reiniciar el programa para aplicar los nuevos idiomas. "
-"¿Desea reiniciarlo ahora?"
+"Es necesario reiniciar el programa para aplicar los nuevos idiomas. ¿Desea "
+"reiniciarlo ahora?"
 msgstr ""
-"Aplikasi perlu dimulai ulang untuk menerapkan bahasa baru. Apakah Anda "
-"ingin memulai ulang sekarang?"
+"Aplikasi perlu dimulai ulang untuk menerapkan bahasa baru. Apakah Anda ingin "
+"memulai ulang sekarang?"
 
 #: controller/menus/chat_item_controller.py:29
 msgid "Mensaje copiado al portapapeles"
@@ -375,8 +367,8 @@ msgid ""
 "el mensaje se ha traducido al idioma del programa y se  a  copiado en el "
 "portapapeles."
 msgstr ""
-"pesan telah diterjemahkan ke bahasa aplikasi saat ini, dan disalin ke "
-"papan klip."
+"pesan telah diterjemahkan ke bahasa aplikasi saat ini, dan disalin ke papan "
+"klip."
 
 #: controller/menus/chat_menu_controller.py:42
 msgid "No hay una URL para agregar a favoritos."
@@ -436,30 +428,29 @@ msgstr "Pembuat proyek:"
 #: controller/menus/main_menu_controller.py:45
 msgid ""
 "Descripción:\n"
-" Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch "
-"y la sala de  juegos, ajusta tus preferencias como quieras y disfruta más"
-" tus canales favoritos."
+" Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch y la "
+"sala de  juegos, ajusta tus preferencias como quieras y disfruta más tus "
+"canales favoritos."
 msgstr ""
 "Deskripsi:\n"
-"Membaca pesan langsung dari YouTube, TikTok, QuentinC's  playroom, "
-"Twitch, ckick dengan suara, sesuaikan preferensi Anda, dan nikmati "
-"saluran favorit Anda."
+"Membaca pesan langsung dari YouTube, TikTok, QuentinC's  playroom, Twitch, "
+"ckick dengan suara, sesuaikan preferensi Anda, dan nikmati saluran favorit "
+"Anda."
 
 #: controller/menus/main_menu_controller.py:59
 msgid ""
-"Estás apunto de reiniciar la configuración a sus valores predeterminados,"
-" ¿Deseas proceder?"
+"Estás apunto de reiniciar la configuración a sus valores predeterminados, "
+"¿Deseas proceder?"
 msgstr ""
-"Anda akan mereset pengaturan menjadi default bawaan aplikasi, apakah Anda"
-" ingin melanjutkan?"
+"Anda akan mereset pengaturan menjadi default bawaan aplikasi, apakah Anda "
+"ingin melanjutkan?"
 
 #: controller/menus/main_menu_controller.py:78
 #: controller/menus/main_menu_controller.py:89
 msgid "Actualización de idiomas"
 msgstr "Pembaruan Bahasa"
 
-#: controller/menus/main_menu_controller.py:89
-#: servicios/language_updater.py:106
+#: controller/menus/main_menu_controller.py:89 servicios/language_updater.py:106
 msgid "No hay actualizaciones ni nuevos idiomas disponibles."
 msgstr "Tidak ada pembaruan atau bahasa baru yang tersedia."
 
@@ -472,8 +463,8 @@ msgid ""
 "Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea "
 "reiniciarlo ahora?"
 msgstr ""
-"Aplikasi ini perlu dimulai ulang untuk menerapkan bahasa baru. Apakah "
-"Anda ingin memulai ulang sekarang?"
+"Aplikasi ini perlu dimulai ulang untuk menerapkan bahasa baru. Apakah Anda "
+"ingin memulai ulang sekarang?"
 
 #: globals/mensajes.py:2
 msgid "iniciar/cancelar la captura de otro en vivo"
@@ -545,23 +536,23 @@ msgstr "Arsipkan pesan"
 
 #: globals/mensajes.py:19
 msgid "Pausar o reanudar el reproductor"
-msgstr "jeda atau lanjutkan pemutaran langsung"
+msgstr "Jeda atau lanjutkan pemutar"
 
 #: globals/mensajes.py:20
 msgid "Adelantar la reproducción"
-msgstr "maju cepat pemutaran langsung"
+msgstr "Memajukan pemutaran"
 
 #: globals/mensajes.py:21
 msgid "Atrasar la reproducción"
-msgstr "mundur cepat pemutaran langsung"
+msgstr "Menunda pemutaran"
 
 #: globals/mensajes.py:22
 msgid "Sube el volumen del reproductor"
-msgstr "volume naik"
+msgstr "Naikkan volume pemutar"
 
 #: globals/mensajes.py:23
 msgid "Baja el volumen del reproductor"
-msgstr "volume turun"
+msgstr "Turunkan volume pemutar"
 
 #: globals/mensajes.py:24
 msgid "Detener y liberar el reproductor"
@@ -609,11 +600,11 @@ msgstr "Suara ketika member berbicara"
 
 #: globals/mensajes.py:37
 msgid ""
-"Sonido cuando se conecta un miembro o cuando alguien se une a tu en vivo "
-"en tiktok"
+"Sonido cuando se conecta un miembro o cuando alguien se une a tu en vivo en "
+"tiktok"
 msgstr ""
-"Suara ketika anggota terhubung atau ketika seseorang bergabung dengan "
-"siaran langsung Anda di TikTok"
+"Suara ketika anggota terhubung atau ketika seseorang bergabung dengan siaran "
+"langsung Anda di TikTok"
 
 #: globals/mensajes.py:38
 msgid "Sonido cuando llega un donativo"
@@ -665,8 +656,7 @@ msgstr "Ketika member berbicara"
 
 #: globals/mensajes.py:53
 msgid ""
-"Cuando se conecta un miembro o cuando alguien se une a tu en vivo en "
-"tiktok"
+"Cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok"
 msgstr ""
 "Ketika member terhubung atau ketika seseorang bergabung dengan siaran "
 "langsung Anda di TikTok"
@@ -710,7 +700,7 @@ msgstr "Tidak ada suara yang terinstal"
 
 #: servicios/kick.py:38
 msgid "error_bypass_no_encontrado"
-msgstr ""
+msgstr "error_bypass_not_found"
 
 #: servicios/kick.py:68
 msgid "Cargando..."
@@ -718,7 +708,7 @@ msgstr "Menghubungkan..."
 
 #: servicios/kick.py:71
 msgid "error_iniciar_bypass"
-msgstr ""
+msgstr "kesalahan_memulai_bypass"
 
 #: servicios/kick.py:94 servicios/tiktok.py:124
 msgid "Ingresando al chat"
@@ -726,7 +716,7 @@ msgstr "Memasuki obrolan"
 
 #: servicios/kick.py:111
 msgid "error_conectar_kick_chatroom"
-msgstr ""
+msgstr "error_conectar_kick_chatroom"
 
 #: servicios/kick.py:160 servicios/kick.py:162 servicios/tiktok.py:161
 #: servicios/tiktok.py:165
@@ -781,7 +771,8 @@ msgstr "Saat ini pengguna sedang live. Menghubungkan..."
 
 #: servicios/tiktok.py:69
 msgid "El usuario no está en vivo. Reintentando en un minuto."
-msgstr "Maaf, saat ini pengguna sedang tidak live. Mencoba lagi dalam satu menit."
+msgstr ""
+"Maaf, saat ini pengguna sedang tidak live. Mencoba lagi dalam satu menit."
 
 #: servicios/tiktok.py:115
 msgid "El directo ha finalizado. Se buscará de nuevo en un minuto."
@@ -840,8 +831,7 @@ msgid ""
 "{subscription_plan_name}. ¡Lleva suscrito por {cumulative_months} meses!"
 msgstr ""
 "{author_name} telah memperbarui langganannya di tingkat "
-"{subscription_plan_name}. Sudah berlangganan selama {cumulative_months} "
-"bulan!"
+"{subscription_plan_name}. Sudah berlangganan selama {cumulative_months} bulan!"
 
 #: servicios/twich.py:71
 #, python-brace-format
@@ -849,8 +839,8 @@ msgid ""
 "{author_name} se ha suscrito en el nivel {subscription_plan_name} por "
 "{cumulative_months} meses!"
 msgstr ""
-"{author_name} telah berlangganan di tingkat {subscription_plan_name} "
-"selama {cumulative_months} bulan!"
+"{author_name} telah berlangganan di tingkat {subscription_plan_name} selama "
+"{cumulative_months} bulan!"
 
 #: servicios/twich.py:72
 #, python-brace-format
@@ -858,27 +848,25 @@ msgid ""
 "{author_name} regaló una suscripción de nivel {subscription_type} a la "
 "comunidad, ¡ha regalado un total de {sender_count} suscripciones!"
 msgstr ""
-"{author_name} memberikan langganan tingkat {subscription_type} ke "
-"komunitas, total telah memberikan {sender_count} langganan!"
+"{author_name} memberikan langganan tingkat {subscription_type} ke komunitas, "
+"total telah memberikan {sender_count} langganan!"
 
 #: servicios/twich.py:73
 #, python-brace-format
 msgid ""
-"{author_name} ha regalado una suscripción a {gift_recipient_display_name}"
-" en el nivel {subscription_plan_name} por {number_of_months_gifted} "
-"meses!"
+"{author_name} ha regalado una suscripción a {gift_recipient_display_name} en "
+"el nivel {subscription_plan_name} por {number_of_months_gifted} meses!"
 msgstr ""
-"{author_name} telah memberikan langganan kepada "
-"{gift_recipient_display_name} di tingkat {subscription_plan_name} selama "
-"{number_of_months_gifted} bulan!"
+"{author_name} telah memberikan langganan kepada {gift_recipient_display_name} "
+"di tingkat {subscription_plan_name} selama {number_of_months_gifted} bulan!"
 
 #: servicios/youtube.py:63
 msgid ""
-"Se ha detectado una transmisión pasada. ¿Deseas conectarte con el "
-"servicio en tiempo real del chat?"
+"Se ha detectado una transmisión pasada. ¿Deseas conectarte con el servicio en "
+"tiempo real del chat?"
 msgstr ""
-"Telah terdeteksi siaran sebelumnya. Apakah Anda ingin terhubung ke "
-"layanan obrolan waktu nyata?"
+"Telah terdeteksi siaran sebelumnya. Apakah Anda ingin terhubung ke layanan "
+"obrolan waktu nyata?"
 
 #: servicios/youtube.py:63
 msgid "Transmisión pasada"
@@ -922,7 +910,7 @@ msgstr "menterjemahkan What's new ketika ada update."
 
 #: ui/ajustes.py:35
 msgid "Desactivar la interfaz invisible"
-msgstr ""
+msgstr "Nonaktifkan antarmuka yang tidak terlihat"
 
 #: ui/ajustes.py:38
 msgid "traducción de mensajes: "
@@ -978,7 +966,7 @@ msgstr "&Putar uji coba."
 
 #: ui/ajustes.py:94
 msgid "reproducción"
-msgstr "Putar"
+msgstr "reproduksi"
 
 #: ui/ajustes.py:96
 msgid "ajustes de reproducción"
@@ -1048,19 +1036,18 @@ msgstr "Event"
 msgid "leídos"
 msgstr "dibaca"
 
-#: ui/ajustes.py:172 update/update.py:132
+#: ui/ajustes.py:172 update/update.py:136
 msgid "&Aceptar"
 msgstr "&Oke"
 
-#: ui/ajustes.py:174 update/update.py:132
+#: ui/ajustes.py:174 update/update.py:136
 msgid "&Cancelar"
 msgstr "&Batal"
 
 #: ui/chat_dialog.py:107
 msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
 msgstr ""
-"Apakah Anda ingin keluar dari aplikasi ini dan menghentikan pembacaan "
-"pesan?"
+"Apakah Anda ingin keluar dari aplikasi ini dan menghentikan pembacaan pesan?"
 
 #: ui/chat_ui.py:10
 msgid "Lectura del chat en vivo..."
@@ -1164,7 +1151,7 @@ msgstr "QuentinC Playroom"
 
 #: ui/main_window.py:30
 msgid "Kick"
-msgstr "kick"
+msgstr "Kick"
 
 #: ui/main_window.py:35
 msgid "&Acceder"
@@ -1392,10 +1379,10 @@ msgstr "&Tentang"
 msgid "&Salir...\tAlt+F4"
 msgstr "&Keluar...\tAlt+F4"
 
-#: update/update.py:131
+#: update/update.py:135
 msgid ""
-"Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te "
-"unes a nuestra causa?"
+"Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te unes a "
+"nuestra causa?"
 msgstr ""
 "Dengan dukungan Anda, Anda berkontribusi agar program ini tetap gratis. "
 "Maukah anda bergabung dengan tujuan kami?"
@@ -1479,8 +1466,8 @@ msgstr "Memperbarui... %s dari %s"
 
 #: update/wxUpdater.py:30
 msgid ""
-"La actualización se a descargado he instalado exitosamente. pulse en "
-"aceptar para continuar."
+"La actualización se a descargado he instalado exitosamente. pulse en aceptar "
+"para continuar."
 msgstr "Pembaruan berhasil diunduh dan diinstal. Tekan OK untuk melanjutkan."
 
 #: update/wxUpdater.py:30
@@ -1489,17 +1476,16 @@ msgstr "Selesai!"
 
 #: utils/app_utilitys.py:26
 msgid ""
-"Necesitas al menos una voz para poder usar el sintetizador Piper. "
-"Â¿Quieres abrir nuestra carpeta de Drive para descargar algunos modelos? "
-"Si pulsas sÃ­, se abrirÃ¡ nuestra carpeta seguido de una ventana para "
-"instalar una una vez la descargues."
+"Necesitas al menos una voz para poder usar el sintetizador Piper. Â¿Quieres "
+"abrir nuestra carpeta de Drive para descargar algunos modelos? Si pulsas sÃ­, "
+"se abrirÃ¡ nuestra carpeta seguido de una ventana para instalar una una vez "
+"la descargues."
 msgstr ""
-"Anda memerlukan setidaknya satu suara untuk dapat menggunakan synthesizer"
-" Piper. Apakah Anda ingin membuka folder Drive kami untuk mengunduh "
-"beberapa model? Jika Anda menekan Ya, folder kami akan terbuka diikuti "
-"dengan tampilan untuk menginstal setelah Anda mengunduhnya."
+"Anda memerlukan setidaknya satu suara untuk dapat menggunakan synthesizer "
+"Piper. Apakah Anda ingin membuka folder Drive kami untuk mengunduh beberapa "
+"model? Jika Anda menekan Ya, folder kami akan terbuka diikuti dengan tampilan "
+"untuk menginstal setelah Anda mengunduhnya."
 
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
 msgstr "Bahasa sistem"
-
