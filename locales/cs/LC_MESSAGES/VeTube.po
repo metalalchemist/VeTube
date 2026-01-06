@@ -5,17 +5,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2026-01-05 09:53+0700\n"
-"PO-Revision-Date: 2026-01-06 20:26+0100\n"
+"PO-Revision-Date: 2026-01-06 20:17+0100\n"
 "Last-Translator: 4Sense Gaming <lukas@4sensegaming.cz>\n"
-"Language-Team: en <LL@li.org>\n"
-"Language: en\n"
+"Language-Team: 4Sense Gaming <lukas@4sensegaming.cz>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
 "Generated-By: Babel 2.17.0\n"
 "X-Generator: Poedit 3.8\n"
 
@@ -23,16 +23,15 @@ msgstr ""
 msgid ""
 "VeTube ya se encuentra en ejecución. Cierra la otra instancia antes de "
 "iniciar esta."
-msgstr ""
-"VeTube is already running. Close the other instance before starting this one."
+msgstr "VeTube už běží. Před spuštěním zavři druhou instanci."
 
 #: TTS/list_voices.py:13
 msgid "Selecciona un paquete de voz"
-msgstr "Select a voice package"
+msgstr "Vyber hlasový balíček"
 
 #: TTS/list_voices.py:13
 msgid "Archivos tar.gz (*.tar.gz)|*.tar.gz"
-msgstr "Tar.gz files (*.tar.gz)|*.tar.gz"
+msgstr "Soubory tar.gz (*.tar.gz)|*.tar.gz"
 
 #: TTS/list_voices.py:15
 msgid ""
@@ -40,293 +39,293 @@ msgid ""
 "quieres hacerlo de forma manual, extrae el paquete de voz en la carpeta "
 "\"piper/voices/voice-nombre_de_paquete\" en VeTube."
 msgstr ""
-"To use Piper as the TTS engine, you need to have at least one voice. If you "
-"want to set it manually, extract the voice package into the \"piper/voices/"
-"voice-package_name\" subfolder within the VeTube folder."
+"Pokud chceš používat syntézu Piper, musíš mít nainstalovaný aspoň jeden hlas. "
+"Pokud chceš hlas nainstalovat ručně, rozbal hlasový balíček do podsložky "
+"\"piper/voices/voice-jméno_balíčku\" v kořenové složce VeTube."
 
 #: TTS/list_voices.py:15
 msgid "No se instaló ninguna voz"
-msgstr "No voice installed"
+msgstr "Žádné nainstalované hlasy"
 
 #: TTS/list_voices.py:21
 msgid ""
 "¡Voz instalada satosfactoriamente! esta será establecida en VeTube ahora. "
 "Para cambiar de modelo de voz, puedes hacerlo a través de las configuraciones."
 msgstr ""
-"Voice installed successfully! It will now be set as your default for VeTube. "
-"You can change the voice model in settings."
+"Hlas byl úspěšně nainstalován! Teď se nastaví jako výchozí pro VeTube. "
+"Hlasový model můžeš kdykoli změnit v nastavení."
 
 #: TTS/list_voices.py:21
 msgid "Listo"
-msgstr "Ready"
+msgstr "Hotovo"
 
 #: controller/ajustes_controller.py:94
 msgid "Hablaré a través  de este dispositivo."
-msgstr "I will speak through this device."
+msgstr "Budu mluvit z tohoto zařízení."
 
 #: controller/ajustes_controller.py:98 controller/ajustes_controller.py:100
 msgid ""
 "Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes "
 "de tus canales favoritos."
 msgstr ""
-"Hello, i'm the voice that will read the messages in your favorite channels."
+"Nazdar, já jsem hlas, který ti bude číst zprávy z tvých oblíbených kanálů."
 
 #: controller/chat_controller.py:150
 msgid "Introduce el criterio de búsqueda"
-msgstr "Enter your search term"
+msgstr "Zadej vyhledávací výraz"
 
 #: controller/chat_controller.py:150
 msgid "Buscar mensajes"
-msgstr "Search messages"
+msgstr "Prohledat zprávy"
 
 #: controller/chat_controller.py:176
 msgid "No se encontraron mensajes que coincidan con el criterio de búsqueda."
-msgstr "No messages matching the search criteria were found."
+msgstr "Nebyly nalezeny žádné zprávy, které odpovídají vyhledávacímu výrazu."
 
 #: controller/chat_controller.py:176
 msgid "Búsqueda sin resultados"
-msgstr "No results"
+msgstr "Žádné výsledky"
 
 #: controller/chat_controller.py:266
 msgid "Mensaje copiado"
-msgstr "Message copied"
+msgstr "Zpráva zkopírována"
 
 #: controller/chat_controller.py:282 globals/mensajes.py:31 ui/chat_ui.py:34
 #: ui/main_window.py:47
 msgid "Favoritos"
-msgstr "Favorites"
+msgstr "Oblíbené"
 
 #: controller/chat_controller.py:286
 msgid "Este mensaje ya se encuentra en favoritos"
-msgstr "This message is already in favorites"
+msgstr "Tato zpráva už je v oblíbených"
 
 #: controller/chat_controller.py:289
 msgid "Mensaje agregado a favoritos"
-msgstr "Message added to favorites"
+msgstr "Zpráva přidána do oblíbených"
 
 #: controller/chat_controller.py:301 controller/main_controller.py:35
 #: controller/main_controller.py:107 controller/main_controller.py:120
 #: controller/main_controller.py:127 controller/menus/chat_item_controller.py:52
 msgid "Tus mensajes archivados aparecerán aquí"
-msgstr "Your archived messages will appear here"
+msgstr "Tady se objeví tvoje archivované zprávy"
 
 #: controller/chat_controller.py:317 controller/menus/chat_item_controller.py:70
 msgid "El mensaje ha sido archivado correctamente."
-msgstr "Message archived successfully."
+msgstr "Zpráva úspěšně archivována."
 
 #: controller/chat_controller.py:319 controller/menus/chat_item_controller.py:72
 msgid "Este mensaje ya está en la lista de archivados."
-msgstr "This message is already archived."
+msgstr "Zpráva už je archivovaná."
 
 #: controller/chat_controller.py:326
 msgid "No se puede borrar la última página."
-msgstr "Can't delete the last buffer."
+msgstr "Nemůžeš smazat poslední kategorii."
 
 #: controller/chat_controller.py:330
 msgid "Página borrada."
-msgstr "Buffer deleted."
+msgstr "Kategorie smazána."
 
 #: controller/chat_controller.py:338
 msgid "Lectura automática activada."
-msgstr "Automatic reading enabled."
+msgstr "Automatické čtení zapnuto."
 
 #: controller/chat_controller.py:338
 msgid "Lectura automática  desactivada."
-msgstr "Automatic reading disabled."
+msgstr "Automatické čtení vypnuto."
 
 #: controller/chat_controller.py:342
 msgid "sonidos activados."
-msgstr "sounds enabled."
+msgstr "zvuky zapnuty."
 
 #: controller/chat_controller.py:342
 msgid "sonidos desactivados."
-msgstr "sounds disabled."
+msgstr "zvuky vypnuty."
 
 #: controller/editor_controller.py:43
 msgid ""
 "Está apunto de restaurar las combinaciones a sus valores por defecto, ¿desea "
 "proceder? Esta acción no se puede desacer."
 msgstr ""
-"You are about to reset the settings to their default values, do you want to "
-"proceed? This action cannot be undone."
+"Chystáš se obnovit výchozí nastavení. Chceš pokračovat? Tato akce se nedá "
+"odvolat."
 
 #: controller/editor_controller.py:43
 #: controller/menus/main_menu_controller.py:59 update/update.py:135
 msgid "Atención:"
-msgstr "Warning:"
+msgstr "Varování:"
 
 #: controller/editor_controller.py:63 controller/editor_controller.py:92
 msgid "Función desconocida"
-msgstr "Unknown function"
+msgstr "Neznámá funkce"
 
 #: controller/editor_controller.py:85
 msgid "Debe escoger al menos una tecla de las casillas de verificación"
-msgstr "You must select at least one key from the checkbox options"
+msgstr "Musíš vybrat aspoň jednu klávesu ze seznamu zaškrtávacích políček"
 
 #: controller/editor_controller.py:92
 #, python-format
 msgid "Esta combinación ya está siendo usada en la función %s"
-msgstr "This keystroke is already being used for the %s function"
+msgstr "Tuto zkratku už používá funkce %s"
 
 #: controller/editor_controller.py:116
 msgid "Esa combinación está siendo usada por el sistema operativo"
-msgstr "This keystroke is being used by the system"
+msgstr "Tuto zkratku používá systém"
 
 #: controller/estadisticas_controller.py:9
 #, python-brace-format
 msgid "Total de mensajes recibidos: {}"
-msgstr "Total messages received: {}"
+msgstr "Zpráv v chatu: {}"
 
 #: controller/estadisticas_controller.py:10
 #, python-brace-format
 msgid "Total de usuarios que hablaron: {}"
-msgstr "Total users chatted: {}"
+msgstr "Chatujících uživatelů: {}"
 
 #: controller/estadisticas_controller.py:14
 #, python-brace-format
 msgid "Total de usuarios que se unieron al en vivo: {}"
-msgstr "Users who joined the live stream: {}"
+msgstr "Sledujících: {}"
 
 #: controller/estadisticas_controller.py:15
 #, python-brace-format
 msgid "Total de usuarios que siguieron al moderador: {}"
-msgstr "Users who follow the live stream host: {}"
+msgstr "Odběratelů kanálu: {}"
 
 #: controller/estadisticas_controller.py:16
 #, python-brace-format
 msgid "Total de me gustan en el en vivo: {}"
-msgstr "Likes on the live stream: {}"
+msgstr "Lajků u streamu: {}"
 
 #: controller/estadisticas_controller.py:17
 #, python-brace-format
 msgid "Total de usuarios que compartieron en el en vivo: {}"
-msgstr "Users who shared the live stream\v: {}"
+msgstr "Sdílení streamu: {}"
 
 #: controller/estadisticas_controller.py:19 ui/estadisticas_dialog.py:4
 msgid "Estadísticas del Chat"
-msgstr "Chat statistics"
+msgstr "Statistiky chatu"
 
 #: controller/estadisticas_controller.py:35 ui/estadisticas_dialog.py:18
 msgid "Guardar estadísticas"
-msgstr "Save statistics"
+msgstr "Uložit statistiky"
 
 #: controller/estadisticas_controller.py:35
 msgid "Archivos JSON (*.json)|*.json"
-msgstr "Json files (*.json)|*.json"
+msgstr "Soubory json (*.json)|*.json"
 
 #: controller/estadisticas_controller.py:44
 #, python-brace-format
 msgid "Estadísticas guardadas en {}"
-msgstr "Statistics saved in: {}"
+msgstr "Statistiky uloženy do souboru {}"
 
 #: controller/estadisticas_controller.py:44
 msgid "Éxito"
-msgstr "Success"
+msgstr "Hotovo"
 
 #: controller/estadisticas_controller.py:46
 #, python-brace-format
 msgid "Error al guardar el archivo: {}"
-msgstr "Error saving file: {}"
+msgstr "Chyba při ukládání souboru: {}"
 
 #: controller/estadisticas_controller.py:46 controller/main_controller.py:66
 #: controller/update_languages_controller.py:82 servicios/language_updater.py:13
 msgid "Error"
-msgstr "Error"
+msgstr "Chyba"
 
 #: controller/main_controller.py:30
 #, python-format
 msgid "Favoritos(%s)"
-msgstr "Favorites (%s)"
+msgstr "Oblíbené (%s)"
 
 #: controller/main_controller.py:32 controller/main_controller.py:65
 #: controller/main_controller.py:82 controller/menus/chat_menu_controller.py:56
 msgid "Tus favoritos aparecerán aquí"
-msgstr "Your favorites  will appear here"
+msgstr "Tady se objeví tvoje oblíbené"
 
 #: controller/main_controller.py:66
 msgid "No hay favoritos que borrar"
-msgstr "No favorites to delete"
+msgstr "Nemáš uložené žádné oblíbené zprávy"
 
 #: controller/main_controller.py:70
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
-msgstr "Are you sure you want to delete all the favorites?"
+msgstr "Chceš opravdu smazat všechny oblíbené zprávy?"
 
 #: controller/main_controller.py:70 controller/menus/main_menu_controller.py:106
 #: controller/update_languages_controller.py:93 ui/chat_dialog.py:107
 msgid "¡Atención!"
-msgstr "Warning!"
+msgstr "Varování!"
 
 #: controller/main_controller.py:86
 msgid "&Borrar mensajes"
-msgstr "&delete messages"
+msgstr "&Smazat zprávy"
 
 #: controller/main_controller.py:87
 msgid "Borrar todos los mensajes destacados"
-msgstr "Delete all starred messages"
+msgstr "Smazat všechny zprávy s hvězdičkou"
 
 #: controller/main_controller.py:90 ui/main_window.py:67
 msgid "&Borrar mensaje"
-msgstr "&Delete message"
+msgstr "&Smazat zprávu"
 
 #: controller/main_controller.py:91
 msgid "Borrar el mensaje destacado seleccionado"
-msgstr "Delete selected starred message"
+msgstr "Smazat vybranou zprávu s hvězdičkou"
 
 #: controller/main_controller.py:96
 msgid "&Borrar favoritos"
-msgstr "&Delete favorites"
+msgstr "&Smazat oblíbené"
 
 #: controller/main_controller.py:97
 msgid "Borrar todos los favoritos"
-msgstr "Delete all favorites"
+msgstr "Smazat všechny oblíbené zprávy"
 
 #: controller/main_controller.py:100 ui/main_window.py:55
 msgid "&Borrar favorito"
-msgstr "&Delete favorite"
+msgstr "&Smazat z oblíbených"
 
 #: controller/main_controller.py:101
 msgid "Borrar el favorito seleccionado"
-msgstr "Delete selected favorite"
+msgstr "Smazat vybranou zprávu z oblíbených"
 
 #: controller/main_controller.py:115
 msgid "No hay más elementos que borrar"
-msgstr "No items to delete"
+msgstr "Žádné položky ke smazání"
 
 #: controller/main_controller.py:117 controller/main_controller.py:130
 msgid "No hay mensajes que borrar"
-msgstr "No messages to delete"
+msgstr "Žádné zprávy ke smazání"
 
 #: controller/main_controller.py:123
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
-msgstr "Are you sure you want to delete all messages?"
+msgstr "Chceš opravdu smazat všechny zprávy?"
 
 #: controller/main_controller.py:139
 msgid "Lectura de chats en vivo"
-msgstr "Live chat reading"
+msgstr "Čtení živého chatu"
 
 #: controller/main_controller.py:222
 msgid "Conectando..."
-msgstr "Connecting..."
+msgstr "Připojování..."
 
 #: controller/main_controller.py:281 controller/menus/main_menu_controller.py:64
 msgid "¿está seguro que desea salir del programa?"
-msgstr "Are you sure you want to exit the program?"
+msgstr "Chceš opravdu ukončit program?"
 
 #: controller/main_controller.py:281 controller/menus/main_menu_controller.py:64
 msgid "¡atención!"
-msgstr "Warning!"
+msgstr "Varování!"
 
 #: controller/update_languages_controller.py:38
 msgid "Por favor, selecciona al menos un idioma para actualizar."
-msgstr "Please select at least one language to update."
+msgstr "Prosím, vyber aspoň jeden jazyk, který se má aktualizovat."
 
 #: controller/update_languages_controller.py:38
 msgid "Advertencia"
-msgstr "Warning"
+msgstr "Varování"
 
 #: controller/update_languages_controller.py:64
 msgid "Iniciando descarga de idiomas..."
-msgstr "Starting language download..."
+msgstr "Stahuje se jazyk."
 
 #: controller/update_languages_controller.py:74
 msgid "data"
@@ -338,90 +337,88 @@ msgstr "dataerror_msg"
 
 #: controller/update_languages_controller.py:86 ui/update_languages_dialog.py:72
 msgid "Actualización completada."
-msgstr "Update completed."
+msgstr "Aktualizace dokončena."
 
 #: controller/update_languages_controller.py:93
 msgid ""
 "Es necesario reiniciar el programa para aplicar los nuevos idiomas. ¿Desea "
 "reiniciarlo ahora?"
 msgstr ""
-"It's necessary to restart the program to apply new languages. Would you like "
-"to restart it now?"
+"Před použitím nových jazyků je potřeba program restartovat. Chceš restartovat "
+"teď?"
 
 #: controller/menus/chat_item_controller.py:29
 msgid "Mensaje copiado al portapapeles"
-msgstr "Message copied to clipboard"
+msgstr "Zpráva zkopírována do schránky"
 
 #: controller/menus/chat_item_controller.py:29
 msgid "El mensaje seleccionado ha sido copiado al portapapeles."
-msgstr "The selected message has been copied to the clipboard."
+msgstr "Vybraná zpráva byla zkopírována do schránky."
 
 #: controller/menus/chat_item_controller.py:43
 msgid "Mensaje traducido"
-msgstr "Message translated"
+msgstr "Zpráva přeložena"
 
 #: controller/menus/chat_item_controller.py:43
 msgid ""
 "el mensaje se ha traducido al idioma del programa y se  a  copiado en el "
 "portapapeles."
-msgstr ""
-"the message has been translated into the program language and copied to the "
-"clipboard."
+msgstr "Zpráva byla přeložena do jazyka programu a zkopírována do schránky."
 
 #: controller/menus/chat_menu_controller.py:42
 msgid "No hay una URL para agregar a favoritos."
-msgstr "No URL to add to favorites."
+msgstr "Žádný odkaz, který by se dal přidat do oblíbených."
 
 #: controller/menus/chat_menu_controller.py:42
 #: controller/menus/chat_menu_controller.py:53
 #: controller/menus/chat_menu_controller.py:61
 msgid "Aviso"
-msgstr "Warning"
+msgstr "Upozornění"
 
 #: controller/menus/chat_menu_controller.py:53
 msgid "Ya se encuentra en favoritos"
-msgstr "Already in favorites"
+msgstr "Už je v oblíbených"
 
 #: controller/menus/chat_menu_controller.py:61
 msgid "Se ha agregado a favoritos"
-msgstr "Added to favorites"
+msgstr "Přidáno do oblíbených"
 
 #: controller/menus/chat_menu_controller.py:69
 msgid "Enlace copiado al portapapeles"
-msgstr "Link copied to clipboard"
+msgstr "Odkaz zkopírován do schránky"
 
 #: controller/menus/chat_menu_controller.py:69
 msgid "El enlace del chat ha sido copiado al portapapeles."
-msgstr "The live stream link has been copied to the clipboard."
+msgstr "Odkaz na chat byl zkopírován do schránky."
 
 #: controller/menus/chat_menu_controller.py:71
 msgid "No se pudo copiar el enlace"
-msgstr "Could not copy the link"
+msgstr "Odkaz se nepodařilo zkopírovat"
 
 #: controller/menus/chat_menu_controller.py:71
 msgid "No se encontró un enlace válido para copiar."
-msgstr "No valid link found to copy."
+msgstr "Nebyl nalezen žádný platný odkaz, který by se dal zkopírovat."
 
 #: controller/menus/chat_menu_controller.py:79
 msgid "No se pudo abrir el enlace"
-msgstr "Could not open the link"
+msgstr "Odkaz se nepodařilo otevřít"
 
 #: controller/menus/chat_menu_controller.py:79
 msgid "No se encontró un enlace válido para abrir."
-msgstr "No valid link found to open."
+msgstr "Nebyl nalezen žádný platný odkaz, který by se dal otevřít."
 
 #: controller/menus/main_menu_controller.py:40
 msgid "Al parecer tienes la última versión del programa"
-msgstr "It seems you have the latest version of the program"
+msgstr "Zdá se, že už máš nejnovější verzi programu"
 
 #: controller/menus/main_menu_controller.py:40
 #: controller/menus/main_menu_controller.py:46
 msgid "Información"
-msgstr "Information"
+msgstr "Informace"
 
 #: controller/menus/main_menu_controller.py:44
 msgid "Creadores del proyecto:"
-msgstr "Project creators:"
+msgstr "Tvůrci projektu:"
 
 #: controller/menus/main_menu_controller.py:45
 msgid ""
@@ -430,269 +427,265 @@ msgid ""
 "sala de  juegos, ajusta tus preferencias como quieras y disfruta más tus "
 "canales favoritos."
 msgstr ""
-"Description:\n"
-"Have the messages from live streams on YouTube, TikTok, playroom and Twitch "
-"read aloud, customize your preferences as you desire, and enhance your "
-"enjoyment of your favorite channels."
+"Popis:\n"
+"Nech si hlasem číst zprávy z chatu na YouTube, TikToku, playroomu a Twitchi, "
+"nastav si čtení, jak potřebuješ, a ještě víc si užívej svoje oblíbené kanály."
 
 #: controller/menus/main_menu_controller.py:59
 msgid ""
 "Estás apunto de reiniciar la configuración a sus valores predeterminados, "
 "¿Deseas proceder?"
-msgstr ""
-"You are about to reset the settings to their default values, do you want to "
-"continue?"
+msgstr "Chystáš se obnovit výchozí nastavení. Chceš pokračovat?"
 
 #: controller/menus/main_menu_controller.py:78
 #: controller/menus/main_menu_controller.py:89
 msgid "Actualización de idiomas"
-msgstr "Language update"
+msgstr "Aktualizace jazyků"
 
 #: controller/menus/main_menu_controller.py:89 servicios/language_updater.py:106
 msgid "No hay actualizaciones ni nuevos idiomas disponibles."
-msgstr "No updates or new languages available."
+msgstr "Nejsou dostupné žádné aktualizace ani nové jazyky."
 
 #: controller/menus/main_menu_controller.py:91
 msgid "Error de actualización"
-msgstr "Update error"
+msgstr "Chyba při aktualizaci"
 
 #: controller/menus/main_menu_controller.py:106
 msgid ""
 "Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea "
 "reiniciarlo ahora?"
 msgstr ""
-"It's necessary to restart the program to apply the new language. Would you "
-"like to restart it now?"
+"Před použitím nového jazyka je potřeba program restartovat. Chceš restartovat "
+"teď?"
 
 #: globals/mensajes.py:2
 msgid "iniciar/cancelar la captura de otro en vivo"
-msgstr "start/stop the livestream"
+msgstr "spustit/ukončit živý přenos"
 
 #: globals/mensajes.py:3
 msgid "Silencia la voz sapy"
-msgstr "Mute sapi voice"
+msgstr "Ztlumit hlas Sapi"
 
 #: globals/mensajes.py:4
 msgid "Mensaje anterior."
-msgstr "Previous message."
+msgstr "Předchozí zpráva."
 
 #: globals/mensajes.py:5
 msgid "Mensaje siguiente"
-msgstr "Next message"
+msgstr "Následující zpráva"
 
 #: globals/mensajes.py:6
 msgid "Buffer anterior"
-msgstr "Previous buffer"
+msgstr "Předchozí kategorie"
 
 #: globals/mensajes.py:7
 msgid "Siguiente Buffer"
-msgstr "Next buffer"
+msgstr "Následující kategorie"
 
 #: globals/mensajes.py:8
 msgid "Ir al comienzo del buffer"
-msgstr "Go to the top of the buffer"
+msgstr "Přejít na začátek kategorie"
 
 #: globals/mensajes.py:9
 msgid "Ir al final del buffer"
-msgstr "Go to the end of the buffer"
+msgstr "Přejít na konec kategorie"
 
 #: globals/mensajes.py:10
 msgid "Destaca un mensaje en el buffer de  favoritos"
-msgstr "Star a message in the favorites buffer"
+msgstr "Přidat hvězdičku ke zprávě v kategorii oblíbených"
 
 #: globals/mensajes.py:11
 msgid "Copia el mensaje actual"
-msgstr "Copy the current message"
+msgstr "Zkopírovat vybranou zprávu"
 
 #: globals/mensajes.py:12
 msgid "Activa o desactiva la lectura automática"
-msgstr "Turn automatic message reading on or off"
+msgstr "Přepnout automatické čtení zpráv"
 
 #: globals/mensajes.py:13
 msgid "Busca una palabra en los mensajes actuales"
-msgstr "Search for a phrase among the current messages"
+msgstr "Vyhledat ve vybrané kategorii"
 
 #: globals/mensajes.py:14
 msgid "Muestra el mensaje actual en un cuadro de texto"
-msgstr "Show the current message in a text field"
+msgstr "Zobrazit vybranou zprávu v textovém poli"
 
 #: globals/mensajes.py:15
 msgid "borra el buffer seleccionado"
-msgstr "delete the selected buffer"
+msgstr "smazat vybranou kategorii"
 
 #: globals/mensajes.py:16
 msgid "activa o desactiva los sonidos del programa"
-msgstr "turn on or off program sounds"
+msgstr "přepnout zvuky programu"
 
 #: globals/mensajes.py:17
 msgid "Invocar el editor de combinaciones de teclado"
-msgstr "Start the keystroke editor"
+msgstr "Spustit editor klávesových zkratek"
 
 #: globals/mensajes.py:18
 msgid "Archivar un mensaje"
-msgstr "Archive a message"
+msgstr "Archivovat zprávu"
 
 #: globals/mensajes.py:19
 msgid "Pausar o reanudar el reproductor"
-msgstr "Pause or resume stream playback"
+msgstr "Zapauzovat nebo odpauzovat přehrávač"
 
 #: globals/mensajes.py:20
 msgid "Adelantar la reproducción"
-msgstr "Fast-forward stream playback"
+msgstr "Přetočit dopředu"
 
 #: globals/mensajes.py:21
 msgid "Atrasar la reproducción"
-msgstr "Rewind stream playback"
+msgstr "Přetočit dozadu"
 
 #: globals/mensajes.py:22
 msgid "Sube el volumen del reproductor"
-msgstr "Volume up"
+msgstr "Zvýšit hlasitost přehrávače"
 
 #: globals/mensajes.py:23
 msgid "Baja el volumen del reproductor"
-msgstr "Volume down"
+msgstr "Snížit hlasitost přehrávače"
 
 #: globals/mensajes.py:24
 msgid "Detener y liberar el reproductor"
-msgstr "Pause or resume playback"
+msgstr "Zapauzovat nebo odpauzovat přehrávání"
 
 #: globals/mensajes.py:25
 msgid "ir al Siguiente en vivo"
-msgstr "go to next live stream"
+msgstr "přejít na další živý přenos"
 
 #: globals/mensajes.py:26
 msgid "ir al en vivo anterior"
-msgstr "go to previous live stream"
+msgstr "přejít na předchozí živý přenos"
 
 # | msgid "mensaje"
 #: globals/mensajes.py:30
 msgid "Mensajes"
-msgstr "Messages"
+msgstr "Zprávy"
 
 #: globals/mensajes.py:30
 msgid "eventos"
-msgstr "events"
+msgstr "události"
 
 #: globals/mensajes.py:30 ui/chat_ui.py:25 ui/chat_ui.py:30
 msgid "Miembros"
-msgstr "Members"
+msgstr "Členové"
 
 #: globals/mensajes.py:30
 msgid "Donativos"
-msgstr "Donations"
+msgstr "Příspěvky"
 
 #: globals/mensajes.py:30 ui/chat_ui.py:31
 msgid "Moderadores"
-msgstr "Moderators"
+msgstr "Moderátoři"
 
 #: globals/mensajes.py:31
 msgid "Usuarios Verificados"
-msgstr "Verified users"
+msgstr "Ověření uživatelé"
 
 #: globals/mensajes.py:35
 msgid "Sonido cuando llega un mensaje"
-msgstr "Sound when message received"
+msgstr "Zvuk, když dorazí nová zpráva"
 
 #: globals/mensajes.py:36
 msgid "Sonido cuando habla un miembro"
-msgstr "Sound when a member chats"
+msgstr "Zvuk, když dorazí zpráva od člena"
 
 #: globals/mensajes.py:37
 msgid ""
 "Sonido cuando se conecta un miembro o cuando alguien se une a tu en vivo en "
 "tiktok"
-msgstr ""
-"Sound when a member connects or when someone joins your live stream on TikTok"
+msgstr "Zvuk, když se připojí člen, nebo na TikToku kdokoli"
 
 #: globals/mensajes.py:38
 msgid "Sonido cuando llega un donativo"
-msgstr "Sound when donation received"
+msgstr "Zvuk, když dorazí příspěvek"
 
 #: globals/mensajes.py:39
 msgid "Sonido cuando habla un moderador"
-msgstr "Sound when a moderator chats"
+msgstr "Zvuk, když dorazí zpráva od moderátora"
 
 #: globals/mensajes.py:40
 msgid "Sonido cuando habla un usuario verificado"
-msgstr "Sound when a verified user chats"
+msgstr "Zvuk, když dorazí zpráva od ověřeného uživatele"
 
 #: globals/mensajes.py:41
 msgid "Sonido al ingresar al chat"
-msgstr "Sound when entering chat"
+msgstr "Zvuk, když vstoupíš do chatu"
 
 #: globals/mensajes.py:42
 msgid "Sonido cuando habla el propietario del canal"
-msgstr "Sound when channel owner chats"
+msgstr "Zvuk, když dorazí zpráva od majitele kanálu"
 
 #: globals/mensajes.py:43
 msgid "sonido al terminar la búsqueda de mensajes"
-msgstr "sound when finished searching the buffer"
+msgstr "zvuk, když skončí prohledávání zpráv"
 
 #: globals/mensajes.py:44
 msgid "sonido cuando le dan me gusta al en vivo (solo para tiktok)"
-msgstr "sound when someone likes the livestream (only for TikTok)"
+msgstr "zvuk, když někdo dá streamu lajk (pouze pro TikTok)"
 
 #: globals/mensajes.py:45
 msgid "Sonido cuando alguien empieza a seguirte en tiktok"
-msgstr "Sound when someone starts following you on TikTok"
+msgstr "Zvuk, když tě někdo začne sledovat na TikToku"
 
 #: globals/mensajes.py:46
 msgid "Sonido cuando alguien comparte el enlace de tu envivo en  tiktok"
-msgstr "Sound when someone shares the link to your live stream on TikTok"
+msgstr "Zvuk, když někdo sdílí odkaz na tvůj stream na TikToku"
 
 #: globals/mensajes.py:47
 msgid "Sonido cuando alguien envía un cofre  en tiktok"
-msgstr "Sound when someone sends a chest on TikTok"
+msgstr "Zvuk, když někdo na TikToku pošle truhličku"
 
 #: globals/mensajes.py:51
 msgid "Cuando llega un mensaje"
-msgstr "When a message arrives"
+msgstr "Když dorazí zpráva"
 
 #: globals/mensajes.py:52
 msgid "Cuando habla un miembro"
-msgstr "When a member chats"
+msgstr "Když dorazí zpráva od člena"
 
 #: globals/mensajes.py:53
 msgid ""
 "Cuando se conecta un miembro o cuando alguien se une a tu en vivo en tiktok"
-msgstr "When a member connects or when someone joins your live stream on TikTok"
+msgstr "Když se připojí člen, nebo na TikToku kdokoli"
 
 #: globals/mensajes.py:54
 msgid "Cuando llega un donativo"
-msgstr "When donation received"
+msgstr "Když dorazí příspěvek"
 
 #: globals/mensajes.py:55
 msgid "Cuando habla un moderador"
-msgstr "When a moderator chats"
+msgstr "Když dorazí zpráva od moderátora"
 
 #: globals/mensajes.py:56
 msgid "Cuando habla un usuario verificado"
-msgstr "When a verified user chats"
+msgstr "Když dorazí zpráva od ověřeného uživatele"
 
 #: globals/mensajes.py:57
 msgid "Cuando le dan me gusta al en vivo (solo para tiktok)"
-msgstr "When someone likes the live stream (only for TikTok)"
+msgstr "Když někdo dá streamu lajk (pouze pro TikTok)"
 
 #: globals/mensajes.py:58
 msgid "Cuando alguien empieza a seguirte en tiktok"
-msgstr "When someone starts following you on TikTok"
+msgstr "Když tě někdo začne sledovat na TikToku"
 
 #: globals/mensajes.py:59
 msgid "Cuando alguien comparte el enlace de tu envivo en  tiktok"
-msgstr "When someone shares the link to your live stream on TikTok"
+msgstr "Když někdo sdílí odkaz na tvůj stream na TikToku"
 
 #: globals/mensajes.py:60
 msgid "Cuando alguien envía un cofre  en tiktok"
-msgstr "When someone sends a chest on TikTok"
+msgstr "Když někdo na TikToku pošle truhličku"
 
 #: globals/resources.py:27 servicios/twich.py:83 servicios/twich.py:86
 #: servicios/twich.py:95 servicios/twich.py:100
 msgid "Por defecto"
-msgstr "Default"
+msgstr "Výchozí"
 
 #: globals/resources.py:29 utils/app_utilitys.py:26
 msgid "No hay voces instaladas"
-msgstr "No voices installed"
+msgstr "Žádné nainstalované hlasy"
 
 #: servicios/kick.py:38
 msgid "error_bypass_no_encontrado"
@@ -700,7 +693,7 @@ msgstr "error_bypass_no_encontrado"
 
 #: servicios/kick.py:68
 msgid "Cargando..."
-msgstr "Download in progress..."
+msgstr "Stahování..."
 
 #: servicios/kick.py:71
 msgid "error_iniciar_bypass"
@@ -708,7 +701,7 @@ msgstr "error_iniciar_bypass"
 
 #: servicios/kick.py:94 servicios/tiktok.py:124
 msgid "Ingresando al chat"
-msgstr "Entering the chat"
+msgstr "Vstupuješ do chatu"
 
 #: servicios/kick.py:111
 msgid "error_conectar_kick_chatroom"
@@ -717,107 +710,107 @@ msgstr "error_conectar_kick_chatroom"
 #: servicios/kick.py:160 servicios/kick.py:162 servicios/tiktok.py:161
 #: servicios/tiktok.py:165
 msgid " comenzó a seguirte!"
-msgstr " started following you!"
+msgstr " tě sleduje!"
 
 #: servicios/language_updater.py:40
 #, python-brace-format
 msgid "Error al cargar idiomas locales: {}"
-msgstr "Error loading local languages: {}"
+msgstr "Chyba při načítání místních jazyků: {}"
 
 #: servicios/language_updater.py:54
 msgid "Idiomas guardados exitosamente."
-msgstr "Languages saved successfully."
+msgstr "Jazyky úspěšně uloženy."
 
 #: servicios/language_updater.py:56
 #, python-brace-format
 msgid "Error al guardar idiomas locales: {}"
-msgstr "Error saving local languages: {}"
+msgstr "Chyba při ukládání místních jazyků: {}"
 
 #: servicios/language_updater.py:76 servicios/language_updater.py:80
 #, python-brace-format
 msgid "Error al obtener idiomas remotos: {}"
-msgstr "Error getting remote languages: {}"
+msgstr "Chyba při stahování seznamu dostupných jazyků ze serveru: {}"
 
 #: servicios/language_updater.py:138
 #, python-brace-format
 msgid "Error al descargar el archivo .zip de {}: {}"
-msgstr "Error downloading .zip file from {}: {}"
+msgstr "Chyba při stahování .zip souboru {}: {}"
 
 #: servicios/language_updater.py:172
 #, python-brace-format
 msgid "Error al descomprimir el archivo .zip de {}: {}"
-msgstr "Error extracting .zip file from {}: {}"
+msgstr "Chyba při rozbalování .zip souboru {}: {}"
 
 #: servicios/language_updater.py:197
 #, python-brace-format
 msgid "Error al actualizar el idioma local {}: {}"
-msgstr "Error updating local language {}: {}"
+msgstr "Chyba při aktualizaci místního jazyka {}: {}"
 
 #: servicios/sala.py:30 servicios/twich.py:28 servicios/youtube.py:28
 msgid "Ingresando al chat."
-msgstr "Entering chat."
+msgstr "Vstupuješ do chatu."
 
 #: servicios/sala.py:31
 msgid "Chat de la sala de juegos"
-msgstr "QuentinC Playroom's chat"
+msgstr "Chat na QuentinC Playroomu"
 
 #: servicios/tiktok.py:63
 msgid "El usuario está en vivo. Conectando..."
-msgstr "The user is live. Connecting..."
+msgstr "Kanál vysílá. Navazuje se spojení..."
 
 #: servicios/tiktok.py:69
 msgid "El usuario no está en vivo. Reintentando en un minuto."
-msgstr "The user is not live. Retrying in one minute."
+msgstr "Kanál nevysílá. Další pokus o připojení proběhne za minutu."
 
 #: servicios/tiktok.py:115
 msgid "El directo ha finalizado. Se buscará de nuevo en un minuto."
-msgstr "The stream has ended. Will check again in one minute."
+msgstr "Stream skončil. Další kontrola proběhne za minutu."
 
 #: servicios/tiktok.py:120
 msgid "Se ha perdido la conexión. El servicio se ha detenido."
-msgstr "Connection lost. The service has stopped."
+msgstr "Ztráta spojení. Stream se přerušil."
 
 #: servicios/tiktok.py:144 servicios/tiktok.py:148
 msgid " envió un emogi."
-msgstr " sent an emoji."
+msgstr " posílá emotikon."
 
 #: servicios/tiktok.py:152 servicios/tiktok.py:156
 msgid " ha enviado un cofre!"
-msgstr " has sent a chest!"
+msgstr " posílá truhličku!"
 
 #: servicios/tiktok.py:176 servicios/tiktok.py:184
 #, python-format
 msgid "%s ha enviado %s %s (%s %s)"
-msgstr "%s sent %s %s (%s %s)"
+msgstr "%s posílá %s %s (%s %s)"
 
 #: servicios/tiktok.py:177 servicios/tiktok.py:185
 #, python-format
 msgid "%s ha enviado %s %s (%s diamante)"
-msgstr "%s sent %s %s (%s diamond)"
+msgstr "%s posílá %s %s (%s diamantů)"
 
 #: servicios/tiktok.py:197 servicios/tiktok.py:201
 msgid " se ha unido a tu en vivo."
-msgstr " has joined your live stream."
+msgstr " se připojuje ke streamu."
 
 #: servicios/tiktok.py:206 servicios/tiktok.py:210
 msgid " le ha dado me gusta a tu en vivo."
-msgstr " liked your live stream."
+msgstr " dává lajk tvému streamu."
 
 #: servicios/tiktok.py:215 servicios/tiktok.py:219
 msgid " ha compartido tu en vivo!"
-msgstr " has shared your livestream!"
+msgstr " sdílí tvůj stream!"
 
 #: servicios/tiktok.py:222
 msgid " en vivo, actualmente "
-msgstr " live, currently "
+msgstr " na streamu, právě "
 
 #: servicios/tiktok.py:222
 msgid " viendo ahora"
-msgstr " watching now"
+msgstr " teď sleduje"
 
 #: servicios/twich.py:57
 msgid "Desconocido"
-msgstr "Unknown"
+msgstr "Neznámé"
 
 #: servicios/twich.py:66
 #, python-brace-format
@@ -825,8 +818,8 @@ msgid ""
 "{author_name} ha renovado su suscripción en el nivel "
 "{subscription_plan_name}. ¡Lleva suscrito por {cumulative_months} meses!"
 msgstr ""
-"{author_name} has renewed their subscription at the {subscription_plan_name} "
-"level. They've been a loyal member for {cumulative_months} months!"
+"{author_name} prodlužuje svoje předplatné na úrovni {subscription_plan_name}. "
+"Je věrným členem už {cumulative_months} měsíců!"
 
 #: servicios/twich.py:71
 #, python-brace-format
@@ -834,8 +827,8 @@ msgid ""
 "{author_name} se ha suscrito en el nivel {subscription_plan_name} por "
 "{cumulative_months} meses!"
 msgstr ""
-"{author_name} subscribed at level {subscription_plan_name} for "
-"{cumulative_months} months!"
+"{author_name} si předplácí kanál na úrovni {subscription_plan_name} na "
+"{cumulative_months} měsíců!"
 
 #: servicios/twich.py:72
 #, python-brace-format
@@ -843,8 +836,8 @@ msgid ""
 "{author_name} regaló una suscripción de nivel {subscription_type} a la "
 "comunidad, ¡ha regalado un total de {sender_count} suscripciones!"
 msgstr ""
-"{author_name} gifted a {subscription_type} level subscription to the "
-"community, having gifted a total of {sender_count} subscriptions!"
+"{author_name} daruje předplatné {subscription_type}, takže celkem už rozdal/a "
+"{sender_count} předplatných!"
 
 #: servicios/twich.py:73
 #, python-brace-format
@@ -852,184 +845,184 @@ msgid ""
 "{author_name} ha regalado una suscripción a {gift_recipient_display_name} en "
 "el nivel {subscription_plan_name} por {number_of_months_gifted} meses!"
 msgstr ""
-"{author_name} gifted a subscription to {gift_recipient_display_name} at level "
-"{subscription_plan_name} for {number_of_months_gifted} months!"
+"{author_name} daruje předplatné uživateli {gift_recipient_display_name} na "
+"úrovni {subscription_plan_name} na {number_of_months_gifted} měsíců!"
 
 #: servicios/youtube.py:63
 msgid ""
 "Se ha detectado una transmisión pasada. ¿Deseas conectarte con el servicio en "
 "tiempo real del chat?"
 msgstr ""
-"A past livestream has been detected. Would you like to connect to the current "
-"real-time chat for the channel?"
+"Byl nalezen předchozí stream. Chceš se k tomuto kanálu připojit do živého "
+"chatu právě teď?"
 
 #: servicios/youtube.py:63
 msgid "Transmisión pasada"
-msgstr "Past livestream"
+msgstr "Předchozí stream"
 
 #: servicios/youtube.py:104
 msgid " se a conectado al chat. "
-msgstr " has connected to the chat. "
+msgstr " vstupuje do chatu. "
 
 #: ui/ajustes.py:9
 msgid "Configuración"
-msgstr "Settings"
+msgstr "Nastavení"
 
 #: ui/ajustes.py:14 ui/chat_ui.py:23 ui/chat_ui.py:28
 msgid "General"
-msgstr "General"
+msgstr "Obecné"
 
 #: ui/ajustes.py:16
 msgid "Opciones de la app"
-msgstr "App options"
+msgstr "Nastavení programu"
 
 #: ui/ajustes.py:18
 msgid "Idioma de VeTube (Requiere reiniciar)"
-msgstr "VeTube Language (Requires restart)"
+msgstr "Jazyk VeTube (vyžaduje restart)"
 
 #: ui/ajustes.py:23
 msgid "Activar diálogo de donaciones al inicio de la app."
-msgstr "Enable donations dialog at startup."
+msgstr "Zobrazovat zprávu o podpoře při spuštění programu."
 
 #: ui/ajustes.py:26
 msgid "preguntar si desea salir de la app al cerrar."
-msgstr "ask if you want to exit the app when closing."
+msgstr "potvrzovat ukončení programu."
 
 #: ui/ajustes.py:29
 msgid "Comprobar si hay actualizaciones al iniciar la app"
-msgstr "Check for updates at startup"
+msgstr "Vyhledávat aktualizace při spuštění programu"
 
 #: ui/ajustes.py:32
 msgid "intentar traducir las novedades cuando salga una actualización."
-msgstr "try to translate the changelog when an update is received."
+msgstr "automaticky překládat seznamy změn v aktualizacích."
 
 #: ui/ajustes.py:35
 msgid "Desactivar la interfaz invisible"
-msgstr "Deactivate the invisible interface"
+msgstr "Vypnout virtuální rozhraní"
 
 #: ui/ajustes.py:38
 msgid "traducción de mensajes: "
-msgstr "message translation: "
+msgstr "překládat zprávy do: "
 
 #: ui/ajustes.py:43
 msgid "convertir las donaciones a la divisa: "
-msgstr "convert donations to currency: "
+msgstr "převádět příspěvky na měnu: "
 
 #: ui/ajustes.py:53
 msgid "Voz"
-msgstr "Voice"
+msgstr "Hlas"
 
 #: ui/ajustes.py:55
 msgid "Opciones del habla"
-msgstr "Speech options"
+msgstr "Nastavení hlasu"
 
 #: ui/ajustes.py:57
 msgid "Usar voz sapi en lugar de lector de pantalla."
-msgstr "Use Sapi voice instead of screen reader."
+msgstr "Používat hlas Sapi místo odečítače."
 
 #: ui/ajustes.py:60
 msgid "Sistema TTS a usar: "
-msgstr "TTS engine to use: "
+msgstr "Používat syntézu: "
 
 #: ui/ajustes.py:65
 msgid "Activar lectura de mensajes automática"
-msgstr "Enable automatic message reading"
+msgstr "Zapnout automatické čtení zpráv"
 
 #: ui/ajustes.py:68
 msgid "Voz: "
-msgstr "Voice: "
+msgstr "Hlas: "
 
 #: ui/ajustes.py:73
 msgid "Instalar un paquete de voz..."
-msgstr "Install a voice package..."
+msgstr "Nainstalovat hlasový balíček..."
 
 #: ui/ajustes.py:75
 msgid "Tono: "
-msgstr "Pitch: "
+msgstr "Výška: "
 
 #: ui/ajustes.py:79
 msgid "Volumen: "
-msgstr "Volume: "
+msgstr "Hlasitost: "
 
 #: ui/ajustes.py:83
 msgid "Velocidad: "
-msgstr "Speed: "
+msgstr "Rychlost: "
 
 #: ui/ajustes.py:87
 msgid "&Reproducir prueba."
-msgstr "&Play test."
+msgstr "&Přehrát ukázku."
 
 #: ui/ajustes.py:94
 msgid "reproducción"
-msgstr "playback"
+msgstr "přehrávač"
 
 #: ui/ajustes.py:96
 msgid "ajustes de reproducción"
-msgstr "playback settings"
+msgstr "nastavení přehrávače"
 
 #: ui/ajustes.py:98
 msgid "activar reproducción automática al iniciar un en vivo."
-msgstr "start playback automatically when a livestream starts."
+msgstr "spustit přehrávání automaticky, když začne stream."
 
 #: ui/ajustes.py:101
 msgid "tiempo para adelantar y atrazar el en vivo en segundos"
-msgstr "time to fast-forward and rewind the livestream in seconds"
+msgstr "interval posunu při přetáčení v sekundách"
 
 #: ui/ajustes.py:105
 msgid "volumen del reproductor"
-msgstr "player volume"
+msgstr "hlasitost přehrávače"
 
 #: ui/ajustes.py:109
 msgid "cambio de volumen con las teclas de volumen (1-25)"
-msgstr "change the volume using the volume keys (1-25)"
+msgstr "nastav hlasitost pomocí kláves hlasitosti (1-25)"
 
 #: ui/ajustes.py:118
 msgid "Categorías"
-msgstr "Categories"
+msgstr "Kategorie"
 
 #: ui/ajustes.py:121
 msgid "Categoría"
-msgstr "Category"
+msgstr "Kategorie"
 
 #: ui/ajustes.py:128
 msgid "Sonidos"
-msgstr "Sounds"
+msgstr "Zvuky"
 
 #: ui/ajustes.py:130
 msgid "Activar sonidos"
-msgstr "Enable sounds"
+msgstr "Zapnout zvuky"
 
 #: ui/ajustes.py:134
 msgid "Sonido"
-msgstr "Sound"
+msgstr "Zvuk"
 
 #: ui/ajustes.py:138
 msgid "&Reproducir"
-msgstr "&Play"
+msgstr "&Přehrát"
 
 #: ui/ajustes.py:141
 msgid "Seleccionar dispositivo de audio"
-msgstr "Select an audio device"
+msgstr "Vybrat zvukové zařízení"
 
 #: ui/ajustes.py:146
 msgid "&Establecer"
-msgstr "&Set"
+msgstr "&Nastavit"
 
 #: ui/ajustes.py:152 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:53
 msgid "Eventos"
-msgstr "Events"
+msgstr "Události"
 
 #: ui/ajustes.py:154
 msgid "procesados: "
-msgstr "ignored by VeTube: "
+msgstr "nezobrazovat ve VeTube: "
 
 #: ui/ajustes.py:157 ui/ajustes.py:163
 msgid "Evento"
-msgstr "Event"
+msgstr "Událost"
 
 #: ui/ajustes.py:160
 msgid "leídos"
-msgstr "ignored by screen reader"
+msgstr "nečíst nahlas"
 
 #: ui/ajustes.py:172 update/update.py:136
 msgid "&Aceptar"
@@ -1037,96 +1030,95 @@ msgstr "&OK"
 
 #: ui/ajustes.py:174 update/update.py:136
 msgid "&Cancelar"
-msgstr "&Cancel"
+msgstr "&Zrušit"
 
 #: ui/chat_dialog.py:107
 msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
-msgstr ""
-"Would you like to exit this window and stop reading messages in this chat?"
+msgstr "Chceš zavřít toto okno a přestat číst zprávy?"
 
 #: ui/chat_ui.py:10
 msgid "Lectura del chat en vivo..."
-msgstr "Live chat reading..."
+msgstr "Čtení živého chatu..."
 
 #: ui/chat_ui.py:12
 msgid "&Cerrar chat"
-msgstr "&Close chat"
+msgstr "&Zavřít chat"
 
 #: ui/chat_ui.py:20
 msgid "conversaciones"
-msgstr "conversations"
+msgstr "konverzace"
 
 #: ui/chat_ui.py:21
 msgid "mensajes privados"
-msgstr "private messages"
+msgstr "soukromé zprávy"
 
 #: ui/chat_ui.py:26
 msgid "regalos"
-msgstr "gifted subs"
+msgstr "darovaná předplatná"
 
 #: ui/chat_ui.py:32
 msgid "Donaciones"
-msgstr "Donations"
+msgstr "Příspěvky"
 
 #: ui/chat_ui.py:33
 msgid "Verificados"
-msgstr "Verified users"
+msgstr "Ověření uživatelé"
 
 #: ui/chat_ui.py:40
 msgid "&Eliminar"
-msgstr "&Delete"
+msgstr "&Smazat"
 
 #: ui/chat_ui.py:42 ui/menus/main_menu.py:9
 msgid "&Opciones"
-msgstr "&Options"
+msgstr "&Nastavení"
 
 #: ui/chat_ui.py:54
 msgid "&Filtrar por"
-msgstr "&Filter by"
+msgstr "&Filtrovat podle"
 
 #: ui/estadisticas_dialog.py:13
 msgid "Autor"
-msgstr "Author"
+msgstr "Autor"
 
 #: ui/estadisticas_dialog.py:14
 msgid "Cantidad de mensajes"
-msgstr "Number of messages"
+msgstr "Počet zpráv"
 
 #: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:73
 msgid "Cerrar"
-msgstr "Close"
+msgstr "Zavřít"
 
 #: ui/list_urls.py:8
 msgid "Lista de URLS"
-msgstr "URL list"
+msgstr "Seznam odkazů"
 
 #: ui/editor/editor.py:24 ui/editor/nueva_combinacion.py:38 ui/list_urls.py:21
 msgid "&Cerrar"
-msgstr "&Close"
+msgstr "&Zavřít"
 
 #: ui/list_urls.py:30
 msgid "No hay URLS en este mensaje"
-msgstr "No URL's in this message"
+msgstr "Ve zprávě nejsou žádné odkazy"
 
 #: ui/main_window.py:13
 msgid "&Más opciones"
-msgstr "&More options"
+msgstr "&Další možnosti"
 
 #: ui/main_window.py:19
 msgid "Inicio"
-msgstr "Home"
+msgstr "Chat"
 
 #: ui/main_window.py:23
 msgid "Escriba o pegue una URL o usuario"
-msgstr "Type or paste a URL or an user"
+msgstr "Napiš nebo zkopíruj adresu nebo uživatelské jméno"
 
 #: ui/main_window.py:28
 msgid "Capturar el chat de: "
-msgstr "Capture the chat at: "
+msgstr "Typ služby: "
 
 #: ui/main_window.py:30
 msgid "detectar"
-msgstr "autodetect"
+msgstr "automaticky"
 
 #: ui/main_window.py:30
 msgid "YouTube"
@@ -1146,109 +1138,109 @@ msgstr "QuentinC Playroom"
 
 #: ui/main_window.py:30
 msgid "Kick"
-msgstr "Kick"
+msgstr "Vyhodit uživatele"
 
 #: ui/main_window.py:35
 msgid "&Acceder"
-msgstr "&Enter"
+msgstr "&OK"
 
 #: ui/main_window.py:38
 msgid "&Borrar"
-msgstr "&Delete"
+msgstr "&Smazat"
 
 #: ui/main_window.py:49
 msgid "&Tus favoritos: "
-msgstr "&Your favorites: "
+msgstr "&Tvoje oblíbené: "
 
 #: ui/main_window.py:53
 #, python-format
 msgid "Favoritos (%s)"
-msgstr "Favorites (%s)"
+msgstr "Oblíbené (%s)"
 
 #: ui/main_window.py:57 ui/main_window.py:69
 msgid "&Seleccionar todos los elementos"
-msgstr "&Select all"
+msgstr "&Vybrat vše"
 
 #: ui/main_window.py:61
 msgid "mensajes archivados"
-msgstr "archived messages"
+msgstr "archivované zprávy"
 
 #: ui/main_window.py:63
 msgid "&Mensajes archivados: "
-msgstr "&Archived messages: "
+msgstr "&Archivované zprávy: "
 
 #: ui/show_comment.py:6
 msgid "Mensaje"
-msgstr "Message"
+msgstr "Zpráva"
 
 #: ui/menus/chat_item_menu.py:7 ui/show_comment.py:13
 msgid "&Traducir"
-msgstr "&Translate"
+msgstr "&Přeložit"
 
 #: ui/show_comment.py:20
 msgid "mensaje: "
-msgstr "message: "
+msgstr "zpráva: "
 
 #: ui/show_comment.py:36
 msgid "&Traducir mensaje"
-msgstr "&Translate message"
+msgstr "&Přeložit zprávu"
 
 #: ui/show_comment.py:36
 msgid "&Traducir al idioma del programa"
-msgstr "&Translate into program language"
+msgstr "&Přeložit do jazyka programu"
 
 #: ui/show_comment.py:42
 msgid "mensaje en "
-msgstr "message in "
+msgstr "zpráva v "
 
 #: ui/update_languages_dialog.py:5
 msgid "Actualizar idiomas"
-msgstr "Update languages"
+msgstr "Aktualizovat jazyky"
 
 #: ui/update_languages_dialog.py:9
 msgid "Selecciona los idiomas que deseas actualizar:"
-msgstr "Select the languages that you want to update:"
+msgstr "Vyber jazyky, které chceš aktualizovat:"
 
 #: ui/update_languages_dialog.py:13
 msgid "Idioma"
-msgstr "Language"
+msgstr "Jazyk"
 
 #: ui/update_languages_dialog.py:31
 msgid "Actualizar"
-msgstr "Update"
+msgstr "Aktualizovat"
 
 #: ui/editor/editor.py:7
 msgid "Editor de combinaciones de teclado para Vetube"
-msgstr "VeTube keystroke Editor"
+msgstr "Editor klávesových zkratek VeTube"
 
 #: ui/editor/editor.py:9
 msgid "&Selecciona la combinación de teclado a editar"
-msgstr "&Select a keystroke to edit"
+msgstr "&Vyber zkratku, kterou chceš upravit"
 
 #: ui/editor/editor.py:11
 msgid "acción: "
-msgstr "action: "
+msgstr "akce: "
 
 #: ui/editor/editor.py:12
 msgid "combinación de teclas: "
-msgstr "keystroke: "
+msgstr "klávesová zkratka: "
 
 #: ui/editor/editor.py:21
 msgid "&Editar"
-msgstr "&Edit"
+msgstr "&Upravit"
 
 #: ui/editor/editor.py:23
 msgid "&restaurar combinaciones por defecto"
-msgstr "&Restore the default keystroke"
+msgstr "&Nastavit na výchozí"
 
 #: ui/editor/nueva_combinacion.py:8
 #, python-format
 msgid "Editando la combinación de teclas para %s"
-msgstr "Editing %s keystroke"
+msgstr "Úpravy zkratky %s"
 
 #: ui/editor/nueva_combinacion.py:10
 msgid "Selecciona las teclas que quieres usar"
-msgstr "Select the keys that you want to use"
+msgstr "Vyber klávesy, které chceš použít"
 
 #: ui/editor/nueva_combinacion.py:13
 msgid "&Control"
@@ -1268,163 +1260,163 @@ msgstr "&Windows"
 
 #: ui/editor/nueva_combinacion.py:28
 msgid "Selecciona una tecla para la combinación"
-msgstr "Select a key for the keystroke"
+msgstr "Vyber klávesu do zkratky"
 
 #: ui/editor/nueva_combinacion.py:37
 msgid "&Aplicar nueva combinación de teclado"
-msgstr "&Apply new keystroke"
+msgstr "&Použít novou zkratku"
 
 #: ui/menus/chat_filter_menu.py:9
 msgid "Todos"
-msgstr "All"
+msgstr "Vše"
 
 #: ui/menus/chat_filter_menu.py:10
 msgid "Unidos"
-msgstr "Watching"
+msgstr "Sledující"
 
 #: ui/menus/chat_filter_menu.py:11
 msgid "Gustados"
-msgstr "Likes"
+msgstr "Lajky"
 
 #: ui/menus/chat_filter_menu.py:12
 msgid "Compartidas"
-msgstr "Shares"
+msgstr "Sdílení"
 
 #: ui/menus/chat_filter_menu.py:13
 msgid "Seguidores"
-msgstr "Followers"
+msgstr "Odběratelé"
 
 #: ui/menus/chat_item_menu.py:8
 msgid "&Mostrar el mensaje en un cuadro de texto."
-msgstr "&Show the current message in a text field."
+msgstr "&Zobrazit vybranou zprávu v textovém poli."
 
 #: ui/menus/chat_item_menu.py:9
 msgid "&Copiar mensaje al portapapeles"
-msgstr "&Copy message to clipboard"
+msgstr "&Zkopírovat zprávu do schránky"
 
 #: ui/menus/chat_item_menu.py:10
 msgid "&Listado de Urls."
-msgstr "URL &list."
+msgstr "&Seznam odkazů."
 
 #: ui/menus/chat_item_menu.py:11
 msgid "&Archivar mensaje"
-msgstr "&Archive message"
+msgstr "&Archivovat zprávu"
 
 #: ui/menus/chat_opciones_menu.py:7 ui/menus/main_menu.py:10
 msgid "&Editor de combinaciones de teclado para VeTube"
-msgstr "&VeTube keystroke Editor"
+msgstr "&Editor klávesových zkratek VeTube"
 
 #: ui/menus/chat_opciones_menu.py:8
 msgid "&Añadir este canal a favoritos"
-msgstr "&Add this channel to favorites"
+msgstr "&Přidat tento kanál do oblíbených"
 
 #: ui/menus/chat_opciones_menu.py:9
 msgid "&Ver estadísticas del chat"
-msgstr "&View chat statistics"
+msgstr "&Zobrazit statistiky chatu"
 
 #: ui/menus/chat_opciones_menu.py:10
 msgid "&Copiar enlace del chat al portapapeles"
-msgstr "&Copy live chat link to clipboard"
+msgstr "&Zkopírovat odkaz na chat do schránky"
 
 #: ui/menus/chat_opciones_menu.py:11
 msgid "&Reproducir video en el navegador"
-msgstr "&Play video in browser"
+msgstr "&Přehrát video v prohlížeči"
 
 #: ui/menus/chat_opciones_menu.py:12
 msgid "Buscar mensajes..."
-msgstr "&Search messages..."
+msgstr "Prohledat zprávy..."
 
 #: ui/menus/main_menu.py:11
 msgid "&Configuración"
-msgstr "&Settings"
+msgstr "&Nastavení"
 
 #: ui/menus/main_menu.py:12
 msgid "&Restablecer los ajustes"
-msgstr "&Restore default settings"
+msgstr "&Obnovit výchozí nastavení"
 
 #: ui/menus/main_menu.py:13
 msgid "&Ayuda"
-msgstr "&Help"
+msgstr "&Nápověda"
 
 #: ui/menus/main_menu.py:14
 msgid "¿Cómo usar &vetube? (documentación en línea)"
-msgstr "How to use &VeTube? (Opens in the browser)"
+msgstr "Jak používat &VeTube? (Otevře se v prohlížeči)"
 
 #: ui/menus/main_menu.py:15
 msgid "Únete a nuestra &causa"
-msgstr "&Support us"
+msgstr "&Podpořit nás"
 
 #: ui/menus/main_menu.py:16
 msgid "&Visita nuestra página de github"
-msgstr "&Visit our Github page"
+msgstr "&Navštívit naši stránku na Githubu"
 
 #: ui/menus/main_menu.py:17
 msgid "&buscar actualizaciones"
-msgstr "&Check for updates"
+msgstr "&Vyhledat aktualizace"
 
 #: ui/menus/main_menu.py:18
 msgid "Actualizar &idiomas"
-msgstr "Update &languages"
+msgstr "Aktualizovat &jazyky"
 
 #: ui/menus/main_menu.py:19
 msgid "&Acerca de"
-msgstr "&About"
+msgstr "&O programu"
 
 #: ui/menus/main_menu.py:20
 msgid "&Salir...\tAlt+F4"
-msgstr "&Exit...\tAlt+F4"
+msgstr "&Konec...\tAlt+F4"
 
 #: update/update.py:135
 msgid ""
 "Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te unes a "
 "nuestra causa?"
 msgstr ""
-"With your support, you contribute to keeping this program free. Do you want "
-"to support us?"
+"Svou podporou přispěješ k tomu, že tento program zůstane zdarma. Chceš nás "
+"podpořit?"
 
 #: update/updater.py:13
 msgid "Hubo un error al actualizar VeTube."
-msgstr "There was an error updating VeTube."
+msgstr "Při aktualizaci VeTube došlo k chybě."
 
 #: update/utils.py:29
 #, python-format
 msgid "%d día, "
-msgstr "%d day, "
+msgstr "%d den, "
 
 #: update/utils.py:31
 #, python-format
 msgid "%d días, "
-msgstr "%d days, "
+msgstr "%d dnů, "
 
 #: update/utils.py:33
 #, python-format
 msgid "%d hora, "
-msgstr "%d hour, "
+msgstr "%d hodina, "
 
 #: update/utils.py:35
 #, python-format
 msgid "%d horas, "
-msgstr "%d hours, "
+msgstr "%d hodin, "
 
 #: update/utils.py:37
 #, python-format
 msgid "%d minuto, "
-msgstr "%d minute, "
+msgstr "%d minuta, "
 
 #: update/utils.py:39
 #, python-format
 msgid "%d minutos, "
-msgstr "%d minutes, "
+msgstr "%d minut, "
 
 #: update/utils.py:41
 #, python-format
 msgid "%s segundo"
-msgstr "%s second"
+msgstr "%s vteřina"
 
 #: update/utils.py:43
 #, python-format
 msgid "%s segundos"
-msgstr "%s seconds"
+msgstr "%s vteřin"
 
 #: update/wxUpdater.py:9
 #, python-format
@@ -1436,41 +1428,41 @@ msgid ""
 "Cambios:\n"
 "%s"
 msgstr ""
-"There is a new version of VeTube. Would you like to download it now?\n"
+"Je k dispozici nová verze VeTube. Chceš ji nyní stáhnout?\n"
 "\n"
-" VeTube version: %s\n"
+"Verze VeTube: %s\n"
 "\n"
-"changes:\n"
+"Novinky:\n"
 "%s"
 
 #: update/wxUpdater.py:9
 msgid "Nueva versión de VeTube"
-msgstr "New VeTube version"
+msgstr "Nová verze VeTube"
 
 #: update/wxUpdater.py:17
 msgid "Descarga en progreso"
-msgstr "Download in progress"
+msgstr "Probíhá stahování"
 
 #: update/wxUpdater.py:17
 msgid "Descargando la actualización"
-msgstr "Downloading the update"
+msgstr "Stahuje se aktualizace"
 
 #: update/wxUpdater.py:27
 #, python-format
 msgid "Actualizando... %s de %s"
-msgstr "Updating... %s of %s"
+msgstr "Probíhá aktualizace... %s z %s"
 
 #: update/wxUpdater.py:30
 msgid ""
 "La actualización se a descargado he instalado exitosamente. pulse en aceptar "
 "para continuar."
 msgstr ""
-"The update has been downloaded and installed successfully. Click \"OK\" to "
-"continue."
+"Aktualizace byla úspěšně stažena a nainstalována. Pro pokračování stiskni "
+"tlačítko OK."
 
 #: update/wxUpdater.py:30
 msgid "¡Hecho!"
-msgstr "Done!"
+msgstr "Hotovo!"
 
 #: utils/app_utilitys.py:26
 msgid ""
@@ -1479,20 +1471,20 @@ msgid ""
 "se abrirÃ¡ nuestra carpeta seguido de una ventana para instalar una una vez "
 "la descargues."
 msgstr ""
-"You need at least one voice in order to use the Piper synthesizer. Do you "
-"want to open our Drive folder to download some models? If you press yes, our "
-"folder will open, followed by a window to install one once you've downloaded "
-"it."
+"Pokud chceš používat syntézu Piper, potřebuješ aspoň jeden hlas. Chceš "
+"otevřít naši složku na Disku Google, kde si budeš moct stáhnout některý "
+"model? Pokud klikneš na Ano, otevře se naše složka, a až si stáhneš některý "
+"model, tak následně i okno, kde ho budeš moct nainstalovat."
 
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
-msgstr "System language"
+msgstr "Jazyk systému"
 
 #~ msgid "ha finalizado la lectura del chat."
-#~ msgstr "Stopped reading chat."
+#~ msgstr "čtení chatu ukončeno."
 
 #~ msgid "Chat en vivo"
-#~ msgstr "Live chat"
+#~ msgstr "Živý chat"
 
 #~ msgid "&Detener chat"
-#~ msgstr "&Stop chat"
+#~ msgstr "&Ukončit chat"
