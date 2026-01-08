@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2026-01-05 09:53+0700\n"
-"PO-Revision-Date: 2026-01-06 20:26+0100\n"
+"PO-Revision-Date: 2026-01-08 16:04+0100\n"
 "Last-Translator: 4Sense Gaming <lukas@4sensegaming.cz>\n"
 "Language-Team: en <LL@li.org>\n"
 "Language: en\n"
@@ -1021,7 +1021,7 @@ msgstr "Events"
 
 #: ui/ajustes.py:154
 msgid "procesados: "
-msgstr "ignored by VeTube: "
+msgstr "events to display: "
 
 #: ui/ajustes.py:157 ui/ajustes.py:163
 msgid "Evento"
@@ -1029,7 +1029,7 @@ msgstr "Event"
 
 #: ui/ajustes.py:160
 msgid "leídos"
-msgstr "ignored by screen reader"
+msgstr "events to speak"
 
 #: ui/ajustes.py:172 update/update.py:136
 msgid "&Aceptar"
