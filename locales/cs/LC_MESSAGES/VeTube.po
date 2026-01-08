@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2026-01-05 09:53+0700\n"
-"PO-Revision-Date: 2026-01-06 20:17+0100\n"
+"PO-Revision-Date: 2026-01-08 16:06+0100\n"
 "Last-Translator: 4Sense Gaming <lukas@4sensegaming.cz>\n"
 "Language-Team: 4Sense Gaming <lukas@4sensegaming.cz>\n"
 "Language: cs\n"
@@ -1014,7 +1014,7 @@ msgstr "Události"
 
 #: ui/ajustes.py:154
 msgid "procesados: "
-msgstr "nezobrazovat ve VeTube: "
+msgstr "obrazovat události: "
 
 #: ui/ajustes.py:157 ui/ajustes.py:163
 msgid "Evento"
@@ -1022,7 +1022,7 @@ msgstr "Událost"
 
 #: ui/ajustes.py:160
 msgid "leídos"
-msgstr "nečíst nahlas"
+msgstr "číst nahlas"
 
 #: ui/ajustes.py:172 update/update.py:136
 msgid "&Aceptar"
@@ -1138,7 +1138,7 @@ msgstr "QuentinC Playroom"
 
 #: ui/main_window.py:30
 msgid "Kick"
-msgstr "Vyhodit uživatele"
+msgstr "Vykopnout uživatele"
 
 #: ui/main_window.py:35
 msgid "&Acceder"
