@@ -84,5 +84,5 @@ cesar.verastegui17@gmail.com
 Svou podporou přispíváš k tomu, aby se tento program stále zdokonaloval.
 
 [Chceš nás podpořit?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
-[Tady si stáhni 64-bitovou verzi](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x64.zip)
-[Tady si stáhni 32-bitovou verzi](https://github.com/metalalchemist/VeTube/releases/download/v3.2/VeTube-x86.zip)
+[Tady si stáhni 64-bitovou verzi](https://github.com/metalalchemist/VeTube/releases/download/v3.7/VeTube-x64.zip)
+[Tady si stáhni 32-bitovou verzi](https://github.com/metalalchemist/VeTube/releases/download/v3.7/VeTube-x86.zip)
