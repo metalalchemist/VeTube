@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2026-01-05 09:53+0700\n"
-"PO-Revision-Date: 2026-01-08 16:06+0100\n"
+"PO-Revision-Date: 2026-03-07 07:43+0100\n"
 "Last-Translator: 4Sense Gaming <lukas@4sensegaming.cz>\n"
 "Language-Team: 4Sense Gaming <lukas@4sensegaming.cz>\n"
 "Language: cs\n"
@@ -1014,7 +1014,7 @@ msgstr "Události"
 
 #: ui/ajustes.py:154
 msgid "procesados: "
-msgstr "obrazovat události: "
+msgstr "zobrazovat události: "
 
 #: ui/ajustes.py:157 ui/ajustes.py:163
 msgid "Evento"
