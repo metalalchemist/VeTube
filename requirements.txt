@@ -7,7 +7,7 @@ git+https://github.com/metalalchemist/google-currency
 git+https://github.com/accessibleapps/sound_lib
 git+https://github.com/accessibleapps/accessible_output2
 git+https://github.com/rmcpantoja/googletrans.git
-numpy
+numpy==1.26.4
 onnxruntime
 git+https://github.com/mush42/espeak-phonemizer-windows
 uiautomation
