@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2026-01-05 09:53+0700\n"
-"PO-Revision-Date: 2026-05-08 18:22+0200\n"
+"PO-Revision-Date: 2026-05-08 18:40+0200\n"
 "Last-Translator: Dash <https://tdprograms.ovh>\n"
 "Language-Team: TDPrograms <https://tdprograms.ovh>\n"
 "Language: pl\n"
@@ -1363,7 +1363,7 @@ msgstr "&Sprawdź aktualizacje"
 
 #: ui/menus/main_menu.py:18
 msgid "Actualizar &idiomas"
-msgstr "Update &languages"
+msgstr "Aktualizuj języki"
 
 #: ui/menus/main_menu.py:19
 msgid "&Acerca de"
