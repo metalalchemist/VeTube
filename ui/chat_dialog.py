@@ -58,19 +58,27 @@ class ChatDialog(wx.Dialog):
 
                     if obj_name == 'chat':
                         # Llama al método en la sesión de chat activa en el momento de la pulsación
-                        handler = lambda m=method_name: getattr(self.active_chat_session, m)() if self.active_chat_session else None
+                        handler = lambda m=method_name: self._resolve_method(self.active_chat_session, m)() if self.active_chat_session else None
                         self.keyboard_handler.register_key(key, handler)
                     elif obj_name == 'media_player':
                         # Llama al método en el reproductor de medios globalmente activo
-                        handler = lambda m=method_name: getattr(self.globally_controlled_media_player, m)() if self.globally_controlled_media_player else None
+                        handler = lambda m=method_name: self._resolve_method(self.globally_controlled_media_player, m)() if self.globally_controlled_media_player else None
                         self.keyboard_handler.register_key(key, handler)
                     elif obj_name in command_objects:
                         target_obj = command_objects[obj_name]
-                        method = getattr(target_obj, method_name, None)
+                        method = self._resolve_method(target_obj, method_name)
                         if method and callable(method):
                             self.keyboard_handler.register_key(key, method)
                 except Exception as e:
                     print(f"Error parsing shortcut {key}={command_str}: {e}")
+
+    def _resolve_method(self, obj, path):
+        """Resuelve una ruta de atributos separada por puntos (ej: '_leer.silence') sobre un objeto."""
+        if not obj: return None
+        for attr in path.split('.'):
+            obj = getattr(obj, attr, None)
+            if obj is None: break
+        return obj
 
     def add_chat_page(self, chat_panel, title, chat_controller):
         self.notebook.AddPage(chat_panel, title)
@@ -92,6 +100,12 @@ class ChatDialog(wx.Dialog):
         if url_to_remove and page_index_to_remove != -1:
             self.notebook.DeletePage(page_index_to_remove)
             del self.chat_sessions[url_to_remove]
+            
+            # Actualizar los índices de las sesiones restantes
+            for url, (controller, page_index) in self.chat_sessions.items():
+                if page_index > page_index_to_remove:
+                    self.chat_sessions[url] = (controller, page_index - 1)
+
             if self.notebook.GetPageCount() == 0:
                 self.is_programmatic_close = True
                 self.Close() # Llamar a Close() para asegurar que on_close se ejecute
@@ -110,6 +124,7 @@ class ChatDialog(wx.Dialog):
 
         # Si el usuario confirma o el cierre es programático, proceder con la limpieza.
         self.activo = False
+        self.main_controller.chat_dialog = None
         self.main_controller.frame.menu_1.Enable()
         self.keyboard_handler.unregister_all_keys()
         for url, (controller, page_index) in list(self.chat_sessions.items()):

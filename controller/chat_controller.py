@@ -146,6 +146,11 @@ class ChatController:
     def mostrar_dialogo(self):
         return self.ui
 
+    def notificar_error(self, mensaje_error):
+        wx.MessageBox(_("Error al conectar con el chat: ") + str(mensaje_error), _("Error"), wx.OK | wx.ICON_ERROR)
+        if self.chat_dialog:
+            self.chat_dialog.close_chat_session(self)
+
     def buscar_mensajes(self):
         dialogo = wx.TextEntryDialog(self.ui, _("Introduce el criterio de búsqueda"), _("Buscar mensajes"))
         dialogo.Raise()
@@ -335,8 +340,9 @@ class ChatController:
             reader._leer.silence()
             data_store.config['reader'] = False
         else: data_store.config['reader'] = True
-        reader.leer_auto(_("Lectura automática activada.") if data_store.config['reader'] else _("Lectura automática  desactivada."))
+        reader.leer_auto(_("Lectura automática activada.") if data_store.config['reader'] else _("Lectura automática desactivada."))
+
     def toggle_sounds(self):
         if data_store.config['sonidos']: data_store.config['sonidos'] = False
         else: data_store.config['sonidos'] = True
-        reader.leer_auto(_("sonidos activados.") if data_store.config['reader'] else _("sonidos desactivados."))
+        reader.leer_auto(_("sonidos activados.") if data_store.config['sonidos'] else _("sonidos desactivados."))

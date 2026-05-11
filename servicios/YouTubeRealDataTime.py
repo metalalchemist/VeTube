@@ -118,6 +118,7 @@ class YouTubeRealTimeService:
                             wx.CallAfter(self.chat_controller.agregar_mensaje_verificado, full_message)
                             if data_store.config['reader'] and data_store.config['unread'][5]:
                                 wx.CallAfter(reader.leer_mensaje, full_message)
-        except Exception as e: print(f"Error en el servicio de YouTube en tiempo real: {e}")
+        except Exception as e:
+            wx.CallAfter(self.chat_controller.notificar_error, str(e))
         finally:
             if self.chat: self.chat.terminate()

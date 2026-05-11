@@ -80,6 +80,7 @@ class ServicioKick:
         except Exception as e:
             if self.is_running:
                 print(f"Error fatal en el hilo de conexión de Kick: {e}")
+                wx.CallAfter(self.chat_controller.notificar_error, str(e))
         finally:
             if self.loop.is_running():
                 self.loop.close()

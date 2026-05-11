@@ -52,6 +52,7 @@ class ServicioTiktok:
         except Exception as e:
             print(f"Error during client initialization: {e}")
             traceback.print_exc()
+            wx.CallAfter(self.chat_controller.notificar_error, str(e))
             self.detener()
 
     async def _run_client_async(self):
@@ -75,6 +76,7 @@ class ServicioTiktok:
                 if self.is_running:
                     print(f"Error en el bucle del cliente: {e}.")
                     traceback.print_exc()
+                    wx.CallAfter(self.chat_controller.notificar_error, str(e))
                     self.detener()
 
     def detener(self):
