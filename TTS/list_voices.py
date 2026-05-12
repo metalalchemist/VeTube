@@ -13,7 +13,7 @@ def install_piper_voice(config, reader):
 	abrir_tar = wx.FileDialog(None, _("Selecciona un paquete de voz"), wildcard=_("Archivos tar.gz (*.tar.gz)|*.tar.gz"), style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
 	if abrir_tar.ShowModal() == wx.ID_CANCEL:
 		wx.MessageBox(_('Para usar piper como sistema TTS, necesitas tener al menos una voz. Si quieres hacerlo de forma manual, extrae el paquete de voz en la carpeta "piper/voices/voice-nombre_de_paquete" en VeTube.'), _("No se instaló ninguna voz"), wx.ICON_ERROR)
-		return
+		return False
 	paquete = abrir_tar.GetPath()
 	nombre_paquete = os.path.splitext(os.path.basename(paquete))[0]
 	destino = os.path.join(os.getcwd(), "piper", "voices", nombre_paquete[:-3])

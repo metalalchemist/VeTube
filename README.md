@@ -1,5 +1,7 @@
+[readme cs](doc/cs/readme.md)
 [readme eng](doc/en/readme.md)
 [readme es](doc/es/readme.md)
 [readme fr](doc/fr/readme.md)
 [readme id](doc/id/readme.md)
+[readme pl](doc/pl/readme.md)
 [readme pt](doc/pt/readme.md)

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: filmesfxx@gmail.com\n"
-"POT-Creation-Date: 2025-12-29 20:21-0800\n"
+"POT-Creation-Date: 2026-05-11 21:59-0700\n"
 "PO-Revision-Date: 2022-08-18 09:10-0700\n"
 "Last-Translator: Eternal legend <filmesfxx@gmail.com>\n"
 "Language: pt_BR\n"
@@ -74,76 +74,87 @@ msgstr ""
 "mensagens de seus canais favoritos."
 
 #: controller/chat_controller.py:150
+msgid "Error al conectar con el chat: "
+msgstr "Erro ao conectar com o chat: "
+
+#: controller/chat_controller.py:150 controller/estadisticas_controller.py:46
+#: controller/main_controller.py:65
+#: controller/update_languages_controller.py:82
+#: servicios/language_updater.py:13
+msgid "Error"
+msgstr "Erro, "
+
+#: controller/chat_controller.py:155
 msgid "Introduce el criterio de búsqueda"
 msgstr "Escreva o termo  que quer buscar"
 
-#: controller/chat_controller.py:150
+#: controller/chat_controller.py:155
 msgid "Buscar mensajes"
 msgstr "Buscar mensagens"
 
-#: controller/chat_controller.py:176
+#: controller/chat_controller.py:181
 msgid "No se encontraron mensajes que coincidan con el criterio de búsqueda."
 msgstr "Nenhuma mensagem encontrada com o critério de busca."
 
-#: controller/chat_controller.py:176
+#: controller/chat_controller.py:181
 msgid "Búsqueda sin resultados"
 msgstr "Busca sem resultados"
 
-#: controller/chat_controller.py:266
+#: controller/chat_controller.py:271
 msgid "Mensaje copiado"
 msgstr "Mensagem copiada"
 
-#: controller/chat_controller.py:282 globals/mensajes.py:31 ui/chat_ui.py:34
+#: controller/chat_controller.py:287 globals/mensajes.py:31 ui/chat_ui.py:34
 #: ui/main_window.py:47
 msgid "Favoritos"
 msgstr "favoritos"
 
-#: controller/chat_controller.py:286
+#: controller/chat_controller.py:291
 msgid "Este mensaje ya se encuentra en favoritos"
 msgstr "esta mensagem já está no buffer de favoritos."
 
-#: controller/chat_controller.py:289
+#: controller/chat_controller.py:294
 msgid "Mensaje agregado a favoritos"
 msgstr "O item foi adicionado aos favoritos."
 
-#: controller/chat_controller.py:301 controller/main_controller.py:35
-#: controller/main_controller.py:107 controller/main_controller.py:120
-#: controller/main_controller.py:127
+#: controller/chat_controller.py:306 controller/main_controller.py:34
+#: controller/main_controller.py:106 controller/main_controller.py:119
+#: controller/main_controller.py:126
 #: controller/menus/chat_item_controller.py:52
 msgid "Tus mensajes archivados aparecerán aquí"
 msgstr "Suas mensagens arquivadas aparecerão aqui"
 
-#: controller/chat_controller.py:317
+#: controller/chat_controller.py:322
 #: controller/menus/chat_item_controller.py:70
 msgid "El mensaje ha sido archivado correctamente."
 msgstr "A mensagem foi arquivada com sucesso."
 
-#: controller/chat_controller.py:319
+#: controller/chat_controller.py:324
 #: controller/menus/chat_item_controller.py:72
 msgid "Este mensaje ya está en la lista de archivados."
 msgstr "Esta mensagem já está na lista de arquivadas."
 
-#: controller/chat_controller.py:326
+#: controller/chat_controller.py:331
 msgid "No se puede borrar la última página."
 msgstr "Não é possível apagar a última página."
 
-#: controller/chat_controller.py:330
+#: controller/chat_controller.py:335
 msgid "Página borrada."
 msgstr "Página apagada."
 
-#: controller/chat_controller.py:338
+#: controller/chat_controller.py:343
 msgid "Lectura automática activada."
 msgstr "Leitura automática ativada"
 
-#: controller/chat_controller.py:338
-msgid "Lectura automática  desactivada."
+#: controller/chat_controller.py:343
+msgid "Lectura automática desactivada."
 msgstr "Leitura automática desabilitada."
 
-#: controller/chat_controller.py:342
+#: controller/chat_controller.py:348
 msgid "sonidos activados."
 msgstr "Os sons foram ativados"
 
-#: controller/chat_controller.py:342
+#: controller/chat_controller.py:348
 msgid "sonidos desactivados."
 msgstr "Os Sons foram desativados"
 
@@ -156,7 +167,7 @@ msgstr ""
 "padrão,Deseja continuar? Esta ação não pode ser desfeita.\""
 
 #: controller/editor_controller.py:43
-#: controller/menus/main_menu_controller.py:59 update/update.py:131
+#: controller/menus/main_menu_controller.py:59 update/update.py:135
 msgid "Atención:"
 msgstr "Atenção!"
 
@@ -233,94 +244,88 @@ msgstr "listo!"
 msgid "Error al guardar el archivo: {}"
 msgstr "Erro ao salvar o arquivo: {}"
 
-#: controller/estadisticas_controller.py:46 controller/main_controller.py:66
-#: controller/update_languages_controller.py:82
-#: servicios/language_updater.py:13
-msgid "Error"
-msgstr "Erro, "
-
-#: controller/main_controller.py:30
+#: controller/main_controller.py:29
 #, python-format
 msgid "Favoritos(%s)"
 msgstr "favoritos (%s)"
 
-#: controller/main_controller.py:32 controller/main_controller.py:65
-#: controller/main_controller.py:82 controller/menus/chat_menu_controller.py:56
+#: controller/main_controller.py:31 controller/main_controller.py:64
+#: controller/main_controller.py:81 controller/menus/chat_menu_controller.py:56
 msgid "Tus favoritos aparecerán aquí"
 msgstr "Seus favoritos aparecerão aqui"
 
-#: controller/main_controller.py:66
+#: controller/main_controller.py:65
 msgid "No hay favoritos que borrar"
 msgstr "Não há itens para excluir"
 
-#: controller/main_controller.py:70
+#: controller/main_controller.py:69
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr "Tem certeza de que deseja excluir todos os favoritos da lista?"
 
-#: controller/main_controller.py:70
+#: controller/main_controller.py:69
 #: controller/menus/main_menu_controller.py:106
-#: controller/update_languages_controller.py:93 ui/chat_dialog.py:107
+#: controller/update_languages_controller.py:93 ui/chat_dialog.py:121
 msgid "¡Atención!"
 msgstr "Atenção!"
 
-#: controller/main_controller.py:86
+#: controller/main_controller.py:85
 msgid "&Borrar mensajes"
 msgstr "Apagar mensagens"
 
-#: controller/main_controller.py:87
+#: controller/main_controller.py:86
 msgid "Borrar todos los mensajes destacados"
 msgstr "Limpar todas as mensagens destacadas"
 
-#: controller/main_controller.py:90 ui/main_window.py:67
+#: controller/main_controller.py:89 ui/main_window.py:67
 msgid "&Borrar mensaje"
 msgstr "Apagar mensagem"
 
-#: controller/main_controller.py:91
+#: controller/main_controller.py:90
 msgid "Borrar el mensaje destacado seleccionado"
 msgstr "Excluir a mensagem destacada selecionada"
 
-#: controller/main_controller.py:96
+#: controller/main_controller.py:95
 msgid "&Borrar favoritos"
 msgstr "&Excluir favoritos"
 
-#: controller/main_controller.py:97
+#: controller/main_controller.py:96
 msgid "Borrar todos los favoritos"
 msgstr "&Excluir favoritos"
 
-#: controller/main_controller.py:100 ui/main_window.py:55
+#: controller/main_controller.py:99 ui/main_window.py:55
 msgid "&Borrar favorito"
 msgstr "&Excluir favorito"
 
-#: controller/main_controller.py:101
+#: controller/main_controller.py:100
 msgid "Borrar el favorito seleccionado"
 msgstr "Excluir favorito selecionado"
 
-#: controller/main_controller.py:115
+#: controller/main_controller.py:114
 msgid "No hay más elementos que borrar"
 msgstr "Não há itens para excluir"
 
-#: controller/main_controller.py:117 controller/main_controller.py:130
+#: controller/main_controller.py:116 controller/main_controller.py:129
 msgid "No hay mensajes que borrar"
 msgstr "Não há itens para excluir"
 
-#: controller/main_controller.py:123
+#: controller/main_controller.py:122
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr "Tem certeza de que deseja excluir todas as mensagens?"
 
-#: controller/main_controller.py:139
+#: controller/main_controller.py:138
 msgid "Lectura de chats en vivo"
 msgstr "Leitura de bate-papo ao vivo..."
 
-#: controller/main_controller.py:222
+#: controller/main_controller.py:221
 msgid "Conectando..."
 msgstr ""
 
-#: controller/main_controller.py:281
+#: controller/main_controller.py:280
 #: controller/menus/main_menu_controller.py:64
 msgid "¿está seguro que desea salir del programa?"
 msgstr "Tem certeza que deseja sair do programa?"
 
-#: controller/main_controller.py:281
+#: controller/main_controller.py:280
 #: controller/menus/main_menu_controller.py:64
 msgid "¡atención!"
 msgstr "Atenção!"
@@ -699,8 +704,8 @@ msgstr "Quando alguém compartilha o link da sua transmissão ao vivo no TikTok.
 msgid "Cuando alguien envía un cofre  en tiktok"
 msgstr "Quando alguém envia um baú no TikTok."
 
-#: globals/resources.py:27 servicios/twich.py:83 servicios/twich.py:86
-#: servicios/twich.py:95 servicios/twich.py:100
+#: globals/resources.py:27 servicios/twich.py:84 servicios/twich.py:87
+#: servicios/twich.py:96 servicios/twich.py:101
 msgid "Por defecto"
 msgstr "Por padrão."
 
@@ -720,16 +725,16 @@ msgstr ""
 msgid "error_iniciar_bypass"
 msgstr ""
 
-#: servicios/kick.py:94 servicios/tiktok.py:124
+#: servicios/kick.py:95 servicios/tiktok.py:126
 msgid "Ingresando al chat"
 msgstr "Entrando no bate-papo."
 
-#: servicios/kick.py:111
+#: servicios/kick.py:112
 msgid "error_conectar_kick_chatroom"
 msgstr ""
 
-#: servicios/kick.py:160 servicios/kick.py:162 servicios/tiktok.py:161
-#: servicios/tiktok.py:165
+#: servicios/kick.py:161 servicios/kick.py:163 servicios/tiktok.py:163
+#: servicios/tiktok.py:167
 msgid " comenzó a seguirte!"
 msgstr " Começou a seguir você!"
 
@@ -767,73 +772,73 @@ msgstr "Erro ao descompactar o arquivo .zip de {}: {}"
 msgid "Error al actualizar el idioma local {}: {}"
 msgstr "Erro ao atualizar o idioma local {}: {}"
 
-#: servicios/sala.py:30 servicios/twich.py:28 servicios/youtube.py:28
+#: servicios/sala.py:31 servicios/twich.py:28 servicios/youtube.py:28
 msgid "Ingresando al chat."
 msgstr "Entrando no bate-papo."
 
-#: servicios/sala.py:31
+#: servicios/sala.py:32
 msgid "Chat de la sala de juegos"
 msgstr "Chat da sala de jogos"
 
-#: servicios/tiktok.py:63
+#: servicios/tiktok.py:64
 msgid "El usuario está en vivo. Conectando..."
 msgstr "O usuário está ao vivo. Conectando..."
 
-#: servicios/tiktok.py:69
+#: servicios/tiktok.py:70
 msgid "El usuario no está en vivo. Reintentando en un minuto."
 msgstr "O usuário não está ao vivo. Tentando novamente em um minuto."
 
-#: servicios/tiktok.py:115
+#: servicios/tiktok.py:117
 msgid "El directo ha finalizado. Se buscará de nuevo en un minuto."
 msgstr "A live terminou. Buscando novamente em um minuto."
 
-#: servicios/tiktok.py:120
+#: servicios/tiktok.py:122
 msgid "Se ha perdido la conexión. El servicio se ha detenido."
 msgstr "A conexão foi perdida. O serviço foi interrompido."
 
-#: servicios/tiktok.py:144 servicios/tiktok.py:148
+#: servicios/tiktok.py:146 servicios/tiktok.py:150
 msgid " envió un emogi."
 msgstr " envió un emogi."
 
-#: servicios/tiktok.py:152 servicios/tiktok.py:156
+#: servicios/tiktok.py:154 servicios/tiktok.py:158
 msgid " ha enviado un cofre!"
 msgstr " Enviou um baú!"
 
-#: servicios/tiktok.py:176 servicios/tiktok.py:184
+#: servicios/tiktok.py:178 servicios/tiktok.py:186
 #, python-format
 msgid "%s ha enviado %s %s (%s %s)"
 msgstr "%s enviou %s %s (%s %s)"
 
-#: servicios/tiktok.py:177 servicios/tiktok.py:185
+#: servicios/tiktok.py:179 servicios/tiktok.py:187
 #, python-format
 msgid "%s ha enviado %s %s (%s diamante)"
 msgstr "%s enviou %s %s (%s diamante)"
 
-#: servicios/tiktok.py:197 servicios/tiktok.py:201
+#: servicios/tiktok.py:199 servicios/tiktok.py:203
 msgid " se ha unido a tu en vivo."
 msgstr " Juntou-se à sua transmissão ao vivo."
 
-#: servicios/tiktok.py:206 servicios/tiktok.py:210
+#: servicios/tiktok.py:208 servicios/tiktok.py:212
 msgid " le ha dado me gusta a tu en vivo."
 msgstr " Curtiu a sua transmissão ao vivo."
 
-#: servicios/tiktok.py:215 servicios/tiktok.py:219
+#: servicios/tiktok.py:217 servicios/tiktok.py:221
 msgid " ha compartido tu en vivo!"
 msgstr " \"Compartilhou a sua transmissão ao vivo!"
 
-#: servicios/tiktok.py:222
+#: servicios/tiktok.py:224
 msgid " en vivo, actualmente "
 msgstr " ao vivo, Atualmente"
 
-#: servicios/tiktok.py:222
+#: servicios/tiktok.py:224
 msgid " viendo ahora"
 msgstr "Agora"
 
-#: servicios/twich.py:57
+#: servicios/twich.py:58
 msgid "Desconocido"
 msgstr "Desconhecido"
 
-#: servicios/twich.py:66
+#: servicios/twich.py:67
 #, python-brace-format
 msgid ""
 "{author_name} ha renovado su suscripción en el nivel "
@@ -842,7 +847,7 @@ msgstr ""
 "{author_name} renovou sua assinatura no nível {subscription_plan_name}. "
 "Já é assinante há {cumulative_months} meses!"
 
-#: servicios/twich.py:71
+#: servicios/twich.py:72
 #, python-brace-format
 msgid ""
 "{author_name} se ha suscrito en el nivel {subscription_plan_name} por "
@@ -851,7 +856,7 @@ msgstr ""
 "{author_name} se inscreveu no nível {subscription_plan_name} por "
 "{cumulative_months} meses!"
 
-#: servicios/twich.py:72
+#: servicios/twich.py:73
 #, python-brace-format
 msgid ""
 "{author_name} regaló una suscripción de nivel {subscription_type} a la "
@@ -860,7 +865,7 @@ msgstr ""
 "{author_name} presenteou uma assinatura de nível {subscription_type} para"
 " a comunidade, já presenteou um total de {sender_count} assinaturas!"
 
-#: servicios/twich.py:73
+#: servicios/twich.py:74
 #, python-brace-format
 msgid ""
 "{author_name} ha regalado una suscripción a {gift_recipient_display_name}"
@@ -871,7 +876,7 @@ msgstr ""
 "{gift_recipient_display_name} no nível {subscription_plan_name} por "
 "{number_of_months_gifted} meses!"
 
-#: servicios/youtube.py:63
+#: servicios/youtube.py:64
 msgid ""
 "Se ha detectado una transmisión pasada. ¿Deseas conectarte con el "
 "servicio en tiempo real del chat?"
@@ -879,11 +884,11 @@ msgstr ""
 "Foi detectada uma transmissão anterior. Deseja conectar-se ao serviço de "
 "chat em tempo real?"
 
-#: servicios/youtube.py:63
+#: servicios/youtube.py:64
 msgid "Transmisión pasada"
 msgstr "Transmissão anterior"
 
-#: servicios/youtube.py:104
+#: servicios/youtube.py:105
 msgid " se a conectado al chat. "
 msgstr "se conectou ao bate-papo."
 
@@ -1047,15 +1052,15 @@ msgstr "Evento"
 msgid "leídos"
 msgstr "Não ignorados pelo leitor de tela"
 
-#: ui/ajustes.py:172 update/update.py:132
+#: ui/ajustes.py:172 update/update.py:136
 msgid "&Aceptar"
 msgstr "&Aceitar"
 
-#: ui/ajustes.py:174 update/update.py:132
+#: ui/ajustes.py:174 update/update.py:136
 msgid "&Cancelar"
 msgstr "&Cancelar"
 
-#: ui/chat_dialog.py:107
+#: ui/chat_dialog.py:121
 msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
 msgstr "Deseja sair desta janela e parar de ler as mensagens?"
 
@@ -1389,7 +1394,7 @@ msgstr "Sobre"
 msgid "&Salir...\tAlt+F4"
 msgstr "&Sair...\tAlt+F4"
 
-#: update/update.py:131
+#: update/update.py:135
 msgid ""
 "Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te "
 "unes a nuestra causa?"

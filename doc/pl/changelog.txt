@@ -1,0 +1,141 @@
+* naprawiono pobieranie czatu (chat downloader), aby był kompatybilny z Twitch
+* zaktualizowano protobuf do najnowszej wersji z powodu błędu bezpieczeństwa (CVE 0994)
+v3.6
+naprawiono błąd z aktualizatorem
+v3.5
+nowe metody dodawania wiadomości w różnych kategoriach dla Kick: moderatorzy, zweryfikowani użytkownicy oraz członkowie lub subskrybenci.
+możliwość wyłączenia niewidzialnego interfejsu programu.
+v3.4
+dodano w trybie beta przechwytywanie czatu z platformy Kick.
+naprawiono błędy w edytorze kombinacji klawiszy.
+v3.3
+teraz można przechwytywać wiele transmisji na żywo jednocześnie.
+odtwarzacz jest globalny. Za każdym razem, gdy przejdziemy do poprzedniej lub następnej transmisji, zatrzymamy odtwarzacz i ponownie go włączymy, odtworzy on adres URL tej transmisji, na której aktualnie się znajdujemy.
+utworzono zakładkę konfiguracji odtwarzacza w ustawieniach.
+statystyki są wyświetlane dla każdej transmisji z osobna.
+v3.2
+utworzono nowy odtwarzacz, który może odtwarzać zarówno przeszłe transmisje, jak i te w czasie rzeczywistym. Więcej informacji w pliku readme.
+utworzono nową usługę pozwalającą cieszyć się transmisją z YouTube w czasie rzeczywistym z odtwarzaniem dźwięku.
+można wyodrębniać nazwy użytkowników TikTok z adresów URL zawierających vm.tiktok.
+v3.1
+naprawiono błąd, który uniemożliwiał uruchomienie czatu TikTok.
+v3.0
+utworzono aktualizator języków.
+usunięto funkcję zapisywania historii.
+naprawiono błędy z platformą TikTok.
+ulepszono interfejs. Bufory są widoczne, a program został zmodularyzowany.
+Teraz możemy ustawić urządzenie audio dla dźwięków i czytanych wiadomości. Należy pamiętać, że w przypadku czytanych wiadomości zmiana zostanie zastosowana tylko w silniku PiperTTS.
+Możemy przechwycić czat platformy, podając tylko nazwę użytkownika. Na przykład, jeśli wpiszemy 4everzyanya, naciśniemy tab, wybierzemy TikTok i naciśniemy enter, przeniesie nas to do transmisji tej osoby na TikTok.
+Dostęp do edytora kombinacji jest możliwy zarówno przed uruchomieniem czatu, jak i w jego trakcie.
+v2.9
+naprawiono błąd uniemożliwiający dodawanie kanałów:
+*aby dodać kanał YouTube, musisz wpisać nazwę użytkownika kanału, a następnie /live. Na przykład:
+
+www.youtube.com/@4everzyanya/live
+
+naprawa błędów: statystyki i eksport zapisują się poprawnie. Nie działo się tak z powodu nowo dodanego playroomu.
+naprawa błędów: czat powinien kończyć się poprawnie we wszystkich sesjach.
+dodano zakładkę "Zdarzenia". Służy ona do ignorowania pewnych typów zdarzeń w programie.
+dodano próbę tłumaczenia aktualizacji za pomocą Tłumacza Google dla osób wybierających język inny niż hiszpański.
+v2.8
+dodano wsparcie dla czytania czatu z playroom (sala gier), podziękowania dla Oriol Gomez.
+v2.71
+W menu kontekstowym wiadomości dodano opcję "Lista URL-i". Pozwala to na szybki dostęp do adresów URL osób, które wysłały wiadomość.
+Dodano nowy bufor o nazwie "Wiadomości". Trafiają tam tylko wiadomości z czatu, co jest przydatne, aby nie mieszały się z ogólną listą w transmisjach TikTok.
+Konwerter walut jest już dostępny dla transmisji na TikTok.
+v2.7
+dodano więcej danych w statystykach czatu dla transmisji z TikTok.
+Dodano możliwość aktualizacji konfiguracji, aby naprawić nieoczekiwane błędy w przypadku, gdy jakaś opcja nie jest ustawiona.
+możemy ignorować pewne zdarzenia czatu. Przechodzimy do: Więcej opcji, Opcje, Konfiguracja, i kategoria Zdarzenia.
+dodano możliwość wyłączenia potwierdzenia przy wyjściu.
+naprawiono przechwytywanie wiadomości z Twitch i starano się nie przechwytywać powtarzających się informacji na ogólnej liście.
+dodano wsparcie dla TikTok.
+naprawiono kilka drobnych błędów.
+naprawiono błędy związane ze ścieżkami głosów podczas dostępu do syntezatora Piper.
+v2.6
+podziękowania dla Mateo Celillo.
+Dodano pole kombi w opcjach głosu, aby wybierać między systemami tekstowo-mowowymi; pojawi się ono tylko wtedy, gdy pole "Użyj SAPI" jest odznaczone.
+Dodano silnik tekstowo-mowowy Piper.
+Zaktualizowano system dźwiękowy.
+dodano nową wartość w konfiguracji v data.json (sistemaTTS), dlatego uważam, że lepiej zacząć od czystej konfiguracji, aby uniknąć problemów.
+metalalchemist & Johan G.
+rozwiązano problemy z ustawieniami: gdy anulowano ustawienia, zmiany i tak były odzwierciedlane. Nie powinno się to już zdarzać.
+jeśli wkleiłeś URL typu: https://www.youtube.com/live/3wzD80Irf40?feature=share program nie łapał czatów. Teraz powinien.
+powinny być już przechwytywane wiadomości o wartości None.
+dodano konwerter walut, aby przeliczać darowizny na wybraną walutę.
+naprawiono błąd, w którym podczas dodawania linku do ulubionych z aktualnej transmisji na Twitch, dodawany był tytuł, jeśli twórca streamował. Zamiast tytułu transmisji powinna być dodawana nazwa kanału.
+dodano 2 nowe opcje w przycisku "Więcej opcji": Kopiuj link i Odtwórz w przeglądarce.
+poprawki błędów w buforze ulubionych: brak dodawania duplikatów wiadomości oraz brak możliwości dodawania z tego samego bufora ulubionych.
+kilka drobnych optymalizacji kodu.
+dodano menu kontekstowe w liście czatu z różnymi opcjami, takimi jak: tłumacz wiadomość na język programu, kopiuj wiadomość i archiwizuj wiadomość. Podziękowania dla Johan G.
+sekcja archiwizacji wiadomości, gdy chcemy zapisać ważną wiadomość. Wiadomości te pozostaną w aplikacji, dopóki ich nie usuniemy w trzeciej dodanej zakładce. Podziękowania dla Johan G.
+dodano edytor klawiatury. Znajduje się on w menu "Więcej opcji", podmenu "Opcje".
+można zapisywać statystyki kanału do pliku tekstowego, podziękowania dla Joan G.
+dodano tłumaczenie wiadomości przy jej wyświetlaniu.
+teraz można dowiedzieć się, ile wiadomości dotarło na czat i kto mówił najwięcej. Utworzono listę osób w kolejności od największej do najmniejszej liczby wysłanych wiadomości, a poniżej znajduje się pole tekstowe z łączną liczbą wiadomości i użytkowników.
+naprawiono błąd, w którym mieszały się wiadomości z przeszłych transmisji.
+naprawiono błąd, w którym czat nie startował.
+Usunięto dokumentację. Zamiast tego utworzono opcję pozwalającą na dostęp do niej online. Znajduje się ona w menu "Więcej opcji", podmenu "Pomoc".
+naprawiono błąd tłumacza i dodano go do Twitch.
+pogrupowano kilka opcji czatu v menu kontekstowym, podziękowania dla Johan G.
+v2.5
+ulepszono funkcję szukania słowa wśród wiadomości.
+rozwiązano błąd z powtarzającymi się wiadomościami; teraz każda trafia do odpowiedniej kategorii.
+teraz możliwe jest tłumaczenie wiadomości ze streamingu na dowolny język.
+utworzono przycisk do zapisywania historii wiadomości do pliku. Podziękowania dla Johan G.
+v2.2
+zmieniono aktualizator. Zaadaptowany dla VeTube z https://github.com/MCV-Software/TWBlue/tree/next-gen/src/update
+dodano 2 opcje konfiguracji w kategorii ogólnej menu konfiguracji.
+dodano skrót do tymczasowego wyłączenia dźwięków: alt shift p.
+oddzielono klawisze do niezależnego pliku, aby w przyszłości pracować nad edytorem kombinacji.
+(programiści): usunięto bibliotekę `keyboard` na rzecz `keyboard_handler`.
+zmieniono kombinację wyciszania przychodzącej wiadomości z SAPI5: control p.
+dodano skrót do czyszczenia buforów wyszukiwania i bufora ulubionych: alt shift d.
+teraz można szukać wiadomości według słowa lub nazwy autora. Zostanie utworzony bufor z wpisaną frazą wyszukiwania, zawierający wszystkie dopasowania (alt shift s).
+v2.1
+teraz wyświetlane są wiadomości od właściciela kanału.
+teraz możesz wybrać niektóre dźwięki w ustawieniach programu.
+VeTube nie pozwala już na uruchomienie 2 instancji jednocześnie.
+teraz możesz włączać i wyłączać kategorie w ustawieniach programu.
+naprawiono błąd, w którym do ulubionych dodawany był link tyle razy, ile miałeś już ulubionych.
+jeśli przełączysz się na różne kategorie, tryb automatyczny będzie czytał tylko wiadomości z tej kategorii.
+dodano skrót klawiszowy do wyróżnienia wiadomości; trafi ona do kategorii ulubionych (zostanie utworzona, jeśli jej nie masz): alt shift f.
+dodano kategorie wiadomości: członkowie, darowizny, moderatorzy, zweryfikowani użytkownicy i ulubione.
+naprawiono błąd uniemożliwiający automatyczne uruchomienie czatu, jeśli nie udało się pobrać tytułu lub liczby wyświetleń transmisji.
+v2.0
+dodano Twitch do listy wspieranych strumieni.
+naprawiono błąd, który mógł powodować zamknięcie programu, jeśli SAPI lub czytnik ekranu czytał czat.
+dodano sekcję ulubionych; możesz zapisać transmisję, którą lubisz, aby powtarzać czat tyle razy, ile chcesz.
+dodano język portugalski do przetłumaczonych języków, podziękowania dla Eternal Legend.
+naprawiono poprawne ładowanie języków.
+V1.2.1
+(programiści): usunięto `webbrowser` na rzecz natywnych funkcji wx-python. Podziękowania dla Hector.
+dodano język angielski do katalogu wspieranych języków.
+dodano opcję pozwalającą na automatyczne czytanie wiadomości głosem SAPI lub czytnikiem ekranu. Podziękowania za wasze sugestie.
+zmodyfikowano opcję: teraz alt shift + m włącza lub wyłącza automatyczne czytanie wiadomości. W ustawieniach również znajduje się pole o tej samej nazwie.
+zoptymalizowano pobieranie danych o tytule i liczbie odtworzeń we wklejonym linku. Podziękowania dla Hector.
+jeśli zamknąłeś i otworzyłeś inną transmisję, otwierał się kolejny wątek niewidzialnego interfejsu, utrudniając czytanie czatu. Nie powinno się to już zdarzać.
+V1.2
+(programiści): dodano katalog VeTube (oryginalny język hiszpański), aby umożliwić tłumaczenie na wiele języków. Plik nazywa się VeTube.pot.
+(programiści): usunięto `pytchat` na rzecz `chat_downloader` dla wsparcia wielu platform.
+teraz wybierany jest język domyślny zgodnie z twoją konfiguracją.
+jeśli program jest zaktualizowany, VeTube powiadomi cię, że masz najnowszą wersję przy sprawdzaniu aktualizacji.
+dodano dźwięki powiadamiające o nowej wiadomości od członka oraz o zwykłej wiadomości.
+dodano aktualizator. Sprawdza aktualizacje przy starcie, ale można go też znaleźć w Więcej opcji & Pomoc.
+usunięto limit wiadomości.
+eksperymentalne: VeTube może wykryć język systemu i jeśli katalog jest dostępny, załaduje go.
+program czasami się nie uruchamiał, dlatego przy każdym otwarciu usuwane są pliki tymczasowe z %temp/gempy.
+naprawiono zamarzanie niewidzialnego interfejsu przy wchodzeniu do czatu.
+naprawiono brak możliwości przejścia na początek czatu na liście głównej.
+dodano dźwięki przy nawigacji po czacie i przy dotarciu do krawędzi, podziękowania dla Glein.
+Dodano dźwięk wskazujący na wejście do czatu. Podziękowania dla Johan G.
+Dodano łatwy dostęp do naszej strony na GitHub, aby móc z nami współpracować, a także opcję wsparcia w sekcji pomocy. Podziękowania dla Johan G.
+VeTube rozpoznaje teraz link z YouTube Studio, gdy jest to transmisja na żywo, więc nie trzeba już pobierać linku z YouTube.
+***
+v1.1
+dodano osobne okno dialogowe dla czatu, podziękowania dla Johan G.
+Dodano możliwość wyświetlenia wiadomości w polu tekstowym.
+Teraz VeTube rozpoznaje, gdy link nie jest transmisją na żywo, aby uniknąć tworzenia czatu.
+***
+v1.0
+pierwsza wersja projektu
