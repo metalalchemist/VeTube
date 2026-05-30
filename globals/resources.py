@@ -12,10 +12,10 @@ rutasonidos = [
     f"sounds/{config['directorio']}/donar.mp3",
     f"sounds/{config['directorio']}/moderators.mp3",
     f"sounds/{config['directorio']}/verified.mp3",
-    f"sounds/{config['directorio']}/abrirchat.wav",
+    f"sounds/{config['directorio']}/abrirchat.mp3",
     f"sounds/{config['directorio']}/propietario.mp3",
-    f"sounds/{config['directorio']}/buscar.wav",
-    f"sounds/{config['directorio']}/like.wav",
+    f"sounds/{config['directorio']}/buscar.mp3",
+    f"sounds/{config['directorio']}/like.mp3",
     f"sounds/{config['directorio']}/seguirte.mp3",
     f"sounds/{config['directorio']}/share.mp3",
     f"sounds/{config['directorio']}/chest.mp3"

@@ -87,7 +87,7 @@ class AjustesController:
         valor_str = self.dialog.lista_dispositivos.GetStringSelection()
         config['dispositivo'] = valor
         player.setdevice(config["dispositivo"])
-        player.play("sounds/cambiardispositivo.wav")
+        player.play("sounds/cambiardispositivo.mp3")
         if config['sistemaTTS'] == "piper":
             if reader._lector.get_devices() is not None and lista_voces_piper[0]!='No hay voces instaladas':
                 reader._lector.set_device(reader._lector.find_device_id(valor_str))
