@@ -1,15 +1,15 @@
 # French translations for PROJECT.
 # Copyright (C) 2024 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+# Enzo Wenterstein <enzo.wenterstein@hotmail.com>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2026-05-11 21:59-0700\n"
-"PO-Revision-Date: 2024-07-29 11:01-0700\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2026-06-03 12:00+0000\n"
+"Last-Translator: Enzo Wenterstein <enzo.wenterstein@hotmail.com>\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -191,12 +191,12 @@ msgstr "Cette combinaison est utilisée par le système"
 #: controller/estadisticas_controller.py:9
 #, python-brace-format
 msgid "Total de mensajes recibidos: {}"
-msgstr "Total des messages reçus: {}"
+msgstr "Total des messages reçus : {}"
 
 #: controller/estadisticas_controller.py:10
 #, python-brace-format
 msgid "Total de usuarios que hablaron: {}"
-msgstr "Total d'utilisateurs ayant partagé en direct : {}"
+msgstr "Total d'utilisateurs ayant parlé : {}"
 
 #: controller/estadisticas_controller.py:14
 #, python-brace-format
@@ -206,7 +206,7 @@ msgstr "Nouveaux utilisateurs qui ont rejoint en direct : {}"
 #: controller/estadisticas_controller.py:15
 #, python-brace-format
 msgid "Total de usuarios que siguieron al moderador: {}"
-msgstr "Nouveaux utilisateurs qui suivent le modérateur en direct: {}"
+msgstr "Nouveaux utilisateurs qui suivent le modérateur en direct : {}"
 
 #: controller/estadisticas_controller.py:16
 #, python-brace-format
@@ -233,11 +233,11 @@ msgstr "Fichiers json (*.json)|*.json"
 #: controller/estadisticas_controller.py:44
 #, python-brace-format
 msgid "Estadísticas guardadas en {}"
-msgstr "Statistiques enregistrées dans: {}"
+msgstr "Statistiques enregistrées dans : {}"
 
 #: controller/estadisticas_controller.py:44
 msgid "Éxito"
-msgstr "Prêt"
+msgstr "Succès"
 
 #: controller/estadisticas_controller.py:46
 #, python-brace-format
@@ -314,7 +314,7 @@ msgstr "Êtes-vous sûr de vouloir supprimer tous les messages ?"
 
 #: controller/main_controller.py:138
 msgid "Lectura de chats en vivo"
-msgstr "Lecture du chats en direct..."
+msgstr "Lecture des chats en direct..."
 
 #: controller/main_controller.py:221
 msgid "Conectando..."
@@ -446,9 +446,9 @@ msgid ""
 " tus canales favoritos."
 msgstr ""
 "Description :\n"
-"\" \" Lit à haute voix les messages en direct sur YouTube, TikTok, kick "
-"et Twitch, ajuste tes préférences comme tu le souhaites et profite "
-"davantage de tes chaînes\" \" préférées."
+" Lit à haute voix les messages en direct sur YouTube, TikTok, Twitch, "
+"Kick et Le Salon, ajustez vos préférences comme vous le souhaitez et "
+"profitez davantage de vos chaînes préférées."
 
 #: controller/menus/main_menu_controller.py:59
 msgid ""
@@ -486,7 +486,7 @@ msgstr "Démarrer / annuler la capture d’un autre direct"
 
 #: globals/mensajes.py:3
 msgid "Silencia la voz sapy"
-msgstr "Mettre en Muet la voix sapy"
+msgstr "Mettre en sourdine la voix SAPI"
 
 #: globals/mensajes.py:4
 msgid "Mensaje anterior."
@@ -715,7 +715,7 @@ msgstr "Aucune voix n'est installée"
 
 #: servicios/kick.py:38
 msgid "error_bypass_no_encontrado"
-msgstr ""
+msgstr "Le bypass est introuvable."
 
 #: servicios/kick.py:68
 msgid "Cargando..."
@@ -723,7 +723,7 @@ msgstr "Connexion..."
 
 #: servicios/kick.py:71
 msgid "error_iniciar_bypass"
-msgstr ""
+msgstr "Erreur lors du démarrage du bypass."
 
 #: servicios/kick.py:95 servicios/tiktok.py:126
 msgid "Ingresando al chat"
@@ -731,7 +731,7 @@ msgstr "Connexion au chat"
 
 #: servicios/kick.py:112
 msgid "error_conectar_kick_chatroom"
-msgstr ""
+msgstr "Erreur de connexion au salon de discussion Kick."
 
 #: servicios/kick.py:161 servicios/kick.py:163 servicios/tiktok.py:163
 #: servicios/tiktok.py:167
@@ -778,7 +778,7 @@ msgstr "Entrée dans le chat."
 
 #: servicios/sala.py:32
 msgid "Chat de la sala de juegos"
-msgstr "QuentinC Playroom's chat"
+msgstr "Chat du Salon"
 
 #: servicios/tiktok.py:64
 msgid "El usuario está en vivo. Conectando..."
@@ -881,7 +881,7 @@ msgid ""
 "servicio en tiempo real del chat?"
 msgstr ""
 "Une diffusion précédente a été détectée. Souhaitez-vous vous connecter au"
-" service de chat en temps réel?"
+" service de chat en temps réel ?"
 
 #: servicios/youtube.py:64
 msgid "Transmisión pasada"
@@ -893,7 +893,7 @@ msgstr " s'est connecté au chat. "
 
 #: ui/ajustes.py:9
 msgid "Configuración"
-msgstr "Paramêtres"
+msgstr "Paramètres"
 
 #: ui/ajustes.py:14 ui/chat_ui.py:23 ui/chat_ui.py:28
 msgid "General"
@@ -925,7 +925,7 @@ msgstr "essayer de traduire les nouveautés lorsqu'une mise à jour est disponib
 
 #: ui/ajustes.py:35
 msgid "Desactivar la interfaz invisible"
-msgstr ""
+msgstr "Désactiver l'interface invisible"
 
 #: ui/ajustes.py:38
 msgid "traducción de mensajes: "
@@ -1033,7 +1033,7 @@ msgstr "Sélectionner le périphérique audio"
 
 #: ui/ajustes.py:146
 msgid "&Establecer"
-msgstr "Configurer"
+msgstr "&Configurer"
 
 #: ui/ajustes.py:152 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:53
 msgid "Eventos"
@@ -1137,11 +1137,11 @@ msgstr "Accueil"
 
 #: ui/main_window.py:23
 msgid "Escriba o pegue una URL o usuario"
-msgstr "\"Entrez ou collez une URL ou un utilisateur"
+msgstr "Entrez ou collez une URL ou un utilisateur"
 
 #: ui/main_window.py:28
 msgid "Capturar el chat de: "
-msgstr "Lecture  chat du: "
+msgstr "Lecture du chat de : "
 
 #: ui/main_window.py:30
 msgid "detectar"
@@ -1153,7 +1153,7 @@ msgstr "YouTube"
 
 #: ui/main_window.py:30
 msgid "Twich"
-msgstr "Twich"
+msgstr "Twitch"
 
 #: ui/main_window.py:30
 msgid "TikTok"
@@ -1161,11 +1161,11 @@ msgstr "TikTok"
 
 #: ui/main_window.py:30
 msgid "La sala de juegos"
-msgstr "QuentinC Playroom"
+msgstr "Le Salon"
 
 #: ui/main_window.py:30
 msgid "Kick"
-msgstr "kick"
+msgstr "Kick"
 
 #: ui/main_window.py:35
 msgid "&Acceder"
@@ -1355,7 +1355,7 @@ msgstr "Rechercher des messages..."
 
 #: ui/menus/main_menu.py:11
 msgid "&Configuración"
-msgstr "&Paramêtres"
+msgstr "&Paramètres"
 
 #: ui/menus/main_menu.py:12
 msgid "&Restablecer los ajustes"
@@ -1367,7 +1367,7 @@ msgstr "&Aide"
 
 #: ui/menus/main_menu.py:14
 msgid "¿Cómo usar &vetube? (documentación en línea)"
-msgstr "Comment utiliser VeTube ? (documentation en ligne)"
+msgstr "Comment utiliser &VeTube ? (documentation en ligne)"
 
 #: ui/menus/main_menu.py:15
 msgid "Únete a nuestra &causa"
@@ -1379,7 +1379,7 @@ msgstr "&Visitez notre page GitHub"
 
 #: ui/menus/main_menu.py:17
 msgid "&buscar actualizaciones"
-msgstr "Rechercher des mises à jour"
+msgstr "&Rechercher des mises à jour"
 
 #: ui/menus/main_menu.py:18
 msgid "Actualizar &idiomas"
@@ -1387,7 +1387,7 @@ msgstr "Mettre à jour les &langues"
 
 #: ui/menus/main_menu.py:19
 msgid "&Acerca de"
-msgstr "À propos"
+msgstr "&À propos"
 
 #: ui/menus/main_menu.py:20
 msgid "&Salir...\tAlt+F4"
@@ -1457,11 +1457,11 @@ msgid ""
 msgstr ""
 "Il y a une nouvelle version de VeTube. Souhaitez-vous la télécharger "
 "maintenant ?\n"
-"\" \"\n"
-"\" \" Version de VeTube : %s\n"
-"\" \"\n"
-"\" \"Changements :\n"
-"\" \"%s"
+"\n"
+" Version de VeTube : %s\n"
+"\n"
+"Changements :\n"
+"%s"
 
 #: update/wxUpdater.py:9
 msgid "Nueva versión de VeTube"
@@ -1490,7 +1490,7 @@ msgstr ""
 
 #: update/wxUpdater.py:30
 msgid "¡Hecho!"
-msgstr "Terminé!"
+msgstr "Terminé !"
 
 #: utils/app_utilitys.py:26
 msgid ""
