@@ -1,10 +1,18 @@
+from __future__ import annotations
+
 import asyncio, threading, subprocess, os, platform, wx, kick
+from typing import TYPE_CHECKING
 from globals import data_store
 from globals.resources import rutasonidos
 from setup import reader, player
 from controller.media_controller import MediaController
 from utils.play_mp4 import extract_stream_url
 from utils import translator
+from servicios.message_router import MessageRouter, RoutableMessage
+
+if TYPE_CHECKING:
+    from servicios.chat_service_protocol import ChatService
+
 
 class ServicioKick:
     def __init__(self, main_controller, url, frame, plataforma, chat_controller):
@@ -21,6 +29,7 @@ class ServicioKick:
         self.thread = None
         self.media_controller = None
         self.client_task = None
+        self.router = MessageRouter(chat_controller)
 
     def iniciar_chat(self):
         self.is_running = True
@@ -126,41 +135,60 @@ class ServicioKick:
                 else:
                     badge_types.append(getattr(b, 'type', ''))
 
-        full_message = f"{message.author.username}: {cadena}"
-
         # 1. Prioridad: Moderador o Propietario (broadcaster)
-        if ('moderator' in badge_types or 'broadcaster' in badge_types) and data_store.config['eventos'][4] and data_store.config['categorias'][4] and hasattr(self.chat_controller.ui, 'list_box_moderadores'):
-            wx.CallAfter(self.chat_controller.agregar_mensaje_moderador, full_message)
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][4]: wx.CallAfter(player.play, rutasonidos[4])
-            if data_store.config['reader'] and data_store.config['unread'][4]: wx.CallAfter(reader.leer_mensaje, full_message)
+        if 'moderator' in badge_types or 'broadcaster' in badge_types:
+            msg = RoutableMessage(
+                text=cadena,
+                author=message.author.username,
+                category='moderator',
+                platform='kick'
+            )
+            self.router.route(msg)
             return
 
         # 2. Prioridad: Suscriptor (miembro)
-        if 'subscriber' in badge_types and data_store.config['eventos'][1] and data_store.config['categorias'][2] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
-            wx.CallAfter(self.chat_controller.agregar_mensaje_miembro, full_message)
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][1]: wx.CallAfter(player.play, rutasonidos[1])
-            if data_store.config['reader'] and data_store.config['unread'][1]: wx.CallAfter(reader.leer_mensaje, full_message)
+        if 'subscriber' in badge_types:
+            msg = RoutableMessage(
+                text=cadena,
+                author=message.author.username,
+                category='member',
+                platform='kick'
+            )
+            self.router.route(msg)
             return
 
         # 3. Prioridad: Verificado
-        if 'verified' in badge_types and data_store.config['eventos'][5] and data_store.config['categorias'][5] and hasattr(self.chat_controller.ui, 'list_box_verificados'):
-            wx.CallAfter(self.chat_controller.agregar_mensaje_verificado, full_message)
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][5]: wx.CallAfter(player.play, rutasonidos[5])
-            if data_store.config['reader'] and data_store.config['unread'][5]: wx.CallAfter(reader.leer_mensaje, full_message)
+        if 'verified' in badge_types:
+            msg = RoutableMessage(
+                text=cadena,
+                author=message.author.username,
+                category='verified',
+                platform='kick'
+            )
+            self.router.route(msg)
             return
 
         # 4. Fallback: General
-        if data_store.config['eventos'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
-            wx.CallAfter(self.chat_controller.agregar_mensaje_general, full_message)
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][0]: wx.CallAfter(player.play, rutasonidos[0])
-            if data_store.config['reader'] and data_store.config['unread'][0]: wx.CallAfter(reader.leer_mensaje, full_message)
+        msg = RoutableMessage(
+            text=cadena,
+            author=message.author.username,
+            category='general',
+            platform='kick'
+        )
+        self.router.route(msg)
 
     async def on_follow(self, user: kick.User):
-        if data_store.config['eventos'][7] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
-            wx.CallAfter(self.estadisticas_manager.agregar_seguidor)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, user.username + _(" comenzó a seguirte!"), "follow")
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][10]: wx.CallAfter(player.play, rutasonidos[10])
-            if data_store.config['reader'] and data_store.config['unread'][7]: wx.CallAfter(reader.leer_mensaje, user.username + _(" comenzó a seguirte!"))
+        wx.CallAfter(self.estadisticas_manager.agregar_seguidor)
+        msg = RoutableMessage(
+            text=_(" comenzó a seguirte!"),
+            author=user.username,
+            category='event',
+            event_type='follow',
+            platform='kick',
+            eventos_index=7,
+            sound_index=10
+        )
+        self.router.route(msg)
 
     def detener(self):
         if not self.is_running:

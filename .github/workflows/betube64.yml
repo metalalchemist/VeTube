@@ -9,6 +9,34 @@ on:
   workflow_dispatch:
 
 jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Source checkout
+        uses: actions/checkout@v6
+
+      - name: Configure Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          architecture: x64
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Install dev dependencies
+        run: uv sync --dev
+
+      - name: Run tests
+        run: uv run pytest -v
+
+      - name: Run linter
+        run: uv run ruff check .
+
+      - name: Run type checker
+        run: uv run ty check servicios/estadisticas_manager.py
+
   build:
     runs-on: windows-latest
 
@@ -19,7 +47,7 @@ jobs:
       - name: Configure Python
         uses: actions/setup-python@v6
         with:
-          python-version: 3.12.4
+          python-version: "3.13"
           architecture: x64
 
       - name: Install dependencies

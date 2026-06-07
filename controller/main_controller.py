@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import wx
+from typing import TYPE_CHECKING
 from globals.data_store import favorite, mensajes_destacados, favs, msjs, config
 from ui.main_window import MyFrame
 from utils import funciones
@@ -15,6 +18,9 @@ from ui.dialog_response import response
 from setup import reader
 from controller.chat_controller import ChatController
 from controller.editor_controller import EditorController
+
+if TYPE_CHECKING:
+    from servicios.chat_service_protocol import ChatService
 
 
 class MainController:
@@ -262,7 +268,7 @@ class MainController:
                 self, self.frame, plataforma=plataforma, chat_dialog=self.chat_dialog
             )
 
-            servicio = None
+            servicio: ChatService | None = None
             try:
                 if plataforma_ids == 1:
                     servicio = ServicioYouTube(

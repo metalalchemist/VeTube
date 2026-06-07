@@ -1,11 +1,14 @@
-from utils import languageHandler
-from globals.data_store import config
-from players.sound_helper import SoundPlayer
-from helpers.reader_handler import ReaderHandler
-languageHandler.setLanguage(config['idioma'])
-player=SoundPlayer()
-reader = ReaderHandler()
-reader._leer.set_rate(config['speed'])
-reader._leer.set_pitch(config['tono'])
-reader._leer.set_voice(reader._leer.list_voices()[config['voz']])
-reader._leer.set_volume(config['volume'])
+import os
+
+if os.environ.get("VETUBE_TEST_MODE") != "1":
+    from utils import languageHandler
+    from globals.data_store import config
+    from players.sound_helper import SoundPlayer
+    from helpers.reader_handler import ReaderHandler
+    languageHandler.setLanguage(config['idioma'])
+    player=SoundPlayer()
+    reader = ReaderHandler()
+    reader._leer.set_rate(config['speed'])
+    reader._leer.set_pitch(config['tono'])
+    reader._leer.set_voice(reader._leer.list_voices()[config['voz']])
+    reader._leer.set_volume(config['volume'])
