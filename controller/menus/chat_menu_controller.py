@@ -34,7 +34,7 @@ class ChatMenuController:
 
     def addFavoritos(self, event):
         from globals.data_store import favorite
-        main_frame = self.parent.GetParent()
+        main_frame = self.chat_controller.main_controller.frame
         list_favorite = main_frame.list_favorite
         url = self.chat_controller.servicio.url
 
@@ -43,7 +43,7 @@ class ChatMenuController:
             return
 
         if self.plataforma == 'TikTok': titulo = funciones.extractUser(url)
-        elif self.plataforma == 'Twich' and self.chat_controller.servicio.chat.status != 'past': titulo = funciones.extractUser(url)
+        elif self.plataforma == 'Twich' and getattr(getattr(self.chat_controller.servicio, 'chat', None), 'status', None) != 'past': titulo = funciones.extractUser(url)
         elif self.plataforma == 'Kick':
             titulo = url
             url = "https://www.kick.com/" + titulo

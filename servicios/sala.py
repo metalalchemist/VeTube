@@ -1,13 +1,20 @@
+from __future__ import annotations
+
 import wx
+from typing import TYPE_CHECKING
 from helpers.timer import Timer
 from helpers.playroom_helper import PlayroomHelper
-from controller.chat_controller import ChatController
 from globals import data_store
 from globals.resources import rutasonidos
 from utils import translator
 from setup import player,reader
 from controller.chat_controller import ChatController
 from servicios.estadisticas_manager import EstadisticasManager
+from servicios.message_router import MessageRouter, RoutableMessage
+
+if TYPE_CHECKING:
+    from servicios.chat_service_protocol import ChatService
+
 
 class ServicioSala:
     def __init__(self, main_controller, url, frame, plataforma, chat_controller):
@@ -17,7 +24,9 @@ class ServicioSala:
         self.chat = None
         self.chat_controller = chat_controller
         self.estadisticas_manager = chat_controller.estadisticas_manager
+        self.media_controller = None
         self._detener = False
+        self.router = MessageRouter(chat_controller)
 
     def iniciar_chat(self):
         try:
@@ -47,16 +56,21 @@ class ServicioSala:
                 if message['message']==None: message['message']=''
                 if data_store.dst: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
                 if (message['type'] == 'private'):
-                    if data_store.config['categorias'][2] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
-                        if data_store.config['eventos'][1]:
-                            self.chat_controller.agregar_mensaje_miembro(message['author'] +': ' +message['message'])
-                            if data_store.config['reader'] and data_store.config['unread'][1]: reader.leer_mensaje(message['author'] +': ' +message['message'])
-                            if data_store.config['sonidos'] and data_store.config['listasonidos'][2]: player.play(rutasonidos[2])
+                    msg = RoutableMessage(
+                        text=message['message'],
+                        author=message['author'],
+                        category='member',
+                        platform='sala',
+                        sound_index=2
+                    )
+                    self.router.route(msg)
                 else:
-                    if data_store.config['categorias'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
-                        if data_store.config['eventos'][0]:
-                            self.chat_controller.agregar_mensaje_general(message['author'] +': ' +message['message'])
-                            if data_store.config['reader'] and data_store.config['unread'][0]: reader.leer_mensaje(message['author'] +': ' +message['message'])
-                            if data_store.config['sonidos'] and data_store.config['listasonidos'][0]: player.play(rutasonidos[0])
+                    msg = RoutableMessage(
+                        text=message['message'],
+                        author=message['author'],
+                        category='general',
+                        platform='sala'
+                    )
+                    self.router.route(msg)
         except Exception as e:
             wx.CallAfter(self.chat_controller.notificar_error, str(e))

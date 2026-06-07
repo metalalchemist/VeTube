@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import json, google_currency,threading,re,wx
+from typing import TYPE_CHECKING
 from chat_downloader import ChatDownloader
 from globals import data_store
 from globals.resources import rutasonidos
@@ -8,6 +11,11 @@ from setup import player,reader
 from controller.chat_controller import ChatController
 from controller.media_controller import MediaController
 from servicios.estadisticas_manager import EstadisticasManager
+from servicios.message_router import MessageRouter, RoutableMessage
+
+if TYPE_CHECKING:
+    from servicios.chat_service_protocol import ChatService
+
 
 class ServicioTwich:
     def __init__(self, main_controller, url, frame, plataforma, chat_controller):
@@ -19,6 +27,7 @@ class ServicioTwich:
         self.estadisticas_manager = chat_controller.estadisticas_manager
         self.media_controller = None
         self._detener = False
+        self.router = MessageRouter(chat_controller)
 
     def iniciar_chat(self):
         self._detener = False
@@ -61,7 +70,7 @@ class ServicioTwich:
                 full_message = f"{author_name}: {msg}"
 
                 # Subscription events
-                if message['message_type'] in ['resubscription', 'subscription', 'mystery_subscription_gift', 'subscription_gift'] and data_store.config['categorias'][1] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
+                if message['message_type'] in ['resubscription', 'subscription', 'mystery_subscription_gift', 'subscription_gift']:
                     sub_message = ""
                     if message['message_type'] == 'resubscription' and data_store.config['eventos'][2]:
                         sub_message = _("{author_name} ha renovado su suscripción en el nivel {subscription_plan_name}. ¡Lleva suscrito por {cumulative_months} meses!").format(author_name=author_name, subscription_plan_name=message.get('subscription_plan_name', ''), cumulative_months=message.get('cumulative_months', ''))
@@ -72,13 +81,22 @@ class ServicioTwich:
                     elif message['message_type'] == 'subscription' and data_store.config['eventos'][2]: sub_message = _("{author_name} se ha suscrito en el nivel {subscription_plan_name} por {cumulative_months} meses!").format(author_name=author_name, subscription_plan_name=message.get('subscription_plan_name', ''), cumulative_months=message.get('cumulative_months', ''))
                     elif message['message_type'] == 'mystery_subscription_gift' and data_store.config['eventos'][2]: sub_message = _("{author_name} regaló una suscripción de nivel {subscription_type} a la comunidad, ¡ha regalado un total de {sender_count} suscripciones!").format(author_name=author_name, subscription_type=message.get('subscription_type', ''), sender_count=message.get('sender_count', ''))
                     elif message['message_type'] == 'subscription_gift' and data_store.config['eventos'][2]: sub_message = _("{author_name} ha regalado una suscripción a {gift_recipient_display_name} en el nivel {subscription_plan_name} por {number_of_months_gifted} meses!").format(author_name=author_name, gift_recipient_display_name=message.get('gift_recipient_display_name', ''), subscription_plan_name=message.get('subscription_plan_name', ''), number_of_months_gifted=message.get('number_of_months_gifted', ''))
-                    self.chat_controller.agregar_mensaje_evento(sub_message)
-                    if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][2]: player.play(rutasonidos[2])
-                    if data_store.config['reader'] and data_store.config['unread'][2]: reader.leer_mensaje(sub_message)
+                    if sub_message:
+                        msg = RoutableMessage(
+                            text=sub_message,
+                            author='',
+                            category='event',
+                            event_type='subscribe',
+                            platform='twitch',
+                            is_past=(self.chat.status == 'past'),
+                            eventos_index=2,
+                            sound_index=2
+                        )
+                        self.router.route(msg)
                     continue
 
                 # Cheer/Bits event
-                if re.search(r'\bCheer\d+\b', msg) and data_store.config['categorias'][3] and data_store.config['eventos'][3] and hasattr(self.chat_controller.ui, 'list_box_donaciones'):
+                if re.search(r'\bCheer\d+\b', msg):
                     divide1=message['message'].split('Cheer')
                     if not divide1[0]:
                         if data_store.divisa!=_('Por defecto'): divide1[0]=data_store.divisa
@@ -101,23 +119,38 @@ class ServicioTwich:
                         if data_store.divisa!=_('Por defecto'): dinero=data_store.divisa+str(divide1[1])
                         else: dinero='Cheer '+str(divide1[1])
                         divide1=' '+divide1[0]
-                    if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][3]: player.play(rutasonidos[3])
-                    self.chat_controller.agregar_mensaje_donacion(dinero+', '+author_name+': '+divide1)
-                    if data_store.config['reader'] and data_store.config['unread'][3]: reader.leer_mensaje(dinero+', '+author_name+': '+divide1)
+                    cheer_msg = RoutableMessage(
+                        text=dinero+', '+author_name+': '+divide1,
+                        author='',
+                        category='donation',
+                        platform='twitch',
+                        is_past=(self.chat.status == 'past')
+                    )
+                    self.router.route(cheer_msg)
                     continue
 
                 # Regular messages with badges/roles
                 message_sent = False
                 try:
-                    if message['author'].get('is_moderator') and data_store.config['eventos'][4] and data_store.config['categorias'][4] and hasattr(self.chat_controller.ui, 'list_box_moderadores'):
-                        self.chat_controller.agregar_mensaje_moderador(full_message)
-                        if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][4]: player.play(rutasonidos[4])
-                        if data_store.config['reader'] and data_store.config['unread'][4]: reader.leer_mensaje(full_message)
+                    if message['author'].get('is_moderator'):
+                        msg = RoutableMessage(
+                            text=full_message,
+                            author='',
+                            category='moderator',
+                            platform='twitch',
+                            is_past=(self.chat.status == 'past')
+                        )
+                        self.router.route(msg)
                         message_sent = True
-                    elif message['author'].get('is_subscriber') and data_store.config['eventos'][1] and data_store.config['categorias'][2] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
-                        self.chat_controller.agregar_mensaje_miembro(full_message)
-                        if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][1]: player.play(rutasonidos[1])
-                        if data_store.config['reader'] and data_store.config['unread'][1]: reader.leer_mensaje(full_message)
+                    elif message['author'].get('is_subscriber'):
+                        msg = RoutableMessage(
+                            text=full_message,
+                            author='',
+                            category='member',
+                            platform='twitch',
+                            is_past=(self.chat.status == 'past')
+                        )
+                        self.router.route(msg)
                         message_sent = True
                 except KeyError: pass
                 if message_sent: continue
@@ -125,38 +158,58 @@ class ServicioTwich:
                     for badge in message['author']['badges']:
                         title = badge.get('title', '')
                         if 'Subscriber' in title:
-                            if data_store.config['eventos'][1] and data_store.config['categorias'][2] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
-                                if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][1]: player.play(rutasonidos[1])
-                                self.chat_controller.agregar_mensaje_miembro(full_message)
-                                if data_store.config['reader'] and data_store.config['unread'][1]: reader.leer_mensaje(full_message)
+                            msg = RoutableMessage(
+                                text=full_message,
+                                author='',
+                                category='member',
+                                platform='twitch',
+                                is_past=(self.chat.status == 'past')
+                            )
+                            self.router.route(msg)
                             message_sent = True
                             break
                         elif 'Moderator' in title:
-                            if data_store.config['eventos'][4] and data_store.config['categorias'][4] and hasattr(self.chat_controller.ui, 'list_box_moderadores'):
-                                if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][4]: player.play(rutasonidos[4])
-                                self.chat_controller.agregar_mensaje_moderador(full_message)
-                                if data_store.config['reader'] and data_store.config['unread'][4]: reader.leer_mensaje(full_message)
+                            msg = RoutableMessage(
+                                text=full_message,
+                                author='',
+                                category='moderator',
+                                platform='twitch',
+                                is_past=(self.chat.status == 'past')
+                            )
+                            self.router.route(msg)
                             message_sent = True
                             break
                         elif 'Verified' in title:
-                            if data_store.config['eventos'][5] and data_store.config['categorias'][5] and hasattr(self.chat_controller.ui, 'list_box_verificados'):
-                                self.chat_controller.agregar_mensaje_verificado(full_message)
-                                if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][5]: player.play(rutasonidos[5])
-                                if data_store.config['reader'] and data_store.config['unread'][5]: reader.leer_mensaje(full_message)
+                            msg = RoutableMessage(
+                                text=full_message,
+                                author='',
+                                category='verified',
+                                platform='twitch',
+                                is_past=(self.chat.status == 'past')
+                            )
+                            self.router.route(msg)
                             message_sent = True
                             break
                     else:
-                        if data_store.config['eventos'][0] and data_store.config['categorias'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
-                            if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][0]: player.play(rutasonidos[0])
-                            self.chat_controller.agregar_mensaje_general(full_message)
-                            if data_store.config['reader'] and data_store.config['unread'][0]: reader.leer_mensaje(full_message)
-                            message_sent = True
+                        msg = RoutableMessage(
+                            text=full_message,
+                            author='',
+                            category='general',
+                            platform='twitch',
+                            is_past=(self.chat.status == 'past')
+                        )
+                        self.router.route(msg)
+                        message_sent = True
                 if message_sent: continue
                 # Default to general
-                if data_store.config['eventos'][0] and data_store.config['categorias'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
-                    self.chat_controller.agregar_mensaje_general(full_message)
-                    if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][0]: player.play(rutasonidos[0])
-                    if data_store.config['reader'] and data_store.config['unread'][0]: reader.leer_mensaje(full_message)
+                msg = RoutableMessage(
+                    text=full_message,
+                    author='',
+                    category='general',
+                    platform='twitch',
+                    is_past=(self.chat.status == 'past')
+                )
+                self.router.route(msg)
         except Exception as e:
             wx.CallAfter(self.chat_controller.notificar_error, str(e))
 

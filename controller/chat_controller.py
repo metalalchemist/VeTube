@@ -95,12 +95,16 @@ class ChatController:
             if self.filtro_eventos == "todos" or self.filtro_eventos == tipo:
                 self.ui.list_box_eventos.Append(mensaje)
 
+    def set_active_service(self, service):
+        """Replace the active chat service (used when switching YouTube to real-time)."""
+        self.servicio = service
+
     def on_context_menu(self, event):
         list_box = event.GetEventObject()
         if list_box.GetSelection() == wx.NOT_FOUND: return
         
         menu = ChatItemMenu(self.ui)
-        ChatItemController(menu, list_box, self, self.ui.label_dialog)
+        ChatItemController(menu, list_box, self)
         self.ui.PopupMenu(menu.menu)
 
     def on_opciones_btn(self, event):
@@ -114,7 +118,10 @@ class ChatController:
         if event.GetKeyCode() == 32:
             reader._leer.silence()
             list_box = event.GetEventObject()
-            reader.leer_auto(list_box.GetString(list_box.GetSelection()))
+            selection = list_box.GetSelection()
+            if selection == wx.NOT_FOUND:
+                return
+            reader.leer_auto(list_box.GetString(selection))
 
     def agregar_mensaje_general(self, mensaje):
         if hasattr(self.ui, 'list_box_general'):

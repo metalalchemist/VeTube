@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import json, google_currency,threading,wx
+from typing import TYPE_CHECKING
 from chat_downloader import ChatDownloader
 from globals import data_store
 from globals.resources import rutasonidos
@@ -8,6 +11,11 @@ from setup import player,reader
 from controller.chat_controller import ChatController
 from controller.media_controller import MediaController
 from servicios.estadisticas_manager import EstadisticasManager
+from servicios.message_router import MessageRouter, RoutableMessage
+
+if TYPE_CHECKING:
+    from servicios.chat_service_protocol import ChatService
+
 
 class ServicioYouTube:
     def __init__(self, main_controller, url, frame, plataforma, chat_controller):
@@ -19,6 +27,7 @@ class ServicioYouTube:
         self.estadisticas_manager = chat_controller.estadisticas_manager
         self.media_controller = None
         self._detener = False
+        self.router = MessageRouter(chat_controller)
 
     def iniciar_chat(self):
         self._detener = False
@@ -100,51 +109,78 @@ class ServicioYouTube:
 
                 if message['message_type'] == 'paid_message' or message['message_type'] == 'paid_sticker': message_type = 'donacion'
                 if 'header_secondary_text' in message:
-                    if data_store.config['eventos'][2] and data_store.config['categorias'][1] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
-                        for t in message['author']['badges']:
-                            mensajito=author_name+ _(' se a conectado al chat. ')+t['title']
-                            break
-                        wx.CallAfter(self.chat_controller.agregar_mensaje_evento, mensajito)
-                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][2]: player.play(rutasonidos[2])
-                        if data_store.config['reader'] and data_store.config['unread'][2]: wx.CallAfter(reader.leer_mensaje, mensajito)
+                    for t in message['author']['badges']:
+                        mensajito=author_name+ _(' se a conectado al chat. ')+t['title']
+                        break
+                    msg = RoutableMessage(
+                        text=mensajito,
+                        author='',
+                        category='event',
+                        event_type='join',
+                        platform='youtube',
+                        is_past=(self.chat.status == 'past'),
+                        eventos_index=2,
+                        sound_index=2
+                    )
+                    self.router.route(msg)
                     continue
                 # Construct the message string
                 if message_type == 'donacion':
-                    if data_store.config['eventos'][3] and data_store.config['categorias'][3] and hasattr(self.chat_controller.ui, 'list_box_donaciones'):
-                        if data_store.divisa != "Por defecto" and data_store.divisa != message['money']['currency']:
-                            moneda = json.loads(google_currency.convert(message['money']['currency'], data_store.divisa, message['money']['amount']))
-                            if moneda['converted']:
-                                message['money']['currency'] = data_store.divisa
-                                message['money']['amount'] = moneda['amount']
-                        full_message = f"{message['money']['amount']} {message['money']['currency']}, {author_name}: {msg}"
-                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][3]: player.play(rutasonidos[3])
-                        wx.CallAfter(self.chat_controller.agregar_mensaje_donacion, full_message)
-                        if data_store.config['reader'] and data_store.config['unread'][3]: wx.CallAfter(reader.leer_mensaje, full_message)
+                    if data_store.divisa != "Por defecto" and data_store.divisa != message['money']['currency']:
+                        moneda = json.loads(google_currency.convert(message['money']['currency'], data_store.divisa, message['money']['amount']))
+                        if moneda['converted']:
+                            message['money']['currency'] = data_store.divisa
+                            message['money']['amount'] = moneda['amount']
+                    full_message = f"{message['money']['amount']} {message['money']['currency']}, {author_name}: {msg}"
+                    donacion_msg = RoutableMessage(
+                        text=full_message,
+                        author='',
+                        category='donation',
+                        platform='youtube',
+                        is_past=(self.chat.status == 'past')
+                    )
+                    self.router.route(donacion_msg)
                     continue
 
                 full_message = f"{author_name}: {msg}"
 
                 if message_type == 'general':
-                    if data_store.config['eventos'][0] and data_store.config['categorias'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
-                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][0]: player.play(rutasonidos[0])
-                        wx.CallAfter(self.chat_controller.agregar_mensaje_general, full_message)
-                        if data_store.config['reader'] and data_store.config['unread'][0]: wx.CallAfter(reader.leer_mensaje, full_message)
+                    msg = RoutableMessage(
+                        text=full_message,
+                        author='',
+                        category='general',
+                        platform='youtube',
+                        is_past=(self.chat.status == 'past')
+                    )
+                    self.router.route(msg)
                 elif message_type == 'miembro':
-                    if data_store.config['eventos'][1] and data_store.config['categorias'][2] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
-                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][1]: player.play(rutasonidos[1])
-                        wx.CallAfter(self.chat_controller.agregar_mensaje_miembro, full_message)
-                        if data_store.config['reader'] and data_store.config['unread'][1]: wx.CallAfter(reader.leer_mensaje, full_message)
+                    msg = RoutableMessage(
+                        text=full_message,
+                        author='',
+                        category='member',
+                        platform='youtube',
+                        is_past=(self.chat.status == 'past')
+                    )
+                    self.router.route(msg)
                 elif message_type == 'moderador' or message_type=='propietario':
-                    if data_store.config['eventos'][4] and data_store.config['categorias'][4] and hasattr(self.chat_controller.ui, 'list_box_moderadores'):
-                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][4]:
-                            if message_type=='moderador': player.play(rutasonidos[4])
-                            if message_type=='propietario': player.play(rutasonidos[7])
-                        wx.CallAfter(self.chat_controller.agregar_mensaje_moderador, full_message)
-                        if data_store.config['reader'] and data_store.config['unread'][4]: wx.CallAfter(reader.leer_mensaje, full_message)
+                    sound_idx = 7 if message_type == 'propietario' else 4
+                    msg = RoutableMessage(
+                        text=full_message,
+                        author='',
+                        category='moderator',
+                        platform='youtube',
+                        is_past=(self.chat.status == 'past'),
+                        sound_index=sound_idx
+                    )
+                    self.router.route(msg)
                 elif message_type == 'verificado':
-                    if data_store.config['eventos'][5] and data_store.config['categorias'][5] and hasattr(self.chat_controller.ui, 'list_box_verificados'):
-                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][5]: player.play(rutasonidos[5])
-                        wx.CallAfter(self.chat_controller.agregar_mensaje_verificado, f"{author_name}: {msg}")
-                        if data_store.config['reader'] and data_store.config['unread'][5]: wx.CallAfter(reader.leer_mensaje, f'{author_name}: {msg}')
+                    msg = RoutableMessage(
+                        text=f"{author_name}: {msg}",
+                        author='',
+                        category='verified',
+                        platform='youtube',
+                        is_past=(self.chat.status == 'past')
+                    )
+                    self.router.route(msg)
         except Exception as e:
             wx.CallAfter(self.chat_controller.notificar_error, str(e))
