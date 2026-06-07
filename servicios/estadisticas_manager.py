@@ -90,6 +90,29 @@ class EstadisticasManager:
         print(f"Estadísticas guardadas en {file_path}")
 
 
+    def to_dict(self) -> dict:
+        """Serialize the full internal state to a plain dict."""
+        return {
+            "usuarios": list(self.usuarios),
+            "mensajes_por_usuario": list(self.mensajes_por_usuario),
+            "unidos": self.unidos,
+            "seguidores": self.seguidores,
+            "megusta": self.megusta,
+            "compartidas": self.compartidas,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "EstadisticasManager":
+        """Restore an instance from a dict produced by to_dict()."""
+        inst = cls()
+        inst.usuarios = list(data["usuarios"])
+        inst.mensajes_por_usuario = list(data["mensajes_por_usuario"])
+        inst.unidos = data["unidos"]
+        inst.seguidores = data["seguidores"]
+        inst.megusta = data["megusta"]
+        inst.compartidas = data["compartidas"]
+        return inst
+
     def total_mensajes(self):
         """Devuelve el número total de mensajes."""
         return sum(self.mensajes_por_usuario)
