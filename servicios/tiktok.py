@@ -1,12 +1,20 @@
+from __future__ import annotations
+
 import json, google_currency, threading, asyncio, wx, traceback
+from typing import TYPE_CHECKING
 from TikTokLive.client.client import TikTokLiveClient
-from TikTokLive.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent, LikeEvent, JoinEvent, FollowEvent, ShareEvent, RoomUserSeqEvent, EnvelopeEvent, EmoteChatEvent,LiveEndEvent
+from TikTokLive.types.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent, LikeEvent, JoinEvent, FollowEvent, ShareEvent, ViewerUpdateEvent, EnvelopeEvent, EmoteEvent, LiveEndEvent
 from globals import data_store
 from globals.resources import rutasonidos
 from utils import translator,funciones
 from setup import player,reader
 from controller.chat_controller import ChatController
 from servicios.estadisticas_manager import EstadisticasManager
+from servicios.message_router import MessageRouter, RoutableMessage
+
+if TYPE_CHECKING:
+    from servicios.chat_service_protocol import ChatService
+
 
 class ServicioTiktok:
     def __init__(self, main_controller, url, frame, plataforma, chat_controller):
@@ -20,6 +28,7 @@ class ServicioTiktok:
         self.last_live_status = None
         self.loop = None
         self.media_controller = None
+        self.router = MessageRouter(chat_controller)
 
     def iniciar_chat(self):
         self.is_running = True
@@ -103,14 +112,14 @@ class ServicioTiktok:
         if data_store.config['categorias'][0]: self.chat.add_listener(CommentEvent, self.on_comment)
         self.chat.add_listener(LiveEndEvent, self.finalizado)
         self.chat.add_listener(DisconnectEvent, self.on_disconnect)
-        if data_store.config['categorias'][2]: self.chat.add_listener(EmoteChatEvent, self.on_emote)
+        if data_store.config['categorias'][2]: self.chat.add_listener(EmoteEvent, self.on_emote)
         if data_store.config['categorias'][1]: self.chat.add_listener(EnvelopeEvent, self.on_chest)
         if data_store.config['categorias'][1]: self.chat.add_listener(FollowEvent, self.on_follow)
         if data_store.config['categorias'][3]: self.chat.add_listener(GiftEvent, self.on_gift)
         if data_store.config['categorias'][1]: self.chat.add_listener(JoinEvent, self.on_join)
         if data_store.config['categorias'][1]: self.chat.add_listener(LikeEvent, self.on_like)
         if data_store.config['categorias'][1]: self.chat.add_listener(ShareEvent, self.on_share)
-        self.chat.add_listener(RoomUserSeqEvent, self.on_view)
+        self.chat.add_listener(ViewerUpdateEvent, self.on_view)
 
     async def finalizado(self, event: LiveEndEvent):
         self.last_live_status = False
@@ -130,97 +139,121 @@ class ServicioTiktok:
             wx.CallAfter(player.play, rutasonidos[6])
 
     async def on_comment(self,event: CommentEvent):
-        if data_store.config['eventos'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
-            wx.CallAfter(self.estadisticas_manager.agregar_mensaje, event.user.nickname)
-            cadena = event.comment if event.comment is not None else ''
-            if data_store.dst: cadena = self.translator.translate(text=cadena, target=data_store.dst)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_general, event.user.nickname + ": " + cadena)
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][0]:
-                wx.CallAfter(player.play, rutasonidos[0])
-            if data_store.config['reader'] and data_store.config['unread'][0]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + ": " + cadena)
+        wx.CallAfter(self.estadisticas_manager.agregar_mensaje, event.user.nickname)
+        cadena = event.comment if event.comment is not None else ''
+        if data_store.dst: cadena = self.translator.translate(text=cadena, target=data_store.dst)
+        msg = RoutableMessage(
+            text=cadena,
+            author=event.user.nickname,
+            category='general',
+            platform='tiktok'
+        )
+        self.router.route(msg)
 
-    async def on_emote(self,event: EmoteChatEvent):
-        if data_store.config['eventos'][1] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
-            wx.CallAfter(self.estadisticas_manager.agregar_mensaje, event.user.nickname)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_miembro, event.user.nickname + _(" envió un emogi."))
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][1]:
-                wx.CallAfter(player.play, rutasonidos[1])
-            if data_store.config['reader'] and data_store.config['unread'][1]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" envió un emogi."))
+    async def on_emote(self,event: EmoteEvent):
+        wx.CallAfter(self.estadisticas_manager.agregar_mensaje, event.user.nickname)
+        msg = RoutableMessage(
+            text=_(" envió un emogi."),
+            author=event.user.nickname,
+            category='member',
+            event_type='emote',
+            platform='tiktok'
+        )
+        self.router.route(msg)
 
     async def on_chest(self,event: EnvelopeEvent):
-        if data_store.config['eventos'][9] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
-            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname + _(" ha enviado un cofre!"), "chest")
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][12]:
-                wx.CallAfter(player.play, rutasonidos[12])
-            if data_store.config['reader'] and data_store.config['unread'][9]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" ha enviado un cofre!"))
+        msg = RoutableMessage(
+            text=_(" ha enviado un cofre!"),
+            author=event.user.nickname,
+            category='event',
+            event_type='chest',
+            platform='tiktok',
+            eventos_index=9,
+            sound_index=12
+        )
+        self.router.route(msg)
 
     async def on_follow(self,event: FollowEvent):
-        if data_store.config['eventos'][7] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
-            wx.CallAfter(self.estadisticas_manager.agregar_seguidor)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname + _(" comenzó a seguirte!"), "follow")
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][10]:
-                wx.CallAfter(player.play, rutasonidos[10])
-            if data_store.config['reader'] and data_store.config['unread'][7]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" comenzó a seguirte!"))
+        wx.CallAfter(self.estadisticas_manager.agregar_seguidor)
+        msg = RoutableMessage(
+            text=_(" comenzó a seguirte!"),
+            author=event.user.nickname,
+            category='event',
+            event_type='follow',
+            platform='tiktok',
+            eventos_index=7,
+            sound_index=10
+        )
+        self.router.route(msg)
 
     async def on_gift(self,event: GiftEvent):
-        if data_store.config['eventos'][3] and hasattr(self.chat_controller.ui, 'list_box_donaciones'):
-            mensajito = ""
-            if event.gift.streakable and not event.streaking:
-                if data_store.divisa!="Por defecto":
-                    if data_store.divisa=='USD': total=float((event.gift.diamond_count*event.repeat_count)/100)
-                    else:
-                        moneda = json.loads(google_currency.convert('USD', data_store.divisa, int((event.gift.diamond_count * event.repeat_count) / 100)))
-                        if moneda['converted']: total=moneda['amount']
-                    mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(total),data_store.divisa)
-                else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(event.gift.diamond_count))
-            elif not event.gift.streakable:
-                if data_store.divisa!="Por defecto":
-                    if data_store.divisa=='USD': total=int((event.gift.diamond_count*event.repeat_count)/100)
-                    else:
-                        moneda = json.loads(google_currency.convert('USD', data_store.divisa, int((event.gift.diamond_count * event.repeat_count) / 100)))
-                        if moneda['converted']: total=moneda['amount']
-                    mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(total),data_store.divisa)
-                else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(event.gift.diamond_count))
-            
-            if mensajito:
-                wx.CallAfter(self.chat_controller.agregar_mensaje_donacion, mensajito)
-                if data_store.config['sonidos'] and data_store.config['listasonidos'][3]:
-                    wx.CallAfter(player.play, rutasonidos[3])
-                if data_store.config['reader'] and data_store.config['unread'][3]:
-                    wx.CallAfter(reader.leer_mensaje, mensajito)
+        mensajito = ""
+        if event.gift.streakable and not event.streaking:
+            if data_store.divisa!="Por defecto":
+                if data_store.divisa=='USD': total=float((event.gift.diamond_count*event.repeat_count)/100)
+                else:
+                    moneda = json.loads(google_currency.convert('USD', data_store.divisa, int((event.gift.diamond_count * event.repeat_count) / 100)))
+                    if moneda['converted']: total=moneda['amount']
+                mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(total),data_store.divisa)
+            else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(event.gift.diamond_count))
+        elif not event.gift.streakable:
+            if data_store.divisa!="Por defecto":
+                if data_store.divisa=='USD': total=int((event.gift.diamond_count*event.repeat_count)/100)
+                else:
+                    moneda = json.loads(google_currency.convert('USD', data_store.divisa, int((event.gift.diamond_count * event.repeat_count) / 100)))
+                    if moneda['converted']: total=moneda['amount']
+                mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(total),data_store.divisa)
+            else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(event.gift.diamond_count))
+        
+        if mensajito:
+            msg = RoutableMessage(
+                text=mensajito,
+                author='',
+                category='donation',
+                platform='tiktok'
+            )
+            self.router.route(msg)
 
     async def on_join(self,event: JoinEvent):
-        if data_store.config['eventos'][2] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
-            wx.CallAfter(self.estadisticas_manager.agregar_unido)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname+_(" se ha unido a tu en vivo."), "join")
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][2]:
-                wx.CallAfter(player.play, rutasonidos[2])
-            if data_store.config['reader'] and data_store.config['unread'][2]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" se ha unido a tu en vivo."))
+        wx.CallAfter(self.estadisticas_manager.agregar_unido)
+        msg = RoutableMessage(
+            text=_(" se ha unido a tu en vivo."),
+            author=event.user.nickname,
+            category='event',
+            event_type='join',
+            platform='tiktok',
+            eventos_index=2,
+            sound_index=2
+        )
+        self.router.route(msg)
 
     async def on_like(self,event: LikeEvent):
-        if data_store.config['eventos'][6] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
-            wx.CallAfter(self.estadisticas_manager.actualizar_megusta, event.total)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname + _(" le ha dado me gusta a tu en vivo."), "like")
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][9]:
-                wx.CallAfter(player.play, rutasonidos[9])
-            if data_store.config['reader'] and data_store.config['unread'][6]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+        wx.CallAfter(self.estadisticas_manager.actualizar_megusta, event.total)
+        msg = RoutableMessage(
+            text=_(" le ha dado me gusta a tu en vivo."),
+            author=event.user.nickname,
+            category='event',
+            event_type='like',
+            platform='tiktok',
+            eventos_index=6,
+            sound_index=9
+        )
+        self.router.route(msg)
 
     async def on_share(self,event: ShareEvent):
-        if data_store.config['eventos'][8] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
-            wx.CallAfter(self.estadisticas_manager.agregar_compartida)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname + _(" ha compartido tu en vivo!"), "share")
-            if data_store.config['sonidos'] and data_store.config['listasonidos'][11]:
-                wx.CallAfter(player.play, rutasonidos[11])
-            if data_store.config['reader'] and data_store.config['unread'][8]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" ha compartido tu en vivo!"))
+        wx.CallAfter(self.estadisticas_manager.agregar_compartida)
+        msg = RoutableMessage(
+            text=_(" ha compartido tu en vivo!"),
+            author=event.user.nickname,
+            category='event',
+            event_type='share',
+            platform='tiktok',
+            eventos_index=8,
+            sound_index=11
+        )
+        self.router.route(msg)
 
-    async def on_view(self,event: RoomUserSeqEvent):
-        title = self.chat.unique_id+_(' en vivo, actualmente ')+str(event.m_total)+_(' viendo ahora')
+    async def on_view(self,event: ViewerUpdateEvent):
+        title = self.chat.unique_id+_(' en vivo, actualmente ')+str(getattr(event, 'viewer_count', 0))+_(' viendo ahora')
         wx.CallAfter(self.chat_controller.agregar_titulo, title)
         wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, title)
