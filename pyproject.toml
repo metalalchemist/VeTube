@@ -1,0 +1,84 @@
+[project]
+name = "vetube"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "accessible-output2",
+    "chat-downloader",
+    "espeak-phonemizer-windows",
+    "google-currency",
+    "googletrans-py",
+    "kick-py",
+    "numpy==1.26.4",
+    "onnxruntime>=1.26.0",
+    "psutil>=7.2.2",
+    "pyperclip>=1.11.0",
+    "pytchat",
+    "python-vlc>=3.0.21203",
+    "requests>=2.34.2",
+    "sound-lib",
+    "sounddevice>=0.5.5",
+    "tiktoklive>=5.0.8,<6.0.0",             # <-- SOLUCIÓN 1: Forzamos compatibilidad para TikTokLive
+    "pyee<11.0.0",                          # <-- SOLUCIÓN 1: Forzamos compatibilidad para TikTokLive
+    "uiautomation>=2.0.29",
+    "wxpython>=4.2.5",                      # <-- SOLUCIÓN 2: Subimos a la 4.2.5 para evitar compilar attrdict
+    "yt-dlp[curl-cffi,default]>=2026.3.17",
+]
+
+# Ya no necesitas [tool.uv.extra-build-dependencies] porque la 4.2.5 descarga el binario directo (.wheel)
+
+[tool.uv.sources]
+kick-py = { git = "https://github.com/iamoverit/kick.py" }
+chat-downloader = { git = "https://github.com/owsombra/chat-downloader" }
+google-currency = { git = "https://github.com/metalalchemist/google-currency" }
+sound-lib = { git = "https://github.com/accessibleapps/sound_lib" }
+accessible-output2 = { git = "https://github.com/accessibleapps/accessible_output2" }
+googletrans-py = { git = "https://github.com/rmcpantoja/googletrans.git" }
+espeak-phonemizer-windows = { git = "https://github.com/mush42/espeak-phonemizer-windows" }
+pytchat = { git = "https://github.com/KaitoCross/pytchat" }
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "ruff>=0.15.16",
+    "ty>=0.0.44",
+]
+
+[tool.ruff]
+line-length = 120
+exclude = [
+    "helpers/keyboard_handler/linux.py",  # Python 2 syntax, not fixable
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = [
+    "E401",   # multiple-imports-on-one-line (legacy)
+    "E402",   # module-import-not-at-top-of-file (legacy)
+    "E501",   # line-too-long
+    "E701",   # multiple-statements-on-one-line-colon (legacy)
+    "E711",   # none-comparison (legacy)
+    "E712",   # true-false-comparison (legacy)
+    "E713",   # not-in-test (legacy)
+    "E722",   # bare-except (legacy)
+    "E731",   # lambda-assignment (legacy)
+    "E741",   # ambiguous-variable-name (legacy)
+    "F401",   # unused-import (legacy)
+    "F403",   # undefined-local-with-import-star (legacy)
+    "F405",   # undefined-local-with-import-star-usage (legacy)
+    "F601",   # multi-value-repeated-key-literal (legacy)
+    "F811",   # redefined-while-unused (legacy)
+    "F821",   # undefined-name — mostly i18n _() (legacy)
+    "F841",   # unused-variable (legacy)
+    "W191",   # tab-indentation (legacy)
+    "W291",   # trailing-whitespace (legacy)
+    "W292",   # missing-newline-at-end-of-file (legacy)
+    "W293",   # blank-line-with-whitespace (legacy)
+]
+
+[tool.ty]
+
+[project.scripts]
+start = "vetube.__main__:run_main_window"
