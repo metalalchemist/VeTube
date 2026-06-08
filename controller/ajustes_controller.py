@@ -8,6 +8,7 @@ class AjustesController:
     def __init__(self, dialog):
         self.dialog = dialog
         self._bind_events()
+        self.actualizar_visibilidad_piper()
     def _bind_events(self):
         self.dialog.check_1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar_sapi(event))
         self.dialog.chk1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'reader'))
@@ -62,6 +63,7 @@ class AjustesController:
     def checar_sapi(self, event):
         config['sapi'] = True if event.IsChecked() else False
         self.dialog.seleccionar_TTS.Enable(not event.IsChecked())
+        self.actualizar_visibilidad_piper()
 
     def cambiar_sintetizador(self, event):
         config['sistemaTTS'] = self.dialog.seleccionar_TTS.GetStringSelection()
@@ -70,18 +72,23 @@ class AjustesController:
                 reader.set_tts("piper")
                 reader._lector=reader._lector.piperSpeak(f"piper/voices/voice-{lista_voces[0][:-5]}/{lista_voces[0]}")
                 config['voz'] = 0
-            self.dialog.instala_voces.Enable()
             self.dialog.choice_2.Clear()
             self.dialog.choice_2.AppendItems(lista_voces_piper)
         else:
             reader.set_tts(config['sistemaTTS'])
-            self.dialog.instala_voces.Disable()
             self.dialog.choice_2.Clear()
             self.dialog.choice_2.AppendItems(lista_voces)
+        self.actualizar_visibilidad_piper()
         try:
             self.dialog.choice_2.SetSelection(config['voz'])
         except:
             self.dialog.choice_2.SetSelection(0)
+
+    def actualizar_visibilidad_piper(self):
+        show = not config['sapi'] and config['sistemaTTS'] == "piper"
+        self.dialog.instala_voces.Show(show)
+        self.dialog.treeItem_2.Layout()
+
     def establecer_dispositivo(self, event):
         valor = self.dialog.lista_dispositivos.GetSelection() + 1
         valor_str = self.dialog.lista_dispositivos.GetStringSelection()

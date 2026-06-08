@@ -185,7 +185,6 @@ class configuracionDialog(wx.Dialog):
 		else:
 			self.seleccionar_TTS.Enable()
 		if config['sistemaTTS'] == "piper":
-			self.instala_voces.Disable()
 			label_8.Disable()
 			self.slider_1.Disable()
 			label_9.Disable()
