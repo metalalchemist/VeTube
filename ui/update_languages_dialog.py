@@ -1,9 +1,8 @@
 import wx
 
 class UpdateLanguagesDialog(wx.Dialog):
-    def __init__(self, parent, languages_to_update, controller):
+    def __init__(self, parent, languages_to_update):
         super().__init__(parent, title=_("Actualizar idiomas"), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
-        self.controller = controller
         main_sizer = wx.BoxSizer(wx.VERTICAL)
 
         label = wx.StaticText(self, label=_("Selecciona los idiomas que deseas actualizar:"))
@@ -37,25 +36,12 @@ class UpdateLanguagesDialog(wx.Dialog):
         self.SetSize((400, 400))
         self.Centre()
 
-        self.Bind(wx.EVT_BUTTON, self._on_update_button, self.ok_button)
-        self.Bind(wx.EVT_BUTTON, self._on_cancel_button, self.cancel_button)
-        self.Bind(wx.EVT_CLOSE, self._on_close)
-
     def GetCheckedLanguages(self):
         checked_languages = []
         for i in range(self.check_list_box.GetItemCount()):
             if self.check_list_box.IsItemChecked(i):
                 checked_languages.append(self.check_list_box.GetItemText(i))
         return checked_languages
-
-    def _on_update_button(self, event):
-        self.controller.start_update()
-
-    def _on_cancel_button(self, event):
-        self.controller.close()
-
-    def _on_close(self, event):
-        self.controller.close()
 
     def disable_controls(self):
         self.ok_button.Disable()
@@ -68,12 +54,8 @@ class UpdateLanguagesDialog(wx.Dialog):
     def set_status(self, text):
         self.status_text.SetLabel(text)
 
-    def finalize_update(self):
+    def preparar_interfaz_final(self):
         self.status_text.SetLabel(_("Actualización completada."))
         self.ok_button.SetLabel(_("Cerrar"))
         self.ok_button.Enable()
         self.cancel_button.Hide()
-        
-        # Rebind OK button to close dialog
-        self.ok_button.Unbind(wx.EVT_BUTTON)
-        self.ok_button.Bind(wx.EVT_BUTTON, lambda evt: self.EndModal(wx.ID_OK))

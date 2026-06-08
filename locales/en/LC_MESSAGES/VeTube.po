@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-11 21:59-0700\n"
+"POT-Creation-Date: 2026-06-08 12:23-0700\n"
 "PO-Revision-Date: 2026-01-08 16:04+0100\n"
 "Last-Translator: 4Sense Gaming <lukas@4sensegaming.cz>\n"
 "Language: en\n"
@@ -61,11 +61,11 @@ msgstr ""
 msgid "Listo"
 msgstr "Ready"
 
-#: controller/ajustes_controller.py:94
+#: controller/ajustes_controller.py:101
 msgid "Hablaré a través  de este dispositivo."
 msgstr "I will speak through this device."
 
-#: controller/ajustes_controller.py:98 controller/ajustes_controller.py:100
+#: controller/ajustes_controller.py:105 controller/ajustes_controller.py:107
 msgid ""
 "Hola, soy la voz que te acompañará de ahora en adelante a leer los "
 "mensajes de tus canales favoritos."
@@ -79,7 +79,7 @@ msgstr "error reading chat: "
 
 #: controller/chat_controller.py:150 controller/estadisticas_controller.py:46
 #: controller/main_controller.py:65
-#: controller/update_languages_controller.py:82
+#: controller/update_languages_controller.py:88
 #: servicios/language_updater.py:13
 msgid "Error"
 msgstr "Error"
@@ -264,7 +264,7 @@ msgstr "Are you sure you want to delete all the favorites?"
 
 #: controller/main_controller.py:69
 #: controller/menus/main_menu_controller.py:106
-#: controller/update_languages_controller.py:93 ui/chat_dialog.py:121
+#: controller/update_languages_controller.py:104 ui/chat_dialog.py:121
 msgid "¡Atención!"
 msgstr "Warning!"
 
@@ -330,32 +330,58 @@ msgstr "Are you sure you want to exit the program?"
 msgid "¡atención!"
 msgstr "Warning!"
 
-#: controller/update_languages_controller.py:38
+#: controller/update_languages_controller.py:33
+#, python-format
+msgid "%s (Nuevo - v%s)"
+msgstr ""
+
+#: controller/update_languages_controller.py:35
+#, fuzzy, python-format
+msgid "%s (Actualizar a v%s)"
+msgstr "Update languages"
+
+#: controller/update_languages_controller.py:44
 msgid "Por favor, selecciona al menos un idioma para actualizar."
 msgstr "Please select at least one language to update."
 
-#: controller/update_languages_controller.py:38
+#: controller/update_languages_controller.py:44
 msgid "Advertencia"
 msgstr "Warning"
 
-#: controller/update_languages_controller.py:64
+#: controller/update_languages_controller.py:70
 msgid "Iniciando descarga de idiomas..."
 msgstr "Starting language download..."
 
-#: controller/update_languages_controller.py:74
-msgid "data"
-msgstr "data"
+#: controller/update_languages_controller.py:80
+#, fuzzy, python-format
+msgid "Idioma %s actualizado con éxito."
+msgstr "Languages saved successfully."
 
-#: controller/update_languages_controller.py:76
-msgid "dataerror_msg"
-msgstr "dataerror_msg"
+#: controller/update_languages_controller.py:82
+#, fuzzy, python-brace-format, python-format
+msgid "Error al actualizar idioma %s: %s"
+msgstr "Error updating local language {}: {}"
 
 #: controller/update_languages_controller.py:86
-#: ui/update_languages_dialog.py:72
+#, python-format
+msgid "Error inesperado en %s: %s"
+msgstr ""
+
+#: controller/update_languages_controller.py:88
+#, python-format
+msgid ""
+"Error inesperado en %s:\n"
+"%s\n"
+"\n"
+"Ver consola para más detalles."
+msgstr ""
+
+#: controller/update_languages_controller.py:92
+#: ui/update_languages_dialog.py:58
 msgid "Actualización completada."
 msgstr "Update completed."
 
-#: controller/update_languages_controller.py:93
+#: controller/update_languages_controller.py:104
 msgid ""
 "Es necesario reiniciar el programa para aplicar los nuevos idiomas. "
 "¿Desea reiniciarlo ahora?"
@@ -1111,7 +1137,7 @@ msgstr "Author"
 msgid "Cantidad de mensajes"
 msgstr "Number of messages"
 
-#: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:73
+#: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:59
 msgid "Cerrar"
 msgstr "Close"
 
@@ -1224,15 +1250,15 @@ msgstr "message in "
 msgid "Actualizar idiomas"
 msgstr "Update languages"
 
-#: ui/update_languages_dialog.py:9
+#: ui/update_languages_dialog.py:8
 msgid "Selecciona los idiomas que deseas actualizar:"
 msgstr "Select the languages that you want to update:"
 
-#: ui/update_languages_dialog.py:13
+#: ui/update_languages_dialog.py:12
 msgid "Idioma"
 msgstr "Language"
 
-#: ui/update_languages_dialog.py:31
+#: ui/update_languages_dialog.py:30
 msgid "Actualizar"
 msgstr "Update"
 
@@ -1506,3 +1532,10 @@ msgstr ""
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
 msgstr "System language"
+
+#~ msgid "data"
+#~ msgstr "data"
+
+#~ msgid "dataerror_msg"
+#~ msgstr "dataerror_msg"
+

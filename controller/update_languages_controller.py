@@ -14,9 +14,15 @@ class UpdateLanguagesController:
         
         languages_to_display = self._prepare_display_list()
         
-        self.view = UpdateLanguagesDialog(parent, languages_to_display, self)
+        self.view = UpdateLanguagesDialog(parent, languages_to_display)
+        self._bind_events()
         self.executor = None
         self.update_completed = False
+
+    def _bind_events(self):
+        self.view.ok_button.Bind(wx.EVT_BUTTON, self.start_update)
+        self.view.cancel_button.Bind(wx.EVT_BUTTON, self.close)
+        self.view.Bind(wx.EVT_CLOSE, self.close)
 
     def _prepare_display_list(self):
         nuevos = self.update_data.get('nuevos', {})
@@ -24,15 +30,15 @@ class UpdateLanguagesController:
         
         languages_to_display = []
         for lang_code, version in nuevos.items():
-            languages_to_display.append(f"{lang_code} (Nuevo - v{version})")
+            languages_to_display.append(_("%s (Nuevo - v%s)") % (lang_code, version))
         for lang_code, version in actualizaciones.items():
-            languages_to_display.append(f"{lang_code} (Actualizar a v{version})")
+            languages_to_display.append(_("%s (Actualizar a v%s)") % (lang_code, version))
         return languages_to_display
 
     def show(self):
         return self.view.ShowModal()
 
-    def start_update(self):
+    def start_update(self, event=None):
         selected_languages_text = self.view.GetCheckedLanguages()
         if not selected_languages_text:
             wx.MessageBox(_("Por favor, selecciona al menos un idioma para actualizar."), _("Advertencia"), wx.OK | wx.ICON_WARNING)
@@ -71,20 +77,25 @@ class UpdateLanguagesController:
         try:
             result = future.result()
             if result['success']:
-                wx.CallAfter(self.view.set_status, _(f"Idioma {result['data']} actualizado con éxito."))
+                wx.CallAfter(self.view.set_status, _("Idioma %s actualizado con éxito.") % result['data'])
             else:
-                wx.CallAfter(self.view.set_status, _(f"Error al actualizar idioma {result['data']}: {result['error_msg']}"))
+                wx.CallAfter(self.view.set_status, _("Error al actualizar idioma %s: %s") % (result['data'], result['error_msg']))
         except Exception as exc:
             import traceback
             error_traceback = traceback.format_exc()
-            wx.CallAfter(self.view.set_status, _(f"Error inesperado en {lang_code}: {exc}"))
+            wx.CallAfter(self.view.set_status, _("Error inesperado en %s: %s") % (lang_code, exc))
             print(f"[ERROR] Excepción en hilo de {lang_code}:\n{error_traceback}")
-            wx.CallAfter(wx.MessageBox, _(f"Error inesperado en {lang_code}:\n{exc}\n\nVer consola para más detalles."), _("Error"), wx.OK | wx.ICON_ERROR)
+            wx.CallAfter(wx.MessageBox, _("Error inesperado en %s:\n%s\n\nVer consola para más detalles.") % (lang_code, exc), _("Error"), wx.OK | wx.ICON_ERROR)
 
         if self.completed_tasks == self.total_tasks:
             self.update_completed = True
             wx.CallAfter(self.view.set_status, _("Actualización completada."))
-            wx.CallAfter(self.view.finalize_update)
+            wx.CallAfter(self.view.preparar_interfaz_final)
+            
+            # Rebind OK button to close dialog
+            self.view.ok_button.Unbind(wx.EVT_BUTTON)
+            self.view.ok_button.Bind(wx.EVT_BUTTON, lambda evt: self.view.EndModal(wx.ID_OK))
+            
             wx.EndBusyCursor()
             if self.executor:
                 self.executor.shutdown(wait=False)
@@ -110,7 +121,7 @@ class UpdateLanguagesController:
         except Exception as e:
             return {'success': False, 'data': lang_code, 'error_msg': str(e)}
 
-    def close(self):
+    def close(self, event=None):
         if self.update_completed:
             self.prompt_for_restart()
         if self.executor:

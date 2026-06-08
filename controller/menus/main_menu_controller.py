@@ -41,8 +41,8 @@ class MainMenuController:
 
     def mostrar_acerca_de(self, event):
         wx.MessageBox(
-            _(u"Creadores del proyecto:")+"\nAlejandro Verástegui & Johan Antonio Gutierres.\n"+
-            _(u"Descripción:\n Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch y la sala de  juegos, ajusta tus preferencias como quieras y disfruta más tus canales favoritos."),
+            _(u"Creadores del proyecto:")+"\nAlejandro Verástegui & Johan G.\n"+
+            _(u"Descripción:\n Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch, kick y la sala de  juegos, ajusta tus preferencias como quieras y disfruta más tus canales favoritos."),
             _(u"Información"), wx.ICON_INFORMATION
         )
 
