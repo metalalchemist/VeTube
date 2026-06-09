@@ -5,7 +5,8 @@ from controller.main_controller import MainController
 from update import updater,update
 from TTS.lector import detect_onnx_models
 from utils.app_utilitys import configurar_piper
-if sys.platform == "win32": asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+if sys.platform == "win32" and sys.version_info < (3, 14):
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 def run_app():
     app = wx.App(False)
