@@ -11,7 +11,7 @@ dependencies = [
     "google-currency",
     "googletrans-py",
     "kick-py",
-    "numpy==1.26.4",
+    "numpy>=2.4.0,<3",
     "onnxruntime>=1.26.0",
     "psutil>=7.2.2",
     "pyperclip>=1.11.0",
