@@ -1,4 +1,5 @@
-import asyncio,sys,wx,setup
+import asyncio,sys,wx,setup,warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning, module="websockets\\.legacy")
 from globals.data_store import config
 from globals.resources import carpeta_voces,lista_voces_piper
 from controller.main_controller import MainController
