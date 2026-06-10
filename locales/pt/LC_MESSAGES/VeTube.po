@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: filmesfxx@gmail.com\n"
-"POT-Creation-Date: 2026-06-08 12:23-0700\n"
+"POT-Creation-Date: 2026-06-08 13:36-0700\n"
 "PO-Revision-Date: 2022-08-18 09:10-0700\n"
 "Last-Translator: Eternal legend <filmesfxx@gmail.com>\n"
 "Language: pt_BR\n"
@@ -158,6 +158,16 @@ msgstr "Os sons foram ativados"
 msgid "sonidos desactivados."
 msgstr "Os Sons foram desativados"
 
+#: controller/chat_dialog_controller.py:116
+msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
+msgstr "Deseja sair desta janela e parar de ler as mensagens?"
+
+#: controller/chat_dialog_controller.py:116 controller/main_controller.py:69
+#: controller/menus/main_menu_controller.py:106
+#: controller/update_languages_controller.py:104
+msgid "¡Atención!"
+msgstr "Atenção!"
+
 #: controller/editor_controller.py:43
 msgid ""
 "Está apunto de restaurar las combinaciones a sus valores por defecto, "
@@ -262,12 +272,6 @@ msgstr "Não há itens para excluir"
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr "Tem certeza de que deseja excluir todos os favoritos da lista?"
 
-#: controller/main_controller.py:69
-#: controller/menus/main_menu_controller.py:106
-#: controller/update_languages_controller.py:104 ui/chat_dialog.py:121
-msgid "¡Atención!"
-msgstr "Atenção!"
-
 #: controller/main_controller.py:85
 msgid "&Borrar mensajes"
 msgstr "Apagar mensagens"
@@ -312,10 +316,6 @@ msgstr "Não há itens para excluir"
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr "Tem certeza de que deseja excluir todas as mensagens?"
 
-#: controller/main_controller.py:138
-msgid "Lectura de chats en vivo"
-msgstr "Leitura de bate-papo ao vivo..."
-
 #: controller/main_controller.py:221
 msgid "Conectando..."
 msgstr ""
@@ -358,7 +358,7 @@ msgid "Idioma %s actualizado con éxito."
 msgstr "Idiomas salvos com sucesso."
 
 #: controller/update_languages_controller.py:82
-#, fuzzy, python-brace-format, python-format
+#, fuzzy, python-format
 msgid "Error al actualizar idioma %s: %s"
 msgstr "Erro ao atualizar o idioma local {}: {}"
 
@@ -465,11 +465,12 @@ msgid "Creadores del proyecto:"
 msgstr "Criadores do projeto:"
 
 #: controller/menus/main_menu_controller.py:45
+#, fuzzy
 msgid ""
 "Descripción:\n"
-" Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch "
-"y la sala de  juegos, ajusta tus preferencias como quieras y disfruta más"
-" tus canales favoritos."
+" Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch,"
+" kick y la sala de  juegos, ajusta tus preferencias como quieras y "
+"disfruta más tus canales favoritos."
 msgstr ""
 "Descrição:\n"
 "Leia em voz alta as mensagens das transmições ao vivo no youtube, TikTok,"
@@ -1086,10 +1087,6 @@ msgstr "&Aceitar"
 msgid "&Cancelar"
 msgstr "&Cancelar"
 
-#: ui/chat_dialog.py:121
-msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
-msgstr "Deseja sair desta janela e parar de ler as mensagens?"
-
 #: ui/chat_ui.py:10
 msgid "Lectura del chat en vivo..."
 msgstr "Leitura de bate-papo ao vivo..."
@@ -1539,4 +1536,7 @@ msgstr "idioma do sistema"
 
 #~ msgid "dataerror_msg"
 #~ msgstr ""
+
+#~ msgid "Lectura de chats en vivo"
+#~ msgstr "Leitura de bate-papo ao vivo..."
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-11 21:59-0700\n"
+"POT-Creation-Date: 2026-06-08 13:36-0700\n"
 "PO-Revision-Date: 2026-06-03 12:00+0000\n"
 "Last-Translator: Enzo Wenterstein <enzo.wenterstein@hotmail.com>\n"
 "Language: fr\n"
@@ -61,11 +61,11 @@ msgstr ""
 msgid "Listo"
 msgstr "Prêt"
 
-#: controller/ajustes_controller.py:94
+#: controller/ajustes_controller.py:101
 msgid "Hablaré a través  de este dispositivo."
 msgstr "Je parlerai via cet appareil."
 
-#: controller/ajustes_controller.py:98 controller/ajustes_controller.py:100
+#: controller/ajustes_controller.py:105 controller/ajustes_controller.py:107
 msgid ""
 "Hola, soy la voz que te acompañará de ahora en adelante a leer los "
 "mensajes de tus canales favoritos."
@@ -79,7 +79,7 @@ msgstr "Erreur lors de la connexion au chat : "
 
 #: controller/chat_controller.py:150 controller/estadisticas_controller.py:46
 #: controller/main_controller.py:65
-#: controller/update_languages_controller.py:82
+#: controller/update_languages_controller.py:88
 #: servicios/language_updater.py:13
 msgid "Error"
 msgstr "Erreur"
@@ -157,6 +157,16 @@ msgstr "Sons activés."
 #: controller/chat_controller.py:348
 msgid "sonidos desactivados."
 msgstr "Sons désactivés"
+
+#: controller/chat_dialog_controller.py:116
+msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
+msgstr "Voulez-vous quitter cette fenêtre et arrêter la lecture des messages ?"
+
+#: controller/chat_dialog_controller.py:116 controller/main_controller.py:69
+#: controller/menus/main_menu_controller.py:106
+#: controller/update_languages_controller.py:104
+msgid "¡Atención!"
+msgstr "Attention !"
 
 #: controller/editor_controller.py:43
 msgid ""
@@ -262,12 +272,6 @@ msgstr "Aucun favori à supprimer"
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr "Êtes-vous sûr de vouloir supprimer tous les favoris de la liste ?"
 
-#: controller/main_controller.py:69
-#: controller/menus/main_menu_controller.py:106
-#: controller/update_languages_controller.py:93 ui/chat_dialog.py:121
-msgid "¡Atención!"
-msgstr "Attention !"
-
 #: controller/main_controller.py:85
 msgid "&Borrar mensajes"
 msgstr "&Supprimer les messages"
@@ -312,10 +316,6 @@ msgstr "Aucun message à supprimer"
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr "Êtes-vous sûr de vouloir supprimer tous les messages ?"
 
-#: controller/main_controller.py:138
-msgid "Lectura de chats en vivo"
-msgstr "Lecture des chats en direct..."
-
 #: controller/main_controller.py:221
 msgid "Conectando..."
 msgstr "Connexion..."
@@ -330,32 +330,58 @@ msgstr "Êtes-vous sûr de vouloir quitter le programme ?"
 msgid "¡atención!"
 msgstr "Attention !"
 
-#: controller/update_languages_controller.py:38
+#: controller/update_languages_controller.py:33
+#, python-format
+msgid "%s (Nuevo - v%s)"
+msgstr ""
+
+#: controller/update_languages_controller.py:35
+#, fuzzy, python-format
+msgid "%s (Actualizar a v%s)"
+msgstr "Mettre à jour les langues"
+
+#: controller/update_languages_controller.py:44
 msgid "Por favor, selecciona al menos un idioma para actualizar."
 msgstr "Veuillez sélectionner au moins une langue à mettre à jour."
 
-#: controller/update_languages_controller.py:38
+#: controller/update_languages_controller.py:44
 msgid "Advertencia"
 msgstr "Attention :"
 
-#: controller/update_languages_controller.py:64
+#: controller/update_languages_controller.py:70
 msgid "Iniciando descarga de idiomas..."
 msgstr "Démarrage du téléchargement des langues..."
 
-#: controller/update_languages_controller.py:74
-msgid "data"
-msgstr ""
+#: controller/update_languages_controller.py:80
+#, fuzzy, python-format
+msgid "Idioma %s actualizado con éxito."
+msgstr "Langues enregistrées avec succès."
 
-#: controller/update_languages_controller.py:76
-msgid "dataerror_msg"
-msgstr ""
+#: controller/update_languages_controller.py:82
+#, fuzzy, python-format
+msgid "Error al actualizar idioma %s: %s"
+msgstr "Erreur lors de la mise à jour de la langue locale {} : {}"
 
 #: controller/update_languages_controller.py:86
-#: ui/update_languages_dialog.py:72
+#, python-format
+msgid "Error inesperado en %s: %s"
+msgstr ""
+
+#: controller/update_languages_controller.py:88
+#, python-format
+msgid ""
+"Error inesperado en %s:\n"
+"%s\n"
+"\n"
+"Ver consola para más detalles."
+msgstr ""
+
+#: controller/update_languages_controller.py:92
+#: ui/update_languages_dialog.py:58
 msgid "Actualización completada."
 msgstr "Mise à jour terminée."
 
-#: controller/update_languages_controller.py:93
+#: controller/update_languages_controller.py:104
 msgid ""
 "Es necesario reiniciar el programa para aplicar los nuevos idiomas. "
 "¿Desea reiniciarlo ahora?"
@@ -439,11 +465,12 @@ msgid "Creadores del proyecto:"
 msgstr "Créateurs du projet :"
 
 #: controller/menus/main_menu_controller.py:45
+#, fuzzy
 msgid ""
 "Descripción:\n"
-" Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch "
-"y la sala de  juegos, ajusta tus preferencias como quieras y disfruta más"
-" tus canales favoritos."
+" Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch,"
+" kick y la sala de  juegos, ajusta tus preferencias como quieras y "
+"disfruta más tus canales favoritos."
 msgstr ""
 "Description :\n"
 " Lit à haute voix les messages en direct sur YouTube, TikTok, Twitch, "
@@ -1059,10 +1086,6 @@ msgstr "&Accepter"
 msgid "&Cancelar"
 msgstr "&Annuler"
 
-#: ui/chat_dialog.py:121
-msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
-msgstr "Voulez-vous quitter cette fenêtre et arrêter la lecture des messages ?"
-
 #: ui/chat_ui.py:10
 msgid "Lectura del chat en vivo..."
 msgstr "Lecture du chat en direct..."
@@ -1111,7 +1134,7 @@ msgstr "Auteur"
 msgid "Cantidad de mensajes"
 msgstr "Nombre de messages :"
 
-#: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:73
+#: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:59
 msgid "Cerrar"
 msgstr "&Fermer"
 
@@ -1224,15 +1247,15 @@ msgstr "message en "
 msgid "Actualizar idiomas"
 msgstr "Mettre à jour les langues"
 
-#: ui/update_languages_dialog.py:9
+#: ui/update_languages_dialog.py:8
 msgid "Selecciona los idiomas que deseas actualizar:"
 msgstr "Sélectionnez les langues que vous souhaitez mettre à jour :"
 
-#: ui/update_languages_dialog.py:13
+#: ui/update_languages_dialog.py:12
 msgid "Idioma"
 msgstr "Langue"
 
-#: ui/update_languages_dialog.py:31
+#: ui/update_languages_dialog.py:30
 msgid "Actualizar"
 msgstr "Mettre à jour"
 
@@ -1507,4 +1530,13 @@ msgstr ""
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
 msgstr "Langue du système"
+
+#~ msgid "data"
+#~ msgstr ""
+
+#~ msgid "dataerror_msg"
+#~ msgstr ""
+
+#~ msgid "Lectura de chats en vivo"
+#~ msgstr "Lecture des chats en direct..."
 

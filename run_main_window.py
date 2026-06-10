@@ -16,13 +16,23 @@ def run_app():
             salida_actual = setup.reader._lector.find_device_id(setup.player.devicenames[config["dispositivo"]-1])
             setup.reader._lector.set_device(salida_actual)
         configurar_piper(carpeta_voces)
+    
+    # Mostrar donación si es necesario (síncrono al inicio está bien por ser un diálogo de bienvenida)
     if config['donations']: update.donation()
-    if config.get('updates', False): updater.do_update()
+    
+    # Iniciar la interfaz principal
+    MainController()
+    
+    # Comprobar actualizaciones en segundo plano (asíncrono)
+    if config.get('updates', False):
+        import threading
+        threading.Thread(target=updater.do_update, daemon=True).start()
+    
     name = 'vetube-instance-checker'
     instance = wx.SingleInstanceChecker(name)
     if instance.IsAnotherRunning():
         wx.MessageBox(_('VeTube ya se encuentra en ejecución. Cierra la otra instancia antes de iniciar esta.'), 'Error', wx.ICON_ERROR)
         return
-    MainController()
+    
     app.MainLoop()
 run_app()

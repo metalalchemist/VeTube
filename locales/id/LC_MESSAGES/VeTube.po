@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-06-08 12:23-0700\n"
+"POT-Creation-Date: 2026-06-08 13:36-0700\n"
 "PO-Revision-Date: 2026-01-05 10:01+0700\n"
 "Last-Translator: \n"
 "Language: id\n"
@@ -158,6 +158,18 @@ msgstr "suara diaktifkan."
 msgid "sonidos desactivados."
 msgstr "suara dinonaktifkan."
 
+#: controller/chat_dialog_controller.py:116
+msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
+msgstr ""
+"Apakah Anda ingin keluar dari aplikasi ini dan menghentikan pembacaan "
+"pesan?"
+
+#: controller/chat_dialog_controller.py:116 controller/main_controller.py:69
+#: controller/menus/main_menu_controller.py:106
+#: controller/update_languages_controller.py:104
+msgid "¡Atención!"
+msgstr "Perhatian!"
+
 #: controller/editor_controller.py:43
 msgid ""
 "Está apunto de restaurar las combinaciones a sus valores por defecto, "
@@ -262,12 +274,6 @@ msgstr "Tidak ada favorit yang bisa dihapus"
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr "Apakah Anda yakin ingin menghapus semua favorit dari daftar?"
 
-#: controller/main_controller.py:69
-#: controller/menus/main_menu_controller.py:106
-#: controller/update_languages_controller.py:104 ui/chat_dialog.py:121
-msgid "¡Atención!"
-msgstr "Perhatian!"
-
 #: controller/main_controller.py:85
 msgid "&Borrar mensajes"
 msgstr "&Hapus pesan"
@@ -312,10 +318,6 @@ msgstr "Tidak ada pesan yang bisa dihapus"
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr "Apakah Anda yakin ingin menghapus semua pesan?"
 
-#: controller/main_controller.py:138
-msgid "Lectura de chats en vivo"
-msgstr "Membaca obrolan langsung"
-
 #: controller/main_controller.py:221
 msgid "Conectando..."
 msgstr "Menghubungkan..."
@@ -358,7 +360,7 @@ msgid "Idioma %s actualizado con éxito."
 msgstr "Bahasa berhasil disimpan."
 
 #: controller/update_languages_controller.py:82
-#, fuzzy, python-brace-format, python-format
+#, fuzzy, python-format
 msgid "Error al actualizar idioma %s: %s"
 msgstr "Kesalahan saat memperbarui bahasa lokal {}: {}"
 
@@ -465,11 +467,12 @@ msgid "Creadores del proyecto:"
 msgstr "Pembuat proyek:"
 
 #: controller/menus/main_menu_controller.py:45
+#, fuzzy
 msgid ""
 "Descripción:\n"
-" Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch "
-"y la sala de  juegos, ajusta tus preferencias como quieras y disfruta más"
-" tus canales favoritos."
+" Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch,"
+" kick y la sala de  juegos, ajusta tus preferencias como quieras y "
+"disfruta más tus canales favoritos."
 msgstr ""
 "Deskripsi:\n"
 "Membaca pesan langsung dari YouTube, TikTok, QuentinC's  playroom, "
@@ -1087,12 +1090,6 @@ msgstr "&Oke"
 msgid "&Cancelar"
 msgstr "&Batal"
 
-#: ui/chat_dialog.py:121
-msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
-msgstr ""
-"Apakah Anda ingin keluar dari aplikasi ini dan menghentikan pembacaan "
-"pesan?"
-
 #: ui/chat_ui.py:10
 msgid "Lectura del chat en vivo..."
 msgstr "Sedang membaca obrolan siaran langsung..."
@@ -1539,4 +1536,7 @@ msgstr "Bahasa sistem"
 
 #~ msgid "dataerror_msg"
 #~ msgstr "dataerror_msg"
+
+#~ msgid "Lectura de chats en vivo"
+#~ msgstr "Membaca obrolan langsung"
 

@@ -1,6 +1,6 @@
 import wx
-import concurrent.futures
-import tempfile
+import asyncio
+import threading
 from ui.update_languages_dialog import UpdateLanguagesDialog
 from servicios.language_updater import GestorRepositorios
 from ui.dialog_response import response
@@ -16,7 +16,6 @@ class UpdateLanguagesController:
         
         self.view = UpdateLanguagesDialog(parent, languages_to_display)
         self._bind_events()
-        self.executor = None
         self.update_completed = False
 
     def _bind_events(self):
@@ -57,73 +56,53 @@ class UpdateLanguagesController:
         self.total_tasks = len(languages_to_process)
         self.completed_tasks = 0
         
-        self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=5)
-        
-        self.futures = []
-        for lang_info in languages_to_process:
-            lang_code = lang_info['code']
-            version = lang_info['version']
-            future = self.executor.submit(self._download_and_install_language, lang_code, version)
-            self.futures.append(future)
-            future.add_done_callback(lambda f, lc=lang_code: wx.CallAfter(self._on_task_done, f, lc))
-
+        threading.Thread(target=self._run_async_update, args=(languages_to_process,), daemon=True).start()
         wx.CallAfter(self.view.set_status, _("Iniciando descarga de idiomas..."))
 
-    def _on_task_done(self, future, lang_code):
-        self.completed_tasks += 1
-        progress = int((self.completed_tasks / self.total_tasks) * 100)
-        wx.CallAfter(self.view.update_progress, progress)
+    def _run_async_update(self, languages):
+        asyncio.run(self._do_parallel_update(languages))
 
+    async def _do_parallel_update(self, languages):
+        tasks = []
+        for lang_info in languages:
+            tasks.append(self._download_and_install_language_async(lang_info['code'], lang_info['version']))
+        await asyncio.gather(*tasks)
+
+    async def _download_and_install_language_async(self, lang_code, version):
         try:
-            result = future.result()
+            result = await self.gestor.instalar_idioma(lang_code, version)
             if result['success']:
-                wx.CallAfter(self.view.set_status, _("Idioma %s actualizado con éxito.") % result['data'])
+                wx.CallAfter(self.view.set_status, _("Idioma %s actualizado con éxito.") % lang_code)
             else:
-                wx.CallAfter(self.view.set_status, _("Error al actualizar idioma %s: %s") % (result['data'], result['error_msg']))
+                error_msg = result.get('data', 'Error desconocido')
+                wx.CallAfter(self.view.set_status, _("Error en %s: %s") % (lang_code, error_msg))
+                wx.CallAfter(wx.MessageBox, _("Error al actualizar %s: %s") % (lang_code, error_msg), _("Error"), wx.ICON_ERROR)
         except Exception as exc:
             import traceback
             error_traceback = traceback.format_exc()
             wx.CallAfter(self.view.set_status, _("Error inesperado en %s: %s") % (lang_code, exc))
-            print(f"[ERROR] Excepción en hilo de {lang_code}:\n{error_traceback}")
             wx.CallAfter(wx.MessageBox, _("Error inesperado en %s:\n%s\n\nVer consola para más detalles.") % (lang_code, exc), _("Error"), wx.OK | wx.ICON_ERROR)
+        
+        self.completed_tasks += 1
+        progress = int((self.completed_tasks / self.total_tasks) * 100)
+        wx.CallAfter(self.view.update_progress, progress)
 
         if self.completed_tasks == self.total_tasks:
+            self._finalize_update()
+
+    def _finalize_update(self):
+        # Esta función interna es necesaria para pasarla a CallAfter y que todo sea seguro para hilos
+        def _logic():
             self.update_completed = True
-            wx.CallAfter(self.view.set_status, _("Actualización completada."))
-            wx.CallAfter(self.view.preparar_interfaz_final)
-            
-            # Rebind OK button to close dialog
+            self.view.set_status(_("Actualización completada."))
+            self.view.preparar_interfaz_final()
             self.view.ok_button.Unbind(wx.EVT_BUTTON)
             self.view.ok_button.Bind(wx.EVT_BUTTON, lambda evt: self.view.EndModal(wx.ID_OK))
-            
             wx.EndBusyCursor()
-            if self.executor:
-                self.executor.shutdown(wait=False)
-
-    def prompt_for_restart(self):
-        if response(_("Es necesario reiniciar el programa para aplicar los nuevos idiomas. ¿Desea reiniciarlo ahora?"), _("¡Atención!")) == wx.ID_YES:
-            app_utilitys.restart_program()
-
-    def _download_and_install_language(self, lang_code, version):
-        try:
-            with tempfile.TemporaryDirectory() as temp_dir:
-                download_result = self.gestor.descargar_zip(lang_code, download_dir=temp_dir)
-                if not download_result['success']:
-                    return {'success': False, 'data': lang_code, 'error_msg': download_result['data']}
-                
-                unzip_result = self.gestor.descomprimir_zip(lang_code, zip_source_dir=temp_dir, ruta_destino="locales")
-                if not unzip_result['success']:
-                    return {'success': False, 'data': lang_code, 'error_msg': unzip_result['data']}
-                
-                self.gestor.actualizar_idioma_local(lang_code, version)
-                
-                return {'success': True, 'data': lang_code}
-        except Exception as e:
-            return {'success': False, 'data': lang_code, 'error_msg': str(e)}
+        wx.CallAfter(_logic)
 
     def close(self, event=None):
         if self.update_completed:
-            self.prompt_for_restart()
-        if self.executor:
-            self.executor.shutdown(wait=False)
+            if response(_("Es necesario reiniciar el programa para aplicar los nuevos idiomas. ¿Desea reiniciarlo ahora?"), _("¡Atención!")) == wx.ID_YES:
+                app_utilitys.restart_program()
         self.view.Destroy()

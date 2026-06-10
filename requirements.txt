@@ -1,4 +1,5 @@
 sounddevice
+numpy==1.26.4
 TikTokLive
 git+https://github.com/iamoverit/kick.py
 pyperclip
@@ -11,7 +12,7 @@ onnxruntime
 git+https://github.com/mush42/espeak-phonemizer-windows
 uiautomation
 psutil
-requests
+httpx
 git+https://github.com/KaitoCross/pytchat
 yt-dlp[default,curl-cffi]
 python-vlc

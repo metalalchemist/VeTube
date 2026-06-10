@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-06-08 12:23-0700\n"
+"POT-Creation-Date: 2026-06-08 13:36-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -148,6 +148,16 @@ msgstr ""
 msgid "sonidos desactivados."
 msgstr ""
 
+#: controller/chat_dialog_controller.py:116
+msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
+msgstr ""
+
+#: controller/chat_dialog_controller.py:116 controller/main_controller.py:69
+#: controller/menus/main_menu_controller.py:106
+#: controller/update_languages_controller.py:104
+msgid "¡Atención!"
+msgstr ""
+
 #: controller/editor_controller.py:43
 msgid ""
 "Está apunto de restaurar las combinaciones a sus valores por defecto, "
@@ -250,12 +260,6 @@ msgstr ""
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr ""
 
-#: controller/main_controller.py:69
-#: controller/menus/main_menu_controller.py:106
-#: controller/update_languages_controller.py:104 ui/chat_dialog.py:121
-msgid "¡Atención!"
-msgstr ""
-
 #: controller/main_controller.py:85
 msgid "&Borrar mensajes"
 msgstr ""
@@ -298,10 +302,6 @@ msgstr ""
 
 #: controller/main_controller.py:122
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
-msgstr ""
-
-#: controller/main_controller.py:138
-msgid "Lectura de chats en vivo"
 msgstr ""
 
 #: controller/main_controller.py:221
@@ -451,9 +451,9 @@ msgstr ""
 #: controller/menus/main_menu_controller.py:45
 msgid ""
 "Descripción:\n"
-" Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch "
-"y la sala de  juegos, ajusta tus preferencias como quieras y disfruta más"
-" tus canales favoritos."
+" Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch,"
+" kick y la sala de  juegos, ajusta tus preferencias como quieras y "
+"disfruta más tus canales favoritos."
 msgstr ""
 
 #: controller/menus/main_menu_controller.py:59
@@ -1045,10 +1045,6 @@ msgstr ""
 
 #: ui/ajustes.py:174 update/update.py:136
 msgid "&Cancelar"
-msgstr ""
-
-#: ui/chat_dialog.py:121
-msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
 msgstr ""
 
 #: ui/chat_ui.py:10
