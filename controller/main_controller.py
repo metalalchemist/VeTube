@@ -11,7 +11,7 @@ from servicios.sala import ServicioSala
 from servicios.tiktok import ServicioTiktok
 from servicios.kick import ServicioKick # Importar ServicioKick
 from ui.dialog_response import response
-from setup import reader
+from setup import reader,network
 from controller.chat_controller import ChatController
 from controller.editor_controller import EditorController
 
@@ -141,21 +141,20 @@ class MainController:
             if 'vm.tiktok' in url:
                 self.procesando_url = True
                 wx.BeginBusyCursor()
-                
-                import threading
-                import asyncio
-                def tiktok_thread():
-                    try:
-                        real_url = asyncio.run(canonical_scraper.get_simplified_tiktok_live_url(url))
-                        wx.CallAfter(self._continuar_abriendo_chat, real_url)
-                    except Exception as e:
-                        wx.CallAfter(wx.MessageBox, _("Error al simplificar URL de TikTok: {}").format(e), _("Error"), wx.ICON_ERROR)
-                    finally:
-                        # Liberamos el cerrojo y restauramos el cursor
-                        self.procesando_url = False
-                        wx.CallAfter(wx.EndBusyCursor)
-                
-                threading.Thread(target=tiktok_thread, daemon=True).start()
+
+                def handle_tiktok_result(result):
+                    if isinstance(result, Exception):
+                        wx.MessageBox(_("Error al simplificar URL de TikTok: {}").format(result), _("Error"), wx.ICON_ERROR)
+                    elif result:
+                        self._continuar_abriendo_chat(result)
+                    else:
+                        wx.MessageBox(_("No se pudo obtener la URL real de TikTok."), _("Error"), wx.ICON_ERROR)
+                    
+                    # Liberamos el cerrojo y restauramos el cursor al final de todo
+                    self.procesando_url = False
+                    wx.EndBusyCursor()
+
+                network.execute(canonical_scraper.get_simplified_tiktok_live_url(url), callback=handle_tiktok_result)
             else:
                 self._continuar_abriendo_chat(url)
         else:

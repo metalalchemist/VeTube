@@ -1,6 +1,6 @@
 import wx
 import asyncio
-import threading
+from setup import network
 from ui.update_languages_dialog import UpdateLanguagesDialog
 from servicios.language_updater import GestorRepositorios
 from ui.dialog_response import response
@@ -56,17 +56,15 @@ class UpdateLanguagesController:
         self.total_tasks = len(languages_to_process)
         self.completed_tasks = 0
         
-        threading.Thread(target=self._run_async_update, args=(languages_to_process,), daemon=True).start()
+        async def do_all_updates():
+            tasks = []
+            for lang_info in languages_to_process:
+                tasks.append(self._download_and_install_language_async(lang_info['code'], lang_info['version']))
+            await asyncio.gather(*tasks)
+
+        # Usamos el motor de red global para lanzar todas las descargas a la vez
+        network.execute(do_all_updates())
         wx.CallAfter(self.view.set_status, _("Iniciando descarga de idiomas..."))
-
-    def _run_async_update(self, languages):
-        asyncio.run(self._do_parallel_update(languages))
-
-    async def _do_parallel_update(self, languages):
-        tasks = []
-        for lang_info in languages:
-            tasks.append(self._download_and_install_language_async(lang_info['code'], lang_info['version']))
-        await asyncio.gather(*tasks)
 
     async def _download_and_install_language_async(self, lang_code, version):
         try:

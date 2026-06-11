@@ -25,8 +25,7 @@ def run_app():
     
     # Comprobar actualizaciones en segundo plano (asíncrono)
     if config.get('updates', False):
-        import threading
-        threading.Thread(target=updater.do_update, daemon=True).start()
+        updater.do_update()
     
     name = 'vetube-instance-checker'
     instance = wx.SingleInstanceChecker(name)

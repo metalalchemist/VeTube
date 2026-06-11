@@ -7,6 +7,7 @@ import shutil
 import zipfile
 import httpx
 import traceback
+from setup import network
 
 class GestorRepositorios:
     def __init__(self, frame, github_repo, rama='master', local_dir='.', json_file='languages.json'):
@@ -40,11 +41,10 @@ class GestorRepositorios:
     async def obtener_idiomas_remotos(self):
         try:
             url = f"https://raw.githubusercontent.com/{self.github_repo}/{self.rama}/translates/languages.json"
-            async with httpx.AsyncClient(headers={'User-Agent': 'Mozilla/5.0'}, follow_redirects=True, timeout=15.0) as client:
-                response = await client.get(url)
-                if response.status_code == 200:
-                    return {'success': True, 'data': response.json()}
-                return {'success': False, 'data': f"HTTP {response.status_code}"}
+            response = await network.client.get(url)
+            if response.status_code == 200:
+                return {'success': True, 'data': response.json()}
+            return {'success': False, 'data': f"HTTP {response.status_code}"}
         except Exception:
             traceback.print_exc()
             return {'success': False, 'data': _('Error de conexión con el servidor.')}
@@ -68,17 +68,16 @@ class GestorRepositorios:
         try:
             url = f"https://raw.githubusercontent.com/{self.github_repo}/{self.rama}/translates/{idioma}.zip"
             ruta_zip = os.path.join(download_dir, f"{idioma}.zip")
-            async with httpx.AsyncClient(headers={'User-Agent': 'Mozilla/5.0'}, follow_redirects=True, timeout=60.0) as client:
-                async with client.stream("GET", url) as response:
-                    response.raise_for_status()
-                    total = int(response.headers.get('content-length', 0))
-                    descargado = 0
-                    with open(ruta_zip, 'wb') as f:
-                        async for chunk in response.aiter_bytes():
-                            f.write(chunk)
-                            descargado += len(chunk)
-                            if progress_callback and total > 0:
-                                progress_callback(int(descargado / total * 100))
+            async with network.client.stream("GET", url) as response:
+                response.raise_for_status()
+                total = int(response.headers.get('content-length', 0))
+                descargado = 0
+                with open(ruta_zip, 'wb') as f:
+                    async for chunk in response.aiter_bytes():
+                        f.write(chunk)
+                        descargado += len(chunk)
+                        if progress_callback and total > 0:
+                            progress_callback(int(descargado / total * 100))
             return {'success': True, 'data': ruta_zip}
         except Exception:
             traceback.print_exc()

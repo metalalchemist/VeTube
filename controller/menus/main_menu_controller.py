@@ -9,7 +9,7 @@ from globals import data_store
 from globals.resources import carpeta_voces,codes,idiomas_disponibles,monedas
 from controller.editor_controller import EditorController
 from controller.ajustes_controller import AjustesController
-from setup import reader,player
+from setup import network, reader, player
 from googletrans import LANGUAGES
 from servicios.language_updater import GestorRepositorios
 from ui.update_languages_dialog import UpdateLanguagesDialog
@@ -19,7 +19,6 @@ class MainMenuController:
         self.frame = frame
         self.main_controller = main_controller
         self.menu = MainMenu(frame)
-        self.checking_updates = False
         self.checking_languages = False
         self._bind_menu_events()
 
@@ -27,33 +26,13 @@ class MainMenuController:
         self.frame.Bind(wx.EVT_MENU, lambda evt: wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube/tree/master/doc/'+curLang[:2]+'/readme.md'), self.menu.manual)
         self.frame.Bind(wx.EVT_MENU, lambda evt: wx.LaunchDefaultBrowser('https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U'), self.menu.apoyo)
         self.frame.Bind(wx.EVT_MENU, lambda evt: wx.LaunchDefaultBrowser('https://github.com/metalalchemist/VeTube'), self.menu.itemPageMain)
-        self.frame.Bind(wx.EVT_MENU, self.enlazar_actualizador, self.menu.actualizador)
+        self.frame.Bind(wx.EVT_MENU, lambda evt: updater.do_update(is_manual=True), self.menu.actualizador)
         self.frame.Bind(wx.EVT_MENU, self.mostrar_acerca_de, self.menu.acercade)
         self.frame.Bind(wx.EVT_MENU, self.mostrar_ajustes, self.menu.opcion_1)
         self.frame.Bind(wx.EVT_MENU, self.restaurar, self.menu.opcion_3)
         self.frame.Bind(wx.EVT_MENU, self.cerrarVentana, self.menu.salir)
         self.frame.Bind(wx.EVT_MENU, self.main_controller.mostrar_editor_combinaciones, self.menu.opcion_0)
         self.frame.Bind(wx.EVT_MENU, self.on_update_languages, self.menu.update_langs)
-
-    def enlazar_actualizador(self, event):
-        if self.checking_updates: return
-        self.checking_updates = True
-        import threading
-        def check_program_update():
-            try:
-                # Ejecutamos la actualización en un hilo
-                update_status = updater.do_update()
-                
-                # Si no hay actualizaciones, avisamos al usuario a través de la UI
-                if update_status == False:
-                    def show_no_update_msg():
-                        if self.frame.GetTitle():
-                            wx.MessageBox(_("Al parecer tienes la última versión del programa"), _("Información"), wx.ICON_INFORMATION)
-                    wx.CallAfter(show_no_update_msg)
-            finally:
-                self.checking_updates = False
-        
-        threading.Thread(target=check_program_update, daemon=True).start()
 
     def mostrar_acerca_de(self, event):
         wx.MessageBox(
@@ -83,31 +62,18 @@ class MainMenuController:
     def on_update_languages(self, event):
         if self.checking_languages: return
         self.checking_languages = True
-        # Hardcode the repo URL for now
-        github_repo_url = "metalalchemist/vetube"
+        gestor = GestorRepositorios(self.frame, github_repo="metalalchemist/vetube", local_dir=".")
+        def handle_result(result):
+            self.checking_languages = False
+            if isinstance(result, Exception):
+                wx.MessageBox(_("Error al conectar con el servidor de idiomas: {}").format(result), _("Error de red"), wx.ICON_ERROR)
+            else:
+                self._handle_language_check_result(gestor, result)
 
-        # Instantiate the GestorRepositorios
-        gestor = GestorRepositorios(self.frame, github_repo=github_repo_url, local_dir=".")
-
-        # Check for updates in a background thread to avoid UI freeze
-        import threading
-        import asyncio
-
-        def check_thread():
-            try:
-                # Correr la corrutina asíncrona
-                result = asyncio.run(gestor.comprobar_nuevos_y_actualizaciones())
-                wx.CallAfter(self._handle_language_check_result, gestor, result)
-            except Exception as e:
-                wx.CallAfter(wx.MessageBox, _("Error al conectar con el servidor de idiomas: {}").format(e), _("Error de red"), wx.ICON_ERROR)
-            finally:
-                self.checking_languages = False
-
-        threading.Thread(target=check_thread, daemon=True).start()
-
+        network.execute(gestor.comprobar_nuevos_y_actualizaciones(), callback=handle_result)
 
     def _handle_language_check_result(self, gestor, result):
-        if not result['success'] and not result.get('error', True): # 'error': False means no updates
+        if not result['success'] and not result.get('error', True): 
             wx.MessageBox(result['data'], _("Actualización de idiomas"), wx.ICON_INFORMATION)
         elif result['success']:
             nuevos = result['data'].get('nuevos', {})

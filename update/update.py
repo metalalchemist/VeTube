@@ -1,5 +1,4 @@
 from logging import getLogger
-logger = getLogger('update')
 import json
 from utils import languageHandler
 import contextlib
@@ -7,7 +6,7 @@ import io
 import os
 import sys
 import platform
-import requests
+import httpx
 import tempfile
 try:
     import czipfile as zipfile
@@ -16,38 +15,19 @@ except ImportError:
 import wx
 from platform_utils import paths
 from utils.translator import TranslatorWrapper
+from setup import network
+logger = getLogger('update')
 
-def perform_update(endpoint, current_version, app_name='', password=None, update_available_callback=None, progress_callback=None, update_complete_callback=None):
-    if os.path.exists("data.json"):
-        with open ("data.json") as file: resultado=json.load(file)
-        donations=resultado['donations']
-        traducir=resultado['traducir']
-    else:
-        donations=True
-        traducir=False
-    requests_session = create_requests_session(app_name=app_name, version=current_version)
-    available_update = find_update(endpoint, requests_session=requests_session)
-    if not available_update:
-        logger.debug("No update available")
-        return False
-    available_version = available_update['current_version']
-    if available_version == current_version or platform.system()+platform.architecture()[0][:2] not in available_update['downloads']:
-        logger.debug("No update for this architecture")
-        return False
-    if not traducir: available_description = available_update.get('description', None)
-    else:
-        translator = TranslatorWrapper()
-        available_description = translator.translate(available_update.get('description', None),target=languageHandler.curLang[:2])
-    update_url = available_update ['downloads'][platform.system()+platform.architecture()[0][:2]]
-    logger.info("A new update is available. Version %s" % available_version)
-    if not donations: donation()
-    if callable(update_available_callback) and not update_available_callback(version=available_version, description=available_description): #update_available_callback should return a falsy value to stop the process
-        logger.info("User canceled update.")
-        return
+def perform_update(update_url, donations=True, password=None, progress_callback=None, update_complete_callback=None):
     base_path = tempfile.mkdtemp()
     download_path = os.path.join(base_path, 'update.zip')
     update_path = os.path.join(base_path, 'update')
-    downloaded = download_update(update_url, download_path, requests_session=requests_session, progress_callback=progress_callback)
+    
+    if not donations: donation()
+    
+    with httpx.Client(follow_redirects=True, timeout=None) as client:
+        downloaded = download_update(update_url, download_path, client=client, progress_callback=progress_callback)
+    
     extracted = extract_update(downloaded, update_path, password=password)
     bootstrap_path = move_bootstrap(extracted)
     if callable(update_complete_callback):
@@ -55,32 +35,61 @@ def perform_update(endpoint, current_version, app_name='', password=None, update
     execute_bootstrap(bootstrap_path, extracted)
     logger.info("Update prepared for installation.")
 
-def create_requests_session(app_name=None, version=None):
-    user_agent = ''
-    session = requests.session()
-    if app_name:
-        user_agent = ' %s/%r' % (app_name, version)
-    session.headers['User-Agent'] = session.headers['User-Agent'] + user_agent
-    return session
+async def async_check_update(endpoint, current_version):
+    try:
+        if os.path.exists("data.json"):
+            with open ("data.json") as file: resultado=json.load(file)
+            donations = resultado.get('donations', True)
+            traducir = resultado.get('traducir', False)
+        else:
+            donations = True
+            traducir = False
 
-def find_update(endpoint, requests_session):
-    response = requests_session.get(endpoint)
-    response.raise_for_status()
-    content = response.json()
-    return content
+        response = await network.client.get(endpoint)
+        response.raise_for_status()
+        available_update = response.json()
+        
+        available_version = available_update['current_version']
+        arch_key = platform.system() + platform.architecture()[0][:2]
+        
+        if available_version == current_version or arch_key not in available_update['downloads']:
+            logger.debug("No update available or not for this architecture")
+            return None
+            
+        if not traducir:
+            available_description = available_update.get('description', None)
+        else:
+            translator = TranslatorWrapper()
+            available_description = translator.translate(available_update.get('description', None), target=languageHandler.curLang[:2])
+            
+        update_url = available_update['downloads'][arch_key]
+        
+        return {
+            'update_url': update_url,
+            'available_version': available_version,
+            'available_description': available_description,
+            'donations': donations
+        }
+    except Exception as e:
+        logger.error(f"Error checking for updates: {e}")
+        return None
 
-def download_update(update_url, update_destination, requests_session, progress_callback=None, chunk_size=io.DEFAULT_BUFFER_SIZE):
-    total_downloaded = total_size = 0
+def download_update(update_url, update_destination, client, progress_callback=None, chunk_size=128*1024):
+    total_downloaded = 0
+    last_percent = -1
     with io.open(update_destination, 'w+b') as outfile:
-        download = requests_session.get(update_url, stream=True)
-        total_size = int(download.headers.get('content-length', 0))
-        logger.debug("Total update size: %d" % total_size)
-        download.raise_for_status()
-        for chunk in download.iter_content(chunk_size):
-            outfile.write(chunk)
-            total_downloaded += len(chunk)
-            if callable(progress_callback):
-                call_callback(progress_callback, total_downloaded, total_size)
+        with client.stream("GET", update_url) as response:
+            response.raise_for_status()
+            total_size = int(response.headers.get('content-length', 0))
+            logger.debug("Total update size: %d" % total_size)
+            for chunk in response.iter_bytes(chunk_size):
+                outfile.write(chunk)
+                total_downloaded += len(chunk)
+                if callable(progress_callback) and total_size > 0:
+                    percent = int((total_downloaded * 100) / total_size)
+                    if percent > last_percent:
+                        last_percent = percent
+                        call_callback(progress_callback, total_downloaded, total_size)
     logger.debug("Update downloaded")
     return update_destination
 

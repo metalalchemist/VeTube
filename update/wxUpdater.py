@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-import wx,json
-from builtins import str
+import wx
 from . import utils
 
 progress_dialog = None
@@ -18,13 +17,21 @@ def create_progress_dialog():
 
 def progress_callback(total_downloaded, total_size):
     global progress_dialog
-    if progress_dialog == None:
-        progress_dialog = create_progress_dialog()
-        progress_dialog.Show()
-    if total_downloaded == total_size:
-        progress_dialog.Destroy()
-    else:
-        progress_dialog.Update(int((total_downloaded*100)/total_size), _(u"Actualizando... %s de %s") % (str(utils.convert_bytes(total_downloaded)), str(utils.convert_bytes(total_size))))
+    
+    def update_ui():
+        global progress_dialog
+        if progress_dialog == None:
+            progress_dialog = create_progress_dialog()
+            progress_dialog.Show()
+        if total_downloaded == total_size:
+            progress_dialog.Destroy()
+            progress_dialog = None
+        else:
+            progress_dialog.Update(int((total_downloaded*100)/total_size), _(u"Actualizando... %s de %s") % (str(utils.convert_bytes(total_downloaded)), str(utils.convert_bytes(total_size))))
+    
+    wx.CallAfter(update_ui)
 
 def update_finished():
-    ms = wx.MessageDialog(None, _(u"La actualización se a descargado he instalado exitosamente. pulse en aceptar para continuar."), _(u"¡Hecho!")).ShowModal()
+    def show_msg():
+        wx.MessageDialog(None, _(u"La actualización se ha descargado e instalado exitosamente. Pulse en aceptar para continuar."), _(u"¡Hecho!")).ShowModal()
+    wx.CallAfter(show_msg)
