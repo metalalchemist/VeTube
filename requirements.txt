@@ -4,7 +4,6 @@ TikTokLive
 git+https://github.com/iamoverit/kick.py
 pyperclip
 git+https://github.com/owsombra/chat-downloader
-git+https://github.com/metalalchemist/google-currency
 git+https://github.com/accessibleapps/sound_lib
 git+https://github.com/accessibleapps/accessible_output2
 git+https://github.com/rmcpantoja/googletrans.git

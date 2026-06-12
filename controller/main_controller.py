@@ -22,7 +22,7 @@ class MainController:
         self.chat_dialog = None # Initialize ChatDialog instance here
         self.inicializar_datos()
         self.establecer_eventos()
-
+        self.procesando_url = False
     def inicializar_datos(self):
         self.frame.list_favorite.Set(favs)
         self.frame.favoritos_num = self.frame.list_favorite.GetCount()

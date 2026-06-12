@@ -1,4 +1,5 @@
-import json, google_currency,threading,wx
+import json, threading, wx
+from exchange import exchange
 from chat_downloader import ChatDownloader
 from globals import data_store
 from globals.resources import rutasonidos
@@ -112,10 +113,8 @@ class ServicioYouTube:
                 if message_type == 'donacion':
                     if data_store.config['eventos'][3] and data_store.config['categorias'][3] and hasattr(self.chat_controller.ui, 'list_box_donaciones'):
                         if data_store.divisa != "Por defecto" and data_store.divisa != message['money']['currency']:
-                            moneda = json.loads(google_currency.convert(message['money']['currency'], data_store.divisa, message['money']['amount']))
-                            if moneda['converted']:
-                                message['money']['currency'] = data_store.divisa
-                                message['money']['amount'] = moneda['amount']
+                            message['money']['amount'] = exchange.convert(message['money']['amount'], message['money']['currency'])
+                            message['money']['currency'] = data_store.divisa
                         full_message = f"{message['money']['amount']} {message['money']['currency']}, {author_name}: {msg}"
                         if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][3]: player.play(rutasonidos[3])
                         wx.CallAfter(self.chat_controller.agregar_mensaje_donacion, full_message)

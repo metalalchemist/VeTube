@@ -1,4 +1,5 @@
-import json, google_currency,threading,re,wx
+import json, threading, re, wx
+from exchange import exchange
 from chat_downloader import ChatDownloader
 from globals import data_store
 from globals.resources import rutasonidos
@@ -78,32 +79,27 @@ class ServicioTwich:
                     continue
 
                 # Cheer/Bits event
-                if re.search(r'\bCheer\d+\b', msg) and data_store.config['categorias'][3] and data_store.config['eventos'][3] and hasattr(self.chat_controller.ui, 'list_box_donaciones'):
-                    divide1=message['message'].split('Cheer')
-                    if not divide1[0]:
-                        if data_store.divisa!=_('Por defecto'): divide1[0]=data_store.divisa
-                        else: divide1[0]='Cheer'
-                        final_msj=divide1[1].split()
-                        if data_store.divisa!=_('Por defecto'):
-                            if data_store.divisa=='USD':final_msj[0]=int(final_msj[0])/100
-                            else:
-                                moneda=json.loads(google_currency.convert('USD',data_store.divisa,int(final_msj[0])/100) )
-                                if moneda['converted']: final_msj[0]=moneda['amount']
-                        dinero=divide1[0]+str(final_msj[0])
-                        if len(final_msj)==1: divide1=''
-                        else: divide1=' '.join(final_msj[1:])
+                cheer_matches = re.findall(r'cheer(\d+)', msg, re.IGNORECASE)
+                if cheer_matches and data_store.config['categorias'][3] and data_store.config['eventos'][3] and hasattr(self.chat_controller.ui, 'list_box_donaciones'):
+                    # Sumamos todos los bits encontrados en el mensaje
+                    bits_total = sum(int(b) for b in cheer_matches)
+                    
+                    if data_store.divisa != _('Por defecto'):
+                        total_local = exchange.from_bits(bits_total)
+                        dinero = f"{total_local} {data_store.divisa}"
                     else:
-                        if data_store.divisa!=_('Por defecto'):
-                            if data_store.divisa=='USD': divide1[1]=int(divide1[1])/100
-                            else:
-                                moneda=json.loads(google_currency.convert('USD',data_store.divisa,int(divide1[1])/100) )
-                                if moneda['converted']: divide1[1]=moneda['amount']
-                        if data_store.divisa!=_('Por defecto'): dinero=data_store.divisa+str(divide1[1])
-                        else: dinero='Cheer '+str(divide1[1])
-                        divide1=' '+divide1[0]
-                    if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][3]: player.play(rutasonidos[3])
-                    self.chat_controller.agregar_mensaje_donacion(dinero+', '+author_name+': '+divide1)
-                    if data_store.config['reader'] and data_store.config['unread'][3]: reader.leer_mensaje(dinero+', '+author_name+': '+divide1)
+                        dinero = f"{bits_total} Bits"
+                    
+                    # Limpiar el mensaje de TODOS los códigos Cheer (insensible a mayúsculas)
+                    clean_msg = re.sub(r'cheer\d+', '', msg, flags=re.IGNORECASE).strip()
+                    # Si el mensaje queda vacío después de quitar los Cheers, no poner los dos puntos
+                    full_donacion = f"{dinero}, {author_name}" + (f": {clean_msg}" if clean_msg else "")
+                    
+                    if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][3]: 
+                        player.play(rutasonidos[3])
+                    self.chat_controller.agregar_mensaje_donacion(full_donacion)
+                    if data_store.config['reader'] and data_store.config['unread'][3]: 
+                        reader.leer_mensaje(full_donacion)
                     continue
 
                 # Regular messages with badges/roles

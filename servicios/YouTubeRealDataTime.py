@@ -1,4 +1,5 @@
-import pytchat, wx, json, threading, google_currency
+import pytchat, wx, json, threading
+from exchange import exchange
 from utils.play_mp4 import extract_stream_url
 from globals import data_store
 from globals.resources import rutasonidos
@@ -72,10 +73,8 @@ class YouTubeRealTimeService:
                             amount = c.amountString
                             currency = c.currency
                             if data_store.divisa != "Por defecto" and data_store.divisa != currency:
-                                converted = json.loads(google_currency.convert(currency, data_store.divisa, c.amountValue))
-                                if converted['converted']:
-                                    currency = data_store.divisa
-                                    amount = converted['amount']
+                                amount = exchange.convert(c.amountValue, currency)
+                                currency = data_store.divisa
                             
                             full_message = f"{amount} {currency}, {author_name}: {msg}"
                             if data_store.config['sonidos'] and data_store.config['listasonidos'][3]:

@@ -1,4 +1,5 @@
-import json, google_currency, threading, asyncio, wx, traceback
+import json, threading, asyncio, wx, traceback
+from exchange import exchange
 from TikTokLive.client.client import TikTokLiveClient
 from TikTokLive.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent, LikeEvent, JoinEvent, FollowEvent, ShareEvent, RoomUserSeqEvent, EnvelopeEvent, EmoteChatEvent,LiveEndEvent
 from globals import data_store
@@ -169,22 +170,11 @@ class ServicioTiktok:
     async def on_gift(self,event: GiftEvent):
         if data_store.config['eventos'][3] and hasattr(self.chat_controller.ui, 'list_box_donaciones'):
             mensajito = ""
-            if event.gift.streakable and not event.streaking:
-                if data_store.divisa!="Por defecto":
-                    if data_store.divisa=='USD': total=float((event.gift.diamond_count*event.repeat_count)/100)
-                    else:
-                        moneda = json.loads(google_currency.convert('USD', data_store.divisa, int((event.gift.diamond_count * event.repeat_count) / 100)))
-                        if moneda['converted']: total=moneda['amount']
-                    mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(total),data_store.divisa)
-                else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(event.gift.diamond_count))
-            elif not event.gift.streakable:
-                if data_store.divisa!="Por defecto":
-                    if data_store.divisa=='USD': total=int((event.gift.diamond_count*event.repeat_count)/100)
-                    else:
-                        moneda = json.loads(google_currency.convert('USD', data_store.divisa, int((event.gift.diamond_count * event.repeat_count) / 100)))
-                        if moneda['converted']: total=moneda['amount']
-                    mensajito=_('%s ha enviado %s %s (%s %s)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(total),data_store.divisa)
-                else: mensajito=_('%s ha enviado %s %s (%s diamante)') % (event.user.nickname,str(event.repeat_count),event.gift.name,str(event.gift.diamond_count))
+            if data_store.divisa != "Por defecto":
+                total = exchange.from_diamonds(event.gift.diamond_count * event.repeat_count)
+                mensajito = _('%s ha enviado %s %s (%s %s)') % (event.user.nickname, str(event.repeat_count), event.gift.name, str(total), data_store.divisa)
+            else:
+                mensajito = _('%s ha enviado %s %s (%s diamante)') % (event.user.nickname, str(event.repeat_count), event.gift.name, str(event.gift.diamond_count))
             
             if mensajito:
                 wx.CallAfter(self.chat_controller.agregar_mensaje_donacion, mensajito)
