@@ -1,4 +1,4 @@
-import wx,json,google_currency
+import wx,json
 from ui.menus.main_menu import MainMenu
 from update import updater
 from utils.languageHandler import curLang
@@ -11,6 +11,7 @@ from controller.editor_controller import EditorController
 from controller.ajustes_controller import AjustesController
 from setup import network, reader, player
 from googletrans import LANGUAGES
+from exchange import codes as currency_codes
 from servicios.language_updater import GestorRepositorios
 from ui.update_languages_dialog import UpdateLanguagesDialog
 from controller.update_languages_controller import UpdateLanguagesController
@@ -122,7 +123,7 @@ class MainMenuController:
                     break
         if cf.choice_moneditas.GetStringSelection()!='Por defecto':
             monedita=cf.choice_moneditas.GetStringSelection().split(', (')
-            for k in google_currency.CODES:
-                if google_currency.CODES[k] == monedita[0]:
+            for k in currency_codes.CODES:
+                if currency_codes.CODES[k] == monedita[0]:
                     data_store.divisa = k
                     break
