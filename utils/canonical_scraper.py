@@ -9,9 +9,13 @@ async def get_simplified_tiktok_live_url(url):
     and returns a simplified live URL in the format https://www.tiktok.com/@username/live.
     """
     try:
-        # Usamos el cliente global de setup.network.client
-        # Activamos follow_redirects=True solo para esta petición
-        response = await network.client.get(url, follow_redirects=True)
+        # Usamos un User-Agent de navegador real para evitar bloqueos (403 Forbidden)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
+        
+        # Usamos el cliente global de setup.network.client pero con headers personalizados
+        response = await network.client.get(url, follow_redirects=True, headers=headers)
         response.raise_for_status()
         final_url = str(response.url)
 
