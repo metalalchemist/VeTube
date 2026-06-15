@@ -184,11 +184,6 @@ class configuracionDialog(wx.Dialog):
 			self.seleccionar_TTS.Disable()
 		else:
 			self.seleccionar_TTS.Enable()
-		if config['sistemaTTS'] == "piper":
-			label_8.Disable()
-			self.slider_1.Disable()
-			label_9.Disable()
-			self.slider_2.Disable()
 		if config['sonidos']:
 			self.soniditos.Enable()
 			self.reproducir.Enable()

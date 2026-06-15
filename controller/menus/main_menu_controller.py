@@ -110,7 +110,9 @@ class MainMenuController:
         reader._leer.set_volume(data_store.config['volume'])
         reader.set_sapi(data_store.config['sapi'])
         if data_store.config['sistemaTTS'] == "piper":
-            salida_actual = reader._lector.find_device_id(player.devicenames[data_store.config["dispositivo"]-1])
+            nombres = player.devicenames
+            dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
+            salida_actual = reader._lector.find_device_id(nombres[data_store.config["dispositivo"]-1], known_devices=dispositivos_formateados)
             reader._lector.set_device(salida_actual)
             app_utilitys.configurar_piper(carpeta_voces)
         if cf.choice_traducir.GetStringSelection()!="":

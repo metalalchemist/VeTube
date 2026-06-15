@@ -1,11 +1,11 @@
 # lector:
 from accessible_output2.outputs import auto, sapi5
-from .Piper import Piper, speaker
+from . import sonata_handler as speaker
 import glob
 """
 Esto es un gestionador de TTS. Permite manejar el uso de diferentes motores de texto a voz como:
 1. accessible output2
-2. Piper
+2. Sonata (Motor Piper gRPC)
 """
 def configurar_tts(lector):
 	if lector == "auto":
@@ -13,7 +13,7 @@ def configurar_tts(lector):
 	elif lector == "sapi5":
 		return sapi5.SAPI5()
 	elif lector == "piper":
-		return speaker
+		return speaker.piperSpeak()
 	else:
 		raise Exception("Lector no soportado.")
 

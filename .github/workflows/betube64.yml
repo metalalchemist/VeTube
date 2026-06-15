@@ -19,7 +19,7 @@ jobs:
       - name: Configure Python
         uses: actions/setup-python@v6
         with:
-          python-version: 3.12
+          python-version: 3.14
           architecture: x64
 
       - name: Install dependencies
@@ -28,7 +28,6 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller gdown
           pip install --upgrade pyzmq httpx httpcore future
-          git clone https://github.com/mush42/espeak-phonemizer-windows
 
       - name: Compiling
         run: |
@@ -42,7 +41,6 @@ jobs:
           cp -R translates/languages.json dist/VeTube/
           cp -R locales dist/VeTube/
           cp -R sounds dist/VeTube/
-          cp -R espeak-phonemizer-windows/espeak_phonemizer dist/VeTube/_internal/
       - uses: actions/upload-artifact@v7
         with:
           name: VeTube-x64

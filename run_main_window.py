@@ -1,3 +1,4 @@
+#To resume this session: gemini --resume "44dd7d2c-5663-42a5-9e3b-ab471b033308"
 import asyncio,sys,wx,setup
 from globals.data_store import config
 from globals.resources import carpeta_voces,lista_voces_piper
@@ -11,9 +12,11 @@ def run_app():
     app = wx.App(False)
     if config['sistemaTTS'] == "piper":
         if detect_onnx_models(carpeta_voces) is not None:
-            setup.reader._lector=setup.reader._lector.piperSpeak(f"piper/voices/voice-{lista_voces_piper[config['voz']][:-5]}/{lista_voces_piper[config['voz']]}")
-            lector_Salidas = setup.reader._lector.get_devices()
-            salida_actual = setup.reader._lector.find_device_id(setup.player.devicenames[config["dispositivo"]-1])
+            setup.reader._lector=setup.reader._lector.piperSpeak(f"voices/voice-{lista_voces_piper[config['voz']][:-5]}/{lista_voces_piper[config['voz']]}")
+            nombres_dispositivos = setup.player.devicenames
+            dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres_dispositivos)]
+            nombre_actual = nombres_dispositivos[config["dispositivo"]-1]
+            salida_actual = setup.reader._lector.find_device_id(nombre_actual, known_devices=dispositivos_formateados)
             setup.reader._lector.set_device(salida_actual)
         configurar_piper(carpeta_voces)
     
@@ -21,7 +24,7 @@ def run_app():
     if config['donations']: update.donation()
     
     # Iniciar la interfaz principal
-    MainController()
+    controller = MainController()
     
     # Comprobar actualizaciones en segundo plano (asíncrono)
     if config.get('updates', False):
@@ -33,5 +36,10 @@ def run_app():
         wx.MessageBox(_('VeTube ya se encuentra en ejecución. Cierra la otra instancia antes de iniciar esta.'), 'Error', wx.ICON_ERROR)
         return
     
-    app.MainLoop()
+    try:
+        app.MainLoop()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        controller.close()
 run_app()

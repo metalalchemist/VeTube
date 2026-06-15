@@ -9,3 +9,4 @@ reader._leer.set_rate(config['speed'])
 reader._leer.set_pitch(config['tono'])
 reader._leer.set_voice(reader._leer.list_voices()[config['voz']])
 reader._leer.set_volume(config['volume'])
+from utils.network import network_manager as network

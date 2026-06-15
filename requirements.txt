@@ -1,5 +1,5 @@
-sounddevice
-numpy==1.26.4
+grpclib
+protobuf
 TikTokLive
 git+https://github.com/iamoverit/kick.py
 pyperclip
@@ -7,13 +7,10 @@ git+https://github.com/owsombra/chat-downloader
 git+https://github.com/accessibleapps/sound_lib
 git+https://github.com/accessibleapps/accessible_output2
 git+https://github.com/rmcpantoja/googletrans.git
-onnxruntime
-git+https://github.com/mush42/espeak-phonemizer-windows
 uiautomation
 psutil
 httpx
 git+https://github.com/KaitoCross/pytchat
 yt-dlp[default,curl-cffi]
 python-vlc
-wxPython==4.2.2; sys_platform == "win32" and platform_machine == "x86"
-wxPython; sys_platform == "win32" and (platform_machine == "AMD64" or platform_machine == "x86_64")
+wxPython

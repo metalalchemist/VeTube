@@ -303,13 +303,32 @@ class MainController:
         if evt.GetSelection() == 4:
             self.frame.button_1.Enable()
 
+    def close(self):
+        """Cierre centralizado de recursos (TTS, Chats, Servicios)."""
+        # 1. Cerrar el lector (Sonata, etc)
+        try:
+            reader.close()
+        except:
+            pass
+        
+        # 2. Cerrar diálogos de chat y sus servicios (Kick bypass, etc)
+        if self.chat_dialog:
+            try:
+                self.chat_dialog.keyboard_handler.unregister_all_keys()
+                for url, (controller, page_index) in list(self.chat_dialog.chat_sessions.items()):
+                    if controller.servicio:
+                        try:
+                            controller.servicio.detener()
+                        except:
+                            pass
+            except:
+                pass
+
     def cerrarVentana(self, event):
         if config['salir']:
             if response(_("¿está seguro que desea salir del programa?"), _("¡atención!"))==wx.ID_YES:
-                if self.chat_dialog:
-                    self.chat_dialog.keyboard_handler.unregister_all_keys()
+                self.close()
                 wx.GetApp().ExitMainLoop()
         else:
-            if self.chat_dialog:
-                self.chat_dialog.keyboard_handler.unregister_all_keys()
+            self.close()
             wx.GetApp().ExitMainLoop()

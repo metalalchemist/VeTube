@@ -9,6 +9,23 @@ class AjustesController:
         self.dialog = dialog
         self._bind_events()
         self.actualizar_visibilidad_piper()
+        # Cargamos la lista de voces correcta al iniciar
+        self.dialog.choice_2.Clear()
+        if config['sistemaTTS'] == "piper":
+            self.dialog.choice_2.AppendItems(lista_voces_piper)
+        else:
+            self.dialog.choice_2.AppendItems(lista_voces)
+        try:
+            self.dialog.choice_2.SetSelection(config['voz'])
+        except:
+            self.dialog.choice_2.SetSelection(0)
+        
+        # Sincronización inicial de parámetros para Piper
+        if config['sistemaTTS'] == "piper":
+            reader._lector.set_volume(config['volume'])
+            reader._lector.set_pitch(config['tono'])
+            # Aplicamos la velocidad inicial usando la escala correcta
+            reader._lector.set_rate(app_utilitys.porcentaje_a_escala(config['speed']))
     def _bind_events(self):
         self.dialog.check_1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar_sapi(event))
         self.dialog.chk1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'reader'))
@@ -67,15 +84,16 @@ class AjustesController:
 
     def cambiar_sintetizador(self, event):
         config['sistemaTTS'] = self.dialog.seleccionar_TTS.GetStringSelection()
+        reader.set_tts(config['sistemaTTS'])
         if config['sistemaTTS'] == "piper":
-            if len(lista_voces_piper) == 1 and lista_voces_piper[0]=='No hay voces instaladas':
-                reader.set_tts("piper")
-                reader._lector=reader._lector.piperSpeak(f"piper/voices/voice-{lista_voces[0][:-5]}/{lista_voces[0]}")
-                config['voz'] = 0
+            if lista_voces_piper and lista_voces_piper[0] != 'No hay voces instaladas':
+                voz_index = config.get('voz', 0)
+                if voz_index >= len(lista_voces_piper): voz_index = 0
+                model_path = f"voices/voice-{lista_voces_piper[voz_index][:-5]}/{lista_voces_piper[voz_index]}"
+                reader._lector.load_model(model_path)
             self.dialog.choice_2.Clear()
             self.dialog.choice_2.AppendItems(lista_voces_piper)
         else:
-            reader.set_tts(config['sistemaTTS'])
             self.dialog.choice_2.Clear()
             self.dialog.choice_2.AppendItems(lista_voces)
         self.actualizar_visibilidad_piper()
@@ -87,6 +105,9 @@ class AjustesController:
     def actualizar_visibilidad_piper(self):
         show = not config['sapi'] and config['sistemaTTS'] == "piper"
         self.dialog.instala_voces.Show(show)
+        # Aseguramos que los controles de tono y volumen estén habilitados siempre
+        self.dialog.slider_1.Enable()
+        self.dialog.slider_2.Enable()
         self.dialog.treeItem_2.Layout()
 
     def establecer_dispositivo(self, event):
@@ -96,39 +117,54 @@ class AjustesController:
         player.setdevice(config["dispositivo"])
         player.play("sounds/cambiardispositivo.mp3")
         if config['sistemaTTS'] == "piper":
-            if reader._lector.get_devices() is not None and lista_voces_piper[0]!='No hay voces instaladas':
-                reader._lector.set_device(reader._lector.find_device_id(valor_str))
-            reader.leer_auto(_("Hablaré a través  de este dispositivo."))
+            if lista_voces_piper and lista_voces_piper[0] != 'No hay voces instaladas':
+                # Reutilizamos los nombres que ya tiene el player formateados para Sonata
+                nombres = player.devicenames
+                dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
+                reader._lector.set_device(reader._lector.find_device_id(valor_str, known_devices=dispositivos_formateados))
+            reader.leer_auto(_("Hablaré a través de este dispositivo."))
+
     def reproducirPrueva(self, event):
         if not ".onnx" in self.dialog.choice_2.GetStringSelection():
             reader._leer.silence()
             reader.leer_sapi(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
         else:
             reader.leer_auto(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
+
     def cambiarVoz(self, event):
         config['voz'] = self.dialog.choice_2.GetSelection()
         if config['sistemaTTS'] == "piper":
-            reader.set_tts("sapi5")
-            reader.set_tts("piper")
-            reader._lector = reader._lector.piperSpeak(f"piper/voices/voice-{lista_voces[config['voz']][:-5]}/{lista_voces[config['voz']]}")
-            dispositivos_piper = reader._lector.get_devices()
-            salida_piper = reader._lector.find_device_id(player.devicenames[config["dispositivo"]-1])
+            # Simplemente cargamos el nuevo modelo en el lector existente
+            reader._lector.piperSpeak(f"voices/voice-{lista_voces_piper[config['voz']][:-5]}/{lista_voces_piper[config['voz']]}")
+            # El dispositivo se mantiene o se actualiza si es necesario, usando dispositivos conocidos
+            nombres = player.devicenames
+            dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
+            salida_piper = reader._lector.find_device_id(nombres[config["dispositivo"]-1], known_devices=dispositivos_formateados)
             reader._lector.set_device(salida_piper)
         else:
             reader._leer.set_voice(lista_voces[config['voz']])
     def cambiarVolumen(self, event):
-        reader._leer.set_volume(self.dialog.slider_2.GetValue())
-        config['volume'] = self.dialog.slider_2.GetValue()
+        value = self.dialog.slider_2.GetValue()
+        reader._leer.set_volume(value)
+        if config['sistemaTTS'] == "piper":
+            reader._lector.set_volume(value)
+        config['volume'] = value
     def cambiarTono(self, event):
         value = self.dialog.slider_1.GetValue() - 10
         reader._leer.set_pitch(value)
+        if config['sistemaTTS'] == "piper":
+            reader._lector.set_pitch(value)
         config['tono'] = value
     def cambiarVelocidad(self, event):
         value = self.dialog.slider_3.GetValue() - 10
-        if not ".onnx" in lista_voces[self.dialog.choice_2.GetSelection()]:
-            reader._leer.set_rate(value)
+        if config['sistemaTTS'] == "piper":
+            voz_actual = lista_voces_piper[self.dialog.choice_2.GetSelection()]
+            if ".onnx" in voz_actual:
+                reader._lector.set_rate(app_utilitys.porcentaje_a_escala(value))
+            else:
+                reader._leer.set_rate(value)
         else:
-            reader._lector.set_rate(app_utilitys.porcentaje_a_escala(value))
+            reader._leer.set_rate(value)
         config['speed'] = value
     def instalar_voz_piper(self, event):
         global config

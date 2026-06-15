@@ -11,3 +11,6 @@ class ReaderHandler:
 		else: self.leer_auto(mensaje)
 	def leer_sapi(self, mensaje): self._leer.speak(mensaje)
 	def leer_auto(self,mensaje): self._lector.speak(mensaje)
+	def close(self):
+		if hasattr(self._lector, 'close'):
+			self._lector.close()
