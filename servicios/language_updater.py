@@ -5,12 +5,13 @@ import asyncio
 import tempfile
 import shutil
 import zipfile
-import httpx
 import traceback
+from .base_downloader import BaseDownloader
 from setup import network
 
-class GestorRepositorios:
+class GestorRepositorios(BaseDownloader):
     def __init__(self, frame, github_repo, rama='master', local_dir='.', json_file='languages.json'):
+        super().__init__(base_dir=local_dir)
         self.frame = frame
         self.github_repo = github_repo
         self.rama = rama
@@ -65,23 +66,12 @@ class GestorRepositorios:
         return {'success': False, 'data': _('No hay actualizaciones ni nuevos idiomas disponibles.'), 'error': False}
 
     async def descargar_zip(self, idioma, download_dir, progress_callback=None):
-        try:
-            url = f"https://raw.githubusercontent.com/{self.github_repo}/{self.rama}/translates/{idioma}.zip"
-            ruta_zip = os.path.join(download_dir, f"{idioma}.zip")
-            async with network.client.stream("GET", url) as response:
-                response.raise_for_status()
-                total = int(response.headers.get('content-length', 0))
-                descargado = 0
-                with open(ruta_zip, 'wb') as f:
-                    async for chunk in response.aiter_bytes():
-                        f.write(chunk)
-                        descargado += len(chunk)
-                        if progress_callback and total > 0:
-                            progress_callback(int(descargado / total * 100))
-            return {'success': True, 'data': ruta_zip}
-        except Exception:
-            traceback.print_exc()
-            return {'success': False, 'data': _('Error al descargar el archivo del idioma %s.') % idioma}
+        url = f"https://raw.githubusercontent.com/{self.github_repo}/{self.rama}/translates/{idioma}.zip"
+        ruta_zip = os.path.join(download_dir, f"{idioma}.zip")
+        res = await self.download_file(url, ruta_zip, progress_callback)
+        if res['success']:
+            return res
+        return {'success': False, 'data': _('Error al descargar el archivo del idioma %s: %s') % (idioma, res['data'])}
 
     def descomprimir_zip(self, ruta_zip, destino):
         try:

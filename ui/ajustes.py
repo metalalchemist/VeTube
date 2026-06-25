@@ -59,7 +59,7 @@ class configuracionDialog(wx.Dialog):
 		boxSizer_2.Add(self.check_1, 0, wx.ALL, 5)
 		label_tts = wx.StaticText(self.treeItem_2, wx.ID_ANY, _("Sistema TTS a usar: "))
 		boxSizer_2.Add(label_tts, 0, wx.ALL, 5)
-		self.seleccionar_TTS = wx.Choice(self.treeItem_2, wx.ID_ANY, choices=["auto", "piper", "sapi5"])
+		self.seleccionar_TTS = wx.Choice(self.treeItem_2, wx.ID_ANY, choices=["auto", "piper", "sapi5", "onecore"])
 		self.seleccionar_TTS.SetStringSelection(config['sistemaTTS'])
 		boxSizer_2.Add(self.seleccionar_TTS, 0, wx.EXPAND | wx.ALL, 5)
 		self.chk1 = wx.CheckBox(self.treeItem_2, wx.ID_ANY, _("Activar lectura de mensajes automática"))

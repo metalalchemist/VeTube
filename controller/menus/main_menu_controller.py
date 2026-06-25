@@ -107,8 +107,26 @@ class MainMenuController:
                 app_utilitys.restart_program()
         reader._leer.set_rate(data_store.config['speed'])
         reader._leer.set_pitch(data_store.config['tono'])
-        reader._leer.set_voice(reader._leer.list_voices()[data_store.config['voz']])
         reader._leer.set_volume(data_store.config['volume'])
+        voices_leer = reader._leer.list_voices()
+        if voices_leer:
+            idx = data_store.config['voz']
+            if idx >= len(voices_leer): idx = 0
+            reader._leer.set_voice(voices_leer[idx])
+        
+        if data_store.config['sistemaTTS'] != "piper":
+            reader._lector.set_rate(data_store.config['speed'])
+            if data_store.config['sistemaTTS'] == "onecore":
+                reader._lector.set_pitch(data_store.config.get('tono_onecore', 0))
+            else:
+                reader._lector.set_pitch(data_store.config['tono'])
+            reader._lector.set_volume(data_store.config['volume'])
+            voices_lector = reader._lector.list_voices()
+            if voices_lector:
+                idx = data_store.config['voz']
+                if idx >= len(voices_lector): idx = 0
+                reader._lector.set_voice(voices_lector[idx])
+        
         reader.set_sapi(data_store.config['sapi'])
         if data_store.config['sistemaTTS'] == "piper":
             nombres = player.devicenames

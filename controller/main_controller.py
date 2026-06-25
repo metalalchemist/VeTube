@@ -23,6 +23,57 @@ class MainController:
         self.inicializar_datos()
         self.establecer_eventos()
         self.procesando_url = False
+        
+        # Iniciar la secuencia de comprobaciones al arrancar la app
+        wx.CallAfter(self.iniciar_secuencia_arranque)
+
+    def iniciar_secuencia_arranque(self):
+        # 1. Verificar e instalar voces si es necesario
+        if config.get('sistemaTTS') == "piper":
+            self.verificar_piper_inicio()
+        
+        # 2. Comprobar actualizaciones en segundo plano de forma segura
+        if config.get('updates', False):
+            from update import updater
+            updater.do_update()
+
+    def verificar_piper_inicio(self):
+        from TTS.lector import detect_onnx_models
+        from globals.resources import carpeta_voces
+        onnx_models = detect_onnx_models(carpeta_voces)
+        if onnx_models is None:
+            if response(_('Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Deseas abrir el descargador de voces ahora para buscar e instalar una?'), _("No hay voces instaladas"), wx.YES_NO | wx.ICON_ASTERISK) == wx.ID_YES:
+                from controller.piper_downloader_controller import PiperDownloaderController
+                downloader = PiperDownloaderController(self.frame)
+                downloader.show()
+                
+                # Después de cerrar el descargador, verificamos si instaló alguna voz
+                nuevas_voces = detect_onnx_models(carpeta_voces)
+                if nuevas_voces is not None:
+                    from TTS.list_voices import piper_list_voices, obtener_ruta_voz
+                    from globals.resources import lista_voces_piper
+                    import setup
+                    
+                    # Refrescamos la lista de voces global
+                    lista_voces_piper.clear()
+                    lista_voces_piper.extend(piper_list_voices())
+                    
+                    # Seleccionamos la primera por defecto
+                    config['voz'] = 0
+                    model_path = obtener_ruta_voz(lista_voces_piper[0])
+                    
+                    # Inicializamos y cargamos el modelo en el lector
+                    setup.reader._lector = setup.reader._lector.piperSpeak(model_path)
+                    
+                    # Sincronizamos el dispositivo de salida de Piper
+                    nombres_dispositivos = setup.player.devicenames
+                    dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres_dispositivos)]
+                    nombre_actual = nombres_dispositivos[config["dispositivo"]-1]
+                    salida_actual = setup.reader._lector.find_device_id(nombre_actual, known_devices=dispositivos_formateados)
+                    setup.reader._lector.set_device(salida_actual)
+                    
+                    # Damos la bienvenida para confirmar que ya funciona
+                    setup.reader.leer_auto(_("Lector Piper inicializado correctamente."))
     def inicializar_datos(self):
         self.frame.list_favorite.Set(favs)
         self.frame.favoritos_num = self.frame.list_favorite.GetCount()

@@ -18,13 +18,13 @@ def restart_program():
     if os.path.exists(pidpath):
         os.remove(pidpath)
     os.execv(sys.executable, args)
-def porcentaje_a_escala(porcentaje): return 2.00 + (1 - ((porcentaje - -10) / (10 - -10))) * (0.50 - 2.00)
+def porcentaje_a_escala(porcentaje): return 1.25 + porcentaje * 0.125
 def configurar_piper(carpeta_voces):
     global config
     onnx_models = detect_onnx_models(carpeta_voces)
     if onnx_models is None:
-        if response(_('Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Quieres abrir nuestra carpeta de Drive para descargar algunos modelos? Si pulsas sí, se abrirá nuestra carpeta seguido de una ventana para instalar una una vez la descargues.'), _("No hay voces instaladas"),wx.YES_NO | wx.ICON_ASTERISK) == wx.ID_YES:
-            wx.LaunchDefaultBrowser("https://drive.google.com/drive/folders/1zFJRTI6CpVw9NkrTiNYOKGga0yn4JXzv?usp=drive_link")
-            try: config, reader._lector = install_piper_voice(config, reader._lector)
-            except TypeError: config["sistemaTTS"] = "auto"
+        if response(_('Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Deseas abrir el descargador de voces ahora para buscar e instalar una?'), _("No hay voces instaladas"),wx.YES_NO | wx.ICON_ASTERISK) == wx.ID_YES:
+            from controller.piper_downloader_controller import PiperDownloaderController
+            downloader = PiperDownloaderController(None)
+            downloader.show()
     elif isinstance(onnx_models, str) or isinstance(onnx_models, list): config['voz'] = 0

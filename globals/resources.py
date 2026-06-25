@@ -25,9 +25,10 @@ langs = [i[1] for i in idiomas][::-1]
 codes = [i[0] for i in idiomas][::-1]
 idiomas_disponibles = [""] + [v for v in LANGUAGES.values()]
 monedas = [_('Por defecto')] + [f'{CODES[k]}, ({k})' for k in CODES]
-if piper_list_voices() is None:
-	lista_voces_piper=[_("No hay voces instaladas")]
+voces_p = piper_list_voices()
+if not voces_p:
+	lista_voces_piper = [_("No hay voces instaladas")]
 else:
-	lista_voces_piper=piper_list_voices()
+	lista_voces_piper = voces_p
 lista_voces=reader._leer.list_voices()
 carpeta_voces = path.join(getcwd(), "voices")

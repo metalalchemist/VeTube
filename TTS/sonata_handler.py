@@ -186,8 +186,28 @@ class piperSpeak:
             model_path = self.current_voice_path
         if not model_path: return
         
+        # Si el archivo ONNX no existe en la ruta dada (debido a diferencias de nombres de carpeta),
+        # lo buscamos dinámicamente dentro de subcarpetas de voices/
+        if not os.path.exists(model_path):
+            import glob
+            filename = os.path.basename(model_path)
+            coincidencias = glob.glob(os.path.join("voices", "*", filename))
+            if coincidencias:
+                model_path = coincidencias[0]
+        
         if model_path.endswith(".onnx"):
-            model_path += ".json"
+            json_path = model_path + ".json"
+            if not os.path.exists(json_path):
+                # Para voces RT o cuando el JSON tiene un nombre diferente
+                import glob
+                dir_name = os.path.dirname(model_path)
+                jsons = glob.glob(os.path.join(dir_name, "*.json"))
+                if jsons:
+                    model_path = jsons[0]
+                else:
+                    model_path = json_path
+            else:
+                model_path = json_path
         
         self.current_voice_path = model_path
         asyncio.run_coroutine_threadsafe(self._load_voice_task(model_path), self.loop)

@@ -3,10 +3,13 @@ from globals.resources import rutasonidos,lista_voces,lista_voces_piper
 from setup import player,reader
 from utils import app_utilitys
 from TTS.list_voices import piper_list_voices , install_piper_voice
+from controller.piper_downloader_controller import PiperDownloaderController
+from utils.menu_accesible import Accesible
 import wx
 class AjustesController:
     def __init__(self, dialog):
         self.dialog = dialog
+        self.dialog.instala_voces.SetAccessible(Accesible(self.dialog.instala_voces))
         self._bind_events()
         self.actualizar_visibilidad_piper()
         # Cargamos la lista de voces correcta al iniciar
@@ -14,18 +17,28 @@ class AjustesController:
         if config['sistemaTTS'] == "piper":
             self.dialog.choice_2.AppendItems(lista_voces_piper)
         else:
-            self.dialog.choice_2.AppendItems(lista_voces)
+            voces = reader._lector.list_voices()
+            if not voces:
+                voces = [_("Controlado por el lector de pantalla")]
+            self.dialog.choice_2.AppendItems(voces)
+        self.actualizar_habilitacion_controles()
         try:
             self.dialog.choice_2.SetSelection(config['voz'])
         except:
             self.dialog.choice_2.SetSelection(0)
+            config['voz'] = 0
         
-        # Sincronización inicial de parámetros para Piper
+        # Sincronización inicial de parámetros
         if config['sistemaTTS'] == "piper":
             reader._lector.set_volume(config['volume'])
             reader._lector.set_pitch(config['tono'])
             # Aplicamos la velocidad inicial usando la escala correcta
             reader._lector.set_rate(app_utilitys.porcentaje_a_escala(config['speed']))
+        elif config['sistemaTTS'] == "onecore":
+            reader._lector.set_volume(config['volume'])
+            reader._lector.set_rate(config['speed'])
+            # Aplicar el tono guardado para OneCore (posición 0-4, por defecto 0 = 0.6)
+            reader._lector.set_pitch(config.get('tono_onecore', 0))
     def _bind_events(self):
         self.dialog.check_1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar_sapi(event))
         self.dialog.chk1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'reader'))
@@ -85,22 +98,47 @@ class AjustesController:
     def cambiar_sintetizador(self, event):
         config['sistemaTTS'] = self.dialog.seleccionar_TTS.GetStringSelection()
         reader.set_tts(config['sistemaTTS'])
+        self.dialog.choice_2.Clear()
         if config['sistemaTTS'] == "piper":
             if lista_voces_piper and lista_voces_piper[0] != 'No hay voces instaladas':
                 voz_index = config.get('voz', 0)
-                if voz_index >= len(lista_voces_piper): voz_index = 0
-                model_path = f"voices/voice-{lista_voces_piper[voz_index][:-5]}/{lista_voces_piper[voz_index]}"
+                if voz_index >= len(lista_voces_piper):
+                    voz_index = 0
+                    config['voz'] = 0
+                from TTS.list_voices import obtener_ruta_voz
+                model_path = obtener_ruta_voz(lista_voces_piper[voz_index])
                 reader._lector.load_model(model_path)
-            self.dialog.choice_2.Clear()
             self.dialog.choice_2.AppendItems(lista_voces_piper)
+            # Sincronizar volumen, tono y velocidad de Piper
+            reader._lector.set_volume(config['volume'])
+            reader._lector.set_pitch(config['tono'])
+            reader._lector.set_rate(app_utilitys.porcentaje_a_escala(config['speed']))
         else:
-            self.dialog.choice_2.Clear()
-            self.dialog.choice_2.AppendItems(lista_voces)
+            voces = reader._lector.list_voices()
+            if not voces:
+                voces = [_("Controlado por el lector de pantalla")]
+            self.dialog.choice_2.AppendItems(voces)
+            
+            # Sincronizar volumen, tono y velocidad para SAPI/OneCore
+            reader._lector.set_volume(config['volume'])
+            reader._lector.set_pitch(config['tono'])
+            reader._lector.set_rate(config['speed'])
+            
+            # Sincronizar voz para SAPI/OneCore
+            if voces and voces[0] != _("Controlado por el lector de pantalla"):
+                voz_index = config.get('voz', 0)
+                if voz_index >= len(voces):
+                    voz_index = 0
+                    config['voz'] = 0
+                reader._lector.set_voice(voces[voz_index])
+                
         self.actualizar_visibilidad_piper()
+        self.actualizar_habilitacion_controles()
         try:
             self.dialog.choice_2.SetSelection(config['voz'])
         except:
             self.dialog.choice_2.SetSelection(0)
+            config['voz'] = 0
 
     def actualizar_visibilidad_piper(self):
         show = not config['sapi'] and config['sistemaTTS'] == "piper"
@@ -109,6 +147,47 @@ class AjustesController:
         self.dialog.slider_1.Enable()
         self.dialog.slider_2.Enable()
         self.dialog.treeItem_2.Layout()
+
+    def actualizar_habilitacion_controles(self):
+        if config['sistemaTTS'] == "piper":
+            # Restaurar slider de tono al rango normal si venía de OneCore
+            if self.dialog.slider_1.GetMax() == 4:
+                self.dialog.slider_1.SetRange(0, 20)
+                self.dialog.slider_1.SetValue(config['tono'] + 10)
+            self.dialog.slider_1.Enable(True)
+            self.dialog.slider_2.Enable(True)
+            self.dialog.slider_3.Enable(True)
+            self.dialog.choice_2.Enable(True)
+        elif config['sistemaTTS'] == "onecore":
+            # OneCore: pitch limitado a 5 valores discretos: 0.6, 0.7, 0.8, 0.9, 1.0
+            # Slider rango 0-4 donde cada paso = 0.1 en la escala real de OneCore
+            self.dialog.slider_1.SetRange(0, 4)
+            # Por defecto posición 0 = 0.6, el tono más natural en OneCore
+            pos_onecore = config.get('tono_onecore', 0)  # 0 = 0.6 (tono más natural)
+            self.dialog.slider_1.SetValue(pos_onecore)
+            # Aplicar el pitch inmediatamente al lector
+            reader._lector.set_pitch(pos_onecore)
+            self.dialog.slider_1.Enable(True)
+            self.dialog.slider_2.Enable(True)
+            self.dialog.slider_3.Enable(True)
+            self.dialog.choice_2.Enable(True)
+        else:
+            # Restaurar slider de tono al rango normal si venía de OneCore
+            if self.dialog.slider_1.GetMax() == 4:
+                self.dialog.slider_1.SetRange(0, 20)
+                self.dialog.slider_1.SetValue(config['tono'] + 10)
+            has_backend = hasattr(reader._lector, 'backend')
+            features = reader._lector.backend.features if has_backend else None
+            if features:
+                self.dialog.slider_1.Enable(features.supports_set_pitch)
+                self.dialog.slider_2.Enable(features.supports_set_volume)
+                self.dialog.slider_3.Enable(features.supports_set_rate)
+                self.dialog.choice_2.Enable(features.supports_set_voice)
+            else:
+                self.dialog.slider_1.Enable(True)
+                self.dialog.slider_2.Enable(True)
+                self.dialog.slider_3.Enable(True)
+                self.dialog.choice_2.Enable(True)
 
     def establecer_dispositivo(self, event):
         valor = self.dialog.lista_dispositivos.GetSelection() + 1
@@ -125,54 +204,97 @@ class AjustesController:
             reader.leer_auto(_("Hablaré a través de este dispositivo."))
 
     def reproducirPrueva(self, event):
-        if not ".onnx" in self.dialog.choice_2.GetStringSelection():
-            reader._leer.silence()
-            reader.leer_sapi(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
+        if config['sistemaTTS'] == "piper":
+            if self.dialog.choice_2.GetStringSelection() != 'No hay voces instaladas':
+                reader.leer_auto(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
         else:
+            reader._lector.silence()
             reader.leer_auto(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
 
     def cambiarVoz(self, event):
         config['voz'] = self.dialog.choice_2.GetSelection()
         if config['sistemaTTS'] == "piper":
+            from TTS.list_voices import obtener_ruta_voz
             # Simplemente cargamos el nuevo modelo en el lector existente
-            reader._lector.piperSpeak(f"voices/voice-{lista_voces_piper[config['voz']][:-5]}/{lista_voces_piper[config['voz']]}")
+            reader._lector.piperSpeak(obtener_ruta_voz(lista_voces_piper[config['voz']]))
             # El dispositivo se mantiene o se actualiza si es necesario, usando dispositivos conocidos
             nombres = player.devicenames
             dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
             salida_piper = reader._lector.find_device_id(nombres[config["dispositivo"]-1], known_devices=dispositivos_formateados)
             reader._lector.set_device(salida_piper)
         else:
-            reader._leer.set_voice(lista_voces[config['voz']])
+            voces_lector = reader._lector.list_voices()
+            if voces_lector and config['voz'] < len(voces_lector):
+                reader._lector.set_voice(voces_lector[config['voz']])
     def cambiarVolumen(self, event):
         value = self.dialog.slider_2.GetValue()
         reader._leer.set_volume(value)
-        if config['sistemaTTS'] == "piper":
-            reader._lector.set_volume(value)
+        reader._lector.set_volume(value)
         config['volume'] = value
     def cambiarTono(self, event):
-        value = self.dialog.slider_1.GetValue() - 10
-        reader._leer.set_pitch(value)
-        if config['sistemaTTS'] == "piper":
+        if config['sistemaTTS'] == "onecore":
+            # OneCore: el slider va de 0 a 4, cada posición = 0.6, 0.7, 0.8, 0.9, 1.0
+            pos = self.dialog.slider_1.GetValue()
+            config['tono_onecore'] = pos
+            reader._lector.set_pitch(pos)  # PrismBackendWrapper recibirá 0-4 para OneCore
+        else:
+            value = self.dialog.slider_1.GetValue() - 10
+            reader._leer.set_pitch(value)
             reader._lector.set_pitch(value)
-        config['tono'] = value
+            config['tono'] = value
     def cambiarVelocidad(self, event):
         value = self.dialog.slider_3.GetValue() - 10
+        reader._leer.set_rate(value)
         if config['sistemaTTS'] == "piper":
             voz_actual = lista_voces_piper[self.dialog.choice_2.GetSelection()]
-            if ".onnx" in voz_actual:
+            if voz_actual != 'No hay voces instaladas':
                 reader._lector.set_rate(app_utilitys.porcentaje_a_escala(value))
-            else:
-                reader._leer.set_rate(value)
         else:
-            reader._leer.set_rate(value)
+            reader._lector.set_rate(value)
         config['speed'] = value
     def instalar_voz_piper(self, event):
+        menu = wx.Menu()
+        item_online = menu.Append(wx.ID_ANY, _("Descargar voces de internet..."))
+        item_local = menu.Append(wx.ID_ANY, _("Instalar desde archivo local (.tar.gz)..."))
+        
+        self.dialog.Bind(wx.EVT_MENU, self.on_descargar_online, item_online)
+        self.dialog.Bind(wx.EVT_MENU, self.on_instalar_local, item_local)
+        
+        self.dialog.PopupMenu(menu)
+        menu.Destroy()
+
+    def on_descargar_online(self, event):
+        downloader = PiperDownloaderController(self.dialog)
+        downloader.show()
+        self._refrescar_voces_piper()
+
+    def on_instalar_local(self, event):
         global config
-        reader.set_tts("sapi5")
+        # Aseguramos que Piper sea el sistema activo para cargar el modelo tras instalar
         reader.set_tts("piper")
-        config, reader._lector = install_piper_voice(config, reader._lector)
-        print(config,'hola')
-        lista_voces_piper = piper_list_voices()
-        if lista_voces_piper:
-            self.dialog.choice_2.Clear()
-            self.dialog.choice_2.AppendItems(lista_voces_piper)
+        res = install_piper_voice(config, reader._lector)
+        if res:
+            # install_piper_voice devuelve (config, reader)
+            # Aunque no podemos reasignar config global fácilmente aquí sin global config,
+            # lo que nos interesa es refrescar la lista.
+            self._refrescar_voces_piper()
+
+    def _refrescar_voces_piper(self):
+        from TTS.list_voices import piper_list_voices
+        import globals.resources as resources
+        
+        nuevas_voces = piper_list_voices()
+        if nuevas_voces:
+            # Actualizamos la lista global para que toda la app vea los cambios
+            resources.lista_voces_piper.clear()
+            resources.lista_voces_piper.extend(nuevas_voces)
+            
+            # Actualizamos la UI si estamos en modo Piper
+            if config['sistemaTTS'] == "piper":
+                self.dialog.choice_2.Clear()
+                self.dialog.choice_2.AppendItems(resources.lista_voces_piper)
+                # Intentamos mantener la selección o poner la primera
+                try:
+                    self.dialog.choice_2.SetSelection(config.get('voz', 0))
+                except:
+                    self.dialog.choice_2.SetSelection(0)
