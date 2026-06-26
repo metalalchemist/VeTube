@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-06-08 13:36-0700\n"
+"POT-Creation-Date: 2026-06-26 09:51-0700\n"
 "PO-Revision-Date: 2026-01-08 16:04+0100\n"
 "Last-Translator: 4Sense Gaming <lukas@4sensegaming.cz>\n"
 "Language: en\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: run_main_window.py:24
+#: run_main_window.py:32
 msgid ""
 "VeTube ya se encuentra en ejecución. Cierra la otra instancia antes de "
 "iniciar esta."
@@ -26,29 +26,29 @@ msgstr ""
 "VeTube is already running. Close the other instance before starting this "
 "one."
 
-#: TTS/list_voices.py:13
+#: TTS/list_voices.py:17
 msgid "Selecciona un paquete de voz"
 msgstr "Select a voice package"
 
-#: TTS/list_voices.py:13
+#: TTS/list_voices.py:17
 msgid "Archivos tar.gz (*.tar.gz)|*.tar.gz"
 msgstr "Tar.gz files (*.tar.gz)|*.tar.gz"
 
-#: TTS/list_voices.py:15
+#: TTS/list_voices.py:19
 msgid ""
 "Para usar piper como sistema TTS, necesitas tener al menos una voz. Si "
 "quieres hacerlo de forma manual, extrae el paquete de voz en la carpeta "
-"\"piper/voices/voice-nombre_de_paquete\" en VeTube."
+"\"voices/voice-nombre_de_paquete\" en VeTube."
 msgstr ""
 "To use Piper as the TTS engine, you need to have at least one voice. If "
 "you want to set it manually, extract the voice package into the "
-"\"piper/voices/voice-package_name\" subfolder within the VeTube folder."
+"\"voices/voice-package_name\" subfolder within the VeTube folder."
 
-#: TTS/list_voices.py:15
+#: TTS/list_voices.py:19
 msgid "No se instaló ninguna voz"
 msgstr "No voice installed"
 
-#: TTS/list_voices.py:21
+#: TTS/list_voices.py:25
 msgid ""
 "¡Voz instalada satosfactoriamente! esta será establecida en VeTube ahora."
 " Para cambiar de modelo de voz, puedes hacerlo a través de las "
@@ -57,15 +57,20 @@ msgstr ""
 "Voice installed successfully! It will now be set as your default for "
 "VeTube. You can change the voice model in settings."
 
-#: TTS/list_voices.py:21
+#: TTS/list_voices.py:25
 msgid "Listo"
 msgstr "Ready"
 
-#: controller/ajustes_controller.py:101
-msgid "Hablaré a través  de este dispositivo."
+#: controller/ajustes_controller.py:22 controller/ajustes_controller.py:119
+#: controller/ajustes_controller.py:128
+msgid "Controlado por el lector de pantalla"
+msgstr "Controlled by the screen reader"
+
+#: controller/ajustes_controller.py:204
+msgid "Hablaré a través de este dispositivo."
 msgstr "I will speak through this device."
 
-#: controller/ajustes_controller.py:105 controller/ajustes_controller.py:107
+#: controller/ajustes_controller.py:209 controller/ajustes_controller.py:212
 msgid ""
 "Hola, soy la voz que te acompañará de ahora en adelante a leer los "
 "mensajes de tus canales favoritos."
@@ -73,14 +78,30 @@ msgstr ""
 "Hello, i'm the voice that will read the messages in your favorite "
 "channels."
 
+#: controller/ajustes_controller.py:257
+msgid "Descargar voces de internet..."
+msgstr "Download voices from the internet..."
+
+#: controller/ajustes_controller.py:258
+msgid "Instalar desde archivo local (.tar.gz)..."
+msgstr "Install from local file (.tar.gz)..."
+
 #: controller/chat_controller.py:150
 msgid "Error al conectar con el chat: "
 msgstr "error reading chat: "
 
 #: controller/chat_controller.py:150 controller/estadisticas_controller.py:46
-#: controller/main_controller.py:65
-#: controller/update_languages_controller.py:88
-#: servicios/language_updater.py:13
+#: controller/main_controller.py:116 controller/main_controller.py:198
+#: controller/main_controller.py:202 controller/main_controller.py:212
+#: controller/main_controller.py:274
+#: controller/piper_downloader_controller.py:76
+#: controller/piper_downloader_controller.py:97
+#: controller/piper_downloader_controller.py:99
+#: controller/piper_downloader_controller.py:104
+#: controller/piper_downloader_controller.py:143
+#: controller/piper_downloader_controller.py:207
+#: controller/update_languages_controller.py:77
+#: controller/update_languages_controller.py:82 update/updater.py:26
 msgid "Error"
 msgstr "Error"
 
@@ -117,9 +138,9 @@ msgstr "This message is already in favorites"
 msgid "Mensaje agregado a favoritos"
 msgstr "Message added to favorites"
 
-#: controller/chat_controller.py:306 controller/main_controller.py:34
-#: controller/main_controller.py:106 controller/main_controller.py:119
-#: controller/main_controller.py:126
+#: controller/chat_controller.py:306 controller/main_controller.py:85
+#: controller/main_controller.py:157 controller/main_controller.py:170
+#: controller/main_controller.py:177
 #: controller/menus/chat_item_controller.py:52
 msgid "Tus mensajes archivados aparecerán aquí"
 msgstr "Your archived messages will appear here"
@@ -158,11 +179,11 @@ msgstr "sounds enabled."
 msgid "sonidos desactivados."
 msgstr "sounds disabled."
 
-#: controller/chat_dialog_controller.py:116
+#: controller/chat_dialog_controller.py:120
 msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
 msgstr "Would you like to exit this window and stop reading messages in this chat?"
 
-#: controller/chat_dialog_controller.py:116 controller/main_controller.py:69
+#: controller/chat_dialog_controller.py:120 controller/main_controller.py:120
 #: controller/menus/main_menu_controller.py:106
 #: controller/update_languages_controller.py:104
 msgid "¡Atención!"
@@ -177,7 +198,7 @@ msgstr ""
 "to proceed? This action cannot be undone."
 
 #: controller/editor_controller.py:43
-#: controller/menus/main_menu_controller.py:59 update/update.py:135
+#: controller/menus/main_menu_controller.py:55 update/update.py:144
 msgid "Atención:"
 msgstr "Warning:"
 
@@ -246,6 +267,7 @@ msgid "Estadísticas guardadas en {}"
 msgstr "Statistics saved in: {}"
 
 #: controller/estadisticas_controller.py:44
+#: controller/piper_downloader_controller.py:219
 msgid "Éxito"
 msgstr "Success"
 
@@ -254,120 +276,272 @@ msgstr "Success"
 msgid "Error al guardar el archivo: {}"
 msgstr "Error saving file: {}"
 
-#: controller/main_controller.py:29
+#: controller/main_controller.py:45
+msgid ""
+"Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Deseas"
+" abrir el descargador de voces ahora para buscar e instalar una?"
+msgstr "You need at least one voice to use the Piper synthesizer. Do you want to open the voice downloader now to search and install one?"
+
+#: controller/main_controller.py:45
+#: controller/piper_downloader_controller.py:58
+#: controller/piper_downloader_controller.py:62
+#: controller/piper_downloader_controller.py:80 globals/resources.py:30
+#: utils/app_utilitys.py:26
+msgid "No hay voces instaladas"
+msgstr "No voices installed"
+
+#: controller/main_controller.py:76
+msgid "Lector Piper inicializado correctamente."
+msgstr "Piper reader initialized successfully."
+
+#: controller/main_controller.py:80
 #, python-format
 msgid "Favoritos(%s)"
 msgstr "Favorites (%s)"
 
-#: controller/main_controller.py:31 controller/main_controller.py:64
-#: controller/main_controller.py:81 controller/menus/chat_menu_controller.py:56
+#: controller/main_controller.py:82 controller/main_controller.py:115
+#: controller/main_controller.py:132
+#: controller/menus/chat_menu_controller.py:56
 msgid "Tus favoritos aparecerán aquí"
 msgstr "Your favorites  will appear here"
 
-#: controller/main_controller.py:65
+#: controller/main_controller.py:116
 msgid "No hay favoritos que borrar"
 msgstr "No favorites to delete"
 
-#: controller/main_controller.py:69
+#: controller/main_controller.py:120
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr "Are you sure you want to delete all the favorites?"
 
-#: controller/main_controller.py:85
+#: controller/main_controller.py:136
 msgid "&Borrar mensajes"
 msgstr "&delete messages"
 
-#: controller/main_controller.py:86
+#: controller/main_controller.py:137
 msgid "Borrar todos los mensajes destacados"
 msgstr "Delete all starred messages"
 
-#: controller/main_controller.py:89 ui/main_window.py:67
+#: controller/main_controller.py:140 ui/main_window.py:67
 msgid "&Borrar mensaje"
 msgstr "&Delete message"
 
-#: controller/main_controller.py:90
+#: controller/main_controller.py:141
 msgid "Borrar el mensaje destacado seleccionado"
 msgstr "Delete selected starred message"
 
-#: controller/main_controller.py:95
+#: controller/main_controller.py:146
 msgid "&Borrar favoritos"
 msgstr "&Delete favorites"
 
-#: controller/main_controller.py:96
+#: controller/main_controller.py:147
 msgid "Borrar todos los favoritos"
 msgstr "Delete all favorites"
 
-#: controller/main_controller.py:99 ui/main_window.py:55
+#: controller/main_controller.py:150 ui/main_window.py:55
 msgid "&Borrar favorito"
 msgstr "&Delete favorite"
 
-#: controller/main_controller.py:100
+#: controller/main_controller.py:151
 msgid "Borrar el favorito seleccionado"
 msgstr "Delete selected favorite"
 
-#: controller/main_controller.py:114
+#: controller/main_controller.py:165
 msgid "No hay más elementos que borrar"
 msgstr "No items to delete"
 
-#: controller/main_controller.py:116 controller/main_controller.py:129
+#: controller/main_controller.py:167 controller/main_controller.py:180
 msgid "No hay mensajes que borrar"
 msgstr "No messages to delete"
 
-#: controller/main_controller.py:122
+#: controller/main_controller.py:173
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr "Are you sure you want to delete all messages?"
 
-#: controller/main_controller.py:221
+#: controller/main_controller.py:198
+#, python-brace-format
+msgid "Error al simplificar URL de TikTok: {}"
+msgstr "Error simplifying TikTok URL: {}"
+
+#: controller/main_controller.py:202
+msgid "No se pudo obtener la URL real de TikTok."
+msgstr "Could not get the real TikTok URL."
+
+#: controller/main_controller.py:212
+msgid ""
+"No se puede acceder porque el campo de texto está vacío, debe escribir "
+"algo."
+msgstr "Cannot access because the text field is empty, you must write something."
+
+#: controller/main_controller.py:274
+msgid ""
+"¡Parece que el enlace al cual está intentando acceder no es un enlace "
+"válido."
+msgstr "It seems that the link you are trying to access is not a valid link."
+
+#: controller/main_controller.py:303
 msgid "Conectando..."
 msgstr "Connecting..."
 
-#: controller/main_controller.py:280
-#: controller/menus/main_menu_controller.py:64
+#: controller/main_controller.py:380
+#: controller/menus/main_menu_controller.py:60
 msgid "¿está seguro que desea salir del programa?"
 msgstr "Are you sure you want to exit the program?"
 
-#: controller/main_controller.py:280
-#: controller/menus/main_menu_controller.py:64
+#: controller/main_controller.py:380
+#: controller/menus/main_menu_controller.py:60
 msgid "¡atención!"
 msgstr "Warning!"
 
-#: controller/update_languages_controller.py:33
+#: controller/piper_downloader_controller.py:68
+#, python-format
+msgid "Probando voz local: %s"
+msgstr "Testing local voice: %s"
+
+#: controller/piper_downloader_controller.py:74
+#, python-format
+msgid "Hola, esta es una prueba de la voz %s instalada localmente."
+msgstr "Hello, this is a test of the voice %s installed locally."
+
+#: controller/piper_downloader_controller.py:76
+#, python-brace-format, python-format
+msgid "Error al cargar la voz para prueba: %s"
+msgstr "Error loading voice for testing: %s"
+
+#: controller/piper_downloader_controller.py:84
+#, python-format
+msgid ""
+"¿Estás seguro de que deseas eliminar la voz %s? Esta acción no se puede "
+"deshacer."
+msgstr "Are you sure you want to delete the voice %s? This action cannot be undone."
+
+#: controller/piper_downloader_controller.py:85
+msgid "Confirmar eliminación"
+msgstr "Confirm deletion"
+
+#: controller/piper_downloader_controller.py:94
+#, python-format
+msgid "Voz %s eliminada correctamente."
+msgstr "Voice %s deleted successfully."
+
+#: controller/piper_downloader_controller.py:97
+msgid "No se pudo encontrar la carpeta de la voz."
+msgstr "Could not find the voice folder."
+
+#: controller/piper_downloader_controller.py:99
+#, python-format
+msgid "No se pudo eliminar la voz: %s. Asegúrate de que no esté en uso."
+msgstr "Could not delete voice: %s. Make sure it is not in use."
+
+#: controller/piper_downloader_controller.py:103
+#, python-brace-format
+msgid "Error al cargar el catálogo de voces."
+msgstr "Error loading voice catalog."
+
+#: controller/piper_downloader_controller.py:104
+msgid "No se pudo conectar con Hugging Face para obtener las voces."
+msgstr "Could not connect to Hugging Face to retrieve voices."
+
+#: controller/piper_downloader_controller.py:112
+msgid "Catálogo cargado. Selecciona idiomas para ver las voces."
+msgstr "Catalog loaded. Select languages to view voices."
+
+#: controller/piper_downloader_controller.py:133
+msgid "Por favor, selecciona una voz de la lista para escuchar la muestra."
+msgstr "Please select a voice from the list to listen to the sample."
+
+#: controller/menus/chat_menu_controller.py:42
+#: controller/menus/chat_menu_controller.py:53
+#: controller/menus/chat_menu_controller.py:61
+#: controller/piper_downloader_controller.py:133
+#: controller/piper_downloader_controller.py:158
+msgid "Aviso"
+msgstr "Warning"
+
+#: controller/piper_downloader_controller.py:139
+#, python-format
+msgid "Reproduciendo muestra de %s..."
+msgstr "Playing sample of %s..."
+
+#: controller/piper_downloader_controller.py:143
+msgid "Esta voz no dispone de muestra de audio."
+msgstr "This voice does not have an audio sample."
+
+#: controller/piper_downloader_controller.py:158
+msgid "Por favor, selecciona al menos una voz para descargar."
+msgstr "Please select at least one voice to download."
+
+#: controller/piper_downloader_controller.py:167
+msgid "Descargar variantes de Calidad Normal (Alta)"
+msgstr "Download Normal Quality (High) variants"
+
+#: controller/piper_downloader_controller.py:168
+msgid "Descargar variantes Rápidas (RT) donde estén disponibles"
+msgstr "Download Fast (RT) variants where available"
+
+#: controller/piper_downloader_controller.py:194
+#, python-format
+msgid "Descargando %s (%s) [%d/%d]..."
+msgstr "Downloading %s (%s) [%d/%d]..."
+
+#: controller/piper_downloader_controller.py:207
+#, python-format
+msgid "Error al descargar %s: %s"
+msgstr "Error downloading %s: %s"
+
+#: controller/piper_downloader_controller.py:212
+#, python-format
+msgid "Proceso finalizado. %d de %d voces instaladas."
+msgstr "Process finished. %d of %d voices installed."
+
+#: controller/piper_downloader_controller.py:219
+msgid ""
+"Las voces se han instalado correctamente. Ya puedes seleccionarlas en los"
+" Ajustes de Voz."
+msgstr "Voices installed successfully. You can now select them in the Voice Settings."
+
+#: controller/update_languages_controller.py:32
 #, python-format
 msgid "%s (Nuevo - v%s)"
-msgstr ""
+msgstr "%s (New - v%s)"
 
-#: controller/update_languages_controller.py:35
-#, fuzzy, python-format
+#: controller/update_languages_controller.py:34
+#, python-format
 msgid "%s (Actualizar a v%s)"
-msgstr "Update languages"
+msgstr "%s (Update to v%s)"
 
-#: controller/update_languages_controller.py:44
+#: controller/update_languages_controller.py:43
 msgid "Por favor, selecciona al menos un idioma para actualizar."
 msgstr "Please select at least one language to update."
 
-#: controller/update_languages_controller.py:44
+#: controller/update_languages_controller.py:43
 msgid "Advertencia"
 msgstr "Warning"
 
-#: controller/update_languages_controller.py:70
+#: controller/update_languages_controller.py:67
 msgid "Iniciando descarga de idiomas..."
 msgstr "Starting language download..."
 
-#: controller/update_languages_controller.py:80
-#, fuzzy, python-format
+#: controller/update_languages_controller.py:73
+#, python-format
 msgid "Idioma %s actualizado con éxito."
-msgstr "Languages saved successfully."
+msgstr "Language %s updated successfully."
 
-#: controller/update_languages_controller.py:82
-#, fuzzy, python-format
-msgid "Error al actualizar idioma %s: %s"
-msgstr "Error updating local language {}: {}"
+#: controller/update_languages_controller.py:76
+#, python-format
+msgid "Error en %s: %s"
+msgstr "Error in %s: %s"
 
-#: controller/update_languages_controller.py:86
+#: controller/update_languages_controller.py:77
+#, python-format
+msgid "Error al actualizar %s: %s"
+msgstr "Error updating %s: %s"
+
+#: controller/update_languages_controller.py:81
 #, python-format
 msgid "Error inesperado en %s: %s"
-msgstr ""
+msgstr "Unexpected error in %s: %s"
 
-#: controller/update_languages_controller.py:88
+#: controller/update_languages_controller.py:82
 #, python-format
 msgid ""
 "Error inesperado en %s:\n"
@@ -376,8 +550,8 @@ msgid ""
 "Ver consola para más detalles."
 msgstr ""
 
-#: controller/update_languages_controller.py:92
-#: ui/update_languages_dialog.py:58
+#: controller/update_languages_controller.py:95
+#: ui/update_languages_dialog.py:63
 msgid "Actualización completada."
 msgstr "Update completed."
 
@@ -413,12 +587,6 @@ msgstr ""
 msgid "No hay una URL para agregar a favoritos."
 msgstr "No URL to add to favorites."
 
-#: controller/menus/chat_menu_controller.py:42
-#: controller/menus/chat_menu_controller.py:53
-#: controller/menus/chat_menu_controller.py:61
-msgid "Aviso"
-msgstr "Warning"
-
 #: controller/menus/chat_menu_controller.py:53
 msgid "Ya se encuentra en favoritos"
 msgstr "Already in favorites"
@@ -452,20 +620,10 @@ msgid "No se encontró un enlace válido para abrir."
 msgstr "No valid link found to open."
 
 #: controller/menus/main_menu_controller.py:40
-msgid "Al parecer tienes la última versión del programa"
-msgstr "It seems you have the latest version of the program"
-
-#: controller/menus/main_menu_controller.py:40
-#: controller/menus/main_menu_controller.py:46
-msgid "Información"
-msgstr "Information"
-
-#: controller/menus/main_menu_controller.py:44
 msgid "Creadores del proyecto:"
 msgstr "Project creators:"
 
-#: controller/menus/main_menu_controller.py:45
-#, fuzzy
+#: controller/menus/main_menu_controller.py:41
 msgid ""
 "Descripción:\n"
 " Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch,"
@@ -473,11 +631,15 @@ msgid ""
 "disfruta más tus canales favoritos."
 msgstr ""
 "Description:\n"
-"Have the messages from live streams on YouTube, TikTok, playroom and "
+"read  messages from live streams on YouTube, TikTok, kick, playroom and "
 "Twitch read aloud, customize your preferences as you desire, and enhance "
 "your enjoyment of your favorite channels."
 
-#: controller/menus/main_menu_controller.py:59
+#: controller/menus/main_menu_controller.py:42 update/updater.py:31
+msgid "Información"
+msgstr "Information"
+
+#: controller/menus/main_menu_controller.py:55
 msgid ""
 "Estás apunto de reiniciar la configuración a sus valores predeterminados,"
 " ¿Deseas proceder?"
@@ -485,13 +647,21 @@ msgstr ""
 "You are about to reset the settings to their default values, do you want "
 "to continue?"
 
+#: controller/menus/main_menu_controller.py:70
+#, python-brace-format
+msgid "Error al conectar con el servidor de idiomas: {}"
+msgstr "Error connecting to the language server: {}"
+
+#: controller/menus/main_menu_controller.py:70
+msgid "Error de red"
+msgstr "Network error"
+
 #: controller/menus/main_menu_controller.py:78
 #: controller/menus/main_menu_controller.py:89
 msgid "Actualización de idiomas"
 msgstr "Language update"
 
-#: controller/menus/main_menu_controller.py:89
-#: servicios/language_updater.py:106
+#: controller/menus/main_menu_controller.py:89 servicios/language_updater.py:66
 msgid "No hay actualizaciones ni nuevos idiomas disponibles."
 msgstr "No updates or new languages available."
 
@@ -730,20 +900,15 @@ msgstr "When someone shares the link to your live stream on TikTok"
 msgid "Cuando alguien envía un cofre  en tiktok"
 msgstr "When someone sends a chest on TikTok"
 
-#: globals/resources.py:27 servicios/twich.py:84 servicios/twich.py:87
-#: servicios/twich.py:96 servicios/twich.py:101
+#: globals/resources.py:27 servicios/twich.py:87
 msgid "Por defecto"
 msgstr "Default"
-
-#: globals/resources.py:29 utils/app_utilitys.py:26
-msgid "No hay voces instaladas"
-msgstr "No voices installed"
 
 #: servicios/kick.py:38
 msgid "error_bypass_no_encontrado"
 msgstr "error_bypass_no_encontrado"
 
-#: servicios/kick.py:68
+#: servicios/kick.py:68 ui/piper_downloader.py:62
 msgid "Cargando..."
 msgstr "Download in progress..."
 
@@ -751,7 +916,7 @@ msgstr "Download in progress..."
 msgid "error_iniciar_bypass"
 msgstr "error_iniciar_bypass"
 
-#: servicios/kick.py:95 servicios/tiktok.py:126
+#: servicios/kick.py:95 servicios/tiktok.py:127
 msgid "Ingresando al chat"
 msgstr "Entering the chat"
 
@@ -759,46 +924,40 @@ msgstr "Entering the chat"
 msgid "error_conectar_kick_chatroom"
 msgstr "error_conectar_kick_chatroom"
 
-#: servicios/kick.py:161 servicios/kick.py:163 servicios/tiktok.py:163
-#: servicios/tiktok.py:167
+#: servicios/kick.py:161 servicios/kick.py:163 servicios/tiktok.py:164
+#: servicios/tiktok.py:168
 msgid " comenzó a seguirte!"
 msgstr " started following you!"
 
+#: servicios/language_updater.py:31
+#, python-brace-format
+msgid "Error al cargar el archivo de idiomas local."
+msgstr "Error loading the local language file."
+
 #: servicios/language_updater.py:40
 #, python-brace-format
-msgid "Error al cargar idiomas locales: {}"
-msgstr "Error loading local languages: {}"
+msgid "Error al guardar el archivo de idiomas local."
+msgstr "Error saving the local language file."
 
-#: servicios/language_updater.py:54
-msgid "Idiomas guardados exitosamente."
-msgstr "Languages saved successfully."
+#: servicios/language_updater.py:51
+msgid "Error de conexión con el servidor."
+msgstr "Connection error with the server."
 
-#: servicios/language_updater.py:56
+#: servicios/language_updater.py:74
+#, python-brace-format, python-format
+msgid "Error al descargar el archivo del idioma %s: %s"
+msgstr "Error downloading language file %s: %s"
+
+#: servicios/language_updater.py:84
 #, python-brace-format
-msgid "Error al guardar idiomas locales: {}"
-msgstr "Error saving local languages: {}"
+msgid "Error al extraer los archivos del idioma."
+msgstr "Error extracting language files."
 
-#: servicios/language_updater.py:76 servicios/language_updater.py:80
-#, python-brace-format
-msgid "Error al obtener idiomas remotos: {}"
-msgstr "Error getting remote languages: {}"
+#: servicios/language_updater.py:100
+msgid "Error inesperado durante la instalación."
+msgstr "Unexpected error during installation."
 
-#: servicios/language_updater.py:138
-#, python-brace-format
-msgid "Error al descargar el archivo .zip de {}: {}"
-msgstr "Error downloading .zip file from {}: {}"
-
-#: servicios/language_updater.py:172
-#, python-brace-format
-msgid "Error al descomprimir el archivo .zip de {}: {}"
-msgstr "Error extracting .zip file from {}: {}"
-
-#: servicios/language_updater.py:197
-#, python-brace-format
-msgid "Error al actualizar el idioma local {}: {}"
-msgstr "Error updating local language {}: {}"
-
-#: servicios/sala.py:31 servicios/twich.py:28 servicios/youtube.py:28
+#: servicios/sala.py:31 servicios/twich.py:29 servicios/youtube.py:29
 msgid "Ingresando al chat."
 msgstr "Entering chat."
 
@@ -806,65 +965,65 @@ msgstr "Entering chat."
 msgid "Chat de la sala de juegos"
 msgstr "QuentinC Playroom's chat"
 
-#: servicios/tiktok.py:64
+#: servicios/tiktok.py:65
 msgid "El usuario está en vivo. Conectando..."
 msgstr "The user is live. Connecting..."
 
-#: servicios/tiktok.py:70
+#: servicios/tiktok.py:71
 msgid "El usuario no está en vivo. Reintentando en un minuto."
 msgstr "The user is not live. Retrying in one minute."
 
-#: servicios/tiktok.py:117
+#: servicios/tiktok.py:118
 msgid "El directo ha finalizado. Se buscará de nuevo en un minuto."
 msgstr "The stream has ended. Will check again in one minute."
 
-#: servicios/tiktok.py:122
+#: servicios/tiktok.py:123
 msgid "Se ha perdido la conexión. El servicio se ha detenido."
 msgstr "Connection lost. The service has stopped."
 
-#: servicios/tiktok.py:146 servicios/tiktok.py:150
+#: servicios/tiktok.py:147 servicios/tiktok.py:151
 msgid " envió un emogi."
 msgstr " sent an emoji."
 
-#: servicios/tiktok.py:154 servicios/tiktok.py:158
+#: servicios/tiktok.py:155 servicios/tiktok.py:159
 msgid " ha enviado un cofre!"
 msgstr " has sent a chest!"
 
-#: servicios/tiktok.py:178 servicios/tiktok.py:186
+#: servicios/tiktok.py:175
 #, python-format
 msgid "%s ha enviado %s %s (%s %s)"
 msgstr "%s sent %s %s (%s %s)"
 
-#: servicios/tiktok.py:179 servicios/tiktok.py:187
+#: servicios/tiktok.py:177
 #, python-format
 msgid "%s ha enviado %s %s (%s diamante)"
 msgstr "%s sent %s %s (%s diamond)"
 
-#: servicios/tiktok.py:199 servicios/tiktok.py:203
+#: servicios/tiktok.py:189 servicios/tiktok.py:193
 msgid " se ha unido a tu en vivo."
 msgstr " has joined your live stream."
 
-#: servicios/tiktok.py:208 servicios/tiktok.py:212
+#: servicios/tiktok.py:198 servicios/tiktok.py:202
 msgid " le ha dado me gusta a tu en vivo."
 msgstr " liked your live stream."
 
-#: servicios/tiktok.py:217 servicios/tiktok.py:221
+#: servicios/tiktok.py:207 servicios/tiktok.py:211
 msgid " ha compartido tu en vivo!"
 msgstr " has shared your livestream!"
 
-#: servicios/tiktok.py:224
+#: servicios/tiktok.py:214
 msgid " en vivo, actualmente "
 msgstr " live, currently "
 
-#: servicios/tiktok.py:224
+#: servicios/tiktok.py:214
 msgid " viendo ahora"
 msgstr " watching now"
 
-#: servicios/twich.py:58
+#: servicios/twich.py:59
 msgid "Desconocido"
 msgstr "Unknown"
 
-#: servicios/twich.py:67
+#: servicios/twich.py:68
 #, python-brace-format
 msgid ""
 "{author_name} ha renovado su suscripción en el nivel "
@@ -874,7 +1033,7 @@ msgstr ""
 "{subscription_plan_name} level. They've been a loyal member for "
 "{cumulative_months} months!"
 
-#: servicios/twich.py:72
+#: servicios/twich.py:73
 #, python-brace-format
 msgid ""
 "{author_name} se ha suscrito en el nivel {subscription_plan_name} por "
@@ -883,7 +1042,7 @@ msgstr ""
 "{author_name} subscribed at level {subscription_plan_name} for "
 "{cumulative_months} months!"
 
-#: servicios/twich.py:73
+#: servicios/twich.py:74
 #, python-brace-format
 msgid ""
 "{author_name} regaló una suscripción de nivel {subscription_type} a la "
@@ -892,7 +1051,7 @@ msgstr ""
 "{author_name} gifted a {subscription_type} level subscription to the "
 "community, having gifted a total of {sender_count} subscriptions!"
 
-#: servicios/twich.py:74
+#: servicios/twich.py:75
 #, python-brace-format
 msgid ""
 "{author_name} ha regalado una suscripción a {gift_recipient_display_name}"
@@ -902,7 +1061,7 @@ msgstr ""
 "{author_name} gifted a subscription to {gift_recipient_display_name} at "
 "level {subscription_plan_name} for {number_of_months_gifted} months!"
 
-#: servicios/youtube.py:64
+#: servicios/youtube.py:65
 msgid ""
 "Se ha detectado una transmisión pasada. ¿Deseas conectarte con el "
 "servicio en tiempo real del chat?"
@@ -910,11 +1069,11 @@ msgstr ""
 "A past livestream has been detected. Would you like to connect to the "
 "current real-time chat for the channel?"
 
-#: servicios/youtube.py:64
+#: servicios/youtube.py:65
 msgid "Transmisión pasada"
 msgstr "Past livestream"
 
-#: servicios/youtube.py:105
+#: servicios/youtube.py:106
 msgid " se a conectado al chat. "
 msgstr " has connected to the chat. "
 
@@ -962,7 +1121,7 @@ msgstr "message translation: "
 msgid "convertir las donaciones a la divisa: "
 msgstr "convert donations to currency: "
 
-#: ui/ajustes.py:53
+#: ui/ajustes.py:53 ui/piper_downloader.py:47
 msgid "Voz"
 msgstr "Voice"
 
@@ -1078,11 +1237,11 @@ msgstr "Event"
 msgid "leídos"
 msgstr "events to speak"
 
-#: ui/ajustes.py:172 update/update.py:136
+#: ui/ajustes.py:172 update/update.py:145
 msgid "&Aceptar"
 msgstr "&OK"
 
-#: ui/ajustes.py:174 update/update.py:136
+#: ui/ajustes.py:174 update/update.py:145
 msgid "&Cancelar"
 msgstr "&Cancel"
 
@@ -1134,7 +1293,7 @@ msgstr "Author"
 msgid "Cantidad de mensajes"
 msgstr "Number of messages"
 
-#: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:59
+#: ui/estadisticas_dialog.py:19 ui/update_languages_dialog.py:64
 msgid "Cerrar"
 msgstr "Close"
 
@@ -1143,6 +1302,7 @@ msgid "Lista de URLS"
 msgstr "URL list"
 
 #: ui/editor/editor.py:24 ui/editor/nueva_combinacion.py:38 ui/list_urls.py:21
+#: ui/piper_downloader.py:70
 msgid "&Cerrar"
 msgstr "&Close"
 
@@ -1219,6 +1379,55 @@ msgstr "archived messages"
 msgid "&Mensajes archivados: "
 msgstr "&Archived messages: "
 
+#: ui/piper_downloader.py:6
+msgid "Gestor de voces Piper"
+msgstr "Piper voice manager"
+
+#: ui/piper_downloader.py:15
+msgid "Voces que ya tienes en tu equipo:"
+msgstr "Voices you already have on your computer:"
+
+#: ui/piper_downloader.py:22
+msgid "&Probar voz"
+msgstr "&Test voice"
+
+#: ui/piper_downloader.py:24
+msgid "&Eliminar voz"
+msgstr "&Delete voice"
+
+#: ui/piper_downloader.py:29
+msgid "Voces instaladas"
+msgstr "Installed voices"
+
+#: ui/piper_downloader.py:35
+msgid "Selecciona los idiomas para filtrar las voces:"
+msgstr "Select the languages to filter the voices:"
+
+#: ui/piper_downloader.py:39 ui/piper_downloader.py:49
+#: ui/update_languages_dialog.py:12
+msgid "Idioma"
+msgstr "Language"
+
+#: ui/piper_downloader.py:43
+msgid "Selecciona la voz que deseas descargar:"
+msgstr "Select the voice you want to download:"
+
+#: ui/piper_downloader.py:48
+msgid "Calidad"
+msgstr "Quality"
+
+#: ui/piper_downloader.py:54
+msgid "Descargar voces"
+msgstr "Download voices"
+
+#: ui/piper_downloader.py:66
+msgid "&Reproducir muestra"
+msgstr "&Play sample"
+
+#: ui/piper_downloader.py:68
+msgid "&Descargar e instalar"
+msgstr "&Download and install"
+
 #: ui/show_comment.py:6
 msgid "Mensaje"
 msgstr "Message"
@@ -1251,11 +1460,7 @@ msgstr "Update languages"
 msgid "Selecciona los idiomas que deseas actualizar:"
 msgstr "Select the languages that you want to update:"
 
-#: ui/update_languages_dialog.py:12
-msgid "Idioma"
-msgstr "Language"
-
-#: ui/update_languages_dialog.py:30
+#: ui/update_languages_dialog.py:29
 msgid "Actualizar"
 msgstr "Update"
 
@@ -1416,7 +1621,7 @@ msgstr "&About"
 msgid "&Salir...\tAlt+F4"
 msgstr "&Exit...\tAlt+F4"
 
-#: update/update.py:135
+#: update/update.py:144
 msgid ""
 "Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te "
 "unes a nuestra causa?"
@@ -1424,51 +1629,15 @@ msgstr ""
 "With your support, you contribute to keeping this program free. Do you "
 "want to support us?"
 
-#: update/updater.py:13
-msgid "Hubo un error al actualizar VeTube."
-msgstr "There was an error updating VeTube."
+#: update/updater.py:26
+msgid "Error al comprobar actualizaciones: "
+msgstr "Update error"
 
-#: update/utils.py:29
-#, python-format
-msgid "%d día, "
-msgstr "%d day, "
+#: update/updater.py:31
+msgid "Al parecer tienes la última versión del programa"
+msgstr "It seems you have the latest version of the program"
 
-#: update/utils.py:31
-#, python-format
-msgid "%d días, "
-msgstr "%d days, "
-
-#: update/utils.py:33
-#, python-format
-msgid "%d hora, "
-msgstr "%d hour, "
-
-#: update/utils.py:35
-#, python-format
-msgid "%d horas, "
-msgstr "%d hours, "
-
-#: update/utils.py:37
-#, python-format
-msgid "%d minuto, "
-msgstr "%d minute, "
-
-#: update/utils.py:39
-#, python-format
-msgid "%d minutos, "
-msgstr "%d minutes, "
-
-#: update/utils.py:41
-#, python-format
-msgid "%s segundo"
-msgstr "%s second"
-
-#: update/utils.py:43
-#, python-format
-msgid "%s segundos"
-msgstr "%s seconds"
-
-#: update/wxUpdater.py:9
+#: update/wxUpdater.py:8
 #, python-format
 msgid ""
 "Hay una nueva versión de VeTube. Te gustaría descargarla ahora?\n"
@@ -1485,57 +1654,41 @@ msgstr ""
 "changes:\n"
 "%s"
 
-#: update/wxUpdater.py:9
+#: update/wxUpdater.py:8
 msgid "Nueva versión de VeTube"
 msgstr "New VeTube version"
 
-#: update/wxUpdater.py:17
+#: update/wxUpdater.py:16
 msgid "Descarga en progreso"
 msgstr "Download in progress"
 
-#: update/wxUpdater.py:17
+#: update/wxUpdater.py:16
 msgid "Descargando la actualización"
 msgstr "Downloading the update"
 
-#: update/wxUpdater.py:27
+#: update/wxUpdater.py:30
 #, python-format
 msgid "Actualizando... %s de %s"
 msgstr "Updating... %s of %s"
 
-#: update/wxUpdater.py:30
+#: update/wxUpdater.py:36
 msgid ""
-"La actualización se a descargado he instalado exitosamente. pulse en "
+"La actualización se ha descargado e instalado exitosamente. Pulse en "
 "aceptar para continuar."
 msgstr ""
 "The update has been downloaded and installed successfully. Click \"OK\" "
 "to continue."
 
-#: update/wxUpdater.py:30
+#: update/wxUpdater.py:36
 msgid "¡Hecho!"
 msgstr "Done!"
 
 #: utils/app_utilitys.py:26
 msgid ""
 "Necesitas al menos una voz para poder usar el sintetizador Piper. "
-"Â¿Quieres abrir nuestra carpeta de Drive para descargar algunos modelos? "
-"Si pulsas sÃ­, se abrirÃ¡ nuestra carpeta seguido de una ventana para "
-"instalar una una vez la descargues."
-msgstr ""
-"You need at least one voice in order to use the Piper synthesizer. Do you"
-" want to open our Drive folder to download some models? If you press yes,"
-" our folder will open, followed by a window to install one once you've "
-"downloaded it."
+"Â¿Deseas abrir el descargador de voces ahora para buscar e instalar una?"
+msgstr "You need at least one voice to use the Piper synthesizer. Do you want to open the voice downloader now to search and install one?"
 
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
 msgstr "System language"
-
-#~ msgid "data"
-#~ msgstr "data"
-
-#~ msgid "dataerror_msg"
-#~ msgstr "dataerror_msg"
-
-#~ msgid "Lectura de chats en vivo"
-#~ msgstr "Live chat reading"
-

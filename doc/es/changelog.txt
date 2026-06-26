@@ -1,3 +1,11 @@
+v3.8
+se quitan varias dependencias antiguas para optimizar el código y el rendimiento.
+se soluciona que con algunos procesadores amd antiguos no se pudiera ejecutar vetube.
+se solulciona la conversión de divisas.
+se da un soporte mas completo a piper al integrar sonataGCRP y el descargador de voces de uggin face gracias al complemento sonata de NVDA.
+se agrega OneCore a las voces soportadas gracias a prism una nueva librería de accesibilidad.
+ahora si una transmisión no se a iniciado por algún motivo, el programa lo informará y regresará a la ventana principal.
+v3.7
 * se corrige chat downloader para que sea compatible  con twich
 * protobuf se actualiza a la última versión por fallo de seguridad (CVE 0994)
 v3.6
