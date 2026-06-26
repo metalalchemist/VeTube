@@ -26,12 +26,12 @@ jobs:
         run: |
           pip install --upgrade pip wheel setuptools
           pip install -r requirements.txt
-          pip install pyinstaller gdown
+          pip install pyinstaller
           pip install --upgrade pyzmq httpx httpcore future
 
       - name: Compiling
         run: |
-          pyinstaller run_main_window.py --windowed
+          pyinstaller run_main_window.py --windowed --collect-binaries prism
           cd dist
           Rename-Item run_main_window VeTube
           cd ..

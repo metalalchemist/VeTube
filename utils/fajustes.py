@@ -5,6 +5,7 @@ configuraciones ={
 	"sistemaTTS": "auto",
 	'voz': 0,
 	"tono": 0,
+	'tono_onecore': 0,
 	"volume": 100,
 	"speed": 0,
 	'sapi':True,

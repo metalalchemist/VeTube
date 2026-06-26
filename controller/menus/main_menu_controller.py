@@ -117,7 +117,7 @@ class MainMenuController:
         if data_store.config['sistemaTTS'] != "piper":
             reader._lector.set_rate(data_store.config['speed'])
             if data_store.config['sistemaTTS'] == "onecore":
-                reader._lector.set_pitch(data_store.config.get('tono_onecore', 0))
+                reader._lector.set_pitch(data_store.config.get('tono_onecore', 0.6))
             else:
                 reader._lector.set_pitch(data_store.config['tono'])
             reader._lector.set_volume(data_store.config['volume'])

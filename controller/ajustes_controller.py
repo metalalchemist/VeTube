@@ -37,8 +37,8 @@ class AjustesController:
         elif config['sistemaTTS'] == "onecore":
             reader._lector.set_volume(config['volume'])
             reader._lector.set_rate(config['speed'])
-            # Aplicar el tono guardado para OneCore (posición 0-4, por defecto 0 = 0.6)
-            reader._lector.set_pitch(config.get('tono_onecore', 0))
+            # Aplicar el tono guardado para OneCore (posición 0-4, por defecto 0.6 = 0.6)
+            reader._lector.set_pitch(config.get('tono_onecore', 0.6))
     def _bind_events(self):
         self.dialog.check_1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar_sapi(event))
         self.dialog.chk1.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'reader'))
@@ -162,8 +162,8 @@ class AjustesController:
             # OneCore: pitch limitado a 5 valores discretos: 0.6, 0.7, 0.8, 0.9, 1.0
             # Slider rango 0-4 donde cada paso = 0.1 en la escala real de OneCore
             self.dialog.slider_1.SetRange(0, 4)
-            # Por defecto posición 0 = 0.6, el tono más natural en OneCore
-            pos_onecore = config.get('tono_onecore', 0)  # 0 = 0.6 (tono más natural)
+            # Por defecto posición 0.6 = 0.6, el tono más natural en OneCore
+            pos_onecore = config.get('tono_onecore', 0.6)  # 0.6 = 0.6 (tono más natural)
             self.dialog.slider_1.SetValue(pos_onecore)
             # Aplicar el pitch inmediatamente al lector
             reader._lector.set_pitch(pos_onecore)

@@ -18,7 +18,7 @@ if voices_leer:
 if config['sistemaTTS'] != "piper":
     reader._lector.set_rate(config['speed'])
     if config['sistemaTTS'] == "onecore":
-        reader._lector.set_pitch(config.get('tono_onecore', 0))
+        reader._lector.set_pitch(config.get('tono_onecore', 0.6))
     else:
         reader._lector.set_pitch(config['tono'])
     reader._lector.set_volume(config['volume'])
