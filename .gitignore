@@ -2,9 +2,9 @@ __pycache__/
 *.pyc
 *.onnx
 *.onnx.json
-piper/voices/*
-piper/voices/*/*.onnx
-piper/voices/*/*.onnx.json
+voices/*
+voices/*/*.onnx
+voices/*/*.onnx.json
 data.json
 venv/
 favoritos.json
