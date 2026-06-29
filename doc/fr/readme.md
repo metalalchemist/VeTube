@@ -1,81 +1,88 @@
-#vetube
-Lisez et gérez le chat youtube, tiktok, kick et twitch de manière accessible dans vos propres diffusions ou celles de vos créateurs préférés.
+# VeTube
+Lisez et gérez de manière accessible le chat de vos propres directs ou de ceux de vos créateurs favoris.
+## Sites pris en charge
+- YouTube (premières, directs en cours et passés)
+- Twitch.tv (directs en cours et passés)
+- TikTok (directs en cours)
+- Kick (directs en cours)
+- Le Salon (le chat des différentes tables)
 ## Caractéristiques
-- Mode automatique : lisez les messages de chat en temps réel à l'aide de la voix sapy5
-- Interface invisible : gérez les discussions depuis n'importe quelle fenêtre à l'aide de simples commandes au clavier. Vous devez avoir un lecteur d'écran actif.
-- Lecteurs pris en charge :
--NVDA
--MÂCHOIRES
--Fenêtre-Yeux
-- Supernova
--Accès au système
--PC Talker
--ZDSR
-- Possibilité de configuration selon les besoins de l'utilisateur.
-- active ou désactive les sons du programme.
-- active ou désactive le mode automatique.
-- configure la liste des messages dans l'interface invisible.
-- Configurez les préférences de la voix sapy.
-- personnaliser les raccourcis clavier globaux
-- changer le mode de lecture des chats facilement : décidez si vous voulez lire tous les chats ou seulement ceux d'une catégorie spécifique.
-- enregistrer votre live dans une section favoris. répétez le chat autant de fois que vous le souhaitez sans avoir à chercher à nouveau le lien.
-- archiver un message : utile pour avoir des rappels.
-- enregistre un historique des messages.
-- traduisez le chat d'un streaming dans la langue de votre choix.
+- Mode automatique : lit les messages du chat en temps réel à l'aide de la voix SAPI5.
+- Interface invisible : gérez les chats depuis n'importe quelle fenêtre à l'aide de simples raccourcis clavier. Un lecteur d'écran actif est nécessaire.
+- Lecteurs d'écran pris en charge :
+  - NVDA
+  - JAWS
+  - Window-Eyes
+  - SuperNova
+  - System Access
+  - PC Talker
+  - ZDSR
+- Possibilité de configurer le programme selon les besoins de l'utilisateur :
+  - activer ou désactiver les sons du programme.
+  - activer ou désactiver la lecture automatique.
+  - configurer la liste des messages dans l'interface invisible.
+  - configurer les préférences de la voix SAPI.
+  - personnaliser les raccourcis clavier globaux.
+- conserver plusieurs captures de chats à la fois.
+- changer facilement de mode de lecture des chats : choisissez de lire tous les chats, ou seulement ceux d'une catégorie précise.
+- enregistrez vos directs dans une section favoris : rejouez le chat autant de fois que vous le souhaitez, sans avoir à rechercher le lien à nouveau.
+- archiver un message : utile pour garder des rappels.
+- traduisez le chat d'un direct dans la langue de votre choix.
 
-## Raccourcis clavier.
-### Utilisation d'une interface invisible.
-| agir | combinaison de touches |
-| -------------------- | ----------- |
-| Faire taire la voix sape | ctrl+p |
-| Démarrer / annuler la capture d’un autre direct | alt majuscule h |
-| tampon précédent | alt majuscule flèche gauche |
-| tampon suivant | alt majuscule flèche droite |
-| Aller au direct suivant | control alt majuscule flèche droite |
-| Aller au direct précédent | control alt majuscule flèche gauche |
-| Article précédent | alt maj flèche vers le haut |
-| Article suivant | alt Maj flèche vers le bas |
-| Élément initial | alt shift home |
-| élément de fin | alt maj fin |
-| archiver un message | altshift a |
-| Copiez le message actuel | alt shift c |
-| Efface un tampon précédemment créé | alt shift d |
-| ajouter un message au tampon des favoris | altshift f|
-| Activer ou désactiver le mode automatique | alt shift r |
-| désactiver les sons du programme | alt-shift p |
-| rechercher un mot parmi les messages | altshift b |
-| affiche le message en cours dans une zone de texte | alt maj v |
-| invoquer l'éditeur de clavier vetube | alt shift k |
-| mettre en pause ou reprendre la lecture d'une diffusion en direct | control shift p |
-| avancer la lecture de la diffusion en direct | control shift flèche droite |
-| reculer la lecture de la diffusion en direct | control shift flèche gauche |
-| augmenter le volume | control shift flèche vers le haut |
-| baisser le volume | control shift flèche vers le bas |
-| Arrêter et libérer le lecteur | control majuscule s |
-### Dans l'historique des discussions :
-| agir | combinaison de touches |
-| -------------------- | ----------- |
-| Lire le message sélectionné | espace |
+## Raccourcis clavier
+### Avec l'interface invisible
+| Action | Combinaison de touches |
+| --- | --- |
+| Mettre en sourdine la voix SAPI | Ctrl+P |
+| Démarrer / annuler la capture d'un autre direct | Alt+Maj+H |
+| Aller au direct précédent | Ctrl+Alt+Maj+Flèche gauche |
+| Aller au direct suivant | Ctrl+Alt+Maj+Flèche droite |
+| Tampon précédent | Alt+Maj+Flèche gauche |
+| Tampon suivant | Alt+Maj+Flèche droite |
+| Élément précédent | Alt+Maj+Flèche haut |
+| Élément suivant | Alt+Maj+Flèche bas |
+| Premier élément | Alt+Maj+Début |
+| Dernier élément | Alt+Maj+Fin |
+| Archiver un message | Alt+Maj+A |
+| Copier le message actuel | Alt+Maj+C |
+| Effacer un tampon créé précédemment | Alt+Maj+D |
+| Ajouter le message au tampon des favoris | Alt+Maj+F |
+| Activer ou désactiver la lecture automatique | Alt+Maj+R |
+| Désactiver les sons du programme | Alt+Maj+P |
+| Rechercher un mot parmi les messages | Alt+Maj+B |
+| Afficher le message actuel dans une zone de texte | Alt+Maj+V |
+| Ouvrir l'éditeur de combinaisons de clavier de VeTube | Alt+Maj+K |
+| Mettre en pause ou reprendre la lecture d'un direct | Ctrl+Maj+P |
+| Avancer la lecture du direct | Ctrl+Maj+Flèche droite |
+| Reculer la lecture du direct | Ctrl+Maj+Flèche gauche |
+| Augmenter le volume | Ctrl+Maj+Flèche haut |
+| Baisser le volume | Ctrl+Maj+Flèche bas |
+| Arrêter et libérer le lecteur | Ctrl+Maj+S |
 
-### Dans la section des favoris :
-| agir | combinaison detouches |
-| -------------------- | ----------- |
-| accéder à un lien sélectionné | espace |
+### Dans l'historique du chat
+| Action | Combinaison de touches |
+| --- | --- |
+| Lire le message sélectionné | Espace |
 
-## futures mises à jour :
-J'ai ajouté pour les futures mises à jour à venir
-- Possibilité d'afficher les informations de la personne qui discute depuis l'interface invisible :
-- Nom du canal utilisateur
-- Parmi beaucoup d'autres choses.
+### Dans la section des favoris
+| Action | Combinaison de touches |
+| --- | --- |
+| Accéder au lien sélectionné | Espace |
+
+## Futures mises à jour
+Voici ce que j'ai prévu pour les prochaines mises à jour :
+- Possibilité d'afficher, depuis l'interface invisible, les informations de la personne qui écrit dans le chat :
+  - le nom de la chaîne de l'utilisateur ;
+  - et bien d'autres choses encore.
 
 ## Contribuer à la traduction
-Si vous souhaitez collaborer en traduisant VeTube dans votre langue, vous devrez installer les outils d'internationalisation.
+Si vous souhaitez aider à traduire VeTube dans votre langue, vous devrez installer les outils d'internationalisation.
 
 1.  **Installer Babel :**
     ```bash
     pip install Babel
     ```
-    *Remarque : Assurez-vous d'installer le paquet `Babel` (évitez les paquets incorrects de très petite taille).*
+    *Remarque : veillez à bien installer le paquet `Babel` (et non un paquet incorrect de taille minuscule).*
 
 2.  **Extraire les textes pour mettre à jour le modèle (.pot) :**
     Si de nouvelles chaînes ont été ajoutées au code, mettez à jour le fichier modèle :
@@ -83,7 +90,7 @@ Si vous souhaitez collaborer en traduisant VeTube dans votre langue, vous devrez
     pybabel extract -F babel.cfg -o vetube.pot .
     ```
 
-3.  **Commencer une nouvelle traduction :**
+3.  **Démarrer une nouvelle traduction :**
     Si vous traduisez vers une nouvelle langue (par exemple `it` pour l'italien) :
     ```bash
     pybabel init -i vetube.pot -d locales -l it -D vetube
@@ -96,30 +103,30 @@ Si vous souhaitez collaborer en traduisant VeTube dans votre langue, vous devrez
     ```
 
 5.  **Compiler les traductions :**
-    Pour que le programme reconnaisse les changements, compilez les fichiers `.po` en `.mo` :
+    Pour que le programme prenne en compte les changements, compilez les fichiers `.po` en `.mo` :
     ```bash
     pybabel compile -d locales -D vetube
     ```
 
-# merci:
-Je remercie:
+# Remerciements
+Je remercie :
 
 [4everzyanya](https://www.youtube.com/c/4everzyanya/),
 
-Testeur principal du projet.
+testeur principal du projet.
 
-[Johan G](https://github.com/JohanAnim),
+[Johan G](https://github.com/JohanAnim),
 
-Qui a aidé à créer l'interface graphique du projet et à corriger certains bugs mineurs.
+qui a aidé à créer l'interface graphique du projet et à corriger certains bugs mineurs.
 
-Je sais que grâce à vous cette application continuera de s'améliorer et chacune de vos idées et collaborations sera la bienvenue dans ce projet que nous construirons ensemble.
+Je sais que, grâce à vous, cette application continuera de s'améliorer, et que chacune de vos idées et collaborations sera la bienvenue dans ce projet que nous construirons tous ensemble.
 
-Pour des idées, des bugs et des suggestions Vous pouvez m'écrire à
+Pour vos idées, bugs et suggestions, vous pouvez m'écrire à
 cesar.verastegui17@gmail.com
-## Liens de téléchargement.
-Avec votre soutien, vous aidez ce programme à continuer à se développer.
+## Liens de téléchargement
+Avec votre soutien, vous contribuez à la croissance de ce programme.
 
-[Rejoindrez-vous notre cause ?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
+[Vous joignez-vous à notre cause ?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
 [télécharger le programme pour 64 bits](https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-x64.zip)
 [télécharger le programme pour 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.7/VeTube-x86.zip)
