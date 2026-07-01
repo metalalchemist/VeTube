@@ -51,9 +51,25 @@ jobs:
           cd dist/VeTube
           7z a ../../VeTube-x64.zip .
           cd ../../
+      - name: Install Inno Setup
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        run: choco install innosetup -y --no-progress
+
+      - name: Build installer (Inno Setup)
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        run: |
+          $ver = "3.8"
+          if ($env:GITHUB_REF -like 'refs/tags/*') { $ver = $env:GITHUB_REF_NAME -replace '^v','' }
+          Write-Host "Building VeTube installer for version $ver"
+          $iscc = Get-ChildItem "${env:ProgramFiles(x86)}\Inno Setup*\ISCC.exe","${env:ProgramFiles}\Inno Setup*\ISCC.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $iscc) { throw "ISCC.exe not found after install" }
+          & $iscc.FullName /Q /DMyAppVersion=$ver installer/vetube.iss
+
       - name: vetube_release
         uses: softprops/action-gh-release@v3
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
         with:
-          files: VeTube-x64.zip
+          files: |
+            VeTube-x64.zip
+            installer/VeTube-setup.exe
           prerelease: ${{ contains(github.ref, '-') }}
