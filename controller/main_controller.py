@@ -1,6 +1,6 @@
 import wx
 from globals.data_store import favorite, mensajes_destacados, favs, msjs,config
-from ui.main_window import MyFrame
+from ui.main_window import MyFrame, PLATAFORMAS
 from os import remove
 from utils import languageHandler,canonical_scraper,funciones
 from controller.menus.main_menu_controller import MainMenuController
@@ -277,7 +277,11 @@ class MainController:
         
         self.frame.text_ctrl_1.SetValue(url)
         plataforma_ids = self.frame.plataforma.GetSelection()
-        plataforma = self.frame.plataforma.GetString(plataforma_ids)
+        # Identificador interno, no la etiqueta traducida del wx.Choice: con la
+        # interfaz en otro idioma la etiqueta no coincide con las comparaciones
+        # del código (p. ej. == 'La sala de juegos') y la plataforma se trata
+        # como genérica.
+        plataforma = PLATAFORMAS[plataforma_ids]
         
         # Create ChatController first
         chat_controller = ChatController(self, self.frame, plataforma=plataforma, chat_dialog=self.chat_dialog)
