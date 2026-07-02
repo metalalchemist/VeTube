@@ -119,7 +119,10 @@ class ServicioTiktok:
         wx.CallAfter(reader.leer_sapi, _("El directo ha finalizado. Se buscará de nuevo en un minuto."))
 
     async def on_disconnect(self, event: DisconnectEvent):
-        if self.is_running:
+        # TikTokLive emite DisconnectEvent en cada cierre del websocket, incluido el fin
+        # normal del directo: en ese caso finalizado() ya anunció que se buscará de nuevo,
+        # así que dejamos que el bucle de _run_client_async siga sondeando cada minuto.
+        if self.is_running and self.last_live_status is not False:
             self.is_running = False
             wx.CallAfter(reader.leer_sapi, _("Se ha perdido la conexión. El servicio se ha detenido."))
 
