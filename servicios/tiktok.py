@@ -153,11 +153,13 @@ class ServicioTiktok:
 
     async def on_chest(self,event: EnvelopeEvent):
         if data_store.config['eventos'][9] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
-            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname + _(" ha enviado un cofre!"), "chest")
+            # EnvelopeEvent no tiene campo 'user': el remitente viene en envelope_info
+            mensajito = event.envelope_info.send_user_name + _(" ha enviado un cofre!")
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, mensajito, "chest")
             if data_store.config['sonidos'] and data_store.config['listasonidos'][12]:
                 wx.CallAfter(player.play, rutasonidos[12])
             if data_store.config['reader'] and data_store.config['unread'][9]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" ha enviado un cofre!"))
+                wx.CallAfter(reader.leer_mensaje, mensajito)
 
     async def on_follow(self,event: FollowEvent):
         if data_store.config['eventos'][7] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
