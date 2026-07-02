@@ -275,7 +275,7 @@ msgstr "Selesai"
 msgid "Error al guardar el archivo: {}"
 msgstr "Gagal menyimpan berkas: {}"
 
-#: controller/main_controller.py:45
+#: controller/main_controller.py:45 utils/app_utilitys.py:26
 msgid ""
 "Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Deseas"
 " abrir el descargador de voces ahora para buscar e instalar una?"
@@ -1678,12 +1678,6 @@ msgstr "Pembaruan telah berhasil diunduh dan diinstal. Klik OK untuk melanjutkan
 #: update/wxUpdater.py:36
 msgid "¡Hecho!"
 msgstr "Selesai!"
-
-#: utils/app_utilitys.py:26
-msgid ""
-"Necesitas al menos una voz para poder usar el sintetizador Piper. "
-"Â¿Deseas abrir el descargador de voces ahora para buscar e instalar una?"
-msgstr "Anda memerlukan setidaknya satu suara untuk menggunakan penyintesis Piper. Apakah Anda ingin membuka pengunduh suara sekarang untuk mencari dan menginstalnya?"
 
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"

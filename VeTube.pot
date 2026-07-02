@@ -264,7 +264,7 @@ msgstr ""
 msgid "Error al guardar el archivo: {}"
 msgstr ""
 
-#: controller/main_controller.py:45
+#: controller/main_controller.py:45 utils/app_utilitys.py:26
 msgid ""
 "Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Deseas"
 " abrir el descargador de voces ahora para buscar e instalar una?"
@@ -1629,12 +1629,6 @@ msgstr ""
 
 #: update/wxUpdater.py:36
 msgid "¡Hecho!"
-msgstr ""
-
-#: utils/app_utilitys.py:26
-msgid ""
-"Necesitas al menos una voz para poder usar el sintetizador Piper. "
-"Â¿Deseas abrir el descargador de voces ahora para buscar e instalar una?"
 msgstr ""
 
 #: utils/languageHandler.py:72

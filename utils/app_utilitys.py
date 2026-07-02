@@ -1,4 +1,4 @@
-# -*- coding: cp1252
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from TTS.lector import detect_onnx_models
 from TTS.list_voices import install_piper_voice
