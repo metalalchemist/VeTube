@@ -43,6 +43,10 @@ def leerConfiguracion():
 		if clave not in configs:
 			configs[clave] = valor_pred
 			actualizar_configuracion = True
+		elif isinstance(valor_pred, list) and isinstance(configs[clave], list) and len(configs[clave]) < len(valor_pred):
+			# Completar listas que crecieron en versiones nuevas, conservando las preferencias existentes (evita IndexError)
+			configs[clave] = configs[clave] + valor_pred[len(configs[clave]):]
+			actualizar_configuracion = True
 	# actualizar al archivo en caso de ser necesario:
 	if actualizar_configuracion:
 		with open('data.json', 'w+') as file:

@@ -21,6 +21,7 @@ class ServicioTiktok:
         self.last_live_status = None
         self.loop = None
         self.media_controller = None
+        self.translator = None
 
     def iniciar_chat(self):
         self.is_running = True
@@ -134,7 +135,7 @@ class ServicioTiktok:
         if data_store.config['eventos'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
             wx.CallAfter(self.estadisticas_manager.agregar_mensaje, event.user.nickname)
             cadena = event.comment if event.comment is not None else ''
-            if data_store.dst: cadena = self.translator.translate(text=cadena, target=data_store.dst)
+            if data_store.dst and self.translator: cadena = self.translator.translate(text=cadena, target=data_store.dst)
             wx.CallAfter(self.chat_controller.agregar_mensaje_general, event.user.nickname + ": " + cadena)
             if data_store.config['sonidos'] and data_store.config['listasonidos'][0]:
                 wx.CallAfter(player.play, rutasonidos[0])
