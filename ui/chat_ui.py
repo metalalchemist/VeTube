@@ -31,7 +31,7 @@ class ChatPanel(wx.Panel):
             if data_store.config['categorias'][4]: self.list_box_moderadores, self.page_index_moderadores = self.create_page_with_listbox(self.treebook, _(u"Moderadores"))
             if data_store.config['categorias'][3]: self.list_box_donaciones, self.page_index_donaciones = self.create_page_with_listbox(self.treebook, _(u"Donaciones"))
             if data_store.config['categorias'][5]: self.list_box_verificados, self.page_index_verificados = self.create_page_with_listbox(self.treebook, _(u"Verificados"))
-        if data_store.config['categorias'][5]: self.list_box_favoritos, self.page_index_favoritos = self.create_page_with_listbox(self.treebook, _(u"Favoritos"))
+        if data_store.config['categorias'][6]: self.list_box_favoritos, self.page_index_favoritos = self.create_page_with_listbox(self.treebook, _(u"Favoritos"))
 
         self.treebook.SetFocus()
         main_sizer.Add(self.treebook, 1, wx.EXPAND | wx.ALL, 5)
