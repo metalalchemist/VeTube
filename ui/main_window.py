@@ -1,6 +1,10 @@
 from utils.menu_accesible import Accesible
 import wx
 
+# Identificadores internos de las plataformas, en el mismo orden que el wx.Choice.
+# NO traducir ni reordenar: el código los compara tal cual (p. ej. == 'La sala de juegos').
+PLATAFORMAS = ["detectar", "YouTube", "Twich", "TikTok", "La sala de juegos", "Kick"]
+
 class MyFrame(wx.Frame):
     def __init__(self, *args, **kwds):
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
