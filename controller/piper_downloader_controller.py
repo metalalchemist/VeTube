@@ -18,6 +18,10 @@ class PiperDownloaderController:
         self.voces_actuales = [] # Lista de voces filtradas actualmente
         self.voces_locales = [] # Nombres de archivos .onnx locales
         
+        self.play_timer = wx.Timer(self.view)
+        self.view.Bind(wx.EVT_TIMER, self.on_check_play_status, self.play_timer)
+        self.reproduciendo_muestra = False
+        
         self._bind_events()
         self._refrescar_instaladas()
         
@@ -128,6 +132,15 @@ class PiperDownloaderController:
             self.view.voice_list.SetItem(i, 2, v['lang_code'])
 
     def on_reproducir(self, event):
+        if self.reproduciendo_muestra:
+            self.play_timer.Stop()
+            if player.sound is not None and hasattr(player.sound, 'is_playing') and player.sound.is_playing:
+                player.sound.stop()
+            self.view.btn_reproducir.SetLabel(_("&Reproducir muestra"))
+            self.view.set_status(_("Reproducción de muestra detenida."))
+            self.reproduciendo_muestra = False
+            return
+
         item = self.view.voice_list.GetFocusedItem()
         if item == -1:
             wx.MessageBox(_("Por favor, selecciona una voz de la lista para escuchar la muestra."), _("Aviso"))
@@ -139,8 +152,18 @@ class PiperDownloaderController:
             self.view.set_status(_("Reproduciendo muestra de %s...") % voice['name'])
             # Usamos el SoundPlayer global para reproducir la URL directamente
             player.play(url)
+            self.view.btn_reproducir.SetLabel(_("&Detener"))
+            self.reproduciendo_muestra = True
+            self.play_timer.Start(200)
         else:
             wx.MessageBox(_("Esta voz no dispone de muestra de audio."), _("Error"))
+
+    def on_check_play_status(self, event):
+        if not player.sound or not getattr(player.sound, 'is_playing', False):
+            self.play_timer.Stop()
+            self.view.btn_reproducir.SetLabel(_("&Reproducir muestra"))
+            self.view.set_status(_("Reproducción de muestra finalizada."))
+            self.reproduciendo_muestra = False
 
     def on_descargar(self, event):
         checked_indices = []
@@ -219,4 +242,11 @@ class PiperDownloaderController:
             wx.MessageBox(_("Las voces se han instalado correctamente. Ya puedes seleccionarlas en los Ajustes de Voz."), _("Éxito"))
 
     def show(self):
-        return self.view.ShowModal()
+        res = self.view.ShowModal()
+        if self.play_timer.IsRunning():
+            self.play_timer.Stop()
+        if self.reproduciendo_muestra:
+            if player.sound is not None and hasattr(player.sound, 'is_playing') and player.sound.is_playing:
+                player.sound.stop()
+            self.reproduciendo_muestra = False
+        return res
