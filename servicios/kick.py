@@ -21,6 +21,7 @@ class ServicioKick:
         self.thread = None
         self.media_controller = None
         self.client_task = None
+        self.translator = None
 
     def iniciar_chat(self):
         self.is_running = True
@@ -72,6 +73,7 @@ class ServicioKick:
                 self.detener()
                 return
 
+            if data_store.dst: self.translator = translator.TranslatorWrapper()
             self.client = kick.Client()
             self._add_listeners()
             
@@ -115,7 +117,7 @@ class ServicioKick:
     async def on_message(self, message: kick.Message):
         wx.CallAfter(self.estadisticas_manager.agregar_mensaje, message.author.username)
         cadena = message.content
-        if data_store.dst: cadena = self.translator.translate(text=cadena, target=data_store.dst)
+        if data_store.dst and self.translator: cadena = self.translator.translate(text=cadena, target=data_store.dst)
         
         # Obtener los tipos de insignias de forma segura
         badge_types = []

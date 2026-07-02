@@ -17,13 +17,15 @@ class ServicioSala:
         self.chat = None
         self.chat_controller = chat_controller
         self.estadisticas_manager = chat_controller.estadisticas_manager
+        self.translator = None
+        self._hilo = None
         self._detener = False
 
     def iniciar_chat(self):
         try:
             self._detener = False
             self.chat = PlayroomHelper()
-            if data_store.dst: self.translator=translator.translatorWrapper()
+            if data_store.dst: self.translator=translator.TranslatorWrapper()
             self._hilo = Timer(0.5, self.recibir)
             self._hilo.daemon = True
             self._hilo.start()
@@ -37,15 +39,18 @@ class ServicioSala:
 
     def detener(self):
         self._detener = True
+        if self._hilo:
+            self._hilo.stop()
 
     def recibir(self):
+        if self._detener: return
         try:
             self.chat.get_new_messages()
             for message in self.chat.new_messages:
                 self.estadisticas_manager.agregar_mensaje(message['author'])
                 if self._detener: break
                 if message['message']==None: message['message']=''
-                if data_store.dst: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
+                if data_store.dst and self.translator: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
                 if (message['type'] == 'private'):
                     if data_store.config['categorias'][2] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
                         if data_store.config['eventos'][1]:
@@ -59,4 +64,8 @@ class ServicioSala:
                             if data_store.config['reader'] and data_store.config['unread'][0]: reader.leer_mensaje(message['author'] +': ' +message['message'])
                             if data_store.config['sonidos'] and data_store.config['listasonidos'][0]: player.play(rutasonidos[0])
         except Exception as e:
-            wx.CallAfter(self.chat_controller.notificar_error, str(e))
+            # Detener el sondeo antes de notificar: si la ventana de la sala se cierra,
+            # el Timer seguiría fallando cada medio segundo y mostraría errores sin fin.
+            if not self._detener:
+                self.detener()
+                wx.CallAfter(self.chat_controller.notificar_error, str(e))

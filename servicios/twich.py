@@ -19,6 +19,7 @@ class ServicioTwich:
         self.chat_controller = chat_controller
         self.estadisticas_manager = chat_controller.estadisticas_manager
         self.media_controller = None
+        self.translator = None
         self._detener = False
 
     def iniciar_chat(self):
@@ -45,7 +46,7 @@ class ServicioTwich:
 
     def recibir(self):
         try:
-            if data_store.dst: self.translator=translator.translatorWrapper()
+            if data_store.dst: self.translator=translator.TranslatorWrapper()
             self.chat=ChatDownloader().get_chat(self.url,message_groups=["messages", "bits","subscriptions","upgrades"])
             threading.Thread(target=self.prepare_player, args=(self.chat.status,), daemon=True).start()
             wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, self.chat.title)
@@ -54,7 +55,7 @@ class ServicioTwich:
                 if not message: continue
 
                 if message['message'] is None: message['message'] = ''
-                if data_store.dst: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
+                if data_store.dst and self.translator: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
 
                 author_name = message['author'].get('display_name', _('Desconocido'))
                 self.estadisticas_manager.agregar_mensaje(author_name)

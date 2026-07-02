@@ -100,7 +100,7 @@ class ChatController:
         if list_box.GetSelection() == wx.NOT_FOUND: return
         
         menu = ChatItemMenu(self.ui)
-        ChatItemController(menu, list_box, self, self.ui.label_dialog)
+        ChatItemController(menu, list_box, self)
         self.ui.PopupMenu(menu.menu)
 
     def on_opciones_btn(self, event):

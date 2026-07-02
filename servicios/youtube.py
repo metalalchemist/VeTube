@@ -19,6 +19,7 @@ class ServicioYouTube:
         self.chat_controller = chat_controller
         self.estadisticas_manager = chat_controller.estadisticas_manager
         self.media_controller = None
+        self.translator = None
         self._detener = False
 
     def iniciar_chat(self):
@@ -45,7 +46,6 @@ class ServicioYouTube:
         from servicios.YouTubeRealDataTime import YouTubeRealTimeService
         realtime_service = YouTubeRealTimeService(self.url, self.frame, 'youtube_realtime', title=title, chat_controller=self.chat_controller)
         realtime_service.iniciar_chat_reutilizando_ui()
-        self.chat_controller.set_active_service(realtime_service)
 
     def prepare_player(self, status):
         try:
@@ -59,12 +59,20 @@ class ServicioYouTube:
 
     def recibir(self):
         try:
-            if data_store.dst: self.translator=translator.translatorWrapper()
+            if data_store.dst: self.translator=translator.TranslatorWrapper()
             self.chat = ChatDownloader().get_chat(self.url, message_groups=["messages", "superchat"], interruptible_retry=False)
             if self.chat.status == 'past':
-                dialog = wx.MessageDialog(self.chat_controller.ui, _("Se ha detectado una transmisión pasada. ¿Deseas conectarte con el servicio en tiempo real del chat?"), _("Transmisión pasada"), wx.YES_NO | wx.ICON_QUESTION)
-                result = dialog.ShowModal()
-                if result == wx.ID_YES:
+                # El diálogo debe mostrarse en el hilo principal; esperamos la respuesta desde este hilo.
+                respuesta = []
+                respondido = threading.Event()
+                def preguntar_cambio():
+                    dialog = wx.MessageDialog(self.chat_controller.ui, _("Se ha detectado una transmisión pasada. ¿Deseas conectarte con el servicio en tiempo real del chat?"), _("Transmisión pasada"), wx.YES_NO | wx.ICON_QUESTION)
+                    respuesta.append(dialog.ShowModal())
+                    dialog.Destroy()
+                    respondido.set()
+                wx.CallAfter(preguntar_cambio)
+                respondido.wait()
+                if respuesta and respuesta[0] == wx.ID_YES:
                     self.detener()
                     wx.CallAfter(self.do_switch, self.chat.title)
                     return
@@ -74,7 +82,7 @@ class ServicioYouTube:
                 if self._detener: break
                 if not message: continue
                 if message['message'] is None: message['message'] = ''
-                if data_store.dst: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
+                if data_store.dst and self.translator: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
 
                 author_name = message['author']['display_name']
                 self.estadisticas_manager.agregar_mensaje(author_name)
