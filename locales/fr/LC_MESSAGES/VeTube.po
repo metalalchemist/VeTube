@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2026-06-26 09:51-0700\n"
-"PO-Revision-Date: 2026-06-26 12:00+0000\n"
+"PO-Revision-Date: 2026-07-02 12:00+0000\n"
 "Last-Translator: Enzo Wenterstein <enzo.wenterstein@hotmail.com>\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -1688,8 +1688,12 @@ msgstr "Terminé !"
 msgid ""
 "Necesitas al menos una voz para poder usar el sintetizador Piper. "
 "Â¿Deseas abrir el descargador de voces ahora para buscar e instalar una?"
-msgstr "Vous avez besoin d'au menos une voix pour utiliser le synthétiseur Piper. Voulez-vous ouvrir le téléchargeur de voix maintenant pour en rechercher et en installer une ?"
+msgstr "Vous avez besoin d'au moins une voix pour utiliser le synthétiseur Piper. Voulez-vous ouvrir le téléchargeur de voix maintenant pour en rechercher et en installer une ?"
 
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
 msgstr "Langue du système"
+
+#: helpers/playroom_helper.py:61
+msgid "proceso playroom no abierto"
+msgstr "le logiciel du Salon n'est pas lancé"

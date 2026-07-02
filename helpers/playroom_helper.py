@@ -58,7 +58,7 @@ class PlayroomHelper:
             playroom_handle = get_playroom_handle()
 
             if playroom_handle is None:
-                raise Exception('proceso playroom no abierto')
+                raise Exception(_('proceso playroom no abierto'))
 
             playroom_controls = uiautomation.ControlFromHandle(playroom_handle)
             
