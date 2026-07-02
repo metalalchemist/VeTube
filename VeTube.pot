@@ -1641,3 +1641,7 @@ msgstr ""
 msgid "Idioma del sistema"
 msgstr ""
 
+#: helpers/playroom_helper.py:61
+msgid "proceso playroom no abierto"
+msgstr ""
+
