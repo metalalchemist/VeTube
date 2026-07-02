@@ -275,7 +275,7 @@ msgstr "Powodzenie"
 msgid "Error al guardar el archivo: {}"
 msgstr "Błąd podczas zapisywania pliku: {}"
 
-#: controller/main_controller.py:45
+#: controller/main_controller.py:45 utils/app_utilitys.py:26
 msgid ""
 "Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Deseas"
 " abrir el descargador de voces ahora para buscar e instalar una?"
@@ -1677,12 +1677,6 @@ msgstr "Aktualizacja została pomyślnie pobrana i zainstalowana. Kliknij OK, ab
 #: update/wxUpdater.py:36
 msgid "¡Hecho!"
 msgstr "Gotowe!"
-
-#: utils/app_utilitys.py:26
-msgid ""
-"Necesitas al menos una voz para poder usar el sintetizador Piper. "
-"Â¿Deseas abrir el descargador de voces ahora para buscar e instalar una?"
-msgstr "Potrzebujesz co najmniej jednego głosu, aby używać syntezatora Piper. Czy chcesz teraz otworzyć instalator głosów, aby go wyszukać i zainstalować?"
 
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
