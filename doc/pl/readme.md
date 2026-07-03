@@ -7,6 +7,7 @@ Czytaj i zarządzaj w sposób dostępny czatem swoich własnych transmisji na ż
 - tiktok (transmisje na żywo trwające)
 - kick (transmisje na żywo trwające)
 - playroom (czat różnych stołów)
+- Discord (kanały tekstowe serwera; [przewodnik konfiguracji](discord.md))
 ## Funkcje
 - Tryb automatyczny: Czyta wiadomości czatu w czasie rzeczywistym za pomocą głosu SAPI5.
 - Niewidzialny interfejs: Zarządzaj czatami z dowolnego okna za pomocą prostych poleceń klawiaturowych. Wymagany jest aktywny czytnik ekranu.

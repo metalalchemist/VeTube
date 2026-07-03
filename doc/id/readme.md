@@ -10,6 +10,7 @@ Kelola dan baca chat dari siaran langsung milikmu atau dari kreator favoritmu de
 - TikTok (siaran langsung)
 - Kick (siaran langsung)
 - QuentinC's playroom (chat dari berbagai meja permainan)
+- Discord (kanal teks server; [panduan penyiapan](discord.md))
 
 ## Fitur
 

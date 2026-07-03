@@ -1682,3 +1682,55 @@ msgstr "Selesai!"
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
 msgstr "Bahasa sistem"
+
+#: ui/main_window.py:34
+msgid "Discord"
+msgstr "Discord"
+
+#: ui/discord_token_dialog.py:16
+msgid "Se necesita el token del bot de Discord"
+msgstr "Token bot Discord diperlukan"
+
+#: ui/discord_token_dialog.py:18
+msgid "Para leer un canal de Discord, VeTube necesita el token de tu bot. Pégalo aquí; quedará guardado y no se te volverá a pedir."
+msgstr "Untuk membaca kanal Discord, VeTube memerlukan token bot Anda. Tempelkan di sini; token akan disimpan dan tidak akan diminta lagi."
+
+#: ui/discord_token_dialog.py:21
+msgid "&Token del bot:"
+msgstr "&Token bot:"
+
+#: ui/discord_token_dialog.py:25
+msgid "¿No sabes cómo crear el token? Abrir la &guía"
+msgstr "Tidak tahu cara membuat token? Buka &panduan"
+
+#: ui/discord_token_dialog.py:40
+msgid "Debes pegar el token del bot para continuar."
+msgstr "Anda harus menempelkan token bot untuk melanjutkan."
+
+#: servicios/discord.py:83
+msgid "El token del bot de Discord no es válido o fue revocado. Pega de nuevo el enlace del canal para introducir un token nuevo."
+msgstr "Token bot Discord tidak valid atau telah dicabut. Tempelkan kembali tautan kanal untuk memasukkan token baru."
+
+#: servicios/discord.py:87
+msgid "Al bot le falta activar «Message Content Intent» en el portal de desarrolladores de Discord. Actívalo y vuelve a intentarlo."
+msgstr "Bot belum mengaktifkan opsi “Message Content Intent” di portal pengembang Discord. Aktifkan lalu coba lagi."
+
+#: servicios/discord.py:117
+msgid "No se encontró el canal de Discord. Comprueba que el bot está invitado al servidor y que el enlace del canal es correcto."
+msgstr "Kanal Discord tidak ditemukan. Pastikan bot sudah diundang ke server dan tautan kanal sudah benar."
+
+#: controller/main_controller.py:251
+msgid "Para Discord pega el enlace del canal de texto: haz clic derecho sobre el canal y elige «Copiar enlace»."
+msgstr "Untuk Discord, tempelkan tautan kanal teks: klik kanan pada kanal lalu pilih “Salin Tautan”."
+
+#: controller/main_controller.py:281
+msgid "El enlace de Discord no es válido. Copia el enlace del canal de texto (clic derecho sobre el canal, «Copiar enlace») y pégalo en VeTube."
+msgstr "Tautan Discord tidak valid. Salin tautan kanal teks (klik kanan pada kanal, “Salin Tautan”) lalu tempelkan di VeTube."
+
+#: controller/main_controller.py:387
+msgid "No se pudo comprobar el token por un fallo de red. Revisa tu conexión a internet e inténtalo de nuevo."
+msgstr "Token tidak dapat diperiksa karena gangguan jaringan. Periksa koneksi internet Anda lalu coba lagi."
+
+#: controller/main_controller.py:389
+msgid "El token no es válido. Comprueba que lo copiaste completo desde el portal de desarrolladores de Discord."
+msgstr "Token tidak valid. Pastikan Anda menyalinnya secara lengkap dari portal pengembang Discord."

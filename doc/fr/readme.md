@@ -6,6 +6,7 @@ Lisez et gérez de manière accessible le chat de vos propres directs ou de ceux
 - TikTok (directs en cours)
 - Kick (directs en cours)
 - Le Salon (le chat des différentes tables)
+- Discord (canaux texte d'un serveur ; [guide de configuration](discord.md))
 ## Caractéristiques
 - Mode automatique : lit les messages du chat en temps réel à l'aide de la voix SAPI5.
 - Interface invisible : gérez les chats depuis n'importe quelle fenêtre à l'aide de simples raccourcis clavier. Un lecteur d'écran actif est nécessaire.

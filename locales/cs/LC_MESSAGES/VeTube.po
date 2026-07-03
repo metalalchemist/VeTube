@@ -1671,3 +1671,55 @@ msgstr "Hotovo!"
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
 msgstr "Jazyk systému"
+
+#: ui/main_window.py:34
+msgid "Discord"
+msgstr "Discord"
+
+#: ui/discord_token_dialog.py:16
+msgid "Se necesita el token del bot de Discord"
+msgstr "Je vyžadován token Discord bota"
+
+#: ui/discord_token_dialog.py:18
+msgid "Para leer un canal de Discord, VeTube necesita el token de tu bot. Pégalo aquí; quedará guardado y no se te volverá a pedir."
+msgstr "Ke čtení kanálu na Discordu potřebuje VeTube token vašeho bota. Vložte ho sem; uloží se a už nebude znovu vyžadován."
+
+#: ui/discord_token_dialog.py:21
+msgid "&Token del bot:"
+msgstr "&Token bota:"
+
+#: ui/discord_token_dialog.py:25
+msgid "¿No sabes cómo crear el token? Abrir la &guía"
+msgstr "Nevíte, jak token vytvořit? Otevřít &příručku"
+
+#: ui/discord_token_dialog.py:40
+msgid "Debes pegar el token del bot para continuar."
+msgstr "Pro pokračování musíte vložit token bota."
+
+#: servicios/discord.py:83
+msgid "El token del bot de Discord no es válido o fue revocado. Pega de nuevo el enlace del canal para introducir un token nuevo."
+msgstr "Token Discord bota není platný nebo byl zrušen. Vložte znovu odkaz na kanál a zadejte nový token."
+
+#: servicios/discord.py:87
+msgid "Al bot le falta activar «Message Content Intent» en el portal de desarrolladores de Discord. Actívalo y vuelve a intentarlo."
+msgstr "Bot nemá zapnutou volbu „Message Content Intent“ na portálu pro vývojáře Discordu. Zapněte ji a zkuste to znovu."
+
+#: servicios/discord.py:117
+msgid "No se encontró el canal de Discord. Comprueba que el bot está invitado al servidor y que el enlace del canal es correcto."
+msgstr "Kanál na Discordu nebyl nalezen. Zkontrolujte, že je bot pozván na server a že je odkaz na kanál správný."
+
+#: controller/main_controller.py:251
+msgid "Para Discord pega el enlace del canal de texto: haz clic derecho sobre el canal y elige «Copiar enlace»."
+msgstr "Pro Discord vložte odkaz na textový kanál: klikněte pravým tlačítkem na kanál a zvolte „Kopírovat odkaz“."
+
+#: controller/main_controller.py:281
+msgid "El enlace de Discord no es válido. Copia el enlace del canal de texto (clic derecho sobre el canal, «Copiar enlace») y pégalo en VeTube."
+msgstr "Odkaz na Discord není platný. Zkopírujte odkaz na textový kanál (pravé tlačítko na kanálu, „Kopírovat odkaz“) a vložte ho do VeTube."
+
+#: controller/main_controller.py:387
+msgid "No se pudo comprobar el token por un fallo de red. Revisa tu conexión a internet e inténtalo de nuevo."
+msgstr "Token se nepodařilo ověřit kvůli chybě sítě. Zkontrolujte připojení k internetu a zkuste to znovu."
+
+#: controller/main_controller.py:389
+msgid "El token no es válido. Comprueba que lo copiaste completo desde el portal de desarrolladores de Discord."
+msgstr "Token není platný. Zkontrolujte, že jste ho zkopírovali celý z portálu pro vývojáře Discordu."

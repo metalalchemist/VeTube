@@ -25,7 +25,8 @@ configuraciones ={
 	'tiempo': 10,
 	'volumen': 100,
 	"cambiovolumen": 10,
-	'interface': False
+	'interface': False,
+	'discord_token': ""
 
 }
 actualizar_configuracion = False
@@ -34,6 +35,11 @@ def escribirConfiguracion():
 	global configuraciones
 	with open('data.json', 'w+') as file:
 		json.dump(configuraciones, file, indent=4)
+
+def guardarConfiguracion(configs):
+	"""Guarda en data.json la configuración actual (no los valores por defecto)."""
+	with open('data.json', 'w+', encoding='utf-8') as file:
+		json.dump(configs, file, indent=4, ensure_ascii=False)
 
 def leerConfiguracion():
 	global configuraciones, actualizar_configuracion
