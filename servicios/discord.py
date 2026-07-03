@@ -1,9 +1,10 @@
-import asyncio, threading, re, wx, httpx
+import asyncio, threading, re, wx
 import discord
 from globals import data_store
 from globals.resources import rutasonidos
 from setup import reader, player
 from utils import translator
+from utils.network import network_manager
 
 def extraer_id_canal(url):
     """Devuelve el id del canal si la URL es un enlace de canal de Discord
@@ -13,11 +14,12 @@ def extraer_id_canal(url):
         return match.group(2)
     return None
 
-def validar_token(token):
-    """Comprueba el token contra la API de Discord.
+async def validar_token(token):
+    """Comprueba el token contra la API de Discord usando el cliente de red
+    compartido (pensado para ejecutarse vía network.execute, sin bloquear la interfaz).
     Devuelve True si es válido, False si no lo es y None si no se pudo comprobar (fallo de red)."""
     try:
-        respuesta = httpx.get(
+        respuesta = await network_manager.client.get(
             "https://discord.com/api/v10/users/@me",
             headers={"Authorization": f"Bot {token}"},
             timeout=8,
@@ -29,12 +31,12 @@ def validar_token(token):
 class ServicioDiscord:
     def __init__(self, main_controller, url, frame, plataforma, chat_controller):
         self.main_controller = main_controller
-        self.url = url  # id del canal, extraído del enlace en main_controller
+        self.url = url  # enlace completo del canal: identifica la sesión (favoritos, copiar enlace)
         self.frame = frame
         self.chat_controller = chat_controller
         self.estadisticas_manager = chat_controller.estadisticas_manager
 
-        self.channel_id = int(url)
+        self.channel_id = int(extraer_id_canal(url))
         self.is_running = False
         self.loop = None
         self.client = None

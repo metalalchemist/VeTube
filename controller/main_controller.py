@@ -276,13 +276,16 @@ class MainController:
                 url = self.frame.text_ctrl_1.GetValue()
 
         elif 'discord' in url: # Detección de URL para Discord
-            canal_id = extraer_id_canal(url)
-            if not canal_id:
+            if not extraer_id_canal(url):
                 wx.MessageBox(_("El enlace de Discord no es válido. Copia el enlace del canal de texto (clic derecho sobre el canal, «Copiar enlace») y pégalo en VeTube."), _("Error"), wx.ICON_ERROR)
                 self.frame.text_ctrl_1.SetFocus()
                 return
             self.set_plataforma(6)
-            url = canal_id # el id del canal identifica la sesión
+            # El enlace completo identifica la sesión (así favoritos y «copiar
+            # enlace» funcionan); el servicio extrae de él el id del canal.
+            if not config.get('discord_token', ''):
+                self._pedir_token_discord(url)
+                return
         else:
             wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), _("Error"), wx.ICON_ERROR)
             self.frame.text_ctrl_1.SetFocus()
@@ -311,10 +314,7 @@ class MainController:
                 servicio = ServicioSala(self, url, self.frame, plataforma, chat_controller)
             elif plataforma_ids == 5: # Nuevo: Instanciar ServicioKick
                 servicio = ServicioKick(self, url, self.frame, plataforma, chat_controller)
-            elif plataforma_ids == 6: # Discord: pedir y validar el token antes de conectar
-                if not self._asegurar_token_discord():
-                    self.frame.text_ctrl_1.SetFocus()
-                    return
+            elif plataforma_ids == 6: # Discord (el token ya quedó validado en la detección del enlace)
                 servicio = ServicioDiscord(self, url, self.frame, plataforma, chat_controller)
 
             if servicio:
@@ -361,32 +361,36 @@ class MainController:
     def set_plataforma(self, idx):
         self.frame.plataforma.SetSelection(idx)
 
-    def _asegurar_token_discord(self):
-        """Garantiza que hay un token de bot de Discord válido guardado.
-        Si no hay token pide uno con el diálogo, lo valida contra la API y lo
-        guarda en data.json. Devuelve True si se puede conectar, False si el
-        usuario canceló o el token no se pudo validar."""
-        if config.get('discord_token', ''):
-            return True
+    def _pedir_token_discord(self, url):
+        """Pide el token del bot con el diálogo y lo valida contra la API de
+        Discord SIN bloquear la interfaz: la comprobación corre en el hilo de
+        red (network.execute) y el resultado vuelve al hilo de la UI. Si el
+        token es válido se guarda en data.json y se retoma la apertura del
+        chat con el mismo enlace."""
         from ui.discord_token_dialog import DiscordTokenDialog
-        while True:
-            dlg = DiscordTokenDialog(self.frame)
-            resultado = dlg.ShowModal()
-            token = dlg.get_token()
-            dlg.Destroy()
-            if resultado != wx.ID_OK:
-                return False
-            wx.BeginBusyCursor()
-            valido = validar_token(token)
+        dlg = DiscordTokenDialog(self.frame)
+        resultado = dlg.ShowModal()
+        token = dlg.get_token()
+        dlg.Destroy()
+        if resultado != wx.ID_OK:
+            self.frame.text_ctrl_1.SetFocus()
+            return
+        wx.BeginBusyCursor()
+
+        def al_validar(valido):
             wx.EndBusyCursor()
-            if valido:
+            if valido is True:
                 config['discord_token'] = token
                 fajustes.guardarConfiguracion(config)
-                return True
-            if valido is None:
-                wx.MessageBox(_("No se pudo comprobar el token por un fallo de red. Revisa tu conexión a internet e inténtalo de nuevo."), _("Error"), wx.ICON_ERROR)
-            else:
+                self._continuar_abriendo_chat(url)
+                return
+            if valido is False:
                 wx.MessageBox(_("El token no es válido. Comprueba que lo copiaste completo desde el portal de desarrolladores de Discord."), _("Error"), wx.ICON_ERROR)
+            else: # None o excepción: fallo de red
+                wx.MessageBox(_("No se pudo comprobar el token por un fallo de red. Revisa tu conexión a internet e inténtalo de nuevo."), _("Error"), wx.ICON_ERROR)
+            self._pedir_token_discord(url)
+
+        network.execute(validar_token(token), callback=al_validar)
 
     def on_favorite_key_up(self, event):
         if event.GetKeyCode() == wx.WXK_SPACE:
