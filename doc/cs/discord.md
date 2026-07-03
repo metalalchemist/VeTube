@@ -2,7 +2,7 @@
 
 VeTube umí v reálném čase číst zprávy z textového kanálu na serveru Discord. Oficiální cesta podle pravidel Discordu vyžaduje takzvaného „bota": zvláštní účet, který si sami zdarma vytvoříte, jen jednou, asi za 10 minut. Tento průvodce popisuje celý postup a je psán pro uživatele odečítačů obrazovky (žádné snímky obrazovky, přesné názvy všech tlačítek).
 
-Poznámka: portál pro vývojáře Discordu existuje pouze v angličtině, proto jsou názvy jeho tlačítek uvedeny anglicky. Samotná chatovací aplikace Discord přeložena je.
+Poznámka: portál pro vývojáře Discordu se zobrazuje v jazyce vašeho účtu Discord, pokud je k dispozici; jinak v angličtině. Názvy tlačítek níže jsou uvedeny anglicky jako reference; pokud je váš portál přeložen, zobrazí se ve vašem jazyce.
 
 ## Co budete potřebovat
 - Účet na Discordu.
@@ -15,8 +15,9 @@ Poznámka: portál pro vývojáře Discordu existuje pouze v angličtině, proto
 
 ## Krok 2: získání tokenu bota
 1. Na stránce vaší aplikace přejděte do sekce „Bot" v levé nabídce.
-2. Stiskněte tlačítko „Reset Token" a potvrďte volbou „Yes, do it!". Máte-li dvoufázové ověření, budete požádáni o kód.
-3. Zobrazí se nový token s tlačítkem „Copy" pro zkopírování do schránky. Dočasně si ho vložte na bezpečné místo, například do Poznámkového bloku.
+2. Stiskněte tlačítko „Reset Token" a potvrďte volbou „Yes, do it!".
+3. Discord vás poté znovu požádá o heslo (nebo přístupový klíč), aby ověřil, že jste to vy: zadejte ho a potvrďte. Máte-li dvoufázové ověření, může být vyžádán i kód.
+4. Zobrazí se nový token s tlačítkem „Copy" pro zkopírování do schránky. Dočasně si ho vložte na bezpečné místo, například do Poznámkového bloku: z bezpečnostních důvodů se token zobrazí jen jednou, při vytvoření.
 
 Důležité: token je jako heslo vašeho bota. Nikomu ho nedávejte a nikde ho nezveřejňujte. Pokud unikne, vraťte se na tuto stránku a stiskněte „Reset Token" pro vygenerování nového; starý přestane fungovat.
 
@@ -31,7 +32,7 @@ Bez této volby Discord botovi nedovolí číst obsah zpráv.
 2. V seznamu „Scopes" zaškrtněte políčko „bot".
 3. V části „Bot Permissions", která se objeví níže, zaškrtněte „View Channels" a „Read Message History".
 4. Na konci stránky u „Generated URL" stiskněte „Copy".
-5. Otevřete tuto adresu v prohlížeči, v rozbalovacím seznamu vyberte server a stiskněte „Pokračovat" a poté „Autorizovat". (Pokud nemůžete zvát boty, pošlete tuto adresu správci serveru.)
+5. Otevřete tuto adresu v prohlížeči a v rozbalovacím seznamu „Přidat na server" vyberte svůj server. Tip pro odečítač obrazovky: dokud není vybrán žádný server, spodní tlačítko se jmenuje „Nevyplnili jste některá pole"; po výběru serveru se změní na „Autorizovat". Stiskněte ho. (Pokud nemůžete zvát boty, pošlete tuto adresu správci serveru.)
 
 ## Krok 5: zkopírování odkazu na kanál
 1. V Discordu najděte textový kanál, který chcete číst.
@@ -45,6 +46,7 @@ Bez této volby Discord botovi nedovolí číst obsah zpráv.
 
 ## Řešení potíží
 - „Token není platný": zkopírujte celý token z portálu (krok 2). V případě pochybností vygenerujte nový přes „Reset Token".
+- Discord chce při generování tokenu moje heslo: to je normální, jde o bezpečnostní kontrolu (krok 2).
 - „Bot nemá zapnutou volbu Message Content Intent": projděte znovu krok 3 a uložte změny.
 - „Kanál na Discordu nebyl nalezen": zkontrolujte, že je bot pozván právě na tento server (krok 4) a že jste zkopírovali odkaz na správný kanál (krok 5).
 - Chat se připojí, ale nechodí žádné zprávy: ověřte, že bot daný kanál vidí. U soukromých kanálů mu musíte dát přístup nebo roli, která ho má.

@@ -2,7 +2,7 @@
 
 O VeTube pode ler em tempo real as mensagens de um canal de texto de um servidor do Discord. Para fazer isso pela via oficial, o Discord exige o uso de um «bot»: uma conta especial que você mesmo cria de graça, uma única vez, em cerca de 10 minutos. Este guia explica todo o processo e foi pensado para usuários de leitores de tela (sem capturas de tela, com os nomes exatos de cada botão).
 
-Observação: o portal de desenvolvedores do Discord está disponível apenas em inglês, por isso os nomes dos botões aparecem aqui em inglês. O aplicativo de chat do Discord está traduzido.
+Observação: o portal de desenvolvedores do Discord é exibido no idioma da sua conta do Discord quando disponível; caso contrário, em inglês. Os nomes dos botões abaixo são dados em inglês como referência; se o seu portal estiver traduzido, eles aparecerão no seu idioma.
 
 ## O que você precisa
 - Uma conta do Discord.
@@ -15,8 +15,9 @@ Observação: o portal de desenvolvedores do Discord está disponível apenas em
 
 ## Passo 2: obter o token do bot
 1. Na página do seu aplicativo, vá até a seção «Bot» no menu à esquerda.
-2. Pressione o botão «Reset Token» e confirme com «Yes, do it!». Se você tiver verificação em duas etapas, o código será solicitado.
-3. O novo token aparece com um botão «Copy» para copiá-lo para a área de transferência. Cole-o temporariamente em um lugar seguro, por exemplo o Bloco de Notas.
+2. Pressione o botão «Reset Token» e confirme com «Yes, do it!».
+3. O Discord pede novamente a sua senha (ou a sua chave de acesso) para confirmar que é você: digite-a e confirme. Se você tiver verificação em duas etapas, o código também pode ser solicitado.
+4. O novo token aparece com um botão «Copy» para copiá-lo para a área de transferência. Cole-o temporariamente em um lugar seguro, por exemplo o Bloco de Notas: por segurança, o token só é mostrado uma vez, na criação.
 
 Importante: o token é como a senha do seu bot. Não o compartilhe nem o publique. Se ele vazar, volte a esta página e pressione «Reset Token» para gerar outro; o anterior deixa de funcionar.
 
@@ -31,7 +32,7 @@ Sem esta opção, o Discord não permite que o bot leia o conteúdo das mensagen
 2. Na lista «Scopes», marque a caixa «bot».
 3. Em «Bot Permissions», que aparece abaixo, marque «View Channels» e «Read Message History».
 4. No final da página, em «Generated URL», pressione «Copy».
-5. Abra essa URL no navegador, escolha o servidor na caixa combinada e pressione «Continuar» e depois «Autorizar». (Se você não puder convidar bots, envie essa URL para um administrador do servidor.)
+5. Abra essa URL no navegador e escolha o seu servidor na caixa combinada «Adicionar ao servidor». Dica com leitor de tela: enquanto nenhum servidor estiver escolhido, o botão de baixo se chama «Você não preencheu alguns campos»; depois de escolher o servidor ele passa a se chamar «Autorizar». Pressione-o. (Se você não puder convidar bots, envie essa URL para um administrador do servidor.)
 
 ## Passo 5: copiar o link do canal
 1. No Discord, localize o canal de texto que você quer ler.
@@ -45,6 +46,7 @@ Sem esta opção, o Discord não permite que o bot leia o conteúdo das mensagen
 
 ## Solução de problemas
 - «O token não é válido»: copie o token completo do portal (passo 2). Na dúvida, gere um novo com «Reset Token».
+- O Discord pede minha senha ao gerar o token: é normal, é uma verificação de segurança (passo 2).
 - «Falta ativar a opção Message Content Intent»: revise o passo 3 e salve as alterações.
 - «O canal do Discord não foi encontrado»: verifique se o bot foi convidado para esse mesmo servidor (passo 4) e se você copiou o link do canal certo (passo 5).
 - O chat conecta mas nenhuma mensagem chega: verifique se o bot pode ver esse canal. Em canais privados é preciso dar acesso a ele ou um cargo que o tenha.
