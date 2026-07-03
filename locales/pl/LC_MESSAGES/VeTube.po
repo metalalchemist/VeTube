@@ -1681,3 +1681,55 @@ msgstr "Gotowe!"
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
 msgstr "Język systemu"
+
+#: ui/main_window.py:34
+msgid "Discord"
+msgstr "Discord"
+
+#: ui/discord_token_dialog.py:16
+msgid "Se necesita el token del bot de Discord"
+msgstr "Wymagany jest token bota Discord"
+
+#: ui/discord_token_dialog.py:18
+msgid "Para leer un canal de Discord, VeTube necesita el token de tu bot. Pégalo aquí; quedará guardado y no se te volverá a pedir."
+msgstr "Aby czytać kanał Discorda, VeTube potrzebuje tokenu Twojego bota. Wklej go tutaj; zostanie zapisany i nie będzie więcej wymagany."
+
+#: ui/discord_token_dialog.py:21
+msgid "&Token del bot:"
+msgstr "&Token bota:"
+
+#: ui/discord_token_dialog.py:25
+msgid "¿No sabes cómo crear el token? Abrir la &guía"
+msgstr "Nie wiesz, jak utworzyć token? Otwórz &poradnik"
+
+#: ui/discord_token_dialog.py:40
+msgid "Debes pegar el token del bot para continuar."
+msgstr "Aby kontynuować, musisz wkleić token bota."
+
+#: servicios/discord.py:83
+msgid "El token del bot de Discord no es válido o fue revocado. Pega de nuevo el enlace del canal para introducir un token nuevo."
+msgstr "Token bota Discord jest nieprawidłowy lub został unieważniony. Wklej ponownie link do kanału, aby podać nowy token."
+
+#: servicios/discord.py:87
+msgid "Al bot le falta activar «Message Content Intent» en el portal de desarrolladores de Discord. Actívalo y vuelve a intentarlo."
+msgstr "Bot nie ma włączonej opcji „Message Content Intent” w portalu deweloperów Discorda. Włącz ją i spróbuj ponownie."
+
+#: servicios/discord.py:117
+msgid "No se encontró el canal de Discord. Comprueba que el bot está invitado al servidor y que el enlace del canal es correcto."
+msgstr "Nie znaleziono kanału Discorda. Sprawdź, czy bot został zaproszony na serwer i czy link do kanału jest poprawny."
+
+#: controller/main_controller.py:251
+msgid "Para Discord pega el enlace del canal de texto: haz clic derecho sobre el canal y elige «Copiar enlace»."
+msgstr "W przypadku Discorda wklej link do kanału tekstowego: kliknij kanał prawym przyciskiem myszy i wybierz „Kopiuj link”."
+
+#: controller/main_controller.py:281
+msgid "El enlace de Discord no es válido. Copia el enlace del canal de texto (clic derecho sobre el canal, «Copiar enlace») y pégalo en VeTube."
+msgstr "Link do Discorda jest nieprawidłowy. Skopiuj link do kanału tekstowego (prawy przycisk myszy na kanale, „Kopiuj link”) i wklej go do VeTube."
+
+#: controller/main_controller.py:387
+msgid "No se pudo comprobar el token por un fallo de red. Revisa tu conexión a internet e inténtalo de nuevo."
+msgstr "Nie udało się sprawdzić tokenu z powodu błędu sieci. Sprawdź połączenie z internetem i spróbuj ponownie."
+
+#: controller/main_controller.py:389
+msgid "El token no es válido. Comprueba que lo copiaste completo desde el portal de desarrolladores de Discord."
+msgstr "Token jest nieprawidłowy. Upewnij się, że skopiowano go w całości z portalu deweloperów Discorda."
