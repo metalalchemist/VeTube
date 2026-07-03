@@ -34,7 +34,7 @@ class ChatMenuController:
 
     def addFavoritos(self, event):
         from globals.data_store import favorite
-        main_frame = self.parent.GetParent()
+        main_frame = self.chat_controller.frame  # ventana principal; GetParent() daría el notebook del ChatDialog
         list_favorite = main_frame.list_favorite
         url = self.chat_controller.servicio.url
 

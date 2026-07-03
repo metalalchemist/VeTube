@@ -47,7 +47,7 @@ class ChatItemController:
         ListUrlsDialog(self.list_box, self.menu.parent)
 
     def on_archive(self, event):
-        main_frame = self.menu.parent.GetParent()
+        main_frame = self.chat_controller.frame  # ventana principal; GetParent() daría el notebook del ChatDialog
         list_mensajes = main_frame.list_mensajes
         if list_mensajes.GetCount() > 0 and list_mensajes.GetStrings()[0] == _( "Tus mensajes archivados aparecerán aquí"): list_mensajes.Delete(0)
         

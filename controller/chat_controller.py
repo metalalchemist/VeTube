@@ -300,7 +300,7 @@ class ChatController:
         mensaje = listbox.GetString(listbox.GetSelection())
         if not mensaje: return # Evitar archivar mensajes vacíos
 
-        main_frame = self.ui.GetParent()
+        main_frame = self.frame  # ventana principal; self.ui.GetParent() daría el notebook del ChatDialog
         list_mensajes = main_frame.list_mensajes
 
         if list_mensajes.GetCount() > 0 and list_mensajes.GetStrings()[0] == _("Tus mensajes archivados aparecerán aquí"):
