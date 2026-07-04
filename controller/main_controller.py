@@ -373,6 +373,7 @@ class MainController:
         token = dlg.get_token()
         dlg.Destroy()
         if resultado != wx.ID_OK:
+            self.set_plataforma(0)
             self.frame.text_ctrl_1.SetFocus()
             return
         wx.BeginBusyCursor()
