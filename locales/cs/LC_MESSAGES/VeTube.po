@@ -673,8 +673,8 @@ msgid "iniciar/cancelar la captura de otro en vivo"
 msgstr "spustit/ukončit živý přenos"
 
 #: globals/mensajes.py:3
-msgid "Silencia la voz sapy"
-msgstr "Ztlumit hlas Sapi"
+msgid "Silencia todas las voces"
+msgstr "Ztlumit všechny hlasy"
 
 #: globals/mensajes.py:4
 msgid "Mensaje anterior."

@@ -18,7 +18,7 @@ class KeyUtils:
             'control+alt+shift+right': 'chat_dialog.next_session',
             'control+alt+shift+left': 'chat_dialog.previous_session',
             'alt+shift+h': 'chat_dialog.toggle_chat_window_visibility',
-            'control+p': 'reader._leer.silence',
+            'control+p': 'reader.silence',
             'alt+shift+up': 'chat.elementoAnterior',
             'alt+shift+down': 'chat.elementoSiguiente',
             'alt+shift+left': 'chat.retrocederCategorias',
@@ -56,11 +56,14 @@ class KeyUtils:
         user_config.read(config_path, encoding='utf-8')
         original_keys = dict(user_config['atajos_chat']) if 'atajos_chat' in user_config else {}
 
+        # Migración: el atajo de silencio ahora corta todas las voces, no solo la SAPI secundaria.
+        migrated_keys = {k: ('reader.silence' if v == 'reader._leer.silence' else v) for k, v in original_keys.items()}
+
         final_keys = {}
         actions_assigned = set()
 
         # 1. Primer paso: respetar las teclas del usuario y limpiar duplicados
-        for key, action in original_keys.items():
+        for key, action in migrated_keys.items():
             if action not in actions_assigned:
                 final_keys[key] = action
                 actions_assigned.add(action)

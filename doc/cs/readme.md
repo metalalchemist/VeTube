@@ -26,7 +26,7 @@
 ### Virtuální rozhraní
 |Akce |Klávesová zkratka |
 | ------------------------- | ------------- |
-| Ztlumit hlas Sapi      | control+p           |
+| Ztlumit všechny hlasy      | control+p           |
 | Předchozí kategorie      | alt shift šipka doleva            |
 | Následující kategorie      | alt shift šipka doprava            |
 | Předchozí položka      | alt shift šipka nahoru           |

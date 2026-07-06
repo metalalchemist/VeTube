@@ -35,7 +35,7 @@ Lee y gestiona de manera accesible el chat de tus propios directos o en los de t
 ### Usando interfaz invisible.
 | acción                    | combinación de teclas |
 | ------------------------- | ----------- |
-| Silencia la voz sapy      | control+p           |
+| Silencia todas las voces      | control+p           |
 | iniciar/cancelar la captura de un nuevo en vivo      | alt shift h            |
 | ir al en vivo anterior      | control alt shift flecha izquierda            |
 | ir al siguiente en vivo     | control alt shift flecha derecha            |

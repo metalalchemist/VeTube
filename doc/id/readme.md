@@ -43,7 +43,7 @@ Kelola dan baca chat dari siaran langsung milikmu atau dari kreator favoritmu de
 
 | Aksi                                | Pintasan Keyboard         |
 | ----------------------------------- | ------------------------- |
-| Nonaktifkan suara sapi              | Control + P               |
+| Nonaktifkan semua suara              | Control + P               |
 | mulai/batalkan penangkapan obrolan siaran langsung lain              | Alt + Shift + h               |
 | pergi ke siaran langsung sebelumnya                   | control + Alt + Shift + panah kiri  |
 | pergi ke siaran langsung berikutnya                   | control + Alt + Shift + panah kanan |
