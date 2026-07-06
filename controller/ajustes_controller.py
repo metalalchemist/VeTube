@@ -104,8 +104,7 @@ class AjustesController:
     def cambiar_sintetizador(self, event):
         if self.play_timer.IsRunning():
             self.play_timer.Stop()
-        if config['sistemaTTS'] != "piper":
-            reader._lector.silence()
+        reader._lector.silence()
         self.dialog.boton_prueva.SetLabel(_("&Reproducir prueba."))
         self.reproduciendo_prueba = False
 
@@ -237,8 +236,7 @@ class AjustesController:
     def cambiarVoz(self, event):
         if self.play_timer.IsRunning():
             self.play_timer.Stop()
-        if config['sistemaTTS'] != "piper":
-            reader._lector.silence()
+        reader._lector.silence()
         self.dialog.boton_prueva.SetLabel(_("&Reproducir prueba."))
         self.reproduciendo_prueba = False
 
@@ -346,9 +344,8 @@ class AjustesController:
     def on_destroy(self, event):
         if hasattr(self, 'play_timer') and self.play_timer.IsRunning():
             self.play_timer.Stop()
-        if config['sistemaTTS'] != "piper":
-            try:
-                reader._lector.silence()
-            except Exception:
-                pass
+        try:
+            reader._lector.silence()
+        except Exception:
+            pass
         event.Skip()

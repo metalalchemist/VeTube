@@ -141,7 +141,7 @@ class ReaderHandler:
         self._lector.speak(mensaje)
 
     def silence(self):
-        # Silencia la voz principal y la voz SAPI secundaria, incluyendo lo pendiente en cola.
+        # Silencia la voz principal y la voz SAPI secundaria.
         self._lector.silence()
         self._leer.silence()
 

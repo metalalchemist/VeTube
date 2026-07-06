@@ -112,8 +112,10 @@ class ChatController:
     def on_listbox_keyup(self, event):
         event.Skip()
         if event.GetKeyCode() == 32:
-            reader.silence()
             list_box = event.GetEventObject()
+            if list_box.GetSelection() == wx.NOT_FOUND:
+                return
+            reader.silence()
             reader.leer_auto(list_box.GetString(list_box.GetSelection()))
 
     def agregar_mensaje_general(self, mensaje):
