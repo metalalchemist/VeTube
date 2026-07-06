@@ -58,7 +58,7 @@ class ChatItemController:
         if not ya_archivado:
             # Determinar el título primero
             if self.plataforma == 'TikTok':
-                titulo = extractUser(self.chat_controller.servicio.url)
+                titulo = extractUser(self.chat_controller.servicio.url) or self.chat_controller.servicio.url
             else:
                 titulo = self.label_dialog.GetLabelText()
             

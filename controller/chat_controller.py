@@ -310,7 +310,7 @@ class ChatController:
         if not ya_archivado:
             # Determinar el título
             if self.plataforma == 'TikTok':
-                titulo = extractUser(self.servicio.url)
+                titulo = extractUser(self.servicio.url) or self.servicio.url
             else:
                 titulo = self.ui.label_dialog.GetLabelText()
 
