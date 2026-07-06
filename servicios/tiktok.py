@@ -48,6 +48,8 @@ class ServicioTiktok:
     async def _initialize_and_run_client(self):
         try:
             user_id = funciones.extractUser(self.url)
+            if not user_id:
+                raise ValueError(_("No se pudo obtener la URL real de TikTok."))
             self.chat = TikTokLiveClient(unique_id=user_id)
             self._add_listeners()
             await self._run_client_async()
@@ -86,7 +88,8 @@ class ServicioTiktok:
             self.media_controller.release()
         if self.is_running and self.loop and self.loop.is_running():
             self.is_running = False
-            asyncio.run_coroutine_threadsafe(self.chat.disconnect(), self.loop)
+            if self.chat:
+                asyncio.run_coroutine_threadsafe(self.chat.disconnect(), self.loop)
             self.loop.call_soon_threadsafe(self.loop.stop)
 
     def prepare_player(self):

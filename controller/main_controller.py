@@ -190,7 +190,7 @@ class MainController:
         
         if url:
             # Si es TikTok y necesita simplificación, lo manejamos de forma asíncrona
-            if 'vm.tiktok' in url or 'vt.tiktok' in url or 'v.tiktok' in url:
+            if 'vm.tiktok' in url or 'vt.tiktok' in url or 'v.tiktok' in url or 'tiktok.com/t/' in url:
                 self.procesando_url = True
                 wx.BeginBusyCursor()
 
