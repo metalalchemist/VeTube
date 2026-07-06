@@ -74,12 +74,11 @@ class KeyUtils:
                 final_keys[key] = action
                 actions_assigned.add(action)
 
-        # 3. Reescribir solo si ha habido cambios
+        # 3. Reescribir solo si ha habido cambios, conservando las demás secciones del archivo
         if final_keys != original_keys:
-            new_config = configparser.ConfigParser(interpolation=None)
-            new_config['atajos_chat'] = final_keys
+            user_config['atajos_chat'] = final_keys
             with open(config_path, 'w', encoding='utf-8') as configfile:
-                new_config.write(configfile)
+                user_config.write(configfile)
         
         self.teclas = final_keys
 
