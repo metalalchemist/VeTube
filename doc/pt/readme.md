@@ -28,7 +28,7 @@ system access
 ### Usando interface invisível.
 | ação | combinação de teclas |
 | ------------------------- | ----------- |
-| Silencie a voz sapy | CTRL+p |
+| Silencie todas as vozes | CTRL+p |
 | iniciar/cancelar a captura de outra transmissão ao vivo | Alt shift h |
 | ir para a transmissão ao vivo anterior | Control Alt shift seta para a esquerda |
 | ir para a próxima transmissão ao vivo | Control Alt shift seta para a direita |

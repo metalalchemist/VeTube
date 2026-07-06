@@ -277,13 +277,16 @@ class piperSpeak:
 
     def speak(self, text):
         if not text: return
+        self.silence()
+        asyncio.run_coroutine_threadsafe(self._speak_task(text), self.loop)
+
+    def silence(self):
         if self.bass_stream is not None:
-            try: 
+            try:
                 self.bass_stream.stop()
                 self.bass_stream.free()
             except: pass
             self.bass_stream = None
-        asyncio.run_coroutine_threadsafe(self._speak_task(text), self.loop)
 
     async def _speak_task(self, text):
         if not self.voice_id or not self.channel:

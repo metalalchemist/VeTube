@@ -27,7 +27,7 @@ For Discord you can read the text channels of a server; see the [step-by-step se
 ### Using the invisible interface.
 |action |key combination |
 | ------------------------- | ------------- |
-| Mute sapy voice      | control+p           |
+| Mute all voices      | control+p           |
 | start/cancel capture of new chat livestream      | alt shift h           |
 | previous stream      | control alt shift left arrow            |
 | next stream      | control alt shift right arrow            |

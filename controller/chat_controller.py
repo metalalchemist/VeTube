@@ -112,7 +112,7 @@ class ChatController:
     def on_listbox_keyup(self, event):
         event.Skip()
         if event.GetKeyCode() == 32:
-            reader._leer.silence()
+            reader.silence()
             list_box = event.GetEventObject()
             reader.leer_auto(list_box.GetString(list_box.GetSelection()))
 
@@ -337,7 +337,7 @@ class ChatController:
 
     def toggle_lectura_automatica(self):
         if data_store.config['reader']:
-            reader._leer.silence()
+            reader.silence()
             data_store.config['reader'] = False
         else: data_store.config['reader'] = True
         reader.leer_auto(_("Lectura automática activada.") if data_store.config['reader'] else _("Lectura automática desactivada."))

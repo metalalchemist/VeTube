@@ -34,7 +34,7 @@ Lisez et gérez de manière accessible le chat de vos propres directs ou de ceux
 ### Avec l'interface invisible
 | Action | Combinaison de touches |
 | --- | --- |
-| Mettre en sourdine la voix SAPI | Ctrl+P |
+| Mettre en sourdine toutes les voix | Ctrl+P |
 | Démarrer / annuler la capture d'un autre direct | Alt+Maj+H |
 | Aller au direct précédent | Ctrl+Alt+Maj+Flèche gauche |
 | Aller au direct suivant | Ctrl+Alt+Maj+Flèche droite |

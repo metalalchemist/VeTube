@@ -35,7 +35,7 @@ Czytaj i zarządzaj w sposób dostępny czatem swoich własnych transmisji na ż
 ### Korzystanie z niewidzialnego interfejsu.
 | akcja                    | kombinacja klawiszy |
 | ------------------------- | ----------- |
-| Wycisz głos SAPI      | control+p           |
+| Wycisz wszystkie głosy      | control+p           |
 | rozpocznij/anuluj przechwytywanie nowej transmisji      | alt shift h            |
 | przejdź do poprzedniej transmisji      | control alt shift strzałka w lewo            |
 | przejdź do następnej transmisji     | control alt shift strzałka w prawo            |
