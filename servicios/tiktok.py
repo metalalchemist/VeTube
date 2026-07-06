@@ -29,20 +29,31 @@ class ServicioTiktok:
         thread.start()
 
     def _start_async_loop(self):
+        # al terminar la corutina principal (desconexión real incluida) hay que parar
+        # el bucle: si no, run_forever sigue girando vacío y el hilo queda zombi
+        parar_bucle = lambda _tarea: self.loop.stop()
+        tarea_principal = None
         try:
             self.loop = asyncio.new_event_loop()
             asyncio.set_event_loop(self.loop)
-            self.loop.create_task(self._initialize_and_run_client())
+            tarea_principal = self.loop.create_task(self._initialize_and_run_client())
+            tarea_principal.add_done_callback(parar_bucle)
             self.loop.run_forever()
         except Exception as e:
             print(f"Error fatal en el hilo de conexión: {e}")
             traceback.print_exc()
         finally:
-            if self.loop.is_running():
-                pending = asyncio.all_tasks(loop=self.loop)
-                for task in pending:
-                    task.cancel()
+            if tarea_principal is not None:
+                tarea_principal.remove_done_callback(parar_bucle)
+            pending = asyncio.all_tasks(loop=self.loop)
+            for task in pending:
+                task.cancel()
+            try:
+                if pending:
+                    self.loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
                 self.loop.run_until_complete(self.loop.shutdown_asyncgens())
+            except RuntimeError:
+                pass  # un stop() rezagado de detener() puede vaciar el bucle antes de tiempo
             self.loop.close()
 
     async def _initialize_and_run_client(self):
