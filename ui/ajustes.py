@@ -3,7 +3,7 @@ from setup import player
 from globals.data_store import config
 from globals.mensajes import mensajes_categorias, mensajes_sonidos, eventos_lista
 from controller.ajustes_controller import AjustesController
-from globals.resources import idiomas_disponibles,langs,codes,monedas,lista_voces
+from globals.resources import idiomas_disponibles,codigos_traduccion,langs,codes,monedas,lista_voces
 class configuracionDialog(wx.Dialog):
 	def __init__(self, parent):
 		super().__init__(parent, title=_("Configuración"), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
@@ -35,11 +35,6 @@ class configuracionDialog(wx.Dialog):
 		self.check_interface = wx.CheckBox(self.treeItem_1, wx.ID_ANY, _("Desactivar la interfaz invisible"))
 		self.check_interface.SetValue(config.get('interface', False))
 		boxSizer_1.Add(self.check_interface, 0, wx.ALL, 5)
-		label_trans = wx.StaticText(self.treeItem_1, wx.ID_ANY, _("traducción de mensajes: "))
-		boxSizer_1.Add(label_trans, 0, wx.ALL, 5)
-		self.choice_traducir = wx.Choice(self.treeItem_1, wx.ID_ANY, choices=idiomas_disponibles)
-		self.choice_traducir.SetSelection(0)
-		boxSizer_1.Add(self.choice_traducir, 0, wx.EXPAND | wx.ALL, 5)
 		label_monedas = wx.StaticText(self.treeItem_1, wx.ID_ANY, _("convertir las donaciones a la divisa: "))
 		boxSizer_1.Add(label_monedas, 0, wx.ALL, 5)
 		self.choice_moneditas = wx.Choice(self.treeItem_1, wx.ID_ANY, choices=monedas)
@@ -47,6 +42,26 @@ class configuracionDialog(wx.Dialog):
 		boxSizer_1.Add(self.choice_moneditas, 0, wx.EXPAND | wx.ALL, 5)
 		panel_sizer_1.Add(boxSizer_1, 1, wx.EXPAND | wx.ALL, 5)
 		self.treeItem_1.SetSizer(panel_sizer_1)
+
+		# panel de chat
+		self.treeItem_chat = wx.Panel(self.tree_1, wx.ID_ANY)
+		self.tree_1.AddPage(self.treeItem_chat, _("Chat"))
+		panel_sizer_chat = wx.BoxSizer(wx.VERTICAL)
+		box_chat = wx.StaticBox(self.treeItem_chat, -1, _("Opciones del chat"))
+		boxSizer_chat = wx.StaticBoxSizer(box_chat, wx.VERTICAL)
+		self.check_historial = wx.CheckBox(self.treeItem_chat, wx.ID_ANY, _("Leer los mensajes anteriores al chat"))
+		self.check_historial.SetValue(config.get('leer_historial', True))
+		boxSizer_chat.Add(self.check_historial, 0, wx.ALL, 5)
+		label_trans = wx.StaticText(self.treeItem_chat, wx.ID_ANY, _("traducción de mensajes: "))
+		boxSizer_chat.Add(label_trans, 0, wx.ALL, 5)
+		self.choice_traducir = wx.Choice(self.treeItem_chat, wx.ID_ANY, choices=idiomas_disponibles)
+		try:
+			self.choice_traducir.SetSelection(codigos_traduccion.index(config.get('idioma_traduccion', "")))
+		except ValueError:
+			self.choice_traducir.SetSelection(0)
+		boxSizer_chat.Add(self.choice_traducir, 0, wx.EXPAND | wx.ALL, 5)
+		panel_sizer_chat.Add(boxSizer_chat, 1, wx.EXPAND | wx.ALL, 5)
+		self.treeItem_chat.SetSizer(panel_sizer_chat)
 
 		# panel de voz
 		self.treeItem_2 = wx.Panel(self.tree_1, wx.ID_ANY)

@@ -26,7 +26,9 @@ configuraciones ={
 	'volumen': 100,
 	"cambiovolumen": 10,
 	'interface': False,
-	'discord_token': ""
+	'discord_token': "",
+	'idioma_traduccion': "",
+	'leer_historial': True
 
 }
 actualizar_configuracion = False

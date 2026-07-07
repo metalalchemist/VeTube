@@ -1,4 +1,4 @@
-import json, threading, wx
+import json, threading, time, wx
 from exchange import exchange
 from chat_downloader import ChatDownloader
 from globals import data_store
@@ -60,6 +60,7 @@ class ServicioYouTube:
     def recibir(self):
         try:
             if data_store.dst: self.translator=translator.TranslatorWrapper()
+            momento_conexion = time.time() * 1_000_000  # chat_downloader entrega timestamps en microsegundos
             self.chat = ChatDownloader().get_chat(self.url, message_groups=["messages", "superchat"], interruptible_retry=False)
             if self.chat.status == 'past':
                 # El diálogo debe mostrarse en el hilo principal; esperamos la respuesta desde este hilo.
@@ -78,9 +79,14 @@ class ServicioYouTube:
                     return
             threading.Thread(target=self.prepare_player, args=(self.chat.status,), daemon=True).start()
             wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, self.chat.title)
+            # En una transmisión pasada el usuario quiere justamente el historial, así que nunca se filtra ahí
+            filtrar_anteriores = not data_store.config.get('leer_historial', True) and self.chat.status != 'past'
             for message in self.chat:
                 if self._detener: break
                 if not message: continue
+                if filtrar_anteriores:
+                    marca_tiempo = message.get('timestamp')
+                    if marca_tiempo and marca_tiempo < momento_conexion: continue
                 if message['message'] is None: message['message'] = ''
                 if data_store.dst and self.translator: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
 

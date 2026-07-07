@@ -6,11 +6,10 @@ from ui.ajustes import configuracionDialog
 from utils import fajustes, app_utilitys
 from ui.dialog_response import response
 from globals import data_store
-from globals.resources import carpeta_voces,codes,idiomas_disponibles,monedas
+from globals.resources import carpeta_voces,codes,codigos_traduccion,idiomas_disponibles,monedas
 from controller.editor_controller import EditorController
 from controller.ajustes_controller import AjustesController
 from setup import network, reader, player
-from googletrans import LANGUAGES
 from exchange import codes as currency_codes
 from servicios.language_updater import GestorRepositorios
 from ui.update_languages_dialog import UpdateLanguagesDialog
@@ -96,6 +95,10 @@ class MainMenuController:
         data_store.config['listasonidos'] = [cf.soniditos.IsItemChecked(i) for i in range(cf.soniditos.GetItemCount())]
         data_store.config['eventos'] = [cf.eventos.IsItemChecked(i) for i in range(cf.eventos.GetItemCount())]
         data_store.config['unread'] = [cf.unread.IsItemChecked(i) for i in range(cf.unread.GetItemCount())]
+        data_store.config['leer_historial'] = cf.check_historial.IsChecked()
+        seleccion_traduccion = cf.choice_traducir.GetSelection()
+        data_store.dst = codigos_traduccion[seleccion_traduccion] if seleccion_traduccion != wx.NOT_FOUND else ""
+        data_store.config['idioma_traduccion'] = data_store.dst
         rest = False
         if data_store.config['idioma'] != codes[cf.choice_language.GetSelection()]:
             data_store.config['idioma'] = codes[cf.choice_language.GetSelection()]
@@ -134,11 +137,6 @@ class MainMenuController:
             salida_actual = reader._lector.find_device_id(nombres[data_store.config["dispositivo"]-1], known_devices=dispositivos_formateados)
             reader._lector.set_device(salida_actual)
             app_utilitys.configurar_piper(carpeta_voces)
-        if cf.choice_traducir.GetStringSelection()!="":
-            for k in LANGUAGES:
-                if LANGUAGES[k] == cf.choice_traducir.GetStringSelection():
-                    data_store.dst = k
-                    break
         if cf.choice_moneditas.GetStringSelection()!='Por defecto':
             monedita=cf.choice_moneditas.GetStringSelection().split(', (')
             for k in currency_codes.CODES:
