@@ -1,5 +1,6 @@
 import wx
 from setup import player
+from globals import data_store
 from globals.data_store import config
 from globals.mensajes import mensajes_categorias, mensajes_sonidos, eventos_lista
 from controller.ajustes_controller import AjustesController
@@ -56,7 +57,8 @@ class configuracionDialog(wx.Dialog):
 		boxSizer_chat.Add(label_trans, 0, wx.ALL, 5)
 		self.choice_traducir = wx.Choice(self.treeItem_chat, wx.ID_ANY, choices=idiomas_disponibles)
 		try:
-			self.choice_traducir.SetSelection(codigos_traduccion.index(config.get('idioma_traduccion', "")))
+			# data_store.dst ya viene validado al iniciar, así el diálogo refleja el estado real de la traducción
+			self.choice_traducir.SetSelection(codigos_traduccion.index(data_store.dst))
 		except ValueError:
 			self.choice_traducir.SetSelection(0)
 		boxSizer_chat.Add(self.choice_traducir, 0, wx.EXPAND | wx.ALL, 5)

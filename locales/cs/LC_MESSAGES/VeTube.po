@@ -1098,19 +1098,19 @@ msgstr "automaticky překládat seznamy změn v aktualizacích."
 msgid "Desactivar la interfaz invisible"
 msgstr "Vypnout virtuální rozhraní"
 
-#: ui/ajustes.py:48
+#: ui/ajustes.py:49
 msgid "Chat"
 msgstr "Chat"
 
-#: ui/ajustes.py:50
+#: ui/ajustes.py:51
 msgid "Opciones del chat"
 msgstr "Možnosti chatu"
 
-#: ui/ajustes.py:52
+#: ui/ajustes.py:53
 msgid "Leer los mensajes anteriores al chat"
 msgstr "Číst předchozí zprávy chatu"
 
-#: ui/ajustes.py:55
+#: ui/ajustes.py:56
 msgid "traducción de mensajes: "
 msgstr "překládat zprávy do: "
 

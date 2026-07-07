@@ -1,4 +1,4 @@
-import wx,json
+import wx
 from ui.menus.main_menu import MainMenu
 from update import updater
 from utils.languageHandler import curLang
@@ -6,7 +6,7 @@ from ui.ajustes import configuracionDialog
 from utils import fajustes, app_utilitys
 from ui.dialog_response import response
 from globals import data_store
-from globals.resources import carpeta_voces,codes,codigos_traduccion,idiomas_disponibles,monedas
+from globals.resources import carpeta_voces,codes,codigos_traduccion
 from controller.editor_controller import EditorController
 from controller.ajustes_controller import AjustesController
 from setup import network, reader, player
@@ -103,8 +103,7 @@ class MainMenuController:
         if data_store.config['idioma'] != codes[cf.choice_language.GetSelection()]:
             data_store.config['idioma'] = codes[cf.choice_language.GetSelection()]
             rest = True
-        with open('data.json', 'w+', encoding='utf-8') as file:
-            json.dump(data_store.config, file, indent=4, ensure_ascii=False)
+        fajustes.guardarConfiguracion(data_store.config)
         if rest:
             if response(_("Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea reiniciarlo ahora?"), _("¡Atención!")) == wx.ID_YES:
                 app_utilitys.restart_program()

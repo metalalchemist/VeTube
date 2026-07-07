@@ -24,7 +24,7 @@ idiomas = getAvailableLanguages()
 langs = [i[1] for i in idiomas][::-1]
 codes = [i[0] for i in idiomas][::-1]
 idiomas_disponibles = [""] + [v for v in LANGUAGES.values()]
-codigos_traduccion = [""] + [k for k in LANGUAGES.keys()]
+codigos_traduccion = [""] + [k for k in LANGUAGES.keys()]  # mismo orden que idiomas_disponibles: los índices deben coincidir
 monedas = [_('Por defecto')] + [f'{CODES[k]}, ({k})' for k in CODES]
 voces_p = piper_list_voices()
 if not voces_p:

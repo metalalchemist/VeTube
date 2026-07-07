@@ -60,7 +60,8 @@ class ServicioYouTube:
     def recibir(self):
         try:
             if data_store.dst: self.translator=translator.TranslatorWrapper()
-            momento_conexion = time.time() * 1_000_000  # chat_downloader entrega timestamps en microsegundos
+            # chat_downloader entrega timestamps en microsegundos; 10 s de tolerancia por si el reloj local va adelantado
+            momento_conexion = (time.time() - 10) * 1_000_000
             self.chat = ChatDownloader().get_chat(self.url, message_groups=["messages", "superchat"], interruptible_retry=False)
             if self.chat.status == 'past':
                 # El diálogo debe mostrarse en el hilo principal; esperamos la respuesta desde este hilo.

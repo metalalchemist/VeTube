@@ -1115,19 +1115,19 @@ msgstr "essayer de traduire les nouveautés lorsqu'une mise à jour est disponib
 msgid "Desactivar la interfaz invisible"
 msgstr "Désactiver l'interface invisible"
 
-#: ui/ajustes.py:48
+#: ui/ajustes.py:49
 msgid "Chat"
 msgstr "Chat"
 
-#: ui/ajustes.py:50
+#: ui/ajustes.py:51
 msgid "Opciones del chat"
 msgstr "Options du chat"
 
-#: ui/ajustes.py:52
+#: ui/ajustes.py:53
 msgid "Leer los mensajes anteriores al chat"
 msgstr "Lire les messages antérieurs du chat"
 
-#: ui/ajustes.py:55
+#: ui/ajustes.py:56
 msgid "traducción de mensajes: "
 msgstr "traduction des messages :"
 
