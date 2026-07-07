@@ -1113,7 +1113,19 @@ msgstr "try to translate the changelog when an update is received."
 msgid "Desactivar la interfaz invisible"
 msgstr "Deactivate the invisible interface"
 
-#: ui/ajustes.py:38
+#: ui/ajustes.py:49
+msgid "Chat"
+msgstr "Chat"
+
+#: ui/ajustes.py:51
+msgid "Opciones del chat"
+msgstr "Chat options"
+
+#: ui/ajustes.py:53
+msgid "Leer los mensajes anteriores al chat"
+msgstr "Read previous chat messages"
+
+#: ui/ajustes.py:56
 msgid "traducción de mensajes: "
 msgstr "message translation: "
 

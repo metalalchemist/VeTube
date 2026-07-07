@@ -14,4 +14,5 @@ mensajes_destacados = funciones.leerJsonLista('mensajes_destacados.json')
 favs = funciones.convertirLista(favorite, 'titulo', 'url')
 msjs = funciones.convertirLista(mensajes_destacados, 'mensaje', 'titulo')
 divisa="Por defecto"
-dst=""
+# La traducción de mensajes no es persistente: arranca desactivada en cada sesión (se ajusta desde el diálogo)
+dst = ""

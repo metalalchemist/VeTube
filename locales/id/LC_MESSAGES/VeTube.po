@@ -1112,7 +1112,19 @@ msgstr "menterjemahkan What's new ketika ada update."
 msgid "Desactivar la interfaz invisible"
 msgstr "Nonaktifkan antarmuka yang tidak terlihat"
 
-#: ui/ajustes.py:38
+#: ui/ajustes.py:49
+msgid "Chat"
+msgstr "Obrolan"
+
+#: ui/ajustes.py:51
+msgid "Opciones del chat"
+msgstr "Opsi obrolan"
+
+#: ui/ajustes.py:53
+msgid "Leer los mensajes anteriores al chat"
+msgstr "Baca pesan obrolan sebelumnya"
+
+#: ui/ajustes.py:56
 msgid "traducción de mensajes: "
 msgstr "terjemahan pesan: "
 

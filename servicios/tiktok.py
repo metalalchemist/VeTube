@@ -1,4 +1,4 @@
-import json, threading, asyncio, wx, traceback
+import json, threading, asyncio, wx, traceback, time
 from exchange import exchange
 from TikTokLive.client.client import TikTokLiveClient
 from TikTokLive.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent, LikeEvent, JoinEvent, FollowEvent, ShareEvent, RoomUserSeqEvent, EnvelopeEvent, EmoteChatEvent,LiveEndEvent
@@ -22,6 +22,8 @@ class ServicioTiktok:
         self.loop = None
         self.media_controller = None
         self.translator = None
+        self.momento_conexion = None
+        self.filtrar_anteriores = False
 
     def iniciar_chat(self):
         self.is_running = True
@@ -79,6 +81,13 @@ class ServicioTiktok:
                         wx.CallAfter(reader.leer_sapi, _("El usuario está en vivo. Conectando..."))
                     self.last_live_status = True
                     if data_store.dst: self.translator = translator.TranslatorWrapper()
+                    # Casilla «Leer los mensajes anteriores al chat» desmarcada: se ignoran los
+                    # comentarios anteriores a la conexión filtrando por su marca de tiempo en
+                    # on_comment (como en youtube.py). No basta con process_connect_events: TikTok
+                    # reenvía historial reciente por el websocket (history_comment_count) que ese
+                    # parámetro no filtra. Se re-sella en cada (re)conexión del bucle.
+                    self.momento_conexion = time.time() - 10  # 10 s de tolerancia de reloj
+                    self.filtrar_anteriores = not data_store.config.get('leer_historial', True)
                     await self.chat.connect()
                 else:
                     if self.last_live_status is not False:
@@ -148,7 +157,25 @@ class ServicioTiktok:
         if data_store.config['sonidos'] and data_store.config['listasonidos'][6]:
             wx.CallAfter(player.play, rutasonidos[6])
 
+    def _es_mensaje_anterior(self, event):
+        # True si el mensaje de chat (comentario o emoji) es anterior al momento de conexión,
+        # para respetar la casilla «leer mensajes anteriores» desmarcada. create_time
+        # (CommonMessageData) puede venir en segundos, milisegundos o microsegundos según el
+        # mensaje, y puede faltar (0): en ese caso no se filtra, para no silenciar por error
+        # mensajes en vivo (igual que youtube.py).
+        if not self.filtrar_anteriores or self.momento_conexion is None:
+            return False
+        base = getattr(event, 'base_message', None)
+        marca = getattr(base, 'create_time', 0) if base is not None else 0
+        if not marca:
+            return False
+        marca = float(marca)
+        while marca > 1e11:  # normaliza a segundos sea cual sea la unidad de origen
+            marca /= 1000
+        return marca < self.momento_conexion
+
     async def on_comment(self,event: CommentEvent):
+        if self._es_mensaje_anterior(event): return
         if data_store.config['eventos'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
             wx.CallAfter(self.estadisticas_manager.agregar_mensaje, event.user.nickname)
             cadena = event.comment if event.comment is not None else ''
@@ -160,6 +187,7 @@ class ServicioTiktok:
                 wx.CallAfter(reader.leer_mensaje, event.user.nickname + ": " + cadena)
 
     async def on_emote(self,event: EmoteChatEvent):
+        if self._es_mensaje_anterior(event): return
         if data_store.config['eventos'][1] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
             wx.CallAfter(self.estadisticas_manager.agregar_mensaje, event.user.nickname)
             wx.CallAfter(self.chat_controller.agregar_mensaje_miembro, event.user.nickname + _(" envió un emogi."))
