@@ -57,7 +57,7 @@ class configuracionDialog(wx.Dialog):
 		boxSizer_chat.Add(label_trans, 0, wx.ALL, 5)
 		self.choice_traducir = wx.Choice(self.treeItem_chat, wx.ID_ANY, choices=idiomas_disponibles)
 		try:
-			# data_store.dst ya viene validado al iniciar, así el diálogo refleja el estado real de la traducción
+			# La traducción no es persistente: el diálogo refleja el estado de la sesión actual (dst arranca vacío)
 			self.choice_traducir.SetSelection(codigos_traduccion.index(data_store.dst))
 		except ValueError:
 			self.choice_traducir.SetSelection(0)

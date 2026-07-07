@@ -27,7 +27,6 @@ configuraciones ={
 	"cambiovolumen": 10,
 	'interface': False,
 	'discord_token': "",
-	'idioma_traduccion': "",
 	'leer_historial': True
 
 }

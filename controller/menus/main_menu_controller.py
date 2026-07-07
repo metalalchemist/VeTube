@@ -97,8 +97,8 @@ class MainMenuController:
         data_store.config['unread'] = [cf.unread.IsItemChecked(i) for i in range(cf.unread.GetItemCount())]
         data_store.config['leer_historial'] = cf.check_historial.IsChecked()
         seleccion_traduccion = cf.choice_traducir.GetSelection()
+        # La traducción no es persistente: solo aplica a la sesión actual, no se guarda en la configuración
         data_store.dst = codigos_traduccion[seleccion_traduccion] if seleccion_traduccion != wx.NOT_FOUND else ""
-        data_store.config['idioma_traduccion'] = data_store.dst
         rest = False
         if data_store.config['idioma'] != codes[cf.choice_language.GetSelection()]:
             data_store.config['idioma'] = codes[cf.choice_language.GetSelection()]
