@@ -103,6 +103,7 @@ class ServicioKick:
             wx.CallAfter(self.chat_controller.agregar_titulo, title)
             wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, title)
             await user.chatroom.connect()
+            self.loop.create_task(self._refrescar_espectadores_loop())
             
             kick_page_url = f"https://kick.com/{self.url}"
             video_url = extract_stream_url(kick_page_url)
@@ -190,3 +191,24 @@ class ServicioKick:
             self.bypass_process = None
         
         print("Servicio de Kick detenido completamente.")
+
+    async def _refrescar_espectadores_loop(self):
+        while self.is_running:
+            try:
+                user = await self.client.fetch_user(self.url)
+                livestream = user.livestream if user else None
+                if livestream:
+                    espectadores = livestream.viewer_count
+                    if espectadores is None:
+                        break
+                    
+                    title = livestream.title + _(" en vivo, actualmente ") + str(espectadores) + _(" viendo ahora")
+                    wx.CallAfter(self.chat_controller.agregar_titulo, title)
+                    wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, title)
+                else:
+                    break
+            except Exception as e:
+                print(f"Error al refrescar espectadores de Kick: {e}")
+                break
+            
+            await asyncio.sleep(10)

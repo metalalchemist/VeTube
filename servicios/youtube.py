@@ -21,6 +21,7 @@ class ServicioYouTube:
         self.media_controller = None
         self.translator = None
         self._detener = False
+        self._event_refresco = threading.Event()
 
     def iniciar_chat(self):
         self._detener = False
@@ -31,6 +32,7 @@ class ServicioYouTube:
 
     def detener(self):
         self._detener = True
+        self._event_refresco.set()
         # Primero, liberar el reproductor de medios
         if self.media_controller:
             self.media_controller.release()
@@ -80,6 +82,8 @@ class ServicioYouTube:
                     return
             threading.Thread(target=self.prepare_player, args=(self.chat.status,), daemon=True).start()
             wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, self.chat.title)
+            if self.chat.status != 'past':
+                self.iniciar_refresco_espectadores()
             # En una transmisión pasada el usuario quiere justamente el historial, así que nunca se filtra ahí
             filtrar_anteriores = not data_store.config.get('leer_historial', True) and self.chat.status != 'past'
             for message in self.chat:
@@ -162,3 +166,22 @@ class ServicioYouTube:
                         if data_store.config['reader'] and data_store.config['unread'][5]: wx.CallAfter(reader.leer_mensaje, f'{author_name}: {msg}')
         except Exception as e:
             wx.CallAfter(self.chat_controller.notificar_error, str(e))
+
+    def iniciar_refresco_espectadores(self):
+        self._event_refresco.clear()
+        self._hilo_refresco = threading.Thread(target=self._refrescar_espectadores_loop, daemon=True)
+        self._hilo_refresco.start()
+
+    def _refrescar_espectadores_loop(self):
+        from utils.play_mp4 import extract_live_viewers
+        while not self._detener:
+            espectadores = extract_live_viewers(self.url)
+            if espectadores is None:
+                break
+            if not self._detener:
+                title = self.chat.title + _(" en vivo, actualmente ") + str(espectadores) + _(" viendo ahora")
+                wx.CallAfter(self.chat_controller.agregar_titulo, title)
+                wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, title)
+            # Esperar 10 segundos, saliendo al instante si _event_refresco se activa
+            if self._event_refresco.wait(timeout=10):
+                break
