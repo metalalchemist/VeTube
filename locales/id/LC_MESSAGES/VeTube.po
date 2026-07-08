@@ -86,9 +86,8 @@ msgstr ""
 "saluran favorit Anda mulai sekarang. Bagus kan."
 
 #: controller/ajustes_controller.py:232
-#, fuzzy
 msgid "&Detener prueba."
-msgstr "&Putar uji coba."
+msgstr "&Hentikan uji coba."
 
 #: controller/ajustes_controller.py:285
 msgid "Descargar voces de internet..."
@@ -506,9 +505,8 @@ msgid "&Reproducir muestra"
 msgstr "&Putar sampel"
 
 #: controller/piper_downloader_controller.py:140
-#, fuzzy, python-format
 msgid "Reproducción de muestra detenida."
-msgstr "Memutar sampel dari %s..."
+msgstr "Pemutaran sampel dihentikan."
 
 #: controller/piper_downloader_controller.py:146
 msgid "Por favor, selecciona una voz de la lista para escuchar la muestra."
@@ -528,18 +526,16 @@ msgid "Reproduciendo muestra de %s..."
 msgstr "Memutar sampel dari %s..."
 
 #: controller/piper_downloader_controller.py:155
-#, fuzzy
 msgid "&Detener"
-msgstr "&Tetapkan"
+msgstr "H&entikan"
 
 #: controller/piper_downloader_controller.py:159
 msgid "Esta voz no dispone de muestra de audio."
 msgstr "Suara ini tidak memiliki sampel audio."
 
 #: controller/piper_downloader_controller.py:165
-#, fuzzy, python-format
 msgid "Reproducción de muestra finalizada."
-msgstr "Memutar sampel dari %s..."
+msgstr "Pemutaran sampel selesai."
 
 #: controller/piper_downloader_controller.py:181
 msgid "Por favor, selecciona al menos una voz para descargar."
@@ -626,6 +622,10 @@ msgid ""
 "\n"
 "Ver consola para más detalles."
 msgstr ""
+"Kesalahan tak terduga di %s:\n"
+"%s\n"
+"\n"
+"Lihat konsol untuk detail lebih lanjut."
 
 #: controller/update_languages_controller.py:95
 #: ui/update_languages_dialog.py:63
@@ -984,11 +984,11 @@ msgstr "Secara default"
 
 #: helpers/playroom_helper.py:61
 msgid "proceso playroom no abierto"
-msgstr ""
+msgstr "aplikasi QuentinC Playroom belum dibuka"
 
 #: servicios/discord.py:56 servicios/kick.py:69 ui/piper_downloader.py:62
 msgid "Cargando..."
-msgstr "Menghubungkan..."
+msgstr "Memuat..."
 
 #: servicios/discord.py:85
 msgid ""
@@ -1182,6 +1182,10 @@ msgstr "Siaran sebelumnya"
 #: servicios/youtube.py:125
 msgid " se a conectado al chat. "
 msgstr " terhubung ke obrolan. "
+
+#: ui/chat_dialog.py:4
+msgid "Sesiones de chat"
+msgstr "Sesi obrolan"
 
 #: ui/chat_ui.py:10
 msgid "Lectura del chat en vivo..."

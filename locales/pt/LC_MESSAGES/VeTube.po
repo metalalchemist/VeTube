@@ -85,9 +85,8 @@ msgstr ""
 "mensagens de seus canais favoritos."
 
 #: controller/ajustes_controller.py:232
-#, fuzzy
 msgid "&Detener prueba."
-msgstr "&Reproduzir uma amostra."
+msgstr "&Parar a amostra."
 
 #: controller/ajustes_controller.py:285
 msgid "Descargar voces de internet..."
@@ -415,7 +414,7 @@ msgstr "Parece que o link que você está tentando acessar não é un link váli
 
 #: controller/main_controller.py:325
 msgid "Conectando..."
-msgstr ""
+msgstr "Conectando..."
 
 #: controller/main_controller.py:389
 msgid ""
@@ -505,9 +504,8 @@ msgid "&Reproducir muestra"
 msgstr "&Reproduzir amostra"
 
 #: controller/piper_downloader_controller.py:140
-#, fuzzy, python-format
 msgid "Reproducción de muestra detenida."
-msgstr "Reproduzindo amostra de %s..."
+msgstr "Reprodução da amostra parada."
 
 #: controller/piper_downloader_controller.py:146
 msgid "Por favor, selecciona una voz de la lista para escuchar la muestra."
@@ -527,18 +525,16 @@ msgid "Reproduciendo muestra de %s..."
 msgstr "Reproduzindo amostra de %s..."
 
 #: controller/piper_downloader_controller.py:155
-#, fuzzy
 msgid "&Detener"
-msgstr "&Definir"
+msgstr "&Parar"
 
 #: controller/piper_downloader_controller.py:159
 msgid "Esta voz no dispone de muestra de audio."
 msgstr "Esta voz não possui amostra de áudio."
 
 #: controller/piper_downloader_controller.py:165
-#, fuzzy, python-format
 msgid "Reproducción de muestra finalizada."
-msgstr "Reproduzindo amostra de %s..."
+msgstr "Reprodução da amostra concluída."
 
 #: controller/piper_downloader_controller.py:181
 msgid "Por favor, selecciona al menos una voz para descargar."
@@ -625,6 +621,10 @@ msgid ""
 "\n"
 "Ver consola para más detalles."
 msgstr ""
+"Erro inesperado em %s:\n"
+"%s\n"
+"\n"
+"Veja o console para mais detalhes."
 
 #: controller/update_languages_controller.py:95
 #: ui/update_languages_dialog.py:63
@@ -983,11 +983,11 @@ msgstr "Por padrão."
 
 #: helpers/playroom_helper.py:61
 msgid "proceso playroom no abierto"
-msgstr ""
+msgstr "o programa da Sala de Jogos não está aberto"
 
 #: servicios/discord.py:56 servicios/kick.py:69 ui/piper_downloader.py:62
 msgid "Cargando..."
-msgstr ""
+msgstr "Carregando..."
 
 #: servicios/discord.py:85
 msgid ""
@@ -1019,15 +1019,15 @@ msgstr ""
 
 #: servicios/kick.py:39
 msgid "error_bypass_no_encontrado"
-msgstr ""
+msgstr "O bypass não foi encontrado."
 
 #: servicios/kick.py:72
 msgid "error_iniciar_bypass"
-msgstr ""
+msgstr "Erro ao iniciar o bypass."
 
 #: servicios/kick.py:115
 msgid "error_conectar_kick_chatroom"
-msgstr ""
+msgstr "Erro ao conectar ao chat do Kick."
 
 #: servicios/kick.py:164 servicios/kick.py:166 servicios/tiktok.py:212
 #: servicios/tiktok.py:216
@@ -1037,12 +1037,12 @@ msgstr " Começou a seguir você!"
 #: servicios/kick.py:205 servicios/tiktok.py:262 servicios/twich.py:176
 #: servicios/youtube.py:182
 msgid " en vivo, actualmente "
-msgstr " ao vivo, Atualmente"
+msgstr " ao vivo, atualmente "
 
 #: servicios/kick.py:205 servicios/tiktok.py:262 servicios/twich.py:176
 #: servicios/youtube.py:182
 msgid " viendo ahora"
-msgstr "Agora"
+msgstr " assistindo agora"
 
 #: servicios/language_updater.py:31
 msgid "Error al cargar el archivo de idiomas local."
@@ -1180,6 +1180,10 @@ msgstr "Transmissão anterior"
 #: servicios/youtube.py:125
 msgid " se a conectado al chat. "
 msgstr "se conectou ao bate-papo."
+
+#: ui/chat_dialog.py:4
+msgid "Sesiones de chat"
+msgstr "Sessões de bate-papo"
 
 #: ui/chat_ui.py:10
 msgid "Lectura del chat en vivo..."

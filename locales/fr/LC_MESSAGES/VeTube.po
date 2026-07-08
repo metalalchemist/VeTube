@@ -85,9 +85,8 @@ msgstr ""
 "messages de vos chaînes préférées."
 
 #: controller/ajustes_controller.py:232
-#, fuzzy
 msgid "&Detener prueba."
-msgstr "&Lire un essai."
+msgstr "Arrê&ter l'essai."
 
 #: controller/ajustes_controller.py:285
 msgid "Descargar voces de internet..."
@@ -507,9 +506,8 @@ msgid "&Reproducir muestra"
 msgstr "&Lire l'échantillon"
 
 #: controller/piper_downloader_controller.py:140
-#, fuzzy, python-format
 msgid "Reproducción de muestra detenida."
-msgstr "Lecture de l'échantillon de %s..."
+msgstr "Lecture de l'échantillon arrêtée."
 
 #: controller/piper_downloader_controller.py:146
 msgid "Por favor, selecciona una voz de la lista para escuchar la muestra."
@@ -529,18 +527,16 @@ msgid "Reproduciendo muestra de %s..."
 msgstr "Lecture de l'échantillon de %s..."
 
 #: controller/piper_downloader_controller.py:155
-#, fuzzy
 msgid "&Detener"
-msgstr "&Configurer"
+msgstr "&Arrêter"
 
 #: controller/piper_downloader_controller.py:159
 msgid "Esta voz no dispone de muestra de audio."
 msgstr "Cette voix ne dispose pas d'échantillon audio."
 
 #: controller/piper_downloader_controller.py:165
-#, fuzzy, python-format
 msgid "Reproducción de muestra finalizada."
-msgstr "Lecture de l'échantillon de %s..."
+msgstr "Lecture de l'échantillon terminée."
 
 #: controller/piper_downloader_controller.py:181
 msgid "Por favor, selecciona al menos una voz para descargar."
@@ -993,7 +989,7 @@ msgstr "le logiciel du Salon n'est pas lancé"
 
 #: servicios/discord.py:56 servicios/kick.py:69 ui/piper_downloader.py:62
 msgid "Cargando..."
-msgstr "Connexion..."
+msgstr "Chargement..."
 
 #: servicios/discord.py:85
 msgid ""
@@ -1048,7 +1044,7 @@ msgstr " en direct, actuellement "
 #: servicios/kick.py:205 servicios/tiktok.py:262 servicios/twich.py:176
 #: servicios/youtube.py:182
 msgid " viendo ahora"
-msgstr " en train de regarder maintenant"
+msgstr " spectateurs"
 
 #: servicios/language_updater.py:31
 msgid "Error al cargar el archivo de idiomas local."
@@ -1185,6 +1181,10 @@ msgstr "Diffusion précédente"
 #: servicios/youtube.py:125
 msgid " se a conectado al chat. "
 msgstr " s'est connecté au chat. "
+
+#: ui/chat_dialog.py:4
+msgid "Sesiones de chat"
+msgstr "Sessions de chat"
 
 #: ui/chat_ui.py:10
 msgid "Lectura del chat en vivo..."

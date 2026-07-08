@@ -616,6 +616,10 @@ msgid ""
 "\n"
 "Ver consola para más detalles."
 msgstr ""
+"Unexpected error in %s:\n"
+"%s\n"
+"\n"
+"See console for details."
 
 #: controller/update_languages_controller.py:95
 #: ui/update_languages_dialog.py:63
@@ -977,7 +981,7 @@ msgstr "playroom process is not open"
 
 #: servicios/discord.py:56 servicios/kick.py:69 ui/piper_downloader.py:62
 msgid "Cargando..."
-msgstr "loading..."
+msgstr "Loading..."
 
 #: servicios/discord.py:85
 msgid ""
@@ -1170,6 +1174,10 @@ msgstr "Past livestream"
 #: servicios/youtube.py:125
 msgid " se a conectado al chat. "
 msgstr " has connected to the chat. "
+
+#: ui/chat_dialog.py:4
+msgid "Sesiones de chat"
+msgstr "Chat sessions"
 
 #: ui/chat_ui.py:10
 msgid "Lectura del chat en vivo..."

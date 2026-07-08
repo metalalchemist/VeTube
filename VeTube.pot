@@ -1113,6 +1113,10 @@ msgstr ""
 msgid " se a conectado al chat. "
 msgstr ""
 
+#: ui/chat_dialog.py:4
+msgid "Sesiones de chat"
+msgstr ""
+
 #: ui/chat_ui.py:10
 msgid "Lectura del chat en vivo..."
 msgstr ""
