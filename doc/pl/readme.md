@@ -7,6 +7,7 @@ Czytaj i zarządzaj w sposób dostępny czatem swoich własnych transmisji na ż
 - tiktok (transmisje na żywo trwające)
 - kick (transmisje na żywo trwające)
 - playroom (czat różnych stołów)
+- Discord (kanały tekstowe serwera; [przewodnik konfiguracji](discord.md))
 ## Funkcje
 - Tryb automatyczny: Czyta wiadomości czatu w czasie rzeczywistym za pomocą głosu SAPI5.
 - Niewidzialny interfejs: Zarządzaj czatami z dowolnego okna za pomocą prostych poleceń klawiaturowych. Wymagany jest aktywny czytnik ekranu.
@@ -34,7 +35,7 @@ Czytaj i zarządzaj w sposób dostępny czatem swoich własnych transmisji na ż
 ### Korzystanie z niewidzialnego interfejsu.
 | akcja                    | kombinacja klawiszy |
 | ------------------------- | ----------- |
-| Wycisz głos SAPI      | control+p           |
+| Wycisz wszystkie głosy      | control+p           |
 | rozpocznij/anuluj przechwytywanie nowej transmisji      | alt shift h            |
 | przejdź do poprzedniej transmisji      | control alt shift strzałka w lewo            |
 | przejdź do następnej transmisji     | control alt shift strzałka w prawo            |

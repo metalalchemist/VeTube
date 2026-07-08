@@ -1,4 +1,4 @@
-import json, threading, wx
+import json, threading, time, wx
 from exchange import exchange
 from chat_downloader import ChatDownloader
 from globals import data_store
@@ -19,7 +19,9 @@ class ServicioYouTube:
         self.chat_controller = chat_controller
         self.estadisticas_manager = chat_controller.estadisticas_manager
         self.media_controller = None
+        self.translator = None
         self._detener = False
+        self._event_refresco = threading.Event()
 
     def iniciar_chat(self):
         self._detener = False
@@ -30,6 +32,7 @@ class ServicioYouTube:
 
     def detener(self):
         self._detener = True
+        self._event_refresco.set()
         # Primero, liberar el reproductor de medios
         if self.media_controller:
             self.media_controller.release()
@@ -45,7 +48,6 @@ class ServicioYouTube:
         from servicios.YouTubeRealDataTime import YouTubeRealTimeService
         realtime_service = YouTubeRealTimeService(self.url, self.frame, 'youtube_realtime', title=title, chat_controller=self.chat_controller)
         realtime_service.iniciar_chat_reutilizando_ui()
-        self.chat_controller.set_active_service(realtime_service)
 
     def prepare_player(self, status):
         try:
@@ -59,22 +61,39 @@ class ServicioYouTube:
 
     def recibir(self):
         try:
-            if data_store.dst: self.translator=translator.translatorWrapper()
+            if data_store.dst: self.translator=translator.TranslatorWrapper()
+            # chat_downloader entrega timestamps en microsegundos; 10 s de tolerancia por si el reloj local va adelantado
+            momento_conexion = (time.time() - 10) * 1_000_000
             self.chat = ChatDownloader().get_chat(self.url, message_groups=["messages", "superchat"], interruptible_retry=False)
             if self.chat.status == 'past':
-                dialog = wx.MessageDialog(self.chat_controller.ui, _("Se ha detectado una transmisión pasada. ¿Deseas conectarte con el servicio en tiempo real del chat?"), _("Transmisión pasada"), wx.YES_NO | wx.ICON_QUESTION)
-                result = dialog.ShowModal()
-                if result == wx.ID_YES:
+                # El diálogo debe mostrarse en el hilo principal; esperamos la respuesta desde este hilo.
+                respuesta = []
+                respondido = threading.Event()
+                def preguntar_cambio():
+                    dialog = wx.MessageDialog(self.chat_controller.ui, _("Se ha detectado una transmisión pasada. ¿Deseas conectarte con el servicio en tiempo real del chat?"), _("Transmisión pasada"), wx.YES_NO | wx.ICON_QUESTION)
+                    respuesta.append(dialog.ShowModal())
+                    dialog.Destroy()
+                    respondido.set()
+                wx.CallAfter(preguntar_cambio)
+                respondido.wait()
+                if respuesta and respuesta[0] == wx.ID_YES:
                     self.detener()
                     wx.CallAfter(self.do_switch, self.chat.title)
                     return
             threading.Thread(target=self.prepare_player, args=(self.chat.status,), daemon=True).start()
             wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, self.chat.title)
+            if self.chat.status != 'past':
+                self.iniciar_refresco_espectadores()
+            # En una transmisión pasada el usuario quiere justamente el historial, así que nunca se filtra ahí
+            filtrar_anteriores = not data_store.config.get('leer_historial', True) and self.chat.status != 'past'
             for message in self.chat:
                 if self._detener: break
                 if not message: continue
+                if filtrar_anteriores:
+                    marca_tiempo = message.get('timestamp')
+                    if marca_tiempo and marca_tiempo < momento_conexion: continue
                 if message['message'] is None: message['message'] = ''
-                if data_store.dst: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
+                if data_store.dst and self.translator: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
 
                 author_name = message['author']['display_name']
                 self.estadisticas_manager.agregar_mensaje(author_name)
@@ -147,3 +166,22 @@ class ServicioYouTube:
                         if data_store.config['reader'] and data_store.config['unread'][5]: wx.CallAfter(reader.leer_mensaje, f'{author_name}: {msg}')
         except Exception as e:
             wx.CallAfter(self.chat_controller.notificar_error, str(e))
+
+    def iniciar_refresco_espectadores(self):
+        self._event_refresco.clear()
+        self._hilo_refresco = threading.Thread(target=self._refrescar_espectadores_loop, daemon=True)
+        self._hilo_refresco.start()
+
+    def _refrescar_espectadores_loop(self):
+        from utils.play_mp4 import extract_live_viewers
+        while not self._detener:
+            espectadores = extract_live_viewers(self.url)
+            if espectadores is None:
+                break
+            if not self._detener:
+                title = self.chat.title + _(" en vivo, actualmente ") + str(espectadores) + _(" viendo ahora")
+                wx.CallAfter(self.chat_controller.agregar_titulo, title)
+                wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, title)
+            # Esperar 10 segundos, saliendo al instante si _event_refresco se activa
+            if self._event_refresco.wait(timeout=10):
+                break

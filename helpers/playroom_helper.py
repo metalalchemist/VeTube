@@ -1,3 +1,4 @@
+import re
 import uiautomation
 import win32gui
 import win32process
@@ -57,7 +58,7 @@ class PlayroomHelper:
             playroom_handle = get_playroom_handle()
 
             if playroom_handle is None:
-                raise Exception('proceso playroom no abierto')
+                raise Exception(_('proceso playroom no abierto'))
 
             playroom_controls = uiautomation.ControlFromHandle(playroom_handle)
             
@@ -86,14 +87,17 @@ class PlayroomHelper:
                 if not line == '':
 
                     # to find private messages, we take our username which we found in the title bar. In order to avoid using language specific strings from playroom we will use the username and use it as a marker for privates.
-                    if self.username + ':' in line:
-                        processed_message = line[(line.find(self.username + ':') + len(self.username + ':')):]
+                    # The title bar can show the username in a different case than chat lines (e.g. title '[enzow]' but 'Mae18 dit à Enzow: coucou' in the chat), so the match must be case-insensitive.
+                    # A match at the very start of the line is one of our own lines (never an incoming private, the sender comes first), so it stays public.
+                    private_marker = re.search(re.escape(self.username) + ':', line, re.IGNORECASE)
+                    if private_marker is not None and private_marker.start() > 0:
+                        processed_message = line[private_marker.end():].strip()
                         # Find the first word and use it as author name (playroom disallows using spaces in usernames)
                         author = line.split(' ')[0]
                         new_messages.append({'type': 'private', 'message': processed_message, 'author': author})
                     elif ':' in line:
                         # If there is a colon in the message, it means it's public. There are very few other lines with colons (couldn't find any).
-                        processed_message = line[(line.find(':') + len(':')):]
+                        processed_message = line[(line.find(':') + len(':')):].strip()
                         # Find the first word and use it as author name (playroom disallows using spaces in usernames)
                         author = line.split(' ')[0]
                         new_messages.append({'type': 'public', 'message': processed_message, 'author': author})

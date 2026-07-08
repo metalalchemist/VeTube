@@ -1,5 +1,6 @@
   # VeTube
-Accessably Read and manage YouTube, twich, kick and TikTok live chats on your own streams or those of your favorite creators.
+Accessably Read and manage YouTube, twich, kick, TikTok and Discord live chats on your own streams or those of your favorite creators.
+For Discord you can read the text channels of a server; see the [step-by-step setup guide](discord.md).
 ## Features
 
 - Automatic mode: Read incoming  chat messages in real time using your preferred sapi5 voice
@@ -26,7 +27,7 @@ Accessably Read and manage YouTube, twich, kick and TikTok live chats on your ow
 ### Using the invisible interface.
 |action |key combination |
 | ------------------------- | ------------- |
-| Mute sapy voice      | control+p           |
+| Mute all voices      | control+p           |
 | start/cancel capture of new chat livestream      | alt shift h           |
 | previous stream      | control alt shift left arrow            |
 | next stream      | control alt shift right arrow            |

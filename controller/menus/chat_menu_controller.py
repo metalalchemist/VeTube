@@ -34,7 +34,7 @@ class ChatMenuController:
 
     def addFavoritos(self, event):
         from globals.data_store import favorite
-        main_frame = self.parent.GetParent()
+        main_frame = self.chat_controller.frame  # ventana principal; GetParent() daría el notebook del ChatDialog
         list_favorite = main_frame.list_favorite
         url = self.chat_controller.servicio.url
 
@@ -42,7 +42,7 @@ class ChatMenuController:
             wx.MessageBox(_("No hay una URL para agregar a favoritos."), _("Aviso"), wx.OK | wx.ICON_INFORMATION)
             return
 
-        if self.plataforma == 'TikTok': titulo = funciones.extractUser(url)
+        if self.plataforma == 'TikTok': titulo = funciones.extractUser(url) or url
         elif self.plataforma == 'Twich' and self.chat_controller.servicio.chat.status != 'past': titulo = funciones.extractUser(url)
         elif self.plataforma == 'Kick':
             titulo = url

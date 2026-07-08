@@ -23,6 +23,7 @@ class YouTubeRealTimeService:
             # If no chat_controller is provided, create a new one with its own EstadisticasManager
             self.chat_controller = ChatController(None, frame, self, plataforma) # main_controller is None here, will be set by ChatController.servicio
         self.estadisticas_manager = self.chat_controller.estadisticas_manager
+        self.translator = None
         self._detener = False
 
     def iniciar_chat_reutilizando_ui(self):
@@ -47,7 +48,7 @@ class YouTubeRealTimeService:
             print(video_url)
     def recibir(self):
         if data_store.dst:
-            self.translator = translator.translatorWrapper()
+            self.translator = translator.TranslatorWrapper()
         try:
             self.chat = pytchat.create(video_id=self.url, interruptable=False)
             display_title = self.title + " (En tiempo real)"
@@ -60,7 +61,7 @@ class YouTubeRealTimeService:
                     author_name = c.author.name
                     msg = c.message
                     self.estadisticas_manager.agregar_mensaje(author_name)
-                    if data_store.dst: msg = self.translator.translate(text=msg, target=data_store.dst)
+                    if data_store.dst and self.translator: msg = self.translator.translate(text=msg, target=data_store.dst)
                     message_type = 'general'
                     if c.author.isChatOwner: message_type = 'propietario'
                     elif c.author.isChatModerator: message_type = 'moderador'

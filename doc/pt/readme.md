@@ -1,5 +1,6 @@
 # vetube
-Leia e gerencie de forma acessível o bate-papo do youtube, TikTok, Kick e twitch em suas próprias transmissões ou nas de seus criadores favoritos.
+Leia e gerencie de forma acessível o bate-papo do youtube, TikTok, Kick, twitch e Discord em suas próprias transmissões ou nas de seus criadores favoritos.
+No Discord é possível ler os canais de texto de um servidor; veja o [guia de configuração passo a passo](discord.md).
 [demonstração do produto em funcionamento](https://www.youtube.com/watch?v=KljpMJNVYCw)
 ## Caracteristicas
 - Modo automático: leia mensagens de bate-papo em tempo real usando a voz sapy5
@@ -27,7 +28,7 @@ system access
 ### Usando interface invisível.
 | ação | combinação de teclas |
 | ------------------------- | ----------- |
-| Silencie a voz sapy | CTRL+p |
+| Silencie todas as vozes | CTRL+p |
 | iniciar/cancelar a captura de outra transmissão ao vivo | Alt shift h |
 | ir para a transmissão ao vivo anterior | Control Alt shift seta para a esquerda |
 | ir para a próxima transmissão ao vivo | Control Alt shift seta para a direita |

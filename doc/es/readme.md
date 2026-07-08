@@ -7,6 +7,7 @@ Lee y gestiona de manera accesible el chat de tus propios directos o en los de t
 - tiktok(directos en curso)
 - kick (directos en curso)
 - la sala dejuegos(chat de las diversas mesas)
+- Discord (canales de texto de un servidor; [guía de configuración](discord.md))
 ## Características
 - Modo automático: Lee los mensajes de chat en tiempo real utilizando la voz sapy5
 - Interfaz invisible: Gestiona los chats desde cualquier ventana utilizando simples comandos de teclado. Es necesario tener un lector de pantalla activo.
@@ -34,7 +35,7 @@ Lee y gestiona de manera accesible el chat de tus propios directos o en los de t
 ### Usando interfaz invisible.
 | acción                    | combinación de teclas |
 | ------------------------- | ----------- |
-| Silencia la voz sapy      | control+p           |
+| Silencia todas las voces      | control+p           |
 | iniciar/cancelar la captura de un nuevo en vivo      | alt shift h            |
 | ir al en vivo anterior      | control alt shift flecha izquierda            |
 | ir al siguiente en vivo     | control alt shift flecha derecha            |

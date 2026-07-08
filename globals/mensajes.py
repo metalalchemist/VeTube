@@ -1,6 +1,6 @@
 mensaje_teclas=[
 	_('iniciar/cancelar la captura de otro en vivo'),
-	_('Silencia la voz sapy'),
+	_('Silencia todas las voces'),
 	_('Mensaje anterior.'),
 	_('Mensaje siguiente'),
 	_('Buffer anterior'),
@@ -62,7 +62,7 @@ eventos_lista = [
 
 comandos_ordenados = [
     'chat_dialog.toggle_chat_window_visibility',
-    'reader._leer.silence',
+    'reader.silence',
     'chat.elementoAnterior',
     'chat.elementoSiguiente',
     'chat.retrocederCategorias',

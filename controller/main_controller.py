@@ -2,7 +2,7 @@ import wx
 from globals.data_store import favorite, mensajes_destacados, favs, msjs,config
 from ui.main_window import MyFrame, PLATAFORMAS
 from os import remove
-from utils import languageHandler,canonical_scraper,funciones
+from utils import languageHandler,canonical_scraper,funciones,fajustes
 from controller.menus.main_menu_controller import MainMenuController
 from controller.chat_dialog_controller import ChatDialogController
 from servicios.youtube import ServicioYouTube
@@ -10,6 +10,7 @@ from servicios.twich import ServicioTwich
 from servicios.sala import ServicioSala
 from servicios.tiktok import ServicioTiktok
 from servicios.kick import ServicioKick # Importar ServicioKick
+from servicios.discord import ServicioDiscord, extraer_id_canal, validar_token
 from ui.dialog_response import response
 from setup import reader,network
 from controller.chat_controller import ChatController
@@ -189,7 +190,7 @@ class MainController:
         
         if url:
             # Si es TikTok y necesita simplificación, lo manejamos de forma asíncrona
-            if 'vm.tiktok' in url or 'vt.tiktok' in url or 'v.tiktok' in url:
+            if 'vm.tiktok' in url or 'vt.tiktok' in url or 'v.tiktok' in url or 'tiktok.com/t/' in url:
                 self.procesando_url = True
                 wx.BeginBusyCursor()
 
@@ -246,6 +247,10 @@ class MainController:
                 url = "https://www.tiktok.com/@" + url + "/live"
             elif plataforma_ids == 5: # Nuevo: Kick
                 url = "https://www.kick.com/" + url
+            elif plataforma_ids == 6: # Discord: no hay URL construible, se necesita el enlace del canal
+                wx.MessageBox(_("Para Discord pega el enlace del canal de texto: haz clic derecho sobre el canal y elige «Copiar enlace»."), _("Error"), wx.ICON_ERROR)
+                self.frame.text_ctrl_1.SetFocus()
+                return
         
         if 'yout' in url:
             if 'studio' in url:
@@ -269,7 +274,18 @@ class MainController:
                 url = path_parts[-1]
             else:
                 url = self.frame.text_ctrl_1.GetValue()
-            
+
+        elif 'discord' in url: # Detección de URL para Discord
+            if not extraer_id_canal(url):
+                wx.MessageBox(_("El enlace de Discord no es válido. Copia el enlace del canal de texto (clic derecho sobre el canal, «Copiar enlace») y pégalo en VeTube."), _("Error"), wx.ICON_ERROR)
+                self.frame.text_ctrl_1.SetFocus()
+                return
+            self.set_plataforma(6)
+            # El enlace completo identifica la sesión (así favoritos y «copiar
+            # enlace» funcionan); el servicio extrae de él el id del canal.
+            if not config.get('discord_token', ''):
+                self._pedir_token_discord(url)
+                return
         else:
             wx.MessageBox(_("¡Parece que el enlace al cual está intentando acceder no es un enlace válido."), _("Error"), wx.ICON_ERROR)
             self.frame.text_ctrl_1.SetFocus()
@@ -298,7 +314,9 @@ class MainController:
                 servicio = ServicioSala(self, url, self.frame, plataforma, chat_controller)
             elif plataforma_ids == 5: # Nuevo: Instanciar ServicioKick
                 servicio = ServicioKick(self, url, self.frame, plataforma, chat_controller)
-            
+            elif plataforma_ids == 6: # Discord (el token ya quedó validado en la detección del enlace)
+                servicio = ServicioDiscord(self, url, self.frame, plataforma, chat_controller)
+
             if servicio:
                 chat_controller.servicio = servicio # Set the service in chat_controller
                 servicio.iniciar_chat()
@@ -342,6 +360,38 @@ class MainController:
 
     def set_plataforma(self, idx):
         self.frame.plataforma.SetSelection(idx)
+
+    def _pedir_token_discord(self, url):
+        """Pide el token del bot con el diálogo y lo valida contra la API de
+        Discord SIN bloquear la interfaz: la comprobación corre en el hilo de
+        red (network.execute) y el resultado vuelve al hilo de la UI. Si el
+        token es válido se guarda en data.json y se retoma la apertura del
+        chat con el mismo enlace."""
+        from ui.discord_token_dialog import DiscordTokenDialog
+        dlg = DiscordTokenDialog(self.frame)
+        resultado = dlg.ShowModal()
+        token = dlg.get_token()
+        dlg.Destroy()
+        if resultado != wx.ID_OK:
+            self.set_plataforma(0)
+            self.frame.text_ctrl_1.SetFocus()
+            return
+        wx.BeginBusyCursor()
+
+        def al_validar(valido):
+            wx.EndBusyCursor()
+            if valido is True:
+                config['discord_token'] = token
+                fajustes.guardarConfiguracion(config)
+                self._continuar_abriendo_chat(url)
+                return
+            if valido is False:
+                wx.MessageBox(_("El token no es válido. Comprueba que lo copiaste completo desde el portal de desarrolladores de Discord."), _("Error"), wx.ICON_ERROR)
+            else: # None o excepción: fallo de red
+                wx.MessageBox(_("No se pudo comprobar el token por un fallo de red. Revisa tu conexión a internet e inténtalo de nuevo."), _("Error"), wx.ICON_ERROR)
+            self._pedir_token_discord(url)
+
+        network.execute(validar_token(token), callback=al_validar)
 
     def on_favorite_key_up(self, event):
         if event.GetKeyCode() == wx.WXK_SPACE:

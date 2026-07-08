@@ -10,6 +10,12 @@ class AjustesController:
     def __init__(self, dialog):
         self.dialog = dialog
         self.dialog.instala_voces.SetAccessible(Accesible(self.dialog.instala_voces))
+        
+        self.play_timer = wx.Timer(self.dialog)
+        self.dialog.Bind(wx.EVT_TIMER, self.on_check_play_status, self.play_timer)
+        self.reproduciendo_prueba = False
+        self.dialog.Bind(wx.EVT_WINDOW_DESTROY, self.on_destroy)
+        
         self._bind_events()
         self.actualizar_visibilidad_piper()
         # Cargamos la lista de voces correcta al iniciar
@@ -96,6 +102,12 @@ class AjustesController:
         self.actualizar_visibilidad_piper()
 
     def cambiar_sintetizador(self, event):
+        if self.play_timer.IsRunning():
+            self.play_timer.Stop()
+        reader._lector.silence()
+        self.dialog.boton_prueva.SetLabel(_("&Reproducir prueba."))
+        self.reproduciendo_prueba = False
+
         config['sistemaTTS'] = self.dialog.seleccionar_TTS.GetStringSelection()
         reader.set_tts(config['sistemaTTS'])
         self.dialog.choice_2.Clear()
@@ -208,10 +220,26 @@ class AjustesController:
             if self.dialog.choice_2.GetStringSelection() != 'No hay voces instaladas':
                 reader.leer_auto(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
         else:
+            if self.reproduciendo_prueba:
+                self.play_timer.Stop()
+                reader._lector.silence()
+                self.dialog.boton_prueva.SetLabel(_("&Reproducir prueba."))
+                self.reproduciendo_prueba = False
+                return
+            
             reader._lector.silence()
             reader.leer_auto(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
+            self.dialog.boton_prueva.SetLabel(_("&Detener prueba."))
+            self.reproduciendo_prueba = True
+            self.play_timer.Start(200)
 
     def cambiarVoz(self, event):
+        if self.play_timer.IsRunning():
+            self.play_timer.Stop()
+        reader._lector.silence()
+        self.dialog.boton_prueva.SetLabel(_("&Reproducir prueba."))
+        self.reproduciendo_prueba = False
+
         config['voz'] = self.dialog.choice_2.GetSelection()
         if config['sistemaTTS'] == "piper":
             from TTS.list_voices import obtener_ruta_voz
@@ -298,3 +326,26 @@ class AjustesController:
                     self.dialog.choice_2.SetSelection(config.get('voz', 0))
                 except:
                     self.dialog.choice_2.SetSelection(0)
+
+    def on_check_play_status(self, event):
+        if config['sistemaTTS'] != "piper" and hasattr(reader._lector, 'backend'):
+            try:
+                if not reader._lector.backend.speaking:
+                    self.play_timer.Stop()
+                    self.dialog.boton_prueva.SetLabel(_("&Reproducir prueba."))
+                    self.reproduciendo_prueba = False
+            except Exception:
+                self.play_timer.Stop()
+                self.dialog.boton_prueva.SetLabel(_("&Reproducir prueba."))
+                self.reproduciendo_prueba = False
+        else:
+            self.play_timer.Stop()
+
+    def on_destroy(self, event):
+        if hasattr(self, 'play_timer') and self.play_timer.IsRunning():
+            self.play_timer.Stop()
+        try:
+            reader._lector.silence()
+        except Exception:
+            pass
+        event.Skip()

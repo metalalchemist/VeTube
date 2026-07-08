@@ -25,7 +25,9 @@ configuraciones ={
 	'tiempo': 10,
 	'volumen': 100,
 	"cambiovolumen": 10,
-	'interface': False
+	'interface': False,
+	'discord_token': "",
+	'leer_historial': True
 
 }
 actualizar_configuracion = False
@@ -35,6 +37,11 @@ def escribirConfiguracion():
 	with open('data.json', 'w+') as file:
 		json.dump(configuraciones, file, indent=4)
 
+def guardarConfiguracion(configs):
+	"""Guarda en data.json la configuración actual (no los valores por defecto)."""
+	with open('data.json', 'w+', encoding='utf-8') as file:
+		json.dump(configs, file, indent=4, ensure_ascii=False)
+
 def leerConfiguracion():
 	global configuraciones, actualizar_configuracion
 	with open ("data.json") as file:
@@ -42,6 +49,10 @@ def leerConfiguracion():
 	for clave, valor_pred in configuraciones.items():
 		if clave not in configs:
 			configs[clave] = valor_pred
+			actualizar_configuracion = True
+		elif isinstance(valor_pred, list) and isinstance(configs[clave], list) and len(configs[clave]) < len(valor_pred):
+			# Completar listas que crecieron en versiones nuevas, conservando las preferencias existentes (evita IndexError)
+			configs[clave] = configs[clave] + valor_pred[len(configs[clave]):]
 			actualizar_configuracion = True
 	# actualizar al archivo en caso de ser necesario:
 	if actualizar_configuracion:

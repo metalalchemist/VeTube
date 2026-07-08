@@ -21,6 +21,7 @@ class ServicioKick:
         self.thread = None
         self.media_controller = None
         self.client_task = None
+        self.translator = None
 
     def iniciar_chat(self):
         self.is_running = True
@@ -72,6 +73,7 @@ class ServicioKick:
                 self.detener()
                 return
 
+            if data_store.dst: self.translator = translator.TranslatorWrapper()
             self.client = kick.Client()
             self._add_listeners()
             
@@ -101,6 +103,7 @@ class ServicioKick:
             wx.CallAfter(self.chat_controller.agregar_titulo, title)
             wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, title)
             await user.chatroom.connect()
+            self.loop.create_task(self._refrescar_espectadores_loop())
             
             kick_page_url = f"https://kick.com/{self.url}"
             video_url = extract_stream_url(kick_page_url)
@@ -115,7 +118,7 @@ class ServicioKick:
     async def on_message(self, message: kick.Message):
         wx.CallAfter(self.estadisticas_manager.agregar_mensaje, message.author.username)
         cadena = message.content
-        if data_store.dst: cadena = self.translator.translate(text=cadena, target=data_store.dst)
+        if data_store.dst and self.translator: cadena = self.translator.translate(text=cadena, target=data_store.dst)
         
         # Obtener los tipos de insignias de forma segura
         badge_types = []
@@ -188,3 +191,24 @@ class ServicioKick:
             self.bypass_process = None
         
         print("Servicio de Kick detenido completamente.")
+
+    async def _refrescar_espectadores_loop(self):
+        while self.is_running:
+            try:
+                user = await self.client.fetch_user(self.url)
+                livestream = user.livestream if user else None
+                if livestream:
+                    espectadores = livestream.viewer_count
+                    if espectadores is None:
+                        break
+                    
+                    title = livestream.title + _(" en vivo, actualmente ") + str(espectadores) + _(" viendo ahora")
+                    wx.CallAfter(self.chat_controller.agregar_titulo, title)
+                    wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, title)
+                else:
+                    break
+            except Exception as e:
+                print(f"Error al refrescar espectadores de Kick: {e}")
+                break
+            
+            await asyncio.sleep(10)

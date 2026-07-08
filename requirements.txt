@@ -14,3 +14,5 @@ git+https://github.com/KaitoCross/pytchat
 yt-dlp[default,curl-cffi]
 python-vlc
 wxPython
+pywin32
+discord.py

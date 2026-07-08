@@ -85,7 +85,9 @@ class piperSpeak:
         self.espeak_dir = self.bin_dir
         
         self.bass_stream = None
-        
+        # Generación de habla: silence() la incrementa para invalidar síntesis en curso o pendientes.
+        self._speak_generation = 0
+
         # Iniciar Job Object en Windows
         if sys.platform == "win32":
             self.job_handle = CreateJobObject(None, None)
@@ -277,18 +279,25 @@ class piperSpeak:
 
     def speak(self, text):
         if not text: return
+        self.silence()
+        asyncio.run_coroutine_threadsafe(self._speak_task(text, self._speak_generation), self.loop)
+
+    def silence(self):
+        # Invalida cualquier síntesis en curso o pendiente y corta el audio actual.
+        self._speak_generation += 1
         if self.bass_stream is not None:
-            try: 
+            try:
                 self.bass_stream.stop()
                 self.bass_stream.free()
             except: pass
             self.bass_stream = None
-        asyncio.run_coroutine_threadsafe(self._speak_task(text), self.loop)
 
-    async def _speak_task(self, text):
+    async def _speak_task(self, text, gen):
         if not self.voice_id or not self.channel:
             return
-            
+        if gen != self._speak_generation:
+            return  # silenciado antes de empezar
+
         rate_val = int(self.length_scale * 40)
         if rate_val < 5: rate_val = 5
         if rate_val > 200: rate_val = 200
@@ -297,19 +306,24 @@ class piperSpeak:
             voice_id=self.voice_id,
             text=text,
             speech_args=sonata_grpc_pb2.SpeechArgs(
-                rate=rate_val, 
+                rate=rate_val,
                 volume=self.volume,
                 pitch=self.pitch
             )
         )
-        
+
         try:
-            self.bass_stream = stream.PushStream(freq=self.sample_rate, chans=1)
-            self.bass_stream.volume = self.volume / 100.0
+            local_stream = stream.PushStream(freq=self.sample_rate, chans=1)
+            local_stream.volume = self.volume / 100.0
             if self.device != -1:
-                try: self.bass_stream.set_device(self.device)
+                try: local_stream.set_device(self.device)
                 except: pass
-            self.bass_stream.play()
+            if gen != self._speak_generation:
+                try: local_stream.free()
+                except: pass
+                return
+            self.bass_stream = local_stream
+            local_stream.play()
 
             async with self.channel.request(
                 '/sonata_grpc.sonata_grpc/SynthesizeUtterance',
@@ -319,9 +333,11 @@ class piperSpeak:
             ) as s:
                 await s.send_message(utterance, end=True)
                 async for result in s:
-                    if result.wav_samples and self.bass_stream is not None:
-                        self.bass_stream.push(result.wav_samples)
-                        
+                    if gen != self._speak_generation:
+                        break  # silenciado: dejar de empujar audio
+                    if result.wav_samples:
+                        local_stream.push(result.wav_samples)
+
         except Exception as e:
             print(f"Error en síntesis Sonata: {e}")
 
@@ -350,14 +366,8 @@ class piperSpeak:
                 pass
             self.job_handle = None
 
-        if self.bass_stream is not None:
-            try:
-                self.bass_stream.stop()
-                self.bass_stream.free()
-            except:
-                pass
-            self.bass_stream = None
-            
+        self.silence()
+
         if self.loop and self.loop.is_running():
             try:
                 self.loop.call_soon_threadsafe(self.loop.stop)

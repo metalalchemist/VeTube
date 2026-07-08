@@ -1,3 +1,10 @@
+v3.9
+se agrega número de espectadores que están viendo el en vivo para youtube y kick.
+se corrigen varios erorres críticos gracias a Enzo, de la comunidad  francesa.
+se agrega discord como plataforma de lectura de mensajes. para mas información mirar discord.md. gracias otra vez a Enzo.
+se crea una nueva pestaña chat donde van las conversiones de divisas, las traducciones y la lectura automática de mensajes.
+se agrega una nueva opción para decidir si capturar o no los mensajes previos al en vivo.
+se crea un instalador para vetube, gracias a Enzo
 v3.8
 se quitan varias dependencias antiguas para optimizar el código y el rendimiento.
 se soluciona que con algunos procesadores amd antiguos no se pudiera ejecutar vetube.

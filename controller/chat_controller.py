@@ -100,7 +100,7 @@ class ChatController:
         if list_box.GetSelection() == wx.NOT_FOUND: return
         
         menu = ChatItemMenu(self.ui)
-        ChatItemController(menu, list_box, self, self.ui.label_dialog)
+        ChatItemController(menu, list_box, self)
         self.ui.PopupMenu(menu.menu)
 
     def on_opciones_btn(self, event):
@@ -112,8 +112,10 @@ class ChatController:
     def on_listbox_keyup(self, event):
         event.Skip()
         if event.GetKeyCode() == 32:
-            reader._leer.silence()
             list_box = event.GetEventObject()
+            if list_box.GetSelection() == wx.NOT_FOUND:
+                return
+            reader.silence()
             reader.leer_auto(list_box.GetString(list_box.GetSelection()))
 
     def agregar_mensaje_general(self, mensaje):
@@ -300,7 +302,7 @@ class ChatController:
         mensaje = listbox.GetString(listbox.GetSelection())
         if not mensaje: return # Evitar archivar mensajes vacíos
 
-        main_frame = self.ui.GetParent()
+        main_frame = self.frame  # ventana principal; self.ui.GetParent() daría el notebook del ChatDialog
         list_mensajes = main_frame.list_mensajes
 
         if list_mensajes.GetCount() > 0 and list_mensajes.GetStrings()[0] == _("Tus mensajes archivados aparecerán aquí"):
@@ -310,7 +312,7 @@ class ChatController:
         if not ya_archivado:
             # Determinar el título
             if self.plataforma == 'TikTok':
-                titulo = extractUser(self.servicio.url)
+                titulo = extractUser(self.servicio.url) or self.servicio.url
             else:
                 titulo = self.ui.label_dialog.GetLabelText()
 
@@ -337,7 +339,7 @@ class ChatController:
 
     def toggle_lectura_automatica(self):
         if data_store.config['reader']:
-            reader._leer.silence()
+            reader.silence()
             data_store.config['reader'] = False
         else: data_store.config['reader'] = True
         reader.leer_auto(_("Lectura automática activada.") if data_store.config['reader'] else _("Lectura automática desactivada."))

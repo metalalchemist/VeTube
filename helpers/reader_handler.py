@@ -140,6 +140,11 @@ class ReaderHandler:
     def leer_auto(self, mensaje):
         self._lector.speak(mensaje)
 
+    def silence(self):
+        # Silencia la voz principal y la voz SAPI secundaria.
+        self._lector.silence()
+        self._leer.silence()
+
     def close(self):
         if hasattr(self._lector, 'close'):
             self._lector.close()
