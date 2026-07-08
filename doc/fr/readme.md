@@ -129,5 +129,6 @@ Avec votre soutien, vous contribuez à la croissance de ce programme.
 
 [Vous joignez-vous à notre cause ?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
-[télécharger le programme pour 64 bits](https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-x64.zip)
-[télécharger le programme pour 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.7/VeTube-x86.zip)
+[télécharger le programme portable pour 64 bits](https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-x64.zip)
+[télécharger le programme d'installation pour 64 bits](https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-setup.exe)
+[télécharger le programme portable pour 32 bits](https://github.com/metalalchemist/VeTube/releases/download/v3.7/VeTube-x86.zip)
