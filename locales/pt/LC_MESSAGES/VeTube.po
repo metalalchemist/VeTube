@@ -504,7 +504,6 @@ msgid "&Reproducir muestra"
 msgstr "&Reproduzir amostra"
 
 #: controller/piper_downloader_controller.py:140
-#, python-format
 msgid "Reproducción de muestra detenida."
 msgstr "Reprodução da amostra parada."
 
@@ -534,7 +533,6 @@ msgid "Esta voz no dispone de muestra de audio."
 msgstr "Esta voz não possui amostra de áudio."
 
 #: controller/piper_downloader_controller.py:165
-#, python-format
 msgid "Reproducción de muestra finalizada."
 msgstr "Reprodução da amostra concluída."
 
@@ -1185,7 +1183,7 @@ msgstr "se conectou ao bate-papo."
 
 #: ui/chat_dialog.py:4
 msgid "Sesiones de chat"
-msgstr "Sessões de chat"
+msgstr "Sessões de bate-papo"
 
 #: ui/chat_ui.py:10
 msgid "Lectura del chat en vivo..."

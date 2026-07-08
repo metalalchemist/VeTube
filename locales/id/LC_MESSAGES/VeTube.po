@@ -505,7 +505,6 @@ msgid "&Reproducir muestra"
 msgstr "&Putar sampel"
 
 #: controller/piper_downloader_controller.py:140
-#, python-format
 msgid "Reproducción de muestra detenida."
 msgstr "Pemutaran sampel dihentikan."
 
@@ -528,14 +527,13 @@ msgstr "Memutar sampel dari %s..."
 
 #: controller/piper_downloader_controller.py:155
 msgid "&Detener"
-msgstr "&Hentikan"
+msgstr "H&entikan"
 
 #: controller/piper_downloader_controller.py:159
 msgid "Esta voz no dispone de muestra de audio."
 msgstr "Suara ini tidak memiliki sampel audio."
 
 #: controller/piper_downloader_controller.py:165
-#, python-format
 msgid "Reproducción de muestra finalizada."
 msgstr "Pemutaran sampel selesai."
 

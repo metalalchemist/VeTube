@@ -503,7 +503,6 @@ msgid "&Reproducir muestra"
 msgstr "&Odtwórz próbkę"
 
 #: controller/piper_downloader_controller.py:140
-#, python-format
 msgid "Reproducción de muestra detenida."
 msgstr "Odtwarzanie próbki zatrzymane."
 
@@ -526,14 +525,13 @@ msgstr "Odtwarzanie próbki %s..."
 
 #: controller/piper_downloader_controller.py:155
 msgid "&Detener"
-msgstr "&Zatrzymaj"
+msgstr "Z&atrzymaj"
 
 #: controller/piper_downloader_controller.py:159
 msgid "Esta voz no dispone de muestra de audio."
 msgstr "Ten głos nie posiada próbki audio."
 
 #: controller/piper_downloader_controller.py:165
-#, python-format
 msgid "Reproducción de muestra finalizada."
 msgstr "Odtwarzanie próbki zakończone."
 
@@ -1037,12 +1035,12 @@ msgstr " zaczął Cię obserwować!"
 #: servicios/kick.py:205 servicios/tiktok.py:262 servicios/twich.py:176
 #: servicios/youtube.py:182
 msgid " en vivo, actualmente "
-msgstr " na żywo, obecnie "
+msgstr " na żywo, liczba widzów: "
 
 #: servicios/kick.py:205 servicios/tiktok.py:262 servicios/twich.py:176
 #: servicios/youtube.py:182
 msgid " viendo ahora"
-msgstr " widzów"
+msgstr "."
 
 #: servicios/language_updater.py:31
 msgid "Error al cargar el archivo de idiomas local."

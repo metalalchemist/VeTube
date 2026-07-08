@@ -82,7 +82,7 @@ msgstr "Nazdar, já jsem hlas, který ti bude číst zprávy z tvých oblíbený
 
 #: controller/ajustes_controller.py:232
 msgid "&Detener prueba."
-msgstr "&Zastavit ukázku."
+msgstr "Z&astavit ukázku."
 
 #: controller/ajustes_controller.py:285
 msgid "Descargar voces de internet..."
@@ -493,7 +493,6 @@ msgid "&Reproducir muestra"
 msgstr "&Přehrát ukázku"
 
 #: controller/piper_downloader_controller.py:140
-#, python-format
 msgid "Reproducción de muestra detenida."
 msgstr "Přehrávání ukázky zastaveno."
 
@@ -516,14 +515,13 @@ msgstr "Přehrávání ukázky %s..."
 
 #: controller/piper_downloader_controller.py:155
 msgid "&Detener"
-msgstr "&Zastavit"
+msgstr "Z&astavit"
 
 #: controller/piper_downloader_controller.py:159
 msgid "Esta voz no dispone de muestra de audio."
 msgstr "Tento hlas nemá zvukovou ukázku."
 
 #: controller/piper_downloader_controller.py:165
-#, python-format
 msgid "Reproducción de muestra finalizada."
 msgstr "Přehrávání ukázky dokončeno."
 
@@ -1019,12 +1017,12 @@ msgstr " tě sleduje!"
 #: servicios/kick.py:205 servicios/tiktok.py:262 servicios/twich.py:176
 #: servicios/youtube.py:182
 msgid " en vivo, actualmente "
-msgstr " na streamu, právě "
+msgstr " na streamu, počet diváků: "
 
 #: servicios/kick.py:205 servicios/tiktok.py:262 servicios/twich.py:176
 #: servicios/youtube.py:182
 msgid " viendo ahora"
-msgstr " diváků"
+msgstr "."
 
 #: servicios/language_updater.py:31
 msgid "Error al cargar el archivo de idiomas local."
