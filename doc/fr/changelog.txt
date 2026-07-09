@@ -1,0 +1,156 @@
+v3.9
+Ajout du nombre de spectateurs en train de regarder le direct, pour YouTube et Kick.
+Correction de plusieurs erreurs critiques, grâce à Enzo, de la communauté française.
+Ajout de Discord comme plateforme de lecture de messages. Pour plus d'informations, voir discord.md. Merci encore à Enzo.
+Création d'un nouvel onglet Chat, qui regroupe la conversion des devises, la traduction et la lecture automatique des messages.
+Ajout d'une nouvelle option pour choisir de capturer ou non les messages antérieurs au direct.
+Création d'un installateur pour VeTube, merci à Enzo.
+v3.8
+Suppression de plusieurs dépendances anciennes pour optimiser le code et les performances.
+Correction d'un problème qui empêchait VeTube de se lancer sur certains anciens processeurs AMD.
+Correction de la conversion des devises.
+Prise en charge plus complète de Piper, avec l'intégration de SonataGCRP et du téléchargeur de voix Hugging Face, grâce au module complémentaire Sonata pour NVDA.
+Ajout de OneCore aux voix prises en charge, grâce à Prism, une nouvelle bibliothèque d'accessibilité.
+Désormais, si une transmission n'a pas pu démarrer pour une raison quelconque, le programme le signale et revient à la fenêtre principale.
+v3.7
+* Correction de chat-downloader pour le rendre compatible avec Twitch.
+* Mise à jour de protobuf vers la dernière version à cause d'une faille de sécurité (CVE 0994).
+v3.6
+Correction d'une erreur du système de mise à jour.
+v3.5
+Nouvelles méthodes pour classer les messages dans leurs différentes catégories sur Kick : modérateurs, utilisateurs vérifiés et membres ou abonnés.
+Possibilité de désactiver l'interface invisible du programme.
+v3.4
+Ajout, en version bêta, de la capture du chat de la plateforme Kick.
+Correction d'erreurs dans l'éditeur de combinaisons de clavier.
+v3.3
+Il est désormais possible de capturer plusieurs directs à la fois.
+Le lecteur multimédia est maintenant global : chaque fois que l'on se déplace vers le direct précédent ou le direct suivant, si l'on arrête le lecteur puis qu'on le réactive, il lit l'URL du direct sur lequel on est positionné.
+Ajout d'un onglet de configuration du lecteur dans les réglages.
+Les statistiques sont désormais propres à chaque direct.
+v3.2
+Création d'un nouveau lecteur capable de lire aussi bien les directs passés que les directs en temps réel. Pour plus d'informations, voir le readme.
+Création d'un nouveau service qui permet de profiter de son direct YouTube en temps réel avec lecture audio.
+Les noms d'utilisateur TikTok peuvent maintenant être extraits des URL contenant vm.tiktok.
+v3.1
+Correction d'un bug qui empêchait le chat TikTok de démarrer.
+v3.0
+Création d'un outil de mise à jour des langues.
+Suppression de la fonction d'enregistrement de l'historique.
+Correction de bugs sur la plateforme TikTok.
+Interface améliorée : les tampons sont visibles et le programme a été restructuré en modules.
+Il est maintenant possible de choisir un périphérique audio pour les sons et pour la lecture des messages. À noter : pour la lecture des messages, le changement ne s'applique qu'au moteur PiperTTS.
+On peut désormais capturer le chat d'une plateforme avec le simple nom d'utilisateur de la personne. Par exemple, si l'on écrit 4everzyanya, qu'on appuie sur Tab, qu'on choisit TikTok et qu'on valide par Entrée, on arrive sur le direct TikTok de la personne.
+L'éditeur de combinaisons est accessible aussi bien avant le chat que pendant celui-ci.
+v2.9
+Correction du bug qui empêchait d'ajouter des chaînes :
+* Pour ajouter une chaîne YouTube, il faut écrire le nom d'utilisateur de la chaîne, suivi de /live. Par exemple :
+
+www.youtube.com/@4everzyanya/live
+
+Corrections d'erreurs : les statistiques et l'exportation s'enregistrent correctement (elles ne le faisaient plus depuis l'ajout du Salon).
+Corrections d'erreurs : le chat devrait se terminer correctement dans toutes les sections.
+Ajout d'un onglet Événements, qui permet d'ignorer certains types d'événements dans le programme.
+Le programme essaie désormais de traduire les notes de mise à jour avec le traducteur Google pour les personnes ayant choisi une autre langue que l'espagnol.
+v2.8
+Ajout de la lecture du chat du Salon, merci Oriol Gomez.
+v2.71
+Ajout, dans le menu contextuel d'un message, d'une option appelée Liste des URL. Elle permet d'accéder rapidement aux URL contenues dans les messages.
+Ajout d'un nouveau tampon appelé Messages : seuls les messages du chat y arrivent. Utile pour qu'ils ne se mélangent pas à la liste générale dans les directs TikTok.
+Le convertisseur de devises est maintenant disponible pour les directs TikTok.
+v2.7
+Ajout de données supplémentaires dans les statistiques du chat lorsque le direct est sur TikTok.
+Ajout de la mise à jour automatique de la configuration, pour corriger des erreurs inattendues si un réglage n'est pas défini.
+On peut ignorer certains événements du chat : menu Plus d'options, Options, Configuration, catégorie Événements.
+Possibilité de désactiver la confirmation à la fermeture.
+Correction de la capture des messages Twitch ; le programme essaie aussi de ne plus capturer d'informations en double dans la liste générale.
+Ajout de la prise en charge de TikTok.
+Correction de plusieurs erreurs mineures.
+Correction d'erreurs liées aux chemins des voix lors de l'accès au synthétiseur Piper.
+v2.6
+Merci à Mateo Celillo :
+Ajout d'une zone de liste déroulante dans les options vocales pour choisir entre plusieurs systèmes de synthèse vocale ; elle n'apparaît que si la case Utiliser SAPI est décochée.
+Ajout du moteur de synthèse vocale Piper.
+Mise à jour du système audio.
+Ajout d'une nouvelle valeur de configuration dans data.json (sistemaTTS) ; il est donc conseillé de repartir d'une configuration vierge pour éviter des problèmes.
+metalalchemist & Johan G. :
+Problèmes de configuration résolus : quand on annulait, les réglages étaient quand même appliqués. Cela ne devrait plus arriver.
+Si l'on collait une URL comme https://www.youtube.com/live/3wzD80Irf40?feature=share, le programme ne récupérait pas le chat. C'est corrigé.
+Les messages ayant la valeur None devraient maintenant être capturés.
+Ajout d'un convertisseur de devises pour convertir les dons dans la monnaie de votre choix.
+Correction d'un bug sur Twitch : en ajoutant le direct en cours aux favoris pendant que le créateur était en train de diffuser, c'est le titre du direct qui était enregistré au lieu du nom de la chaîne.
+Ajout de 2 nouvelles options dans le bouton Plus d'options : copier le lien et lire dans le navigateur.
+Corrections de bugs du tampon des favoris : plus de messages en double, et impossible d'ajouter un message depuis le tampon des favoris lui-même.
+Quelques optimisations mineures du code.
+Ajout d'un menu contextuel dans la liste du chat, avec plusieurs options : traduire le message dans la langue du programme, copier le message et archiver le message. Merci Johan G.
+Section Archiver les messages, pour conserver un message important. Ces messages restent dans l'application jusqu'à ce qu'on les supprime, dans le troisième onglet ajouté. Merci Johan G.
+Ajout de l'éditeur de clavier ; il se trouve dans le menu Plus d'options, sous-menu Options.
+Les statistiques de la chaîne peuvent être enregistrées dans un fichier texte. Merci Johan G.
+Ajout de la traduction du message quand un message est affiché.
+Il est maintenant possible de savoir combien de messages sont arrivés dans le chat et qui a le plus parlé : une liste classe, du plus grand au plus petit, qui a parlé et combien de messages chacun a envoyés, suivie d'une zone de texte indiquant le total des messages et le total des utilisateurs.
+Correction d'un bug où les messages des directs passés se mélangeaient.
+Correction d'un bug où le chat ne s'initialisait pas.
+La documentation intégrée est supprimée ; à la place, une option permet d'y accéder en ligne, via le menu Plus d'options, sous-menu Aide.
+Correction d'un bug du traducteur, qui est aussi ajouté à Twitch.
+Plusieurs options du chat sont regroupées dans un menu contextuel. Merci Johan G.
+v2.5
+Amélioration de la fonction de recherche de mot parmi les messages.
+Correction du bug des messages en double ; chaque message est ajouté à sa catégorie correspondante.
+Il est maintenant possible de traduire les messages d'un stream vers n'importe quelle langue.
+Création d'un bouton pour enregistrer l'historique des messages dans un fichier. Merci Johan G.
+v2.2
+Changement du système de mise à jour, adapté pour VeTube depuis https://github.com/MCV-Software/TWBlue/tree/next-gen/src/update
+Ajout de 2 options dans la catégorie Général du menu Configuration.
+Ajout d'un raccourci pour désactiver temporairement les sons : Alt+Maj+P.
+Les touches sont déplacées dans un fichier indépendant, pour préparer un futur éditeur de combinaisons.
+(développeurs) : la bibliothèque keyboard est remplacée par keyboard_handler.
+Changement de la combinaison pour faire taire un message entrant avec SAPI 5 : Ctrl+P.
+Ajout d'un raccourci pour effacer les tampons de recherche et le tampon des favoris : Alt+Maj+D.
+Il est maintenant possible de rechercher des messages par mot ou par nom d'auteur ; un tampon portant le terme recherché est créé avec toutes les correspondances (Alt+Maj+S).
+v2.1
+Les messages du propriétaire de la chaîne sont désormais affichés.
+Vous pouvez choisir quels sons sont activés depuis la configuration du programme.
+VeTube n'autorise plus 2 instances ouvertes en même temps.
+Vous pouvez activer et désactiver les catégories depuis la configuration du programme.
+Correction du bug qui ajoutait un lien aux favoris autant de fois que vous aviez de favoris.
+Si vous passez dans une autre catégorie, le mode automatique ne lit que les messages de cette catégorie.
+Ajout d'un raccourci clavier pour surligner un message ; il est envoyé dans la catégorie des favoris (créée si vous ne l'avez pas) : Alt+Maj+F.
+Ajout de catégories de messages : membres, dons, modérateurs, utilisateurs vérifiés et favoris.
+Correction de l'impossibilité de démarrer le chat automatiquement quand le titre ou le nombre de vues d'un direct est introuvable.
+v2.0
+Ajout de Twitch à la liste des plateformes prises en charge.
+Correction d'un bug qui pouvait fermer le programme quand SAPI ou le lecteur d'écran lisait le chat.
+Ajout d'une section de favoris : vous pouvez enregistrer un direct qui vous plaît pour rejouer son chat autant de fois que vous voulez.
+Ajout du portugais aux langues traduites. Merci Eternal Legend.
+Correction du chargement des langues.
+V1.2.1
+(développeurs) : webbrowser est remplacé par des fonctions natives de wxPython. Merci Hector.
+Ajout de l'anglais au catalogue des langues prises en charge.
+Ajout de l'option qui permet de lire automatiquement vos messages avec une voix SAPI ou avec votre lecteur d'écran. Merci pour vos suggestions.
+Modification d'une option : Alt+Maj+M active ou désactive désormais la lecture automatique des messages ; la case du même nom se trouve aussi dans la configuration.
+Optimisation de la récupération du titre et du nombre de vues du lien collé. Merci Hector.
+Quand on fermait puis ouvrait un autre direct, un nouveau fil de l'interface invisible s'ouvrait et gênait la lecture du chat. Cela ne devrait plus arriver.
+V1.2
+(développeurs) : ajout du catalogue de VeTube (langue d'origine : espagnol) pour permettre la traduction en plusieurs langues. Le fichier s'appelle VeTube.pot.
+(développeurs) : pytchat est remplacé par chat_downloader, afin de prendre en charge plusieurs plateformes.
+La langue définie par défaut dans votre configuration est désormais sélectionnée automatiquement.
+Si le programme est à jour, VeTube vous informe désormais que vous avez la dernière version quand vous recherchez des mises à jour.
+Ajout de sons qui préviennent à l'arrivée d'un message, qu'il vienne d'un membre ou qu'il soit normal.
+Ajout d'un système de mise à jour : il vérifie au démarrage, et se trouve aussi dans Plus d'options et Aide.
+Suppression de la limite de messages.
+Expérimental : VeTube peut détecter la langue du système et charger le catalogue correspondant s'il est disponible.
+Le programme ne démarrait pas dans certains cas ; à chaque ouverture, les fichiers temporaires de %temp%/gempy sont désormais supprimés.
+Correction du gel de l'interface invisible à l'entrée dans le chat.
+Correction de l'impossibilité d'aller au début du chat dans la liste principale.
+Ajout de sons lors de la navigation dans le chat et à l'arrivée en bordure de liste. Merci Glein.
+Ajout d'un son qui indique l'entrée dans le chat. Merci Johan G.
+Accès facile à notre page GitHub pour collaborer avec nous, ainsi qu'une option de soutien dans la section d'aide. Merci Johan G.
+VeTube reconnaît désormais un lien YouTube Studio quand il s'agit d'un direct ; il n'est donc plus nécessaire d'aller chercher le lien YouTube.
+***
+v1.1
+Ajout d'un dialogue séparé pour le chat. Merci Johan G.
+Ajout de l'affichage du message dans une zone de texte.
+VeTube reconnaît désormais qu'un lien n'est pas en direct, pour éviter la création du chat.
+***
+v1.0
+Première version du projet.

@@ -120,5 +120,6 @@ cesar.verastegui17@gmail.com
 With your support, you can help this program continue to grow.
 
 [Want to donate to VeTube?](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
-[Download the 64-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-x64.zip)
-[Download the 32-bit version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.7/VeTube-x86.zip)
+[Download the 64-bit portable version of the program here](https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-x64.zip)
+[Download the 64-bit installer version of the program here](https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-setup.exe)
+[Download the 32-bit portable version of the program here](https://github.com/metalalchemist/VeTube/releases/download/v3.7/VeTube-x86.zip)
