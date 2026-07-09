@@ -239,10 +239,12 @@ class MainController:
         
         # Si no autodetecta, construye la URL basada en la plataforma seleccionada y el texto actual
         if not autodetectar:
+            # Quita el arroba si el usuario lo escribió con el nombre; el código ya lo añade donde hace falta
+            url = url.lstrip('@')
             if plataforma_ids == 1:
                 url = "https://www.youtube.com/@" + url + "/live"
             elif plataforma_ids == 2:
-                url = "https://www.twitch.tv/@" + url
+                url = "https://www.twitch.tv/" + url
             elif plataforma_ids == 3:
                 url = "https://www.tiktok.com/@" + url + "/live"
             elif plataforma_ids == 5: # Nuevo: Kick
