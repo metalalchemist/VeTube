@@ -1,5 +1,5 @@
 from globals.data_store import config
-from globals.resources import rutasonidos,lista_voces,lista_voces_piper
+from globals.resources import rutasonidos,lista_voces,lista_voces_piper,recargar_rutasonidos
 from setup import player,reader
 from utils import app_utilitys
 from TTS.list_voices import piper_list_voices , install_piper_voice
@@ -54,6 +54,7 @@ class AjustesController:
         self.dialog.check_salir.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'salir'))
         self.dialog.check_donaciones.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'donations'))
         self.dialog.check_2.Bind(wx.EVT_CHECKBOX, self.mostrarSonidos)
+        self.dialog.lista_temas.Bind(wx.EVT_CHOICE, self.cambiar_tema_sonidos)
         self.dialog.reproducir.Bind(wx.EVT_BUTTON, lambda event: player.play(rutasonidos[self.dialog.soniditos.GetFocusedItem()]))
         self.dialog.seleccionar_TTS.Bind(wx.EVT_CHOICE, self.cambiar_sintetizador)
         self.dialog.establecer_dispositivo.Bind(wx.EVT_BUTTON, self.establecer_dispositivo)
@@ -92,6 +93,11 @@ class AjustesController:
             config['sonidos'] = False
             self.dialog.soniditos.Disable()
             self.dialog.reproducir.Disable()
+
+    def cambiar_tema_sonidos(self, event):
+        config['directorio'] = self.dialog.lista_temas.GetStringSelection()
+        recargar_rutasonidos()
+        if config['sonidos']: player.play(rutasonidos[0])
 
     def checar(self, event, key):
         config[key] = True if event.IsChecked() else False
