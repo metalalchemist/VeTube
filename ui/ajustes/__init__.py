@@ -97,6 +97,7 @@ class configuracionDialog(wx.Dialog):
 
 		# Panel Sonidos
 		self.check_2 = self.panel_sonidos.check_2
+		self.lista_temas = self.panel_sonidos.lista_temas
 		self.soniditos = self.panel_sonidos.soniditos
 		self.reproducir = self.panel_sonidos.reproducir
 		self.lista_dispositivos = self.panel_sonidos.lista_dispositivos

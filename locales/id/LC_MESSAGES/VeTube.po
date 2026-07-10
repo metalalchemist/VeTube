@@ -1559,6 +1559,10 @@ msgid "Activar sonidos"
 msgstr "Aktifkan suara"
 
 #: ui/ajustes/sonidos.py:14
+msgid "Tema de sonidos"
+msgstr "Tema suara"
+
+#: ui/ajustes/sonidos.py:23
 msgid "Sonido"
 msgstr "Suara"
 
