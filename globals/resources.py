@@ -20,8 +20,8 @@ nombres_sonidos = [
     "share.mp3",
     "chest.mp3"
 ]
-# msj.mp3 y orilla.mp3 no están en la lista: chat_controller los reproduce directamente
-sonidos_requeridos = nombres_sonidos + ["msj.mp3", "orilla.mp3"]
+# msj.mp3, orilla.mp3 y cambiardispositivo.mp3 no están en la lista: se reproducen directamente
+sonidos_requeridos = nombres_sonidos + ["msj.mp3", "orilla.mp3", "cambiardispositivo.mp3"]
 rutasonidos = []
 
 def listar_temas_sonidos():
