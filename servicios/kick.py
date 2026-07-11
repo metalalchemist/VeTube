@@ -31,7 +31,8 @@ class ServicioKick:
     def _run_bypass_and_wait(self):
         dir_current_script = os.path.dirname(os.path.abspath(__file__))
         arch = "64" if platform.architecture()[0][:2] == "64" else "32"
-        path_to_arch_dir = os.path.join(os.getcwd(), arch)
+        # Ruta relativa al código, no al cwd: en el build instalado la carpeta 64 vive dentro de _internal (igual que en players/vlc_helper.py)
+        path_to_arch_dir = os.path.abspath(os.path.join(dir_current_script, '..', arch))
         bypass_executable = os.path.join(path_to_arch_dir, f"bypass{arch}.exe")
 
         if not os.path.exists(bypass_executable):
