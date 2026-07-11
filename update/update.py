@@ -23,7 +23,7 @@ def perform_update(update_url, donations=True, password=None, progress_callback=
     download_path = os.path.join(base_path, 'update.zip')
     update_path = os.path.join(base_path, 'update')
     
-    if not donations: donation()
+    if donations: donation()
     
     with httpx.Client(follow_redirects=True, timeout=None) as client:
         downloaded = download_update(update_url, download_path, client=client, progress_callback=progress_callback)

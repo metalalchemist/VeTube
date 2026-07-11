@@ -212,7 +212,7 @@ class AjustesController:
         valor_str = self.dialog.lista_dispositivos.GetStringSelection()
         config['dispositivo'] = valor
         player.setdevice(config["dispositivo"])
-        player.play("sounds/cambiardispositivo.mp3")
+        player.play(f"sounds/{config['directorio']}/cambiardispositivo.mp3")
         if config['sistemaTTS'] == "piper":
             if lista_voces_piper and lista_voces_piper[0] != 'No hay voces instaladas':
                 # Reutilizamos los nombres que ya tiene el player formateados para Sonata
