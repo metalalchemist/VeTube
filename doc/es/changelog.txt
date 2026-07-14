@@ -1,4 +1,5 @@
 v 3.91
+se agrega un selector de temas de sonido en el panel de sonidos en ajustes.
 se corrige que se leyera correctamente el chat de kick, gracias a Enzo, no se encontraba el ejecutable que nos permitía pasar de cloudflare mas que en el código fuente.
 detección correcta de usuarios de twich al elegir como plataforma twich.
 v3.9
