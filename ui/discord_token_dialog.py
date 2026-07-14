@@ -20,7 +20,7 @@ class DiscordTokenDialog(wx.Dialog):
         sizer.Add(intro, 0, wx.ALL, 10)
         label = wx.StaticText(self, wx.ID_ANY, _("&Token del bot:"))
         sizer.Add(label, 0, wx.LEFT | wx.RIGHT, 10)
-        self.token_ctrl = wx.TextCtrl(self, wx.ID_ANY, "")
+        self.token_ctrl = wx.TextCtrl(self, wx.ID_ANY, "", style=wx.TE_PASSWORD)
         sizer.Add(self.token_ctrl, 0, wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, 10)
         self.boton_guia = wx.Button(self, wx.ID_ANY, _("¿No sabes cómo crear el token? Abrir la &guía"))
         self.boton_guia.Bind(wx.EVT_BUTTON, self.abrir_guia)

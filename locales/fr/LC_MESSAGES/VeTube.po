@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2026-07-07 21:03-0700\n"
-"PO-Revision-Date: 2026-07-02 12:00+0000\n"
+"PO-Revision-Date: 2026-07-10 12:00+0000\n"
 "Last-Translator: Enzo Wenterstein <enzo.wenterstein@hotmail.com>\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -1553,23 +1553,27 @@ msgstr "Volume du lecteur"
 msgid "cambio de volumen con las teclas de volumen (1-25)"
 msgstr "Changement du volume avec les touches de volume (1-25)"
 
-#: ui/ajustes/sonidos.py:10
+#: ui/ajustes/sonidos.py:11
 msgid "Activar sonidos"
 msgstr "Lire les sons."
 
 #: ui/ajustes/sonidos.py:14
+msgid "Tema de sonidos"
+msgstr "Thème de sons"
+
+#: ui/ajustes/sonidos.py:23
 msgid "Sonido"
 msgstr "Son"
 
-#: ui/ajustes/sonidos.py:18
+#: ui/ajustes/sonidos.py:27
 msgid "&Reproducir"
 msgstr "&Lire"
 
-#: ui/ajustes/sonidos.py:21
+#: ui/ajustes/sonidos.py:30
 msgid "Seleccionar dispositivo de audio"
 msgstr "Sélectionner le périphérique audio"
 
-#: ui/ajustes/sonidos.py:26
+#: ui/ajustes/sonidos.py:35
 msgid "&Establecer"
 msgstr "&Configurer"
 

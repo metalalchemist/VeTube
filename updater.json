@@ -1,8 +1,7 @@
 {
-    "current_version": "3.9",
-    "description": "varios errores corregidos, soporte a discord",
+    "current_version": "3.91",
+    "description": "¡importante! actualiza para que funcione la lectura para los en vivos en kick",
     "downloads": {
-        "Windows32": "https://github.com/metalalchemist/VeTube/releases/download/v3.7/VeTube-x86.zip",
         "Windows64": "https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-x64.zip"
     }
 }

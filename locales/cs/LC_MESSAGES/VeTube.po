@@ -1536,6 +1536,10 @@ msgid "Activar sonidos"
 msgstr "Zapnout zvuky"
 
 #: ui/ajustes/sonidos.py:14
+msgid "Tema de sonidos"
+msgstr "Motiv zvuků"
+
+#: ui/ajustes/sonidos.py:23
 msgid "Sonido"
 msgstr "Zvuk"
 
