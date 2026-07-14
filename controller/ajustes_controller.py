@@ -55,7 +55,7 @@ class AjustesController:
         self.dialog.check_donaciones.Bind(wx.EVT_CHECKBOX, lambda event: self.checar(event, 'donations'))
         self.dialog.check_2.Bind(wx.EVT_CHECKBOX, self.mostrarSonidos)
         self.dialog.lista_temas.Bind(wx.EVT_CHOICE, self.cambiar_tema_sonidos)
-        self.dialog.reproducir.Bind(wx.EVT_BUTTON, lambda event: player.play(rutasonidos[self.dialog.soniditos.GetFocusedItem()]))
+        self.dialog.reproducir.Bind(wx.EVT_BUTTON, self.reproducir_sonido)
         self.dialog.seleccionar_TTS.Bind(wx.EVT_CHOICE, self.cambiar_sintetizador)
         self.dialog.establecer_dispositivo.Bind(wx.EVT_BUTTON, self.establecer_dispositivo)
         self.dialog.boton_prueva.Bind(wx.EVT_BUTTON, self.reproducirPrueva)
@@ -99,6 +99,11 @@ class AjustesController:
         recargar_rutasonidos()
         if config['sonidos']: player.play(rutasonidos[0])
 
+    def reproducir_sonido(self, event):
+        idx = self.dialog.soniditos.GetFocusedItem()
+        if 0 <= idx < len(rutasonidos):
+            player.play(rutasonidos[idx])
+
     def checar(self, event, key):
         config[key] = True if event.IsChecked() else False
 
@@ -118,7 +123,7 @@ class AjustesController:
         reader.set_tts(config['sistemaTTS'])
         self.dialog.choice_2.Clear()
         if config['sistemaTTS'] == "piper":
-            if lista_voces_piper and lista_voces_piper[0] != 'No hay voces instaladas':
+            if lista_voces_piper and lista_voces_piper[0] != _("No hay voces instaladas"):
                 voz_index = config.get('voz', 0)
                 if voz_index >= len(lista_voces_piper):
                     voz_index = 0
@@ -214,7 +219,7 @@ class AjustesController:
         player.setdevice(config["dispositivo"])
         player.play(f"sounds/{config['directorio']}/cambiardispositivo.mp3")
         if config['sistemaTTS'] == "piper":
-            if lista_voces_piper and lista_voces_piper[0] != 'No hay voces instaladas':
+            if lista_voces_piper and lista_voces_piper[0] != _("No hay voces instaladas"):
                 # Reutilizamos los nombres que ya tiene el player formateados para Sonata
                 nombres = player.devicenames
                 dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
@@ -223,7 +228,7 @@ class AjustesController:
 
     def reproducirPrueva(self, event):
         if config['sistemaTTS'] == "piper":
-            if self.dialog.choice_2.GetStringSelection() != 'No hay voces instaladas':
+            if self.dialog.choice_2.GetStringSelection() != _("No hay voces instaladas"):
                 reader.leer_auto(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
         else:
             if self.reproduciendo_prueba:
@@ -281,7 +286,7 @@ class AjustesController:
         reader._leer.set_rate(value)
         if config['sistemaTTS'] == "piper":
             voz_actual = lista_voces_piper[self.dialog.choice_2.GetSelection()]
-            if voz_actual != 'No hay voces instaladas':
+            if voz_actual != _("No hay voces instaladas"):
                 reader._lector.set_rate(app_utilitys.porcentaje_a_escala(value))
         else:
             reader._lector.set_rate(value)

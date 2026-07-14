@@ -6,7 +6,7 @@ import shutil
 from setup import network, player, reader
 from servicios.piper_manager import PiperManager
 from ui.piper_downloader import PiperDownloaderDialog
-from TTS.list_voices import piper_list_voices
+from TTS.list_voices import piper_list_voices, obtener_ruta_voz
 
 class PiperDownloaderController:
     def __init__(self, parent):
@@ -67,7 +67,7 @@ class PiperDownloaderController:
             return
         
         voz_nombre = self.voces_locales[selection]
-        ruta_modelo = os.path.join("voices", f"voice-{voz_nombre[:-5]}", voz_nombre)
+        ruta_modelo = obtener_ruta_voz(voz_nombre)
         
         self.view.set_status(_("Probando voz local: %s") % voz_nombre)
         
@@ -88,9 +88,8 @@ class PiperDownloaderController:
         if wx.MessageBox(_("¿Estás seguro de que deseas eliminar la voz %s? Esta acción no se puede deshacer.") % voz_nombre, 
                          _("Confirmar eliminación"), wx.YES_NO | wx.ICON_WARNING) == wx.ID_YES:
             
-            # La carpeta suele ser voice-<nombre_sin_onnx>
-            folder_name = f"voice-{voz_nombre[:-5]}"
-            path_to_remove = os.path.join("voices", folder_name)
+            # piper_list_voices() ya devuelve el nombre de la carpeta (voice-...)
+            path_to_remove = os.path.join("voices", voz_nombre)
             
             try:
                 if os.path.exists(path_to_remove):

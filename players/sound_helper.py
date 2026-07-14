@@ -51,6 +51,9 @@ class SoundPlayer:
 		if self.sound.is_playing: self.sound.pause()
 		else: self.sound.play()
 
+	def is_playing(self):
+		return self.sound is not None and hasattr(self.sound, 'is_playing') and self.sound.is_playing
+
 	def atrasar(self, seconds):
 		if not self.sound: return
 		current_pos = self.sound.get_position()

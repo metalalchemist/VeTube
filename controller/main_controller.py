@@ -125,6 +125,9 @@ class MainController:
                     lf.SetFocus()
             else:
                 sel = lf.GetSelection()
+                if sel == wx.NOT_FOUND:
+                    lf.SetFocus()
+                    return
                 lf.Delete(sel)
                 favorite.pop(sel)
                 funciones.escribirJsonLista('favoritos.json', favorite)
