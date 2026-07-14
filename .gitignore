@@ -10,3 +10,4 @@ venv/
 favoritos.json
 keys.txt
 .vscode
+logs/
