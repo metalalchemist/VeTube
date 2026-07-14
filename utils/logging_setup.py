@@ -12,12 +12,17 @@ import os
 import sys
 import threading
 
-# Bibliotecas de terceros que generan mucho ruido en DEBUG: las bajamos a WARNING
-# para que el archivo de log siga siendo legible y útil para diagnosticar.
+# Bibliotecas de terceros muy verbosas (peticiones HTTP, latidos de websocket...):
+# las bajamos a WARNING para que el archivo de log siga siendo legible.
 _LIBRERIAS_RUIDOSAS = (
     "httpx", "httpcore", "urllib3", "asyncio", "PIL",
-    "comtypes", "websocket", "websockets", "TikTokLive",
+    "comtypes", "websocket", "websockets",
 )
+
+# Nuestros propios módulos: los ponemos en DEBUG para tener diagnóstico fino
+# (p. ej. los pasos del actualizador), mientras el resto queda en INFO. Se hace
+# con lista explícita porque los loggers de VeTube no comparten un prefijo común.
+_LOGGERS_VETUBE = ("vetube", "update", "updater", "keyboard_handler")
 
 _configurado = False
 _log = logging.getLogger("vetube")
@@ -32,7 +37,7 @@ def carpeta_logs():
     return os.path.join(base, "logs")
 
 
-def configurar_logs(nivel=logging.DEBUG):
+def configurar_logs(nivel=logging.INFO):
     """Configura el logger raíz una sola vez. Seguro de llamar varias veces."""
     global _configurado
     if _configurado:
@@ -71,6 +76,9 @@ def configurar_logs(nivel=logging.DEBUG):
 
     for nombre in _LIBRERIAS_RUIDOSAS:
         logging.getLogger(nombre).setLevel(logging.WARNING)
+
+    for nombre in _LOGGERS_VETUBE:
+        logging.getLogger(nombre).setLevel(logging.DEBUG)
 
     _instalar_captura_excepciones()
 
