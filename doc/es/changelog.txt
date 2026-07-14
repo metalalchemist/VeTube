@@ -1,3 +1,6 @@
+v 3.91
+se corrige que se leyera correctamente el chat de kick, gracias a Enzo, no se encontraba el ejecutable que nos permitía pasar de cloudflare mas que en el código fuente.
+detección correcta de usuarios de twich al elegir como plataforma twich.
 v3.9
 se agrega número de espectadores que están viendo el en vivo para youtube y kick.
 se corrigen varios erorres críticos gracias a Enzo, de la comunidad  francesa.
