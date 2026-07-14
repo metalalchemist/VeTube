@@ -158,7 +158,9 @@ class ChatController:
         dialogo.Raise()
         if dialogo.ShowModal() == wx.ID_OK:
             criterio = dialogo.GetValue()
-            if not criterio: return
+            if not criterio:
+                dialogo.Destroy()
+                return
 
             resultados = []
             list_boxes = []

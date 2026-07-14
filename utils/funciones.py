@@ -14,7 +14,9 @@ def escribirJsonLista(arch,lista=[]):
 	with open(arch, 'w+') as file: json.dump(lista, file)
 def leerJsonLista(arch):
 	if path.exists(arch):
-		with open (arch) as file: return json.load(file)
+		try:
+			with open (arch) as file: return json.load(file)
+		except (json.JSONDecodeError, ValueError, OSError): return []
 	else: return []
 def convertirLista(lista, val1, val2):
 	if len(lista)<=0: return []
