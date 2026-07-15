@@ -1,4 +1,5 @@
 import wx
+from logging import getLogger
 from helpers.timer import Timer
 from helpers.playroom_helper import PlayroomHelper
 from controller.chat_controller import ChatController
@@ -8,6 +9,8 @@ from utils import translator
 from setup import player,reader
 from controller.chat_controller import ChatController
 from servicios.estadisticas_manager import EstadisticasManager
+
+logger = getLogger(__name__)
 
 class ServicioSala:
     def __init__(self, main_controller, url, frame, plataforma, chat_controller):
@@ -35,6 +38,7 @@ class ServicioSala:
             wx.CallAfter(self.chat_controller.agregar_titulo, title)
             wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, title)
         except Exception as e:
+            logger.exception("Error al iniciar el chat de la sala de juegos")
             wx.CallAfter(self.chat_controller.notificar_error, str(e))
 
     def detener(self):
@@ -68,4 +72,5 @@ class ServicioSala:
             # el Timer seguiría fallando cada medio segundo y mostraría errores sin fin.
             if not self._detener:
                 self.detener()
+                logger.exception("Error fatal en la recepción del chat de la sala de juegos")
                 wx.CallAfter(self.chat_controller.notificar_error, str(e))

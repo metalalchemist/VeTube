@@ -1,5 +1,6 @@
 import json, threading, time, wx
 from exchange import exchange
+from logging import getLogger
 from chat_downloader import ChatDownloader
 from globals import data_store
 from globals.resources import rutasonidos
@@ -9,6 +10,8 @@ from setup import player,reader
 from controller.chat_controller import ChatController
 from controller.media_controller import MediaController
 from servicios.estadisticas_manager import EstadisticasManager
+
+logger = getLogger(__name__)
 
 class ServicioYouTube:
     def __init__(self, main_controller, url, frame, plataforma, chat_controller):
@@ -56,8 +59,8 @@ class ServicioYouTube:
             if video_url:
                 self.media_controller = MediaController(url=video_url, state_callback=self.chat_controller.chat_dialog.on_media_player_state_change)
                 self.chat_controller.set_media_controller(self.media_controller)
-        except Exception as e:
-            print(f"Error al iniciar la reproducción de video en YouTube: {e}")
+        except Exception:
+            logger.exception("Error al iniciar la reproducción de video en YouTube")
 
     def recibir(self):
         try:
@@ -165,6 +168,7 @@ class ServicioYouTube:
                         wx.CallAfter(self.chat_controller.agregar_mensaje_verificado, f"{author_name}: {msg}")
                         if data_store.config['reader'] and data_store.config['unread'][5]: wx.CallAfter(reader.leer_mensaje, f'{author_name}: {msg}')
         except Exception as e:
+            logger.exception("Error fatal en la recepción del chat de YouTube")
             wx.CallAfter(self.chat_controller.notificar_error, str(e))
 
     def iniciar_refresco_espectadores(self):
