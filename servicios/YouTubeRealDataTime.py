@@ -1,5 +1,6 @@
 import pytchat, wx, json, threading
 from exchange import exchange
+from logging import getLogger
 from utils.play_mp4 import extract_stream_url
 from globals import data_store
 from globals.resources import rutasonidos
@@ -8,6 +9,8 @@ from setup import player, reader
 from controller.chat_controller import ChatController
 from controller.media_controller import MediaController
 from servicios.estadisticas_manager import EstadisticasManager
+
+logger = getLogger(__name__)
 
 class YouTubeRealTimeService:
     def __init__(self, url, frame, plataforma, title=None, chat_controller=None):
@@ -45,7 +48,7 @@ class YouTubeRealTimeService:
         if video_url:
             self.media_controller = MediaController(url=video_url, state_callback=self.chat_controller.chat_dialog.on_media_player_state_change)
             self.chat_controller.set_media_controller(self.media_controller)
-            print(video_url)
+            logger.debug("URL de video: %s", video_url)
     def recibir(self):
         if data_store.dst:
             self.translator = translator.TranslatorWrapper()

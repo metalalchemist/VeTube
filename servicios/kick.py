@@ -1,10 +1,13 @@
 import asyncio, threading, subprocess, os, platform, wx, kick
+from logging import getLogger
 from globals import data_store
 from globals.resources import rutasonidos
 from setup import reader, player
 from controller.media_controller import MediaController
 from utils.play_mp4 import extract_stream_url
 from utils import translator
+
+logger = getLogger(__name__)
 
 class ServicioKick:
     def __init__(self, main_controller, url, frame, plataforma, chat_controller):
@@ -36,7 +39,7 @@ class ServicioKick:
         bypass_executable = os.path.join(path_to_arch_dir, f"bypass{arch}.exe")
 
         if not os.path.exists(bypass_executable):
-            print(f"Error: No se encuentra el archivo '{bypass_executable}'.")
+            logger.error("No se encuentra el archivo '%s'.", bypass_executable)
             wx.CallAfter(reader.leer_sapi, _("error_bypass_no_encontrado"))
             return False
 
@@ -52,8 +55,8 @@ class ServicioKick:
                 errors='replace',
                 creationflags=creation_flags
             )
-        except Exception as e:
-            print(f"Error al intentar ejecutar {bypass_executable}: {e}")
+        except Exception:
+            logger.exception("Error al intentar ejecutar %s", bypass_executable)
             return False
 
         for line in iter(self.bypass_process.stdout.readline, ''):
@@ -82,12 +85,12 @@ class ServicioKick:
             self.loop.run_forever()
         except Exception as e:
             if self.is_running:
-                print(f"Error fatal en el hilo de conexión de Kick: {e}")
+                logger.exception("Error fatal en el hilo de conexión de Kick")
                 wx.CallAfter(self.chat_controller.notificar_error, str(e))
         finally:
             if self.loop.is_running():
                 self.loop.close()
-            print("Hilo de Kick finalizado.")
+            logger.info("Hilo de Kick finalizado.")
 
     def _add_listeners(self):
         self.client.event(self.on_ready)
@@ -111,8 +114,8 @@ class ServicioKick:
             if video_url and not self.media_controller:
                 self.media_controller = MediaController(url=video_url, state_callback=self.chat_controller.chat_dialog.on_media_player_state_change)
                 self.chat_controller.set_media_controller(self.media_controller)
-        except Exception as e:
-            print(f"Error al conectar al chatroom de Kick: {e}")
+        except Exception:
+            logger.exception("Error al conectar al chatroom de Kick")
             wx.CallAfter(reader.leer_sapi, _("error_conectar_kick_chatroom"))
             self.detener()
 
@@ -170,7 +173,7 @@ class ServicioKick:
         if not self.is_running:
             return
         self.is_running = False
-        print("Deteniendo servicio de Kick...")
+        logger.info("Deteniendo servicio de Kick...")
 
         if self.media_controller:
             self.media_controller.release()
@@ -183,15 +186,15 @@ class ServicioKick:
 
         if self.bypass_process:
             try:
-                print("Terminando proceso de bypass...")
+                logger.debug("Terminando proceso de bypass...")
                 self.bypass_process.terminate()
                 self.bypass_process.wait()
-                print("Proceso de bypass terminado.")
-            except Exception as e:
-                print(f"Error al terminar el proceso de bypass: {e}")
+                logger.debug("Proceso de bypass terminado.")
+            except Exception:
+                logger.exception("Error al terminar el proceso de bypass")
             self.bypass_process = None
-        
-        print("Servicio de Kick detenido completamente.")
+
+        logger.info("Servicio de Kick detenido completamente.")
 
     async def _refrescar_espectadores_loop(self):
         while self.is_running:
@@ -208,8 +211,8 @@ class ServicioKick:
                     wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, title)
                 else:
                     break
-            except Exception as e:
-                print(f"Error al refrescar espectadores de Kick: {e}")
+            except Exception:
+                logger.exception("Error al refrescar espectadores de Kick")
                 break
             
             await asyncio.sleep(10)

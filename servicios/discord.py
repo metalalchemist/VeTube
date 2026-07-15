@@ -1,10 +1,13 @@
 import asyncio, threading, re, wx
 import discord
+from logging import getLogger
 from globals import data_store
 from globals.resources import rutasonidos
 from setup import reader, player
 from utils import translator
 from utils.network import network_manager
+
+logger = getLogger(__name__)
 
 def extraer_id_canal(url):
     """Devuelve el id del canal si la URL es un enlace de canal de Discord
@@ -65,14 +68,14 @@ class ServicioDiscord:
             self.loop.run_forever()
         except Exception as e:
             if self.is_running:
-                print(f"Error fatal en el hilo de conexión de Discord: {e}")
+                logger.exception("Error fatal en el hilo de conexión de Discord")
                 wx.CallAfter(self.chat_controller.notificar_error, str(e))
         finally:
             try:
                 self.loop.close()
             except Exception:
                 pass
-            print("Hilo de Discord finalizado.")
+            logger.info("Hilo de Discord finalizado.")
 
     async def _conectar(self):
         try:
@@ -90,7 +93,7 @@ class ServicioDiscord:
                 self.detener()
         except Exception as e:
             if self.is_running:
-                print(f"Error de conexión con Discord: {e}")
+                logger.exception("Error de conexión con Discord")
                 wx.CallAfter(self.chat_controller.notificar_error, str(e))
                 self.detener()
 
@@ -114,8 +117,8 @@ class ServicioDiscord:
             title = f"#{channel.name} ({channel.guild.name})"
             wx.CallAfter(self.chat_controller.agregar_titulo, title)
             wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, title)
-        except Exception as e:
-            print(f"Error al acceder al canal de Discord: {e}")
+        except Exception:
+            logger.exception("Error al acceder al canal de Discord")
             wx.CallAfter(reader.leer_sapi, _("No se encontró el canal de Discord. Comprueba que el bot está invitado al servidor y que el enlace del canal es correcto."))
             self.detener()
 
@@ -155,11 +158,11 @@ class ServicioDiscord:
         if not self.is_running:
             return
         self.is_running = False
-        print("Deteniendo servicio de Discord...")
+        logger.info("Deteniendo servicio de Discord...")
 
         if self.loop and self.loop.is_running():
             if self.client:
                 asyncio.run_coroutine_threadsafe(self.client.close(), self.loop)
             self.loop.call_soon_threadsafe(self.loop.stop)
 
-        print("Servicio de Discord detenido completamente.")
+        logger.info("Servicio de Discord detenido completamente.")

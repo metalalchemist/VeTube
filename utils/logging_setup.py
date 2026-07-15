@@ -22,7 +22,8 @@ _LIBRERIAS_RUIDOSAS = (
 # Nuestros propios módulos: los ponemos en DEBUG para tener diagnóstico fino
 # (p. ej. los pasos del actualizador), mientras el resto queda en INFO. Se hace
 # con lista explícita porque los loggers de VeTube no comparten un prefijo común.
-_LOGGERS_VETUBE = ("vetube", "update", "updater", "keyboard_handler")
+# "servicios" cubre por jerarquía a todos sus submódulos (servicios.kick, etc.).
+_LOGGERS_VETUBE = ("vetube", "update", "updater", "keyboard_handler", "servicios")
 
 _configurado = False
 _log = logging.getLogger("vetube")
