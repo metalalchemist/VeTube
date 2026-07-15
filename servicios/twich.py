@@ -158,5 +158,6 @@ class ServicioTwich:
                     if data_store.config['sonidos'] and self.chat.status!="past" and data_store.config['listasonidos'][0]: player.play(rutasonidos[0])
                     if data_store.config['reader'] and data_store.config['unread'][0]: reader.leer_mensaje(full_message)
         except Exception as e:
+            logger.exception("Error fatal en la recepción del chat de Twitch")
             wx.CallAfter(self.chat_controller.notificar_error, str(e))
 

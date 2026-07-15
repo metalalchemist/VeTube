@@ -21,9 +21,15 @@ _LIBRERIAS_RUIDOSAS = (
 
 # Nuestros propios módulos: los ponemos en DEBUG para tener diagnóstico fino
 # (p. ej. los pasos del actualizador), mientras el resto queda en INFO. Se hace
-# con lista explícita porque los loggers de VeTube no comparten un prefijo común.
-# "servicios" cubre por jerarquía a todos sus submódulos (servicios.kick, etc.).
-_LOGGERS_VETUBE = ("vetube", "update", "updater", "keyboard_handler", "servicios")
+# con lista explícita porque los loggers históricos ("update", "keyboard_handler"...)
+# no comparten un prefijo común. Cada paquete cubre por jerarquía a todos sus
+# submódulos (p. ej. "servicios" -> servicios.kick), de modo que los módulos que
+# se vayan migrando a getLogger(__name__) quedan en DEBUG sin tocar esta lista.
+_LOGGERS_VETUBE = (
+    "vetube", "update", "updater", "keyboard_handler",
+    "servicios", "utils", "players", "helpers", "TTS",
+    "exchange", "controller", "ui", "globals",
+)
 
 _configurado = False
 _log = logging.getLogger("vetube")

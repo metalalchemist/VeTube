@@ -168,6 +168,7 @@ class ServicioYouTube:
                         wx.CallAfter(self.chat_controller.agregar_mensaje_verificado, f"{author_name}: {msg}")
                         if data_store.config['reader'] and data_store.config['unread'][5]: wx.CallAfter(reader.leer_mensaje, f'{author_name}: {msg}')
         except Exception as e:
+            logger.exception("Error fatal en la recepción del chat de YouTube")
             wx.CallAfter(self.chat_controller.notificar_error, str(e))
 
     def iniciar_refresco_espectadores(self):

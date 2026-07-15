@@ -1,6 +1,7 @@
 import pytchat, wx, json, threading
 from exchange import exchange
 from logging import getLogger
+from urllib.parse import urlsplit
 from utils.play_mp4 import extract_stream_url
 from globals import data_store
 from globals.resources import rutasonidos
@@ -48,7 +49,9 @@ class YouTubeRealTimeService:
         if video_url:
             self.media_controller = MediaController(url=video_url, state_callback=self.chat_controller.chat_dialog.on_media_player_state_change)
             self.chat_controller.set_media_controller(self.media_controller)
-            logger.debug("URL de video: %s", video_url)
+            # Solo el host: la URL completa lleva parámetros firmados (IP del usuario)
+            # y el log está pensado para compartirse al diagnosticar.
+            logger.debug("URL de video extraída (host: %s)", urlsplit(video_url).netloc)
     def recibir(self):
         if data_store.dst:
             self.translator = translator.TranslatorWrapper()
@@ -122,6 +125,7 @@ class YouTubeRealTimeService:
                             if data_store.config['reader'] and data_store.config['unread'][5]:
                                 wx.CallAfter(reader.leer_mensaje, full_message)
         except Exception as e:
+            logger.exception("Error fatal en la recepción del chat en tiempo real de YouTube")
             wx.CallAfter(self.chat_controller.notificar_error, str(e))
         finally:
             if self.chat: self.chat.terminate()

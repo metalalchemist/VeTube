@@ -59,6 +59,7 @@ class ServicioTiktok:
             except RuntimeError:
                 pass  # un stop() rezagado de detener() puede vaciar el bucle antes de tiempo
             self.loop.close()
+            logger.info("Hilo de TikTok finalizado.")
 
     async def _initialize_and_run_client(self):
         try:
@@ -69,7 +70,7 @@ class ServicioTiktok:
             self._add_listeners()
             await self._run_client_async()
         except Exception as e:
-            logger.exception("Error during client initialization")
+            logger.exception("Error al inicializar el cliente de TikTok")
             wx.CallAfter(self.chat_controller.notificar_error, str(e))
             self.detener()
 
@@ -108,6 +109,7 @@ class ServicioTiktok:
             self.media_controller.release()
         if self.is_running and self.loop and self.loop.is_running():
             self.is_running = False
+            logger.info("Deteniendo servicio de TikTok...")
             if self.chat:
                 asyncio.run_coroutine_threadsafe(self.chat.disconnect(), self.loop)
             self.loop.call_soon_threadsafe(self.loop.stop)
