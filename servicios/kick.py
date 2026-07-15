@@ -88,8 +88,10 @@ class ServicioKick:
                 logger.exception("Error fatal en el hilo de conexión de Kick")
                 wx.CallAfter(self.chat_controller.notificar_error, str(e))
         finally:
-            if self.loop.is_running():
+            try:
                 self.loop.close()
+            except Exception:
+                pass
             logger.info("Hilo de Kick finalizado.")
 
     def _add_listeners(self):
