@@ -213,6 +213,9 @@ class AjustesController:
                 self.dialog.choice_2.Enable(True)
 
     def establecer_dispositivo(self, event):
+        if self.dialog.lista_dispositivos.GetSelection() == wx.NOT_FOUND:
+            self.dialog.lista_dispositivos.SetFocus()
+            return
         valor = self.dialog.lista_dispositivos.GetSelection() + 1
         valor_str = self.dialog.lista_dispositivos.GetStringSelection()
         config['dispositivo'] = valor
