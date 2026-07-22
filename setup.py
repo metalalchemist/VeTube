@@ -4,6 +4,10 @@ from players.sound_helper import SoundPlayer
 from helpers.reader_handler import ReaderHandler
 languageHandler.setLanguage(config['idioma'])
 player=SoundPlayer()
+# Si el dispositivo guardado ya no existe (por ejemplo, auriculares USB/Bluetooth desconectados),
+# volvemos al primero: los índices fuera de rango rompen el arranque con Piper al indexar devicenames.
+if not (1 <= config['dispositivo'] <= len(player.devicenames)):
+    config['dispositivo'] = 1
 reader = ReaderHandler()
 reader._leer.set_rate(config['speed'])
 reader._leer.set_pitch(config['tono'])
