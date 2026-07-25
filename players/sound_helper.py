@@ -22,7 +22,7 @@ class SoundPlayer:
 		self.device = 1
 
 	def setdevice(self, device):
-		if device > 0 or device < len(self.devicenames):
+		if device > 0 and device <= len(self.devicenames):
 			self.device = device
 		else:
 			raise Exception("device is less than 1 or greater than the available devices.")

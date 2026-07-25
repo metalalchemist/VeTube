@@ -30,7 +30,10 @@ class PanelSonidos(wx.Panel):
 		label_dispositivo = wx.StaticText(self, wx.ID_ANY, _("Seleccionar dispositivo de audio"))
 		sizer_soniditos.Add(label_dispositivo, 0, wx.ALL, 5)
 		self.lista_dispositivos = wx.Choice(self, wx.ID_ANY, choices=player.devicenames)
-		self.lista_dispositivos.SetSelection(config['dispositivo'] - 1)
+		if 1 <= config['dispositivo'] <= self.lista_dispositivos.GetCount():
+			self.lista_dispositivos.SetSelection(config['dispositivo'] - 1)
+		elif self.lista_dispositivos.GetCount() > 0:
+			self.lista_dispositivos.SetSelection(0)
 		sizer_soniditos.Add(self.lista_dispositivos, 0, wx.EXPAND | wx.ALL, 5)
 		self.establecer_dispositivo = wx.Button(self, wx.ID_ANY, label=_("&Establecer"))
 		sizer_soniditos.Add(self.establecer_dispositivo, 0, wx.ALL, 5)
