@@ -47,13 +47,16 @@ class ChatPanel(wx.Panel):
 
     def create_page_with_listbox(self, parent, name, plataforma=None):
         page = wx.Panel(parent)
+        page.SetName(str(name))
         sizer = wx.BoxSizer(wx.VERTICAL)
         list_box = wx.ListBox(page, wx.ID_ANY)
+        list_box.SetName(str(name))
         sizer.Add(list_box, 1, wx.EXPAND | wx.ALL, 5)
         if plataforma == 'TikTok' and name == _(u"Eventos"):
             self.boton_filtrar = wx.Button(page, wx.ID_ANY, _(u"&Filtrar por"))
             self.boton_filtrar.SetAccessible(Accesible(self.boton_filtrar))
             sizer.Add(self.boton_filtrar, 0, wx.ALL | wx.ALIGN_RIGHT, 5)
         page.SetSizer(sizer)
-        page_index = parent.AddPage(page, str(name))
+        parent.AddPage(page, str(name))
+        page_index = parent.GetPageCount() - 1
         return list_box, page_index

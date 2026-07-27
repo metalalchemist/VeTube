@@ -11,7 +11,10 @@ class PanelGeneral(wx.Panel):
 		label_language = wx.StaticText(self, wx.ID_ANY, _("Idioma de VeTube (Requiere reiniciar)"))
 		boxSizer_1.Add(label_language, 0, wx.ALL, 5)
 		self.choice_language = wx.Choice(self, wx.ID_ANY, choices=langs)
-		self.choice_language.SetSelection(codes.index(config['idioma']))
+		try:
+			self.choice_language.SetSelection(codes.index(config['idioma']))
+		except ValueError:
+			self.choice_language.SetSelection(0)
 		boxSizer_1.Add(self.choice_language, 0, wx.EXPAND | wx.ALL, 5)
 		self.check_donaciones = wx.CheckBox(self, wx.ID_ANY, _("Activar diálogo de donaciones al inicio de la app."))
 		self.check_donaciones.SetValue(config['donations'])

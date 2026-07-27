@@ -22,7 +22,7 @@ class SoundPlayer:
 		self.device = 1
 
 	def setdevice(self, device):
-		if device > 0 or device < len(self.devicenames):
+		if device > 0 and device <= len(self.devicenames):
 			self.device = device
 		else:
 			raise Exception("device is less than 1 or greater than the available devices.")
@@ -50,6 +50,9 @@ class SoundPlayer:
 	def toggle_player(self):
 		if self.sound.is_playing: self.sound.pause()
 		else: self.sound.play()
+
+	def is_playing(self):
+		return self.sound is not None and hasattr(self.sound, 'is_playing') and self.sound.is_playing
 
 	def atrasar(self, seconds):
 		if not self.sound: return

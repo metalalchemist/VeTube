@@ -19,25 +19,32 @@ from setup import network
 logger = getLogger('update')
 
 def perform_update(update_url, donations=True, password=None, progress_callback=None, update_complete_callback=None):
-    base_path = tempfile.mkdtemp()
-    download_path = os.path.join(base_path, 'update.zip')
-    update_path = os.path.join(base_path, 'update')
-    
-    # A PROPÓSITO invertido respecto al inicio (run_main_window.py): este diálogo es un
-    # recordatorio para quienes DESACTIVARON la casilla de donaciones, por si les nace
-    # contribuir; los que la tienen activa ya lo ven en cada inicio. NO "corregir".
-    # perform_update corre en un hilo aparte (updater.py); el diálogo va al hilo de la UI.
-    if not donations: wx.CallAfter(donation)
-    
-    with httpx.Client(follow_redirects=True, timeout=None) as client:
-        downloaded = download_update(update_url, download_path, client=client, progress_callback=progress_callback)
-    
-    extracted = extract_update(downloaded, update_path, password=password)
-    bootstrap_path = move_bootstrap(extracted)
-    if callable(update_complete_callback):
-        update_complete_callback()
-    execute_bootstrap(bootstrap_path, extracted)
-    logger.info("Update prepared for installation.")
+    # perform_update corre en un hilo aparte (updater.py). Si algo falla (antivirus,
+    # firewall, conexión, permisos...), la excepción moriría en silencio y el usuario
+    # solo vería que "no pasa nada". La registramos para poder diagnosticar el caso.
+    try:
+        base_path = tempfile.mkdtemp()
+        download_path = os.path.join(base_path, 'update.zip')
+        update_path = os.path.join(base_path, 'update')
+        logger.info("Iniciando actualización desde %s", update_url)
+
+        # A PROPÓSITO invertido respecto al inicio (run_main_window.py): este diálogo es un
+        # recordatorio para quienes DESACTIVARON la casilla de donaciones, por si les nace
+        # contribuir; los que la tienen activa ya lo ven en cada inicio. NO "corregir".
+        # perform_update corre en un hilo aparte (updater.py); el diálogo va al hilo de la UI.
+        if not donations: wx.CallAfter(donation)
+
+        with httpx.Client(follow_redirects=True, timeout=None) as client:
+            downloaded = download_update(update_url, download_path, client=client, progress_callback=progress_callback)
+
+        extracted = extract_update(downloaded, update_path, password=password)
+        bootstrap_path = move_bootstrap(extracted)
+        if callable(update_complete_callback):
+            update_complete_callback()
+        execute_bootstrap(bootstrap_path, extracted)
+        logger.info("Update prepared for installation.")
+    except Exception:
+        logger.exception("Fallo al descargar o instalar la actualización")
 
 async def async_check_update(endpoint, current_version):
     try:

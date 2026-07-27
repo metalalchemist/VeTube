@@ -1,4 +1,7 @@
 import json
+from logging import getLogger
+
+logger = getLogger(__name__)
 
 class EstadisticasManager:
     def __init__(self):
@@ -87,7 +90,7 @@ class EstadisticasManager:
 
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(stats_a_guardar, f, ensure_ascii=False, indent=4)
-        print(f"Estadísticas guardadas en {file_path}")
+        logger.info("Estadísticas guardadas en %s", file_path)
 
 
     def total_mensajes(self):

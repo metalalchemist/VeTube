@@ -1,5 +1,6 @@
-import json, threading, asyncio, wx, traceback, time
+import json, threading, asyncio, wx, time
 from exchange import exchange
+from logging import getLogger
 from TikTokLive.client.client import TikTokLiveClient
 from TikTokLive.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent, LikeEvent, JoinEvent, FollowEvent, ShareEvent, RoomUserSeqEvent, EnvelopeEvent, EmoteChatEvent,LiveEndEvent
 from globals import data_store
@@ -8,6 +9,8 @@ from utils import translator,funciones
 from setup import player,reader
 from controller.chat_controller import ChatController
 from servicios.estadisticas_manager import EstadisticasManager
+
+logger = getLogger(__name__)
 
 class ServicioTiktok:
     def __init__(self, main_controller, url, frame, plataforma, chat_controller):
@@ -41,9 +44,8 @@ class ServicioTiktok:
             tarea_principal = self.loop.create_task(self._initialize_and_run_client())
             tarea_principal.add_done_callback(parar_bucle)
             self.loop.run_forever()
-        except Exception as e:
-            print(f"Error fatal en el hilo de conexión: {e}")
-            traceback.print_exc()
+        except Exception:
+            logger.exception("Error fatal en el hilo de conexión")
         finally:
             if tarea_principal is not None:
                 tarea_principal.remove_done_callback(parar_bucle)
@@ -57,6 +59,7 @@ class ServicioTiktok:
             except RuntimeError:
                 pass  # un stop() rezagado de detener() puede vaciar el bucle antes de tiempo
             self.loop.close()
+            logger.info("Hilo de TikTok finalizado.")
 
     async def _initialize_and_run_client(self):
         try:
@@ -67,8 +70,7 @@ class ServicioTiktok:
             self._add_listeners()
             await self._run_client_async()
         except Exception as e:
-            print(f"Error during client initialization: {e}")
-            traceback.print_exc()
+            logger.exception("Error al inicializar el cliente de TikTok")
             wx.CallAfter(self.chat_controller.notificar_error, str(e))
             self.detener()
 
@@ -98,8 +100,7 @@ class ServicioTiktok:
                 break
             except Exception as e:
                 if self.is_running:
-                    print(f"Error en el bucle del cliente: {e}.")
-                    traceback.print_exc()
+                    logger.exception("Error en el bucle del cliente")
                     wx.CallAfter(self.chat_controller.notificar_error, str(e))
                     self.detener()
 
@@ -108,6 +109,7 @@ class ServicioTiktok:
             self.media_controller.release()
         if self.is_running and self.loop and self.loop.is_running():
             self.is_running = False
+            logger.info("Deteniendo servicio de TikTok...")
             if self.chat:
                 asyncio.run_coroutine_threadsafe(self.chat.disconnect(), self.loop)
             self.loop.call_soon_threadsafe(self.loop.stop)
@@ -120,8 +122,8 @@ class ServicioTiktok:
                 from controller.media_controller import MediaController
                 self.media_controller = MediaController(url=video_url, state_callback=self.chat_controller.chat_dialog.on_media_player_state_change)
                 self.chat_controller.set_media_controller(self.media_controller)
-        except Exception as e:
-            print(f"Error al iniciar la reproducción de video en TikTok: {e}")
+        except Exception:
+            logger.exception("Error al iniciar la reproducción de video en TikTok")
 
     def _add_listeners(self):
         self.chat.add_listener(ConnectEvent, self.on_connect)
