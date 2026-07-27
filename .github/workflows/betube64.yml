@@ -30,6 +30,7 @@ jobs:
           pip install --upgrade pyzmq httpx httpcore future
 
       - name: Compiling
+        run: |
           $prismNative = python -c "import prism, os; print(os.path.join(os.path.dirname(prism.__file__), 'native'))"
           Write-Host "Ruta detectada: $prismNative"
           pyinstaller run_main_window.py --windowed --collect-binaries prism --add-data "$prismNative;prism/native"
