@@ -1,4 +1,5 @@
 from utils.menu_accesible import Accesible
+from update import updater
 import wx
 
 # Identificadores internos de las plataformas, en el mismo orden que el wx.Choice.
@@ -9,7 +10,7 @@ class MyFrame(wx.Frame):
     def __init__(self, *args, **kwds):
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
-        self.SetTitle("VeTube")
+        self.SetTitle("VeTube "+str(updater.VERSION))
         self.SetWindowStyle(wx.RESIZE_BORDER | wx.CAPTION | wx.CLOSE_BOX | wx.CLIP_CHILDREN)
         self.SetSize((800, 600))
         self.panel_1 = wx.Panel(self, wx.ID_ANY)

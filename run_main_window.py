@@ -1,4 +1,3 @@
-#To resume this session: gemini --resume "44dd7d2c-5663-42a5-9e3b-ab471b033308"
 # Configuramos los logs lo antes posible, antes de cualquier otro import del programa,
 # para capturar también los errores que ocurran durante el arranque.
 from utils.logging_setup import configurar_logs

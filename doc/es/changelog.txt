@@ -1,14 +1,20 @@
+v 3.92
+se corrige que si un dispositivo había sido desconectado el programa iniciara correctamente, gracias a Enzo
+se agrega el número de la versión del programa para reportar en que versión del programa estamos.
+se agrega sistema de logs, para reportar errores del programa. gracias a Enzo
+se corrigen bugs menores y se asocian los controles de listas a las diferentes sesiones. así mismo se corrigen las reproducciones de sonidos cuando un sonido no está seleccionado previamente. gracias nuevamente a Enzo
+se corrige que los mensajes archivados se guarden de manera correcta y el borrado de mensajes archivados de manera segura. debemos agradecer a Enzo, que nos ayudó a implementar y corregir dichos errores.
 v 3.91
 se agrega un selector de temas de sonido en el panel de sonidos en ajustes.
 se corrige que se leyera correctamente el chat de kick, gracias a Enzo, no se encontraba el ejecutable que nos permitía pasar de cloudflare mas que en el código fuente.
 detección correcta de usuarios de twich al elegir como plataforma twich.
 v3.9
 se agrega número de espectadores que están viendo el en vivo para youtube y kick.
-se corrigen varios erorres críticos gracias a Enzo, de la comunidad  francesa.
+se corrigen varios errores críticos gracias a Enzo, de la comunidad francesa.
 se agrega discord como plataforma de lectura de mensajes. para mas información mirar discord.md. gracias otra vez a Enzo.
 se crea una nueva pestaña chat donde van las conversiones de divisas, las traducciones y la lectura automática de mensajes.
 se agrega una nueva opción para decidir si capturar o no los mensajes previos al en vivo.
-se crea un instalador para vetube, gracias a Enzo
+se crea un instalador para vetube, gracias a Enzo.
 v3.8
 se quitan varias dependencias antiguas para optimizar el código y el rendimiento.
 se soluciona que con algunos procesadores amd antiguos no se pudiera ejecutar vetube.
