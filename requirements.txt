@@ -1,5 +1,4 @@
 prismatoid
-cffi
 grpclib
 protobuf
 TikTokLive
