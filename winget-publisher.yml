@@ -1,0 +1,52 @@
+name: Submit release to the WinGet community repository
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch: # Permite la ejecución manual desde la pestaña Actions
+
+jobs:
+  publish-winget:
+    name: Submit to WinGet repository
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    runs-on: windows-latest
+
+    env:
+      WINGET_CREATE_GITHUB_TOKEN: ${{ secrets.WINGET_TOKEN }}
+
+    steps:
+      - name: Submit package using wingetcreate
+        shell: powershell
+        run: |
+          $packageId = "metalalchemist.VeTube"
+
+          # Si se dispara manualmente, toma el tag de la versión actual 'v3.93'; si es un release, usa el tag del evento
+          $tagName = "${{ github.event.release.tag_name }}"
+          if ([string]::IsNullOrWhiteSpace($tagName)) {
+              $tagName = "v3.93"
+          }
+          $packageVersion = $tagName.TrimStart('v')
+
+          # Obtener assets de la API si es ejecución manual, o del evento si es un release automático
+          if ('${{ github.event_name }}' -eq 'workflow_dispatch') {
+              $releaseResponse = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/$tagName"
+              $assets = $releaseResponse.assets
+          } else {
+              $assets = '${{ toJSON(github.event.release.assets) }}' | ConvertFrom-Json
+          }
+
+          $installerUrl = $assets | Where-Object -Property name -like '*VeTube-setup.exe' | Select-Object -ExpandProperty browser_download_url
+
+          Write-Host "Procesando versión: $packageVersion"
+          Write-Host "URL del instalador: $installerUrl"
+
+          # Descargar wingetcreate y ejecutar
+          curl.exe -JLO https://aka.ms/wingetcreate/latest
+          .\wingetcreate.exe update $packageId `
+            --version $packageVersion `
+            --urls "$installerUrl|x64" `
+            --submit
