@@ -7,7 +7,7 @@ from setup import network
 logger = logging.getLogger("updater")
 
 # Versión global del programa
-VERSION = "3.92"
+VERSION = "3.93"
 
 # Cerrojo global para evitar múltiples búsquedas simultáneas
 buscando = False

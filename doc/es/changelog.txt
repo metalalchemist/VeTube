@@ -1,4 +1,4 @@
-v 3.92
+v 3.93
 se corrige que si un dispositivo había sido desconectado el programa iniciara correctamente, gracias a Enzo
 se agrega el número de la versión del programa para reportar en que versión del programa estamos.
 se agrega sistema de logs, para reportar errores del programa. gracias a Enzo

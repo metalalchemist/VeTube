@@ -31,7 +31,9 @@ jobs:
 
       - name: Compiling
         run: |
-          pyinstaller run_main_window.py --windowed --collect-binaries prism
+          $prismNative = python -c "import prism, os; print(os.path.join(os.path.dirname(prism.__file__), '_native'))"
+          Write-Host "Ruta detectada: $prismNative"
+          pyinstaller run_main_window.py --windowed --collect-binaries prism --add-data "$prismNative;prism/_native"
           cd dist
           Rename-Item run_main_window VeTube
           cd ..
