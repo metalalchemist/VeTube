@@ -99,7 +99,7 @@ class ServicioYouTube:
                 if data_store.dst and self.translator: message['message'] = self.translator.translate(text=message['message'], target=data_store.dst)
 
                 author_name = message['author']['display_name']
-                self.estadisticas_manager.agregar_mensaje(author_name)
+                wx.CallAfter(self.estadisticas_manager.agregar_mensaje, author_name)
                 msg = message['message']
 
                 # Default message type
@@ -128,7 +128,7 @@ class ServicioYouTube:
                             mensajito=author_name+ _(' se a conectado al chat. ')+t['title']
                             break
                         wx.CallAfter(self.chat_controller.agregar_mensaje_evento, mensajito)
-                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][2]: player.play(rutasonidos[2])
+                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][2]: wx.CallAfter(player.play, rutasonidos[2])
                         if data_store.config['reader'] and data_store.config['unread'][2]: wx.CallAfter(reader.leer_mensaje, mensajito)
                     continue
                 # Construct the message string
@@ -138,7 +138,7 @@ class ServicioYouTube:
                             message['money']['amount'] = exchange.convert(message['money']['amount'], message['money']['currency'])
                             message['money']['currency'] = data_store.divisa
                         full_message = f"{message['money']['amount']} {message['money']['currency']}, {author_name}: {msg}"
-                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][3]: player.play(rutasonidos[3])
+                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][3]: wx.CallAfter(player.play, rutasonidos[3])
                         wx.CallAfter(self.chat_controller.agregar_mensaje_donacion, full_message)
                         if data_store.config['reader'] and data_store.config['unread'][3]: wx.CallAfter(reader.leer_mensaje, full_message)
                     continue
@@ -147,24 +147,24 @@ class ServicioYouTube:
 
                 if message_type == 'general':
                     if data_store.config['eventos'][0] and data_store.config['categorias'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
-                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][0]: player.play(rutasonidos[0])
+                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][0]: wx.CallAfter(player.play, rutasonidos[0])
                         wx.CallAfter(self.chat_controller.agregar_mensaje_general, full_message)
                         if data_store.config['reader'] and data_store.config['unread'][0]: wx.CallAfter(reader.leer_mensaje, full_message)
                 elif message_type == 'miembro':
                     if data_store.config['eventos'][1] and data_store.config['categorias'][2] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
-                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][1]: player.play(rutasonidos[1])
+                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][1]: wx.CallAfter(player.play, rutasonidos[1])
                         wx.CallAfter(self.chat_controller.agregar_mensaje_miembro, full_message)
                         if data_store.config['reader'] and data_store.config['unread'][1]: wx.CallAfter(reader.leer_mensaje, full_message)
                 elif message_type == 'moderador' or message_type=='propietario':
                     if data_store.config['eventos'][4] and data_store.config['categorias'][4] and hasattr(self.chat_controller.ui, 'list_box_moderadores'):
                         if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][4]:
-                            if message_type=='moderador': player.play(rutasonidos[4])
-                            if message_type=='propietario': player.play(rutasonidos[7])
+                            if message_type=='moderador': wx.CallAfter(player.play, rutasonidos[4])
+                            if message_type=='propietario': wx.CallAfter(player.play, rutasonidos[7])
                         wx.CallAfter(self.chat_controller.agregar_mensaje_moderador, full_message)
                         if data_store.config['reader'] and data_store.config['unread'][4]: wx.CallAfter(reader.leer_mensaje, full_message)
                 elif message_type == 'verificado':
                     if data_store.config['eventos'][5] and data_store.config['categorias'][5] and hasattr(self.chat_controller.ui, 'list_box_verificados'):
-                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][5]: player.play(rutasonidos[5])
+                        if data_store.config['sonidos'] and self.chat.status != "past" and data_store.config['listasonidos'][5]: wx.CallAfter(player.play, rutasonidos[5])
                         wx.CallAfter(self.chat_controller.agregar_mensaje_verificado, f"{author_name}: {msg}")
                         if data_store.config['reader'] and data_store.config['unread'][5]: wx.CallAfter(reader.leer_mensaje, f'{author_name}: {msg}')
         except Exception as e:
