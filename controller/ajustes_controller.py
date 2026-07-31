@@ -1,3 +1,4 @@
+from logging import getLogger
 from globals.data_store import config
 from globals.resources import rutasonidos,lista_voces,lista_voces_piper,recargar_rutasonidos
 from setup import player,reader
@@ -6,9 +7,22 @@ from TTS.list_voices import piper_list_voices , install_piper_voice
 from controller.piper_downloader_controller import PiperDownloaderController
 from utils.menu_accesible import Accesible
 import wx
+
+logger = getLogger(__name__)
+
 class AjustesController:
+    # Claves que los controles del diálogo escriben en config apenas cambian (en caliente),
+    # sin esperar a Aceptar. Ver revertir_cambios_en_caliente(): con Cancelar/Escape, todas
+    # vuelven al valor que tenían al abrir el diálogo.
+    CLAVES_EN_CALIENTE = [
+        'sapi', 'reader', 'traducir', 'interface', 'updates', 'salir', 'donations',
+        'sonidos', 'directorio', 'sistemaTTS', 'dispositivo', 'voz', 'volume',
+        'tono', 'tono_onecore', 'speed', 'reproducir', 'tiempo', 'volumen', 'cambiovolumen',
+    ]
+
     def __init__(self, dialog):
         self.dialog = dialog
+        self.config_al_abrir = {clave: config.get(clave) for clave in self.CLAVES_EN_CALIENTE}
         self.dialog.instala_voces.SetAccessible(Accesible(self.dialog.instala_voces))
         
         self.play_timer = wx.Timer(self.dialog)
@@ -363,3 +377,93 @@ class AjustesController:
         except Exception:
             pass
         event.Skip()
+
+    def revertir_cambios_en_caliente(self):
+        """Cancelar/Escape: deshace en config y en el lector/reproductor real todo lo que
+        ya se había aplicado en caliente, para que el diálogo quede como al abrirlo.
+        Reutiliza los propios manejadores (cambiar_sintetizador, cambiarVoz, etc.) porque
+        leen los valores desde los widgets del diálogo, no desde el event, así que sirve
+        con event=None una vez que dejamos los widgets en el valor original. Cada bloque
+        va en su propio try/except: si uno falla (un backend de voz que ya no está
+        disponible, un dispositivo desconectado...) no debe impedir que se reviertan los
+        demás, y no debe fallar en silencio — se registra con logger.exception."""
+        original = self.config_al_abrir
+        cambio_tts = config.get('sistemaTTS') != original['sistemaTTS']
+        cambio_voz = config.get('voz') != original['voz']
+        cambio_volumen = config.get('volume') != original['volume']
+        cambio_tono = (config.get('tono') != original['tono']) or (config.get('tono_onecore') != original['tono_onecore'])
+        cambio_velocidad = config.get('speed') != original['speed']
+        cambio_dispositivo = config.get('dispositivo') != original['dispositivo']
+        cambio_tema = config.get('directorio') != original['directorio']
+
+        for clave in self.CLAVES_EN_CALIENTE:
+            config[clave] = original[clave]
+
+        if cambio_tema:
+            try:
+                recargar_rutasonidos()
+            except Exception:
+                logger.exception("No se pudo restaurar el tema de sonidos al cancelar Ajustes (directorio=%s)", config['directorio'])
+
+        if cambio_tts:
+            try:
+                self.dialog.seleccionar_TTS.SetStringSelection(config['sistemaTTS'])
+                self.cambiar_sintetizador(None)
+            except Exception:
+                logger.exception("No se pudo restaurar el sistema TTS al cancelar Ajustes (sistemaTTS=%s)", config['sistemaTTS'])
+        elif cambio_voz:
+            try:
+                lista_voces_actual = lista_voces_piper if config['sistemaTTS'] == "piper" else reader._lector.list_voices()
+                if 0 <= config['voz'] < len(lista_voces_actual):
+                    self.dialog.choice_2.SetSelection(config['voz'])
+                    self.cambiarVoz(None)
+                else:
+                    # SetSelection() con un índice fuera de rango no lanza excepción en wx: no
+                    # basta con un try/except acá, hay que descartar el índice inválido a mano
+                    # para no terminar cargando una voz cualquiera (indexación negativa de Python).
+                    logger.warning(
+                        "No se pudo restaurar la voz al cancelar Ajustes: índice %s fuera de rango (%s voces disponibles)",
+                        config['voz'], len(lista_voces_actual),
+                    )
+            except Exception:
+                logger.exception("No se pudo restaurar la voz al cancelar Ajustes (voz=%s)", config['voz'])
+
+        if cambio_volumen:
+            try:
+                self.dialog.slider_2.SetValue(config['volume'])
+                self.cambiarVolumen(None)
+            except Exception:
+                logger.exception("No se pudo restaurar el volumen al cancelar Ajustes (volume=%s)", config['volume'])
+
+        if cambio_tono:
+            try:
+                if config['sistemaTTS'] == "onecore":
+                    self.dialog.slider_1.SetValue(config.get('tono_onecore', 0.6))
+                else:
+                    self.dialog.slider_1.SetValue(config['tono'] + 10)
+                self.cambiarTono(None)
+            except Exception:
+                logger.exception("No se pudo restaurar el tono al cancelar Ajustes")
+
+        if cambio_velocidad:
+            try:
+                self.dialog.slider_3.SetValue(config['speed'] + 10)
+                self.cambiarVelocidad(None)
+            except Exception:
+                logger.exception("No se pudo restaurar la velocidad al cancelar Ajustes (speed=%s)", config['speed'])
+
+        if cambio_dispositivo:
+            # Sin el sonido de confirmación ni el "Hablaré a través de este dispositivo" de
+            # establecer_dispositivo(): un Cancelar silencioso no debe sonar como un cambio aplicado.
+            try:
+                player.setdevice(config['dispositivo'])
+                if config['sistemaTTS'] == "piper" and lista_voces_piper and lista_voces_piper[0] != _("No hay voces instaladas"):
+                    nombres = player.devicenames
+                    dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
+                    valor_str = nombres[config['dispositivo'] - 1]
+                    reader._lector.set_device(reader._lector.find_device_id(valor_str, known_devices=dispositivos_formateados))
+            except Exception:
+                # Puede fallar si el dispositivo guardado desapareció mientras Ajustes estaba
+                # abierto (auriculares desconectados, etc. — mismo caso que setup.py al arrancar).
+                # No debe tumbar el revert ni impedir que se cierre el diálogo.
+                logger.exception("No se pudo restaurar el dispositivo de audio al cancelar Ajustes (dispositivo=%s)", config['dispositivo'])

@@ -43,10 +43,14 @@ class MainMenuController:
     def mostrar_ajustes(self, event):
         dlg = configuracionDialog(self.frame)
         resultado = dlg.ShowModal()
-        if resultado == wx.ID_OK:
-            self.config_dialog = dlg  # Guarda la referencia para usarla en guardar()
-            self.guardar()
-        dlg.Destroy()
+        try:
+            if resultado == wx.ID_OK:
+                self.config_dialog = dlg  # Guarda la referencia para usarla en guardar()
+                self.guardar()
+            else:
+                dlg.ajustes_controller.revertir_cambios_en_caliente()
+        finally:
+            dlg.Destroy()
 
     def restaurar(self, event):
         if response(_("Estás apunto de reiniciar la configuración a sus valores predeterminados, ¿Deseas proceder?"), _("Atención:"))==wx.ID_YES:
