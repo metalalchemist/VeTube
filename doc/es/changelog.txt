@@ -1,3 +1,5 @@
+v 3.94
+se corrige la lectura de los en vivos de tiktok. esto a causa de las librerías que hacían posible la lectura del mismo
 v 3.93
 se corrige que si un dispositivo había sido desconectado el programa iniciara correctamente, gracias a Enzo
 se agrega el número de la versión del programa para reportar en que versión del programa estamos.
