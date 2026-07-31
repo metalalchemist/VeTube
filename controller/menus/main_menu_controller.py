@@ -8,7 +8,6 @@ from ui.dialog_response import response
 from globals import data_store
 from globals.resources import carpeta_voces,codes,codigos_traduccion
 from controller.editor_controller import EditorController
-from controller.ajustes_controller import AjustesController
 from setup import network, reader, player
 from exchange import codes as currency_codes
 from servicios.language_updater import GestorRepositorios
@@ -43,7 +42,6 @@ class MainMenuController:
 
     def mostrar_ajustes(self, event):
         dlg = configuracionDialog(self.frame)
-        AjustesController(dlg)
         resultado = dlg.ShowModal()
         if resultado == wx.ID_OK:
             self.config_dialog = dlg  # Guarda la referencia para usarla en guardar()
