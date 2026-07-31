@@ -227,12 +227,13 @@ class ServicioTiktok:
     async def on_follow(self,event: FollowEvent):
         if self._es_mensaje_anterior(event): return
         if data_store.config['eventos'][7] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
+            nombre = _nombre_usuario(event.user)
             wx.CallAfter(self.estadisticas_manager.agregar_seguidor)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, _nombre_usuario(event.user) + _(" comenzó a seguirte!"), "follow")
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, nombre + _(" comenzó a seguirte!"), "follow")
             if data_store.config['sonidos'] and data_store.config['listasonidos'][10]:
                 wx.CallAfter(player.play, rutasonidos[10])
             if data_store.config['reader'] and data_store.config['unread'][7]:
-                wx.CallAfter(reader.leer_mensaje, _nombre_usuario(event.user) + _(" comenzó a seguirte!"))
+                wx.CallAfter(reader.leer_mensaje, nombre + _(" comenzó a seguirte!"))
 
     async def on_gift(self,event: GiftEvent):
         if self._es_mensaje_anterior(event): return
