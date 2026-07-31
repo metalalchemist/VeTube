@@ -383,7 +383,10 @@ class AjustesController:
         ya se había aplicado en caliente, para que el diálogo quede como al abrirlo.
         Reutiliza los propios manejadores (cambiar_sintetizador, cambiarVoz, etc.) porque
         leen los valores desde los widgets del diálogo, no desde el event, así que sirve
-        con event=None una vez que dejamos los widgets en el valor original."""
+        con event=None una vez que dejamos los widgets en el valor original. Cada bloque
+        va en su propio try/except: si uno falla (un backend de voz que ya no está
+        disponible, un dispositivo desconectado...) no debe impedir que se reviertan los
+        demás, y no debe fallar en silencio — se registra con logger.exception."""
         original = self.config_al_abrir
         cambio_tts = config.get('sistemaTTS') != original['sistemaTTS']
         cambio_voz = config.get('voz') != original['voz']
@@ -397,39 +400,59 @@ class AjustesController:
             config[clave] = original[clave]
 
         if cambio_tema:
-            self.dialog.lista_temas.SetStringSelection(config['directorio'])
-            recargar_rutasonidos()
+            try:
+                recargar_rutasonidos()
+            except Exception:
+                logger.exception("No se pudo restaurar el tema de sonidos al cancelar Ajustes (directorio=%s)", config['directorio'])
 
         if cambio_tts:
-            self.dialog.seleccionar_TTS.SetStringSelection(config['sistemaTTS'])
-            self.cambiar_sintetizador(None)
+            try:
+                self.dialog.seleccionar_TTS.SetStringSelection(config['sistemaTTS'])
+                self.cambiar_sintetizador(None)
+            except Exception:
+                logger.exception("No se pudo restaurar el sistema TTS al cancelar Ajustes (sistemaTTS=%s)", config['sistemaTTS'])
         elif cambio_voz:
             try:
-                self.dialog.choice_2.SetSelection(config['voz'])
+                lista_voces_actual = lista_voces_piper if config['sistemaTTS'] == "piper" else reader._lector.list_voices()
+                if 0 <= config['voz'] < len(lista_voces_actual):
+                    self.dialog.choice_2.SetSelection(config['voz'])
+                    self.cambiarVoz(None)
+                else:
+                    # SetSelection() con un índice fuera de rango no lanza excepción en wx: no
+                    # basta con un try/except acá, hay que descartar el índice inválido a mano
+                    # para no terminar cargando una voz cualquiera (indexación negativa de Python).
+                    logger.warning(
+                        "No se pudo restaurar la voz al cancelar Ajustes: índice %s fuera de rango (%s voces disponibles)",
+                        config['voz'], len(lista_voces_actual),
+                    )
             except Exception:
-                pass
-            self.cambiarVoz(None)
+                logger.exception("No se pudo restaurar la voz al cancelar Ajustes (voz=%s)", config['voz'])
 
         if cambio_volumen:
-            self.dialog.slider_2.SetValue(config['volume'])
-            self.cambiarVolumen(None)
+            try:
+                self.dialog.slider_2.SetValue(config['volume'])
+                self.cambiarVolumen(None)
+            except Exception:
+                logger.exception("No se pudo restaurar el volumen al cancelar Ajustes (volume=%s)", config['volume'])
 
         if cambio_tono:
-            if config['sistemaTTS'] == "onecore":
-                self.dialog.slider_1.SetValue(config.get('tono_onecore', 0.6))
-            else:
-                self.dialog.slider_1.SetValue(config['tono'] + 10)
-            self.cambiarTono(None)
+            try:
+                if config['sistemaTTS'] == "onecore":
+                    self.dialog.slider_1.SetValue(config.get('tono_onecore', 0.6))
+                else:
+                    self.dialog.slider_1.SetValue(config['tono'] + 10)
+                self.cambiarTono(None)
+            except Exception:
+                logger.exception("No se pudo restaurar el tono al cancelar Ajustes")
 
         if cambio_velocidad:
-            self.dialog.slider_3.SetValue(config['speed'] + 10)
-            self.cambiarVelocidad(None)
+            try:
+                self.dialog.slider_3.SetValue(config['speed'] + 10)
+                self.cambiarVelocidad(None)
+            except Exception:
+                logger.exception("No se pudo restaurar la velocidad al cancelar Ajustes (speed=%s)", config['speed'])
 
         if cambio_dispositivo:
-            try:
-                self.dialog.lista_dispositivos.SetSelection(config['dispositivo'] - 1)
-            except Exception:
-                pass
             # Sin el sonido de confirmación ni el "Hablaré a través de este dispositivo" de
             # establecer_dispositivo(): un Cancelar silencioso no debe sonar como un cambio aplicado.
             try:
