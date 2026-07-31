@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-07 21:03-0700\n"
+"POT-Creation-Date: 2026-07-31 23:01+0200\n"
 "PO-Revision-Date: 2026-01-08 16:06+0100\n"
 "Last-Translator: 4Sense Gaming <lukas@4sensegaming.cz>\n"
 "Language: cs\n"
@@ -16,9 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
-#: run_main_window.py:32
+#: run_main_window.py:35
 msgid ""
 "VeTube ya se encuentra en ejecución. Cierra la otra instancia antes de "
 "iniciar esta."
@@ -59,36 +59,46 @@ msgstr ""
 msgid "Listo"
 msgstr "Hotovo"
 
-#: controller/ajustes_controller.py:28 controller/ajustes_controller.py:131
-#: controller/ajustes_controller.py:140
+#: controller/ajustes_controller.py:42 controller/ajustes_controller.py:156
+#: controller/ajustes_controller.py:165
 msgid "Controlado por el lector de pantalla"
 msgstr "Řízeno odečítačem obrazovky"
 
-#: controller/ajustes_controller.py:108 controller/ajustes_controller.py:226
-#: controller/ajustes_controller.py:240 controller/ajustes_controller.py:335
-#: controller/ajustes_controller.py:339 ui/ajustes/voz.py:38
+#: controller/ajustes_controller.py:133 controller/ajustes_controller.py:254
+#: controller/ajustes_controller.py:268 controller/ajustes_controller.py:363
+#: controller/ajustes_controller.py:367 ui/ajustes/voz.py:38
 msgid "&Reproducir prueba."
 msgstr "&Přehrát ukázku."
 
-#: controller/ajustes_controller.py:216
+#: controller/ajustes_controller.py:140 controller/ajustes_controller.py:239
+#: controller/ajustes_controller.py:248 controller/ajustes_controller.py:306
+#: controller/ajustes_controller.py:460
+#: controller/piper_downloader_controller.py:62
+#: controller/piper_downloader_controller.py:66
+#: controller/piper_downloader_controller.py:84 globals/resources.py:48
+#: utils/app_utilitys.py:27
+msgid "No hay voces instaladas"
+msgstr "Žádné nainstalované hlasy"
+
+#: controller/ajustes_controller.py:244
 msgid "Hablaré a través de este dispositivo."
 msgstr "Budu mluvit z tohoto zařízení."
 
-#: controller/ajustes_controller.py:221 controller/ajustes_controller.py:231
+#: controller/ajustes_controller.py:249 controller/ajustes_controller.py:259
 msgid ""
 "Hola, soy la voz que te acompañará de ahora en adelante a leer los "
 "mensajes de tus canales favoritos."
 msgstr "Nazdar, já jsem hlas, který ti bude číst zprávy z tvých oblíbených kanálů."
 
-#: controller/ajustes_controller.py:232
+#: controller/ajustes_controller.py:260
 msgid "&Detener prueba."
 msgstr "Z&astavit ukázku."
 
-#: controller/ajustes_controller.py:285
+#: controller/ajustes_controller.py:313
 msgid "Descargar voces de internet..."
 msgstr "Stáhnout hlasy z internetu..."
 
-#: controller/ajustes_controller.py:286
+#: controller/ajustes_controller.py:314
 msgid "Instalar desde archivo local (.tar.gz)..."
 msgstr "Instalovat z místního souboru (.tar.gz)..."
 
@@ -97,17 +107,17 @@ msgid "Error al conectar con el chat: "
 msgstr "Chyba při připojování k chatu: "
 
 #: controller/chat_controller.py:152 controller/estadisticas_controller.py:46
-#: controller/main_controller.py:117 controller/main_controller.py:199
-#: controller/main_controller.py:203 controller/main_controller.py:213
-#: controller/main_controller.py:251 controller/main_controller.py:280
-#: controller/main_controller.py:290 controller/main_controller.py:389
-#: controller/main_controller.py:391
+#: controller/main_controller.py:78 controller/main_controller.py:163
+#: controller/main_controller.py:167 controller/main_controller.py:177
+#: controller/main_controller.py:217 controller/main_controller.py:246
+#: controller/main_controller.py:256 controller/main_controller.py:355
+#: controller/main_controller.py:357
 #: controller/piper_downloader_controller.py:80
-#: controller/piper_downloader_controller.py:101
-#: controller/piper_downloader_controller.py:103
-#: controller/piper_downloader_controller.py:108
-#: controller/piper_downloader_controller.py:159
-#: controller/piper_downloader_controller.py:230
+#: controller/piper_downloader_controller.py:100
+#: controller/piper_downloader_controller.py:102
+#: controller/piper_downloader_controller.py:107
+#: controller/piper_downloader_controller.py:158
+#: controller/piper_downloader_controller.py:229
 #: controller/update_languages_controller.py:77
 #: controller/update_languages_controller.py:82 ui/discord_token_dialog.py:40
 #: update/updater.py:26
@@ -122,69 +132,69 @@ msgstr "Zadej vyhledávací výraz"
 msgid "Buscar mensajes"
 msgstr "Prohledat zprávy"
 
-#: controller/chat_controller.py:183
+#: controller/chat_controller.py:185
 msgid "No se encontraron mensajes que coincidan con el criterio de búsqueda."
 msgstr "Nebyly nalezeny žádné zprávy, které odpovídají vyhledávacímu výrazu."
 
-#: controller/chat_controller.py:183
+#: controller/chat_controller.py:185
 msgid "Búsqueda sin resultados"
 msgstr "Žádné výsledky"
 
-#: controller/chat_controller.py:273
+#: controller/chat_controller.py:275
 msgid "Mensaje copiado"
 msgstr "Zpráva zkopírována"
 
-#: controller/chat_controller.py:289 globals/mensajes.py:31 ui/chat_ui.py:34
-#: ui/main_window.py:51
+#: controller/chat_controller.py:291 globals/mensajes.py:31 ui/chat_ui.py:34
+#: ui/main_window.py:52
 msgid "Favoritos"
 msgstr "Oblíbené"
 
-#: controller/chat_controller.py:293
+#: controller/chat_controller.py:295
 msgid "Este mensaje ya se encuentra en favoritos"
 msgstr "Tato zpráva už je v oblíbených"
 
-#: controller/chat_controller.py:296
+#: controller/chat_controller.py:298
 msgid "Mensaje agregado a favoritos"
 msgstr "Zpráva přidána do oblíbených"
 
-#: controller/chat_controller.py:308 controller/main_controller.py:86
-#: controller/main_controller.py:158 controller/main_controller.py:171
-#: controller/main_controller.py:178
+#: controller/chat_controller.py:310 controller/main_controller.py:47
+#: controller/main_controller.py:122 controller/main_controller.py:135
+#: controller/main_controller.py:142
 #: controller/menus/chat_item_controller.py:52
 msgid "Tus mensajes archivados aparecerán aquí"
 msgstr "Tady se objeví tvoje archivované zprávy"
 
-#: controller/chat_controller.py:324
+#: controller/chat_controller.py:326
 #: controller/menus/chat_item_controller.py:70
 msgid "El mensaje ha sido archivado correctamente."
 msgstr "Zpráva úspěšně archivována."
 
-#: controller/chat_controller.py:326
+#: controller/chat_controller.py:328
 #: controller/menus/chat_item_controller.py:72
 msgid "Este mensaje ya está en la lista de archivados."
 msgstr "Zpráva už je archivovaná."
 
-#: controller/chat_controller.py:333
+#: controller/chat_controller.py:335
 msgid "No se puede borrar la última página."
 msgstr "Nemůžeš smazat poslední kategorii."
 
-#: controller/chat_controller.py:337
+#: controller/chat_controller.py:339
 msgid "Página borrada."
 msgstr "Kategorie smazána."
 
-#: controller/chat_controller.py:345
+#: controller/chat_controller.py:347
 msgid "Lectura automática activada."
 msgstr "Automatické čtení zapnuto."
 
-#: controller/chat_controller.py:345
+#: controller/chat_controller.py:347
 msgid "Lectura automática desactivada."
 msgstr "Automatické čtení vypnuto."
 
-#: controller/chat_controller.py:350
+#: controller/chat_controller.py:352
 msgid "sonidos activados."
 msgstr "zvuky zapnuty."
 
-#: controller/chat_controller.py:350
+#: controller/chat_controller.py:352
 msgid "sonidos desactivados."
 msgstr "zvuky vypnuty."
 
@@ -192,8 +202,8 @@ msgstr "zvuky vypnuty."
 msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
 msgstr "Chceš zavřít toto okno a přestat číst zprávy?"
 
-#: controller/chat_dialog_controller.py:120 controller/main_controller.py:121
-#: controller/menus/main_menu_controller.py:108
+#: controller/chat_dialog_controller.py:120 controller/main_controller.py:82
+#: controller/menus/main_menu_controller.py:110
 #: controller/update_languages_controller.py:104
 msgid "¡Atención!"
 msgstr "Varování!"
@@ -207,7 +217,7 @@ msgstr ""
 " odvolat."
 
 #: controller/editor_controller.py:43
-#: controller/menus/main_menu_controller.py:54 update/update.py:144
+#: controller/menus/main_menu_controller.py:56 update/update.py:155
 msgid "Atención:"
 msgstr "Varování:"
 
@@ -276,7 +286,7 @@ msgid "Estadísticas guardadas en {}"
 msgstr "Statistiky uloženy do souboru {}"
 
 #: controller/estadisticas_controller.py:44
-#: controller/piper_downloader_controller.py:242
+#: controller/piper_downloader_controller.py:241
 msgid "Éxito"
 msgstr "Hotovo"
 
@@ -285,105 +295,84 @@ msgstr "Hotovo"
 msgid "Error al guardar el archivo: {}"
 msgstr "Chyba při ukládání souboru: {}"
 
-#: controller/main_controller.py:46 utils/app_utilitys.py:26
-msgid ""
-"Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Deseas"
-" abrir el descargador de voces ahora para buscar e instalar una?"
-msgstr ""
-"Pro použití syntezátoru Piper potřebujete alespoň jeden hlas. Chcete nyní"
-" otevřít stahovač hlasů, abyste jej našli a nainstalovali?"
-
-#: controller/main_controller.py:46
-#: controller/piper_downloader_controller.py:62
-#: controller/piper_downloader_controller.py:66
-#: controller/piper_downloader_controller.py:84 globals/resources.py:31
-#: utils/app_utilitys.py:26
-msgid "No hay voces instaladas"
-msgstr "Žádné nainstalované hlasy"
-
-#: controller/main_controller.py:77
-msgid "Lector Piper inicializado correctamente."
-msgstr "Čtečka Piper byla úspěšně inicializována."
-
-#: controller/main_controller.py:81
+#: controller/main_controller.py:42
 #, python-format
 msgid "Favoritos(%s)"
 msgstr "Oblíbené (%s)"
 
-#: controller/main_controller.py:83 controller/main_controller.py:116
-#: controller/main_controller.py:133
-#: controller/menus/chat_menu_controller.py:56
+#: controller/main_controller.py:44 controller/main_controller.py:77
+#: controller/main_controller.py:97 controller/menus/chat_menu_controller.py:56
 msgid "Tus favoritos aparecerán aquí"
 msgstr "Tady se objeví tvoje oblíbené"
 
-#: controller/main_controller.py:117
+#: controller/main_controller.py:78
 msgid "No hay favoritos que borrar"
 msgstr "Nemáš uložené žádné oblíbené zprávy"
 
-#: controller/main_controller.py:121
+#: controller/main_controller.py:82
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr "Chceš opravdu smazat všechny oblíbené zprávy?"
 
-#: controller/main_controller.py:137
+#: controller/main_controller.py:101
 msgid "&Borrar mensajes"
 msgstr "&Smazat zprávy"
 
-#: controller/main_controller.py:138
+#: controller/main_controller.py:102
 msgid "Borrar todos los mensajes destacados"
 msgstr "Smazat všechny zprávy s hvězdičkou"
 
-#: controller/main_controller.py:141 ui/main_window.py:71
+#: controller/main_controller.py:105 ui/main_window.py:72
 msgid "&Borrar mensaje"
 msgstr "&Smazat zprávu"
 
-#: controller/main_controller.py:142
+#: controller/main_controller.py:106
 msgid "Borrar el mensaje destacado seleccionado"
 msgstr "Smazat vybranou zprávu s hvězdičkou"
 
-#: controller/main_controller.py:147
+#: controller/main_controller.py:111
 msgid "&Borrar favoritos"
 msgstr "&Smazat oblíbené"
 
-#: controller/main_controller.py:148
+#: controller/main_controller.py:112
 msgid "Borrar todos los favoritos"
 msgstr "Smazat všechny oblíbené zprávy"
 
-#: controller/main_controller.py:151 ui/main_window.py:59
+#: controller/main_controller.py:115 ui/main_window.py:60
 msgid "&Borrar favorito"
 msgstr "&Smazat z oblíbených"
 
-#: controller/main_controller.py:152
+#: controller/main_controller.py:116
 msgid "Borrar el favorito seleccionado"
 msgstr "Smazat vybranou zprávu z oblíbených"
 
-#: controller/main_controller.py:166
+#: controller/main_controller.py:130
 msgid "No hay más elementos que borrar"
 msgstr "Žádné položky ke smazání"
 
-#: controller/main_controller.py:168 controller/main_controller.py:181
+#: controller/main_controller.py:132 controller/main_controller.py:145
 msgid "No hay mensajes que borrar"
 msgstr "Žádné zprávy ke smazání"
 
-#: controller/main_controller.py:174
+#: controller/main_controller.py:138
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr "Chceš opravdu smazat všechny zprávy?"
 
-#: controller/main_controller.py:199
+#: controller/main_controller.py:163
 #, python-brace-format
 msgid "Error al simplificar URL de TikTok: {}"
 msgstr "Chyba při zjednodušování URL TikTok: {}"
 
-#: controller/main_controller.py:203 servicios/tiktok.py:65
+#: controller/main_controller.py:167 servicios/tiktok.py:89
 msgid "No se pudo obtener la URL real de TikTok."
 msgstr "Nepodařilo se získat skutečnou URL TikTok."
 
-#: controller/main_controller.py:213
+#: controller/main_controller.py:177
 msgid ""
 "No se puede acceder porque el campo de texto está vacío, debe escribir "
 "algo."
 msgstr "Nelze získat přístup, protože textové pole je prázdné, musíte něco napsat."
 
-#: controller/main_controller.py:251
+#: controller/main_controller.py:217
 msgid ""
 "Para Discord pega el enlace del canal de texto: haz clic derecho sobre el"
 " canal y elige «Copiar enlace»."
@@ -391,7 +380,7 @@ msgstr ""
 "Pro Discord vložte odkaz na textový kanál: klikněte pravým tlačítkem na "
 "kanál a zvolte „Kopírovat odkaz“."
 
-#: controller/main_controller.py:280
+#: controller/main_controller.py:246
 msgid ""
 "El enlace de Discord no es válido. Copia el enlace del canal de texto "
 "(clic derecho sobre el canal, «Copiar enlace») y pégalo en VeTube."
@@ -399,17 +388,17 @@ msgstr ""
 "Odkaz na Discord není platný. Zkopírujte odkaz na textový kanál (pravé "
 "tlačítko na kanálu, „Kopírovat odkaz“) a vložte ho do VeTube."
 
-#: controller/main_controller.py:290
+#: controller/main_controller.py:256
 msgid ""
 "¡Parece que el enlace al cual está intentando acceder no es un enlace "
 "válido."
 msgstr "Zdá se, že odkaz, na který se pokoušíte přejít, není platný."
 
-#: controller/main_controller.py:325
+#: controller/main_controller.py:291
 msgid "Conectando..."
 msgstr "Připojování..."
 
-#: controller/main_controller.py:389
+#: controller/main_controller.py:355
 msgid ""
 "El token no es válido. Comprueba que lo copiaste completo desde el portal"
 " de desarrolladores de Discord."
@@ -417,7 +406,7 @@ msgstr ""
 "Token není platný. Zkontrolujte, že jste ho zkopírovali celý z portálu "
 "pro vývojáře Discordu."
 
-#: controller/main_controller.py:391
+#: controller/main_controller.py:357
 msgid ""
 "No se pudo comprobar el token por un fallo de red. Revisa tu conexión a "
 "internet e inténtalo de nuevo."
@@ -425,13 +414,13 @@ msgstr ""
 "Token se nepodařilo ověřit kvůli chybě sítě. Zkontrolujte připojení k "
 "internetu a zkuste to znovu."
 
-#: controller/main_controller.py:434
-#: controller/menus/main_menu_controller.py:59
+#: controller/main_controller.py:400
+#: controller/menus/main_menu_controller.py:61
 msgid "¿está seguro que desea salir del programa?"
 msgstr "Chceš opravdu ukončit program?"
 
-#: controller/main_controller.py:434
-#: controller/menus/main_menu_controller.py:59
+#: controller/main_controller.py:400
+#: controller/menus/main_menu_controller.py:61
 msgid "¡atención!"
 msgstr "Varování!"
 
@@ -461,98 +450,98 @@ msgstr "Opravdu chcete smazat hlas %s? Tuto akci nelze vzít zpět."
 msgid "Confirmar eliminación"
 msgstr "Potvrdit smazání"
 
-#: controller/piper_downloader_controller.py:98
+#: controller/piper_downloader_controller.py:97
 #, python-format
 msgid "Voz %s eliminada correctamente."
 msgstr "Hlas %s byl úspěšně smazán."
 
-#: controller/piper_downloader_controller.py:101
+#: controller/piper_downloader_controller.py:100
 msgid "No se pudo encontrar la carpeta de la voz."
 msgstr "Nepodařilo se najít složku s hlasem."
 
-#: controller/piper_downloader_controller.py:103
+#: controller/piper_downloader_controller.py:102
 #, python-format
 msgid "No se pudo eliminar la voz: %s. Asegúrate de que no esté en uso."
 msgstr "Nepodařilo se smazat hlas: %s. Ujistěte se, že se nepoužívá."
 
-#: controller/piper_downloader_controller.py:107
+#: controller/piper_downloader_controller.py:106
 msgid "Error al cargar el catálogo de voces."
 msgstr "Chyba při načítání katalogu hlasů."
 
-#: controller/piper_downloader_controller.py:108
+#: controller/piper_downloader_controller.py:107
 msgid "No se pudo conectar con Hugging Face para obtener las voces."
 msgstr "Nepodařilo se připojit k Hugging Face pro získání hlasů."
 
-#: controller/piper_downloader_controller.py:116
+#: controller/piper_downloader_controller.py:115
 msgid "Catálogo cargado. Selecciona idiomas para ver las voces."
 msgstr "Katalog načten. Vyberte jazyky pro zobrazení hlasů."
 
-#: controller/piper_downloader_controller.py:139
-#: controller/piper_downloader_controller.py:164 ui/piper_downloader.py:66
+#: controller/piper_downloader_controller.py:138
+#: controller/piper_downloader_controller.py:163 ui/piper_downloader.py:66
 msgid "&Reproducir muestra"
 msgstr "&Přehrát ukázku"
 
-#: controller/piper_downloader_controller.py:140
+#: controller/piper_downloader_controller.py:139
 msgid "Reproducción de muestra detenida."
 msgstr "Přehrávání ukázky zastaveno."
 
-#: controller/piper_downloader_controller.py:146
+#: controller/piper_downloader_controller.py:145
 msgid "Por favor, selecciona una voz de la lista para escuchar la muestra."
 msgstr "Vyberte prosím hlas ze seznamu pro poslech ukázky."
 
 #: controller/menus/chat_menu_controller.py:42
 #: controller/menus/chat_menu_controller.py:53
 #: controller/menus/chat_menu_controller.py:61
-#: controller/piper_downloader_controller.py:146
-#: controller/piper_downloader_controller.py:181
+#: controller/piper_downloader_controller.py:145
+#: controller/piper_downloader_controller.py:180
 msgid "Aviso"
 msgstr "Upozornění"
 
-#: controller/piper_downloader_controller.py:152
+#: controller/piper_downloader_controller.py:151
 #, python-format
 msgid "Reproduciendo muestra de %s..."
 msgstr "Přehrávání ukázky %s..."
 
-#: controller/piper_downloader_controller.py:155
+#: controller/piper_downloader_controller.py:154
 msgid "&Detener"
 msgstr "Z&astavit"
 
-#: controller/piper_downloader_controller.py:159
+#: controller/piper_downloader_controller.py:158
 msgid "Esta voz no dispone de muestra de audio."
 msgstr "Tento hlas nemá zvukovou ukázku."
 
-#: controller/piper_downloader_controller.py:165
+#: controller/piper_downloader_controller.py:164
 msgid "Reproducción de muestra finalizada."
 msgstr "Přehrávání ukázky dokončeno."
 
-#: controller/piper_downloader_controller.py:181
+#: controller/piper_downloader_controller.py:180
 msgid "Por favor, selecciona al menos una voz para descargar."
 msgstr "Vyberte prosím alespoň jeden hlas ke stažení."
 
-#: controller/piper_downloader_controller.py:190
+#: controller/piper_downloader_controller.py:189
 msgid "Descargar variantes de Calidad Normal (Alta)"
 msgstr "Stáhnout varianty v normální kvalitě (vysoká)"
 
-#: controller/piper_downloader_controller.py:191
+#: controller/piper_downloader_controller.py:190
 msgid "Descargar variantes Rápidas (RT) donde estén disponibles"
 msgstr "Stáhnout rychlé (RT) varianty, pokud jsou k dispozici"
 
-#: controller/piper_downloader_controller.py:217
+#: controller/piper_downloader_controller.py:216
 #, python-format
 msgid "Descargando %s (%s) [%d/%d]..."
 msgstr "Stahování %s (%s) [%d/%d]..."
 
-#: controller/piper_downloader_controller.py:230
+#: controller/piper_downloader_controller.py:229
 #, python-format
 msgid "Error al descargar %s: %s"
 msgstr "Chyba při stahování %s: %s"
 
-#: controller/piper_downloader_controller.py:235
+#: controller/piper_downloader_controller.py:234
 #, python-format
 msgid "Proceso finalizado. %d de %d voces instaladas."
 msgstr "Proces dokončen. Bylo nainstalováno %d z %d hlasů."
 
-#: controller/piper_downloader_controller.py:242
+#: controller/piper_downloader_controller.py:241
 msgid ""
 "Las voces se han instalado correctamente. Ya puedes seleccionarlas en los"
 " Ajustes de Voz."
@@ -680,11 +669,11 @@ msgstr "Odkaz se nepodařilo otevřít"
 msgid "No se encontró un enlace válido para abrir."
 msgstr "Nebyl nalezen žádný platný odkaz, který by se dal otevřít."
 
-#: controller/menus/main_menu_controller.py:39
+#: controller/menus/main_menu_controller.py:38
 msgid "Creadores del proyecto:"
 msgstr "Tvůrci projektu:"
 
-#: controller/menus/main_menu_controller.py:40
+#: controller/menus/main_menu_controller.py:39
 msgid ""
 "Descripción:\n"
 " Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch,"
@@ -696,39 +685,35 @@ msgstr ""
 " Twitchi, nastav si čtení, jak potřebuješ, a ještě víc si užívej svoje "
 "oblíbené kanály."
 
-#: controller/menus/main_menu_controller.py:41 update/updater.py:31
-msgid "Información"
-msgstr "Informace"
-
-#: controller/menus/main_menu_controller.py:54
+#: controller/menus/main_menu_controller.py:56
 msgid ""
 "Estás apunto de reiniciar la configuración a sus valores predeterminados,"
 " ¿Deseas proceder?"
 msgstr "Chystáš se obnovit výchozí nastavení. Chceš pokračovat?"
 
-#: controller/menus/main_menu_controller.py:69
+#: controller/menus/main_menu_controller.py:71
 #, python-brace-format
 msgid "Error al conectar con el servidor de idiomas: {}"
 msgstr "Chyba při připojování k jazykovému serveru: {}"
 
-#: controller/menus/main_menu_controller.py:69
+#: controller/menus/main_menu_controller.py:71
 msgid "Error de red"
 msgstr "Chyba sítě"
 
-#: controller/menus/main_menu_controller.py:77
-#: controller/menus/main_menu_controller.py:88
+#: controller/menus/main_menu_controller.py:79
+#: controller/menus/main_menu_controller.py:90
 msgid "Actualización de idiomas"
 msgstr "Aktualizace jazyků"
 
-#: controller/menus/main_menu_controller.py:88 servicios/language_updater.py:66
+#: controller/menus/main_menu_controller.py:90 servicios/language_updater.py:66
 msgid "No hay actualizaciones ni nuevos idiomas disponibles."
 msgstr "Nejsou dostupné žádné aktualizace ani nové jazyky."
 
-#: controller/menus/main_menu_controller.py:90
+#: controller/menus/main_menu_controller.py:92
 msgid "Error de actualización"
 msgstr "Chyba při aktualizaci"
 
-#: controller/menus/main_menu_controller.py:108
+#: controller/menus/main_menu_controller.py:110
 msgid ""
 "Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea "
 "reiniciarlo ahora?"
@@ -957,7 +942,7 @@ msgstr "Když někdo sdílí odkaz na tvůj stream na TikToku"
 msgid "Cuando alguien envía un cofre  en tiktok"
 msgstr "Když někdo na TikToku pošle truhličku"
 
-#: globals/resources.py:28 servicios/twich.py:92
+#: globals/resources.py:45 servicios/twich.py:91
 msgid "Por defecto"
 msgstr "Výchozí"
 
@@ -965,11 +950,11 @@ msgstr "Výchozí"
 msgid "proceso playroom no abierto"
 msgstr "aplikace QuentinC Playroom není spuštěna"
 
-#: servicios/discord.py:56 servicios/kick.py:69 ui/piper_downloader.py:62
+#: servicios/discord.py:59 servicios/kick.py:73 ui/piper_downloader.py:62
 msgid "Cargando..."
 msgstr "Načítání..."
 
-#: servicios/discord.py:85
+#: servicios/discord.py:88
 msgid ""
 "El token del bot de Discord no es válido o fue revocado. Pega de nuevo el"
 " enlace del canal para introducir un token nuevo."
@@ -977,7 +962,7 @@ msgstr ""
 "Token Discord bota není platný nebo byl zrušen. Vložte znovu odkaz na "
 "kanál a zadejte nový token."
 
-#: servicios/discord.py:89
+#: servicios/discord.py:92
 msgid ""
 "Al bot le falta activar «Message Content Intent» en el portal de "
 "desarrolladores de Discord. Actívalo y vuelve a intentarlo."
@@ -985,11 +970,11 @@ msgstr ""
 "Bot nemá zapnutou volbu „Message Content Intent“ na portálu pro vývojáře "
 "Discordu. Zapněte ji a zkuste to znovu."
 
-#: servicios/discord.py:107 servicios/kick.py:97 servicios/tiktok.py:154
+#: servicios/discord.py:110 servicios/kick.py:103 servicios/tiktok.py:200
 msgid "Ingresando al chat"
 msgstr "Vstupuješ do chatu"
 
-#: servicios/discord.py:119
+#: servicios/discord.py:122
 msgid ""
 "No se encontró el canal de Discord. Comprueba que el bot está invitado al"
 " servidor y que el enlace del canal es correcto."
@@ -997,30 +982,28 @@ msgstr ""
 "Kanál na Discordu nebyl nalezen. Zkontrolujte, že je bot pozván na server"
 " a že je odkaz na kanál správný."
 
-#: servicios/kick.py:39
+#: servicios/kick.py:43
 msgid "error_bypass_no_encontrado"
 msgstr "error_bypass_no_encontrado"
 
-#: servicios/kick.py:72
+#: servicios/kick.py:76
 msgid "error_iniciar_bypass"
 msgstr "error_iniciar_bypass"
 
-#: servicios/kick.py:115
+#: servicios/kick.py:121
 msgid "error_conectar_kick_chatroom"
 msgstr "error_conectar_kick_chatroom"
 
-#: servicios/kick.py:164 servicios/kick.py:166 servicios/tiktok.py:212
-#: servicios/tiktok.py:216
+#: servicios/kick.py:170 servicios/kick.py:172 servicios/tiktok.py:252
+#: servicios/tiktok.py:256
 msgid " comenzó a seguirte!"
 msgstr " tě sleduje!"
 
-#: servicios/kick.py:205 servicios/tiktok.py:262 servicios/twich.py:176
-#: servicios/youtube.py:182
+#: servicios/kick.py:211 servicios/tiktok.py:351 servicios/youtube.py:186
 msgid " en vivo, actualmente "
 msgstr " na streamu, počet diváků: "
 
-#: servicios/kick.py:205 servicios/tiktok.py:262 servicios/twich.py:176
-#: servicios/youtube.py:182
+#: servicios/kick.py:211 servicios/tiktok.py:351 servicios/youtube.py:186
 msgid " viendo ahora"
 msgstr "."
 
@@ -1049,65 +1032,73 @@ msgstr "Chyba při rozbalování jazykových souborů."
 msgid "Error inesperado durante la instalación."
 msgstr "Neočekávaná chyba během instalace."
 
-#: servicios/sala.py:33 servicios/twich.py:31 servicios/youtube.py:31
+#: servicios/sala.py:36 servicios/twich.py:33 servicios/youtube.py:34
 msgid "Ingresando al chat."
 msgstr "Vstupuješ do chatu."
 
-#: servicios/sala.py:34
+#: servicios/sala.py:37
 msgid "Chat de la sala de juegos"
 msgstr "Chat na QuentinC Playroomu"
 
-#: servicios/tiktok.py:81
+#: servicios/tiktok.py:105
 msgid "El usuario está en vivo. Conectando..."
 msgstr "Kanál vysílá. Navazuje se spojení..."
 
-#: servicios/tiktok.py:94
+#: servicios/tiktok.py:116
 msgid "El usuario no está en vivo. Reintentando en un minuto."
 msgstr "Kanál nevysílá. Další pokus o připojení proběhne za minutu."
 
-#: servicios/tiktok.py:142
+#: servicios/tiktok.py:188
 msgid "El directo ha finalizado. Se buscará de nuevo en un minuto."
 msgstr "Stream skončil. Další kontrola proběhne za minutu."
 
-#: servicios/tiktok.py:150
+#: servicios/tiktok.py:196
 msgid "Se ha perdido la conexión. El servicio se ha detenido."
 msgstr "Ztráta spojení. Stream se přerušil."
 
-#: servicios/tiktok.py:193 servicios/tiktok.py:197
+#: servicios/tiktok.py:230 servicios/tiktok.py:234
 msgid " envió un emogi."
 msgstr " posílá emotikon."
 
-#: servicios/tiktok.py:202
+#: servicios/tiktok.py:240
 msgid " ha enviado un cofre!"
 msgstr " posílá truhličku!"
 
-#: servicios/tiktok.py:223
+#: servicios/tiktok.py:273
 #, python-format
 msgid "%s ha enviado %s %s (%s %s)"
 msgstr "%s posílá %s %s (%s %s)"
 
-#: servicios/tiktok.py:225
+#: servicios/tiktok.py:275
 #, python-format
 msgid "%s ha enviado %s %s (%s diamante)"
 msgstr "%s posílá %s %s (%s diamantů)"
 
-#: servicios/tiktok.py:237 servicios/tiktok.py:241
+#: servicios/tiktok.py:289 servicios/tiktok.py:293 servicios/tiktok.py:321
 msgid " se ha unido a tu en vivo."
 msgstr " se připojuje ke streamu."
 
-#: servicios/tiktok.py:246 servicios/tiktok.py:250
+#: servicios/tiktok.py:300 servicios/tiktok.py:304
 msgid " le ha dado me gusta a tu en vivo."
 msgstr " dává lajk tvému streamu."
 
-#: servicios/tiktok.py:255 servicios/tiktok.py:259
+#: servicios/tiktok.py:311 servicios/tiktok.py:315
 msgid " ha compartido tu en vivo!"
 msgstr " sdílí tvůj stream!"
 
-#: servicios/twich.py:64
+#: servicios/tiktok.py:332
+msgid " ¡se ha convertido en super fan!"
+msgstr " se stal super fanouškem!"
+
+#: servicios/tiktok.py:343
+msgid " ha enviado un cofre de super fan!"
+msgstr " posílá truhličku super fanouška!"
+
+#: servicios/twich.py:63
 msgid "Desconocido"
 msgstr "Neznámé"
 
-#: servicios/twich.py:73
+#: servicios/twich.py:72
 #, python-brace-format
 msgid ""
 "{author_name} ha renovado su suscripción en el nivel "
@@ -1116,7 +1107,7 @@ msgstr ""
 "{author_name} prodlužuje svoje předplatné na úrovni "
 "{subscription_plan_name}. Je věrným členem už {cumulative_months} měsíců!"
 
-#: servicios/twich.py:78
+#: servicios/twich.py:77
 #, python-brace-format
 msgid ""
 "{author_name} se ha suscrito en el nivel {subscription_plan_name} por "
@@ -1125,7 +1116,7 @@ msgstr ""
 "{author_name} si předplácí kanál na úrovni {subscription_plan_name} na "
 "{cumulative_months} měsíců!"
 
-#: servicios/twich.py:79
+#: servicios/twich.py:78
 #, python-brace-format
 msgid ""
 "{author_name} regaló una suscripción de nivel {subscription_type} a la "
@@ -1134,7 +1125,7 @@ msgstr ""
 "{author_name} daruje předplatné {subscription_type}, takže celkem už "
 "rozdal/a {sender_count} předplatných!"
 
-#: servicios/twich.py:80
+#: servicios/twich.py:79
 #, python-brace-format
 msgid ""
 "{author_name} ha regalado una suscripción a {gift_recipient_display_name}"
@@ -1144,7 +1135,7 @@ msgstr ""
 "{author_name} daruje předplatné uživateli {gift_recipient_display_name} "
 "na úrovni {subscription_plan_name} na {number_of_months_gifted} měsíců!"
 
-#: servicios/youtube.py:73
+#: servicios/youtube.py:76
 msgid ""
 "Se ha detectado una transmisión pasada. ¿Deseas conectarte con el "
 "servicio en tiempo real del chat?"
@@ -1152,11 +1143,11 @@ msgstr ""
 "Byl nalezen předchozí stream. Chceš se k tomuto kanálu připojit do živého"
 " chatu právě teď?"
 
-#: servicios/youtube.py:73
+#: servicios/youtube.py:76
 msgid "Transmisión pasada"
 msgstr "Předchozí stream"
 
-#: servicios/youtube.py:125
+#: servicios/youtube.py:128
 msgid " se a conectado al chat. "
 msgstr " vstupuje do chatu. "
 
@@ -1184,7 +1175,7 @@ msgstr "soukromé zprávy"
 msgid "General"
 msgstr "Obecné"
 
-#: ui/ajustes/__init__.py:47 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:53
+#: ui/ajustes/__init__.py:47 ui/chat_ui.py:24 ui/chat_ui.py:29 ui/chat_ui.py:55
 msgid "Eventos"
 msgstr "Události"
 
@@ -1208,7 +1199,7 @@ msgstr "&Smazat"
 msgid "&Opciones"
 msgstr "&Nastavení"
 
-#: ui/chat_ui.py:54
+#: ui/chat_ui.py:56
 msgid "&Filtrar por"
 msgstr "&Filtrovat podle"
 
@@ -1261,76 +1252,76 @@ msgstr "&Zavřít"
 msgid "No hay URLS en este mensaje"
 msgstr "Ve zprávě nejsou žádné odkazy"
 
-#: ui/main_window.py:17
+#: ui/main_window.py:18
 msgid "&Más opciones"
 msgstr "&Další možnosti"
 
-#: ui/main_window.py:23
+#: ui/main_window.py:24
 msgid "Inicio"
 msgstr "Chat"
 
-#: ui/main_window.py:27
+#: ui/main_window.py:28
 msgid "Escriba o pegue una URL o usuario"
 msgstr "Napiš nebo zkopíruj adresu nebo uživatelské jméno"
 
-#: ui/main_window.py:32
+#: ui/main_window.py:33
 msgid "Capturar el chat de: "
 msgstr "Typ služby: "
 
-#: ui/main_window.py:34
+#: ui/main_window.py:35
 msgid "detectar"
 msgstr "automaticky"
 
-#: ui/main_window.py:34
+#: ui/main_window.py:35
 msgid "YouTube"
 msgstr "YouTube"
 
-#: ui/main_window.py:34
+#: ui/main_window.py:35
 msgid "Twich"
 msgstr "Twitch"
 
-#: ui/main_window.py:34
+#: ui/main_window.py:35
 msgid "TikTok"
 msgstr "TikTok"
 
-#: ui/main_window.py:34
+#: ui/main_window.py:35
 msgid "La sala de juegos"
 msgstr "QuentinC Playroom"
 
-#: ui/main_window.py:34
+#: ui/main_window.py:35
 msgid "Kick"
 msgstr "Vykopnout uživatele"
 
-#: ui/main_window.py:34
+#: ui/main_window.py:35
 msgid "Discord"
 msgstr "Discord"
 
-#: ui/main_window.py:39
+#: ui/main_window.py:40
 msgid "&Acceder"
 msgstr "&OK"
 
-#: ui/main_window.py:42
+#: ui/main_window.py:43
 msgid "&Borrar"
 msgstr "&Smazat"
 
-#: ui/main_window.py:53
+#: ui/main_window.py:54
 msgid "&Tus favoritos: "
 msgstr "&Tvoje oblíbené: "
 
-#: ui/main_window.py:57
+#: ui/main_window.py:58
 #, python-format
 msgid "Favoritos (%s)"
 msgstr "Oblíbené (%s)"
 
-#: ui/main_window.py:61 ui/main_window.py:73
+#: ui/main_window.py:62 ui/main_window.py:74
 msgid "&Seleccionar todos los elementos"
 msgstr "&Vybrat vše"
 
-#: ui/main_window.py:65
+#: ui/main_window.py:66
 msgid "mensajes archivados"
 msgstr "archivované zprávy"
 
-#: ui/main_window.py:67
+#: ui/main_window.py:68
 msgid "&Mensajes archivados: "
 msgstr "&Archivované zprávy: "
 
@@ -1439,11 +1430,11 @@ msgstr "Kategorie"
 msgid "Sonidos"
 msgstr "Zvuky"
 
-#: ui/ajustes/__init__.py:54 update/update.py:145
+#: ui/ajustes/__init__.py:54 update/update.py:156
 msgid "&Aceptar"
 msgstr "&OK"
 
-#: ui/ajustes/__init__.py:56 update/update.py:145
+#: ui/ajustes/__init__.py:56 update/update.py:156
 msgid "&Cancelar"
 msgstr "&Zrušit"
 
@@ -1491,23 +1482,23 @@ msgstr "Nastavení programu"
 msgid "Idioma de VeTube (Requiere reiniciar)"
 msgstr "Jazyk VeTube (vyžaduje restart)"
 
-#: ui/ajustes/general.py:16
+#: ui/ajustes/general.py:19
 msgid "Activar diálogo de donaciones al inicio de la app."
 msgstr "Zobrazovat zprávu o podpoře při spuštění programu."
 
-#: ui/ajustes/general.py:19
+#: ui/ajustes/general.py:22
 msgid "preguntar si desea salir de la app al cerrar."
 msgstr "potvrzovat ukončení programu."
 
-#: ui/ajustes/general.py:22
+#: ui/ajustes/general.py:25
 msgid "Comprobar si hay actualizaciones al iniciar la app"
 msgstr "Vyhledávat aktualizace při spuštění programu"
 
-#: ui/ajustes/general.py:25
+#: ui/ajustes/general.py:28
 msgid "intentar traducir las novedades cuando salga una actualización."
 msgstr "automaticky překládat seznamy změn v aktualizacích."
 
-#: ui/ajustes/general.py:28
+#: ui/ajustes/general.py:31
 msgid "Desactivar la interfaz invisible"
 msgstr "Vypnout virtuální rozhraní"
 
@@ -1531,7 +1522,7 @@ msgstr "hlasitost přehrávače"
 msgid "cambio de volumen con las teclas de volumen (1-25)"
 msgstr "nastav hlasitost pomocí kláves hlasitosti (1-25)"
 
-#: ui/ajustes/sonidos.py:10
+#: ui/ajustes/sonidos.py:11
 msgid "Activar sonidos"
 msgstr "Zapnout zvuky"
 
@@ -1543,15 +1534,15 @@ msgstr "Motiv zvuků"
 msgid "Sonido"
 msgstr "Zvuk"
 
-#: ui/ajustes/sonidos.py:18
+#: ui/ajustes/sonidos.py:27
 msgid "&Reproducir"
 msgstr "&Přehrát"
 
-#: ui/ajustes/sonidos.py:21
+#: ui/ajustes/sonidos.py:30
 msgid "Seleccionar dispositivo de audio"
 msgstr "Vybrat zvukové zařízení"
 
-#: ui/ajustes/sonidos.py:26
+#: ui/ajustes/sonidos.py:38
 msgid "&Establecer"
 msgstr "&Nastavit"
 
@@ -1744,7 +1735,7 @@ msgstr "&O programu"
 msgid "&Salir...\tAlt+F4"
 msgstr "&Konec...\tAlt+F4"
 
-#: update/update.py:144
+#: update/update.py:155
 msgid ""
 "Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te "
 "unes a nuestra causa?"
@@ -1759,6 +1750,10 @@ msgstr "Chyba při aktualizaci"
 #: update/updater.py:31
 msgid "Al parecer tienes la última versión del programa"
 msgstr "Zdá se, že už máš nejnovější verzi programu"
+
+#: update/updater.py:31
+msgid "Información"
+msgstr "Informace"
 
 #: update/wxUpdater.py:8
 #, python-format
@@ -1805,6 +1800,18 @@ msgstr ""
 #: update/wxUpdater.py:36
 msgid "¡Hecho!"
 msgstr "Hotovo!"
+
+#: utils/app_utilitys.py:27
+msgid ""
+"Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Deseas"
+" abrir el descargador de voces ahora para buscar e instalar una?"
+msgstr ""
+"Pro použití syntezátoru Piper potřebujete alespoň jeden hlas. Chcete nyní"
+" otevřít stahovač hlasů, abyste jej našli a nainstalovali?"
+
+#: utils/app_utilitys.py:42
+msgid "Lector Piper inicializado correctamente."
+msgstr "Čtečka Piper byla úspěšně inicializována."
 
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
