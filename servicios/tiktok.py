@@ -2,7 +2,7 @@ import json, threading, asyncio, wx
 from exchange import exchange
 from logging import getLogger
 from TikTokLive.client.client import TikTokLiveClient
-from TikTokLive.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent, LikeEvent, JoinEvent, FollowEvent, ShareEvent, RoomUserSeqEvent, EnvelopeEvent, EmoteChatEvent,LiveEndEvent
+from TikTokLive.events import CommentEvent, GiftEvent, DisconnectEvent, ConnectEvent, LikeEvent, JoinEvent, FollowEvent, ShareEvent, RoomUserSeqEvent, EnvelopeEvent, EmoteChatEvent,LiveEndEvent, SuperFanEvent, SuperFanJoinEvent, SuperFanBoxEvent
 from globals import data_store
 from globals.resources import rutasonidos
 from utils import translator,funciones
@@ -13,13 +13,26 @@ from servicios.estadisticas_manager import EstadisticasManager
 logger = getLogger(__name__)
 
 def _nombre_usuario(usuario):
-    # event.user/.user_info/.from_user es un User "crudo" de TikTok: su propiedad .nickname
-    # (ExtendedUser.from_user -> to_pydict) rompe con la versión instalada de TikTokLive/
-    # betterproto ("nickName" vs "nick_name"), y para eventos que no pasan por esa conversión
-    # el User crudo ni siquiera tiene .nickname. Se lee el campo crudo directamente.
+    # event.user es un User "crudo" de TikTok: en TikTokLive 6.6.6 / proto v3 el campo
+    # es .nickname (y .display_id para el @-handle). Se mantienen los nombres antiguos
+    # (.nick_name/.username) como respaldo por si se instala otra versión.
     if usuario is None:
         return ''
-    return getattr(usuario, 'nick_name', None) or getattr(usuario, 'username', None) or ''
+    return (getattr(usuario, 'nickname', None) or
+            getattr(usuario, 'nick_name', None) or
+            getattr(usuario, 'username', None) or
+            getattr(usuario, 'display_id', None) or '')
+
+def _usuario_barrage(event):
+    # SuperFanEvent / SuperFanJoinEvent derivan de BarrageEvent, que no trae un
+    # campo user directo: el usuario viene en las piezas de texto
+    # (TextPiece.user_value.user). Se escanea common_barrage_content y content.
+    for texto in (getattr(event, 'common_barrage_content', None), getattr(event, 'content', None)):
+        for pieza in getattr(texto, 'pieces', None) or []:
+            user = getattr(getattr(pieza, 'user_value', None), 'user', None)
+            if user is not None:
+                return user
+    return None
 
 class ServicioTiktok:
     def __init__(self, main_controller, url, frame, plataforma, chat_controller):
@@ -129,8 +142,12 @@ class ServicioTiktok:
         # activo los últimos mensajes del historial caen casi siempre dentro de ese margen y se
         # colaban como si fueran nuevos. Se engancha aquí para recuperar el indicador real de TikTok.
         parse_original = self.chat._parse_webcast_response_message
-        async def parse_instrumentado(webcast_response_message):
-            eventos = await parse_original(webcast_response_message)
+        async def parse_instrumentado(webcast_response=None, webcast_response_message=None, **kwargs):
+            # TikTokLive 6.6.6 llama con argumentos por palabra clave
+            # (webcast_response, webcast_response_message); versiones anteriores
+            # usaban un único argumento posicional. Aceptar ambos mantiene la
+            # compatibilidad.
+            eventos = await parse_original(webcast_response=webcast_response, webcast_response_message=webcast_response_message, **kwargs)
             es_historico = getattr(webcast_response_message, 'is_history', False)
             for evento in eventos or []:
                 if evento is not None:
@@ -161,6 +178,9 @@ class ServicioTiktok:
         if data_store.config['categorias'][1]: self.chat.add_listener(JoinEvent, self.on_join)
         if data_store.config['categorias'][1]: self.chat.add_listener(LikeEvent, self.on_like)
         if data_store.config['categorias'][1]: self.chat.add_listener(ShareEvent, self.on_share)
+        if data_store.config['categorias'][1]: self.chat.add_listener(SuperFanJoinEvent, self.on_superfan_join)
+        if data_store.config['categorias'][1]: self.chat.add_listener(SuperFanEvent, self.on_superfan)
+        if data_store.config['categorias'][1]: self.chat.add_listener(SuperFanBoxEvent, self.on_superfan_box)
         self.chat.add_listener(RoomUserSeqEvent, self.on_view)
 
     async def finalizado(self, event: LiveEndEvent):
@@ -192,7 +212,7 @@ class ServicioTiktok:
     async def on_comment(self,event: CommentEvent):
         if self._es_mensaje_anterior(event): return
         if data_store.config['eventos'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
-            nombre = _nombre_usuario(event.user_info)
+            nombre = _nombre_usuario(event.user)
             wx.CallAfter(self.estadisticas_manager.agregar_mensaje, nombre)
             cadena = event.comment if event.comment is not None else ''
             if data_store.dst and self.translator: cadena = self.translator.translate(text=cadena, target=data_store.dst)
@@ -238,13 +258,21 @@ class ServicioTiktok:
     async def on_gift(self,event: GiftEvent):
         if self._es_mensaje_anterior(event): return
         if data_store.config['eventos'][3] and hasattr(self.chat_controller.ui, 'list_box_donaciones'):
+            gift = event.gift
+            if gift is None: return
+            # Los regalos "streakable" (type == 1) emiten un GiftEvent por cada
+            # incremento con repeat_count acumulado; los intermedios tienen
+            # event.streaking == True. Se filtran y solo se anuncia el último
+            # (repeat_end == 1, con el total de la racha).
+            if event.streaking:
+                return
             mensajito = ""
-            nombre = _nombre_usuario(event.from_user)
+            nombre = _nombre_usuario(event.user)
             if data_store.divisa != "Por defecto":
-                total = exchange.from_diamonds(event.gift.diamond_count * event.repeat_count)
-                mensajito = _('%s ha enviado %s %s (%s %s)') % (nombre, str(event.repeat_count), event.gift.name, str(total), data_store.divisa)
+                total = exchange.from_diamonds(gift.diamond_count * event.repeat_count)
+                mensajito = _('%s ha enviado %s %s (%s %s)') % (nombre, str(event.repeat_count), gift.name, str(total), data_store.divisa)
             else:
-                mensajito = _('%s ha enviado %s %s (%s diamante)') % (nombre, str(event.repeat_count), event.gift.name, str(event.gift.diamond_count))
+                mensajito = _('%s ha enviado %s %s (%s diamante)') % (nombre, str(event.repeat_count), gift.name, str(gift.diamond_count))
 
             if mensajito:
                 wx.CallAfter(self.chat_controller.agregar_mensaje_donacion, mensajito)
@@ -286,7 +314,40 @@ class ServicioTiktok:
             if data_store.config['reader'] and data_store.config['unread'][8]:
                 wx.CallAfter(reader.leer_mensaje, nombre + _(" ha compartido tu en vivo!"))
 
+    async def on_superfan_join(self,event: SuperFanJoinEvent):
+        if self._es_mensaje_anterior(event): return
+        if data_store.config['eventos'][2] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
+            nombre = _nombre_usuario(_usuario_barrage(event))
+            mensajito = "super fan "+nombre + _(" se ha unido a tu en vivo.")
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, mensajito, "join")
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][2]:
+                wx.CallAfter(player.play, rutasonidos[2])
+            if data_store.config['reader'] and data_store.config['unread'][2]:
+                wx.CallAfter(reader.leer_mensaje, mensajito)
+
+    async def on_superfan(self,event: SuperFanEvent):
+        if self._es_mensaje_anterior(event): return
+        if data_store.config['eventos'][2] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
+            nombre = _nombre_usuario(_usuario_barrage(event))
+            mensajito = nombre + _(" ¡se ha convertido en super fan!")
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, mensajito, "join")
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][2]:
+                wx.CallAfter(player.play, rutasonidos[2])
+            if data_store.config['reader'] and data_store.config['unread'][2]:
+                wx.CallAfter(reader.leer_mensaje, mensajito)
+
+    async def on_superfan_box(self,event: SuperFanBoxEvent):
+        if self._es_mensaje_anterior(event): return
+        if data_store.config['eventos'][9] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
+            nombre = getattr(getattr(event, 'envelope_info', None), 'send_user_name', None) or ''
+            mensajito = nombre + _(" ha enviado un cofre de super fan!")
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, mensajito, "chest")
+            if data_store.config['sonidos'] and data_store.config['listasonidos'][12]:
+                wx.CallAfter(player.play, rutasonidos[12])
+            if data_store.config['reader'] and data_store.config['unread'][9]:
+                wx.CallAfter(reader.leer_mensaje, mensajito)
+
     async def on_view(self,event: RoomUserSeqEvent):
-        title = self.chat.unique_id+_(' en vivo, actualmente ')+str(event.m_total)+_(' viendo ahora')
+        title = self.chat.unique_id+_(' en vivo, actualmente ')+str(event.total)+_(' viendo ahora')
         wx.CallAfter(self.chat_controller.agregar_titulo, title)
         wx.CallAfter(self.chat_controller.chat_dialog.update_chat_page_title, self.chat_controller, title)
