@@ -1,3 +1,15 @@
+v3.94
+Correction de la lecture des directs TikTok, à la suite d'un changement dans les bibliothèques qui rendent cette lecture possible.
+v3.93
+Correction du démarrage du programme lorsqu'un périphérique audio avait été déconnecté, merci à Enzo.
+Ajout du numéro de version du programme, pour pouvoir indiquer quelle version on utilise.
+Ajout d'un système de journaux, pour signaler les erreurs du programme. Merci à Enzo.
+Correction de bugs mineurs, association des contrôles de listes aux différentes sessions, et correction de la lecture des sons lorsqu'aucun son n'était sélectionné au préalable. Merci encore à Enzo.
+Correction de l'enregistrement des messages archivés et de leur suppression en toute sécurité. Nous devons remercier Enzo, qui nous a aidés à implémenter et à corriger ces erreurs.
+v3.91
+Ajout d'un sélecteur de thèmes de sons dans le panneau Sons des paramètres.
+Correction de la lecture du chat Kick, merci à Enzo : l'exécutable permettant de passer Cloudflare n'était trouvé que depuis le code source.
+Détection correcte des utilisateurs Twitch lorsque Twitch est choisi comme plateforme.
 v3.9
 Ajout du nombre de spectateurs en train de regarder le direct, pour YouTube et Kick.
 Correction de plusieurs erreurs critiques, grâce à Enzo, de la communauté française.
