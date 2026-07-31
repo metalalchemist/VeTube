@@ -66,7 +66,7 @@ class YouTubeRealTimeService:
                     if self._detener: break
                     author_name = c.author.name
                     msg = c.message
-                    self.estadisticas_manager.agregar_mensaje(author_name)
+                    wx.CallAfter(self.estadisticas_manager.agregar_mensaje, author_name)
                     if data_store.dst and self.translator: msg = self.translator.translate(text=msg, target=data_store.dst)
                     message_type = 'general'
                     if c.author.isChatOwner: message_type = 'propietario'
@@ -85,7 +85,7 @@ class YouTubeRealTimeService:
                             
                             full_message = f"{amount} {currency}, {author_name}: {msg}"
                             if data_store.config['sonidos'] and data_store.config['listasonidos'][3]:
-                                player.play(rutasonidos[3])
+                                wx.CallAfter(player.play, rutasonidos[3])
                             wx.CallAfter(self.chat_controller.agregar_mensaje_donacion, full_message)
                             if data_store.config['reader'] and data_store.config['unread'][3]:
                                 wx.CallAfter(reader.leer_mensaje, full_message)
@@ -96,14 +96,14 @@ class YouTubeRealTimeService:
                     if message_type == 'general':
                         if data_store.config['eventos'][0] and data_store.config['categorias'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
                             if data_store.config['sonidos'] and data_store.config['listasonidos'][0]:
-                                player.play(rutasonidos[0])
+                                wx.CallAfter(player.play, rutasonidos[0])
                             wx.CallAfter(self.chat_controller.agregar_mensaje_general, full_message)
                             if data_store.config['reader'] and data_store.config['unread'][0]:
                                 wx.CallAfter(reader.leer_mensaje, full_message)
                     elif message_type == 'miembro':
                         if data_store.config['eventos'][1] and data_store.config['categorias'][2] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
                             if data_store.config['sonidos'] and data_store.config['listasonidos'][1]:
-                                player.play(rutasonidos[1])
+                                wx.CallAfter(player.play, rutasonidos[1])
                             wx.CallAfter(self.chat_controller.agregar_mensaje_miembro, full_message)
                             if data_store.config['reader'] and data_store.config['unread'][1]:
                                 wx.CallAfter(reader.leer_mensaje, full_message)
@@ -111,16 +111,16 @@ class YouTubeRealTimeService:
                         if data_store.config['eventos'][4] and data_store.config['categorias'][4] and hasattr(self.chat_controller.ui, 'list_box_moderadores'):
                             if data_store.config['sonidos'] and data_store.config['listasonidos'][4]:
                                 if message_type == 'moderador':
-                                    player.play(rutasonidos[4])
+                                    wx.CallAfter(player.play, rutasonidos[4])
                                 if message_type == 'propietario':
-                                    player.play(rutasonidos[7])
+                                    wx.CallAfter(player.play, rutasonidos[7])
                             wx.CallAfter(self.chat_controller.agregar_mensaje_moderador, full_message)
                             if data_store.config['reader'] and data_store.config['unread'][4]:
                                 wx.CallAfter(reader.leer_mensaje, full_message)
                     elif message_type == 'verificado':
                         if data_store.config['eventos'][5] and data_store.config['categorias'][5] and hasattr(self.chat_controller.ui, 'list_box_verificados'):
                             if data_store.config['sonidos'] and data_store.config['listasonidos'][5]:
-                                player.play(rutasonidos[5])
+                                wx.CallAfter(player.play, rutasonidos[5])
                             wx.CallAfter(self.chat_controller.agregar_mensaje_verificado, full_message)
                             if data_store.config['reader'] and data_store.config['unread'][5]:
                                 wx.CallAfter(reader.leer_mensaje, full_message)
