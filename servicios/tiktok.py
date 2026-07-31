@@ -1,4 +1,4 @@
-import json, threading, asyncio, wx, time
+import json, threading, asyncio, wx
 from exchange import exchange
 from logging import getLogger
 from TikTokLive.client.client import TikTokLiveClient
@@ -11,6 +11,15 @@ from controller.chat_controller import ChatController
 from servicios.estadisticas_manager import EstadisticasManager
 
 logger = getLogger(__name__)
+
+def _nombre_usuario(usuario):
+    # event.user/.user_info/.from_user es un User "crudo" de TikTok: su propiedad .nickname
+    # (ExtendedUser.from_user -> to_pydict) rompe con la versión instalada de TikTokLive/
+    # betterproto ("nickName" vs "nick_name"), y para eventos que no pasan por esa conversión
+    # el User crudo ni siquiera tiene .nickname. Se lee el campo crudo directamente.
+    if usuario is None:
+        return ''
+    return getattr(usuario, 'nick_name', None) or getattr(usuario, 'username', None) or ''
 
 class ServicioTiktok:
     def __init__(self, main_controller, url, frame, plataforma, chat_controller):
@@ -25,7 +34,6 @@ class ServicioTiktok:
         self.loop = None
         self.media_controller = None
         self.translator = None
-        self.momento_conexion = None
         self.filtrar_anteriores = False
 
     def iniciar_chat(self):
@@ -67,6 +75,7 @@ class ServicioTiktok:
             if not user_id:
                 raise ValueError(_("No se pudo obtener la URL real de TikTok."))
             self.chat = TikTokLiveClient(unique_id=user_id)
+            self._instrumentar_historial()
             self._add_listeners()
             await self._run_client_async()
         except Exception as e:
@@ -84,11 +93,9 @@ class ServicioTiktok:
                     self.last_live_status = True
                     if data_store.dst: self.translator = translator.TranslatorWrapper()
                     # Casilla «Leer los mensajes anteriores al chat» desmarcada: se ignoran los
-                    # comentarios anteriores a la conexión filtrando por su marca de tiempo en
-                    # on_comment (como en youtube.py). No basta con process_connect_events: TikTok
-                    # reenvía historial reciente por el websocket (history_comment_count) que ese
-                    # parámetro no filtra. Se re-sella en cada (re)conexión del bucle.
-                    self.momento_conexion = time.time() - 10  # 10 s de tolerancia de reloj
+                    # comentarios marcados por TikTok como parte del reenvío de historial
+                    # (history_comment_count), ver _instrumentar_historial. Se re-evalúa en
+                    # cada (re)conexión del bucle.
                     self.filtrar_anteriores = not data_store.config.get('leer_historial', True)
                     await self.chat.connect()
                 else:
@@ -113,6 +120,23 @@ class ServicioTiktok:
             if self.chat:
                 asyncio.run_coroutine_threadsafe(self.chat.disconnect(), self.loop)
             self.loop.call_soon_threadsafe(self.loop.stop)
+
+    def _instrumentar_historial(self):
+        # TikTokLiveClient recibe de TikTok un indicador fiable (is_history) que dice si un
+        # mensaje formaba parte del reenvío de historial al conectar, pero lo descarta al
+        # construir el evento de alto nivel (CommentEvent, etc.) en _parse_webcast_response_message.
+        # Antes filtrábamos por marca de tiempo con un margen de tolerancia fijo, pero en un chat
+        # activo los últimos mensajes del historial caen casi siempre dentro de ese margen y se
+        # colaban como si fueran nuevos. Se engancha aquí para recuperar el indicador real de TikTok.
+        parse_original = self.chat._parse_webcast_response_message
+        async def parse_instrumentado(webcast_response_message):
+            eventos = await parse_original(webcast_response_message)
+            es_historico = getattr(webcast_response_message, 'is_history', False)
+            for evento in eventos or []:
+                if evento is not None:
+                    evento._vt_es_historico = es_historico
+            return eventos
+        self.chat._parse_webcast_response_message = parse_instrumentado
 
     def prepare_player(self):
         try:
@@ -160,45 +184,37 @@ class ServicioTiktok:
             wx.CallAfter(player.play, rutasonidos[6])
 
     def _es_mensaje_anterior(self, event):
-        # True si el mensaje de chat (comentario o emoji) es anterior al momento de conexión,
-        # para respetar la casilla «leer mensajes anteriores» desmarcada. create_time
-        # (CommonMessageData) puede venir en segundos, milisegundos o microsegundos según el
-        # mensaje, y puede faltar (0): en ese caso no se filtra, para no silenciar por error
-        # mensajes en vivo (igual que youtube.py).
-        if not self.filtrar_anteriores or self.momento_conexion is None:
-            return False
-        base = getattr(event, 'base_message', None)
-        marca = getattr(base, 'create_time', 0) if base is not None else 0
-        if not marca:
-            return False
-        marca = float(marca)
-        while marca > 1e11:  # normaliza a segundos sea cual sea la unidad de origen
-            marca /= 1000
-        return marca < self.momento_conexion
+        # True si TikTok marcó el mensaje como parte del reenvío de historial al conectar
+        # (ver _instrumentar_historial), para respetar la casilla «leer mensajes anteriores»
+        # desmarcada.
+        return self.filtrar_anteriores and bool(getattr(event, '_vt_es_historico', False))
 
     async def on_comment(self,event: CommentEvent):
         if self._es_mensaje_anterior(event): return
         if data_store.config['eventos'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
-            wx.CallAfter(self.estadisticas_manager.agregar_mensaje, event.user.nickname)
+            nombre = _nombre_usuario(event.user_info)
+            wx.CallAfter(self.estadisticas_manager.agregar_mensaje, nombre)
             cadena = event.comment if event.comment is not None else ''
             if data_store.dst and self.translator: cadena = self.translator.translate(text=cadena, target=data_store.dst)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_general, event.user.nickname + ": " + cadena)
+            wx.CallAfter(self.chat_controller.agregar_mensaje_general, nombre + ": " + cadena)
             if data_store.config['sonidos'] and data_store.config['listasonidos'][0]:
                 wx.CallAfter(player.play, rutasonidos[0])
             if data_store.config['reader'] and data_store.config['unread'][0]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + ": " + cadena)
+                wx.CallAfter(reader.leer_mensaje, nombre + ": " + cadena)
 
     async def on_emote(self,event: EmoteChatEvent):
         if self._es_mensaje_anterior(event): return
         if data_store.config['eventos'][1] and hasattr(self.chat_controller.ui, 'list_box_miembros'):
-            wx.CallAfter(self.estadisticas_manager.agregar_mensaje, event.user.nickname)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_miembro, event.user.nickname + _(" envió un emogi."))
+            nombre = _nombre_usuario(event.user)
+            wx.CallAfter(self.estadisticas_manager.agregar_mensaje, nombre)
+            wx.CallAfter(self.chat_controller.agregar_mensaje_miembro, nombre + _(" envió un emogi."))
             if data_store.config['sonidos'] and data_store.config['listasonidos'][1]:
                 wx.CallAfter(player.play, rutasonidos[1])
             if data_store.config['reader'] and data_store.config['unread'][1]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" envió un emogi."))
+                wx.CallAfter(reader.leer_mensaje, nombre + _(" envió un emogi."))
 
     async def on_chest(self,event: EnvelopeEvent):
+        if self._es_mensaje_anterior(event): return
         if data_store.config['eventos'][9] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
             # EnvelopeEvent no tiene campo 'user': el remitente viene en envelope_info
             mensajito = event.envelope_info.send_user_name + _(" ha enviado un cofre!")
@@ -209,23 +225,26 @@ class ServicioTiktok:
                 wx.CallAfter(reader.leer_mensaje, mensajito)
 
     async def on_follow(self,event: FollowEvent):
+        if self._es_mensaje_anterior(event): return
         if data_store.config['eventos'][7] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
             wx.CallAfter(self.estadisticas_manager.agregar_seguidor)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname + _(" comenzó a seguirte!"), "follow")
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, _nombre_usuario(event.user) + _(" comenzó a seguirte!"), "follow")
             if data_store.config['sonidos'] and data_store.config['listasonidos'][10]:
                 wx.CallAfter(player.play, rutasonidos[10])
             if data_store.config['reader'] and data_store.config['unread'][7]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" comenzó a seguirte!"))
+                wx.CallAfter(reader.leer_mensaje, _nombre_usuario(event.user) + _(" comenzó a seguirte!"))
 
     async def on_gift(self,event: GiftEvent):
+        if self._es_mensaje_anterior(event): return
         if data_store.config['eventos'][3] and hasattr(self.chat_controller.ui, 'list_box_donaciones'):
             mensajito = ""
+            nombre = _nombre_usuario(event.from_user)
             if data_store.divisa != "Por defecto":
                 total = exchange.from_diamonds(event.gift.diamond_count * event.repeat_count)
-                mensajito = _('%s ha enviado %s %s (%s %s)') % (event.user.nickname, str(event.repeat_count), event.gift.name, str(total), data_store.divisa)
+                mensajito = _('%s ha enviado %s %s (%s %s)') % (nombre, str(event.repeat_count), event.gift.name, str(total), data_store.divisa)
             else:
-                mensajito = _('%s ha enviado %s %s (%s diamante)') % (event.user.nickname, str(event.repeat_count), event.gift.name, str(event.gift.diamond_count))
-            
+                mensajito = _('%s ha enviado %s %s (%s diamante)') % (nombre, str(event.repeat_count), event.gift.name, str(event.gift.diamond_count))
+
             if mensajito:
                 wx.CallAfter(self.chat_controller.agregar_mensaje_donacion, mensajito)
                 if data_store.config['sonidos'] and data_store.config['listasonidos'][3]:
@@ -234,31 +253,37 @@ class ServicioTiktok:
                     wx.CallAfter(reader.leer_mensaje, mensajito)
 
     async def on_join(self,event: JoinEvent):
+        if self._es_mensaje_anterior(event): return
         if data_store.config['eventos'][2] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
+            nombre = _nombre_usuario(event.user)
             wx.CallAfter(self.estadisticas_manager.agregar_unido)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname+_(" se ha unido a tu en vivo."), "join")
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, nombre+_(" se ha unido a tu en vivo."), "join")
             if data_store.config['sonidos'] and data_store.config['listasonidos'][2]:
                 wx.CallAfter(player.play, rutasonidos[2])
             if data_store.config['reader'] and data_store.config['unread'][2]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" se ha unido a tu en vivo."))
+                wx.CallAfter(reader.leer_mensaje, nombre + _(" se ha unido a tu en vivo."))
 
     async def on_like(self,event: LikeEvent):
+        if self._es_mensaje_anterior(event): return
         if data_store.config['eventos'][6] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
+            nombre = _nombre_usuario(event.user)
             wx.CallAfter(self.estadisticas_manager.actualizar_megusta, event.total)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname + _(" le ha dado me gusta a tu en vivo."), "like")
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, nombre + _(" le ha dado me gusta a tu en vivo."), "like")
             if data_store.config['sonidos'] and data_store.config['listasonidos'][9]:
                 wx.CallAfter(player.play, rutasonidos[9])
             if data_store.config['reader'] and data_store.config['unread'][6]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" le ha dado me gusta a tu en vivo."))
+                wx.CallAfter(reader.leer_mensaje, nombre + _(" le ha dado me gusta a tu en vivo."))
 
     async def on_share(self,event: ShareEvent):
+        if self._es_mensaje_anterior(event): return
         if data_store.config['eventos'][8] and hasattr(self.chat_controller.ui, 'list_box_eventos'):
+            nombre = _nombre_usuario(event.user)
             wx.CallAfter(self.estadisticas_manager.agregar_compartida)
-            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, event.user.nickname + _(" ha compartido tu en vivo!"), "share")
+            wx.CallAfter(self.chat_controller.agregar_mensaje_evento, nombre + _(" ha compartido tu en vivo!"), "share")
             if data_store.config['sonidos'] and data_store.config['listasonidos'][11]:
                 wx.CallAfter(player.play, rutasonidos[11])
             if data_store.config['reader'] and data_store.config['unread'][8]:
-                wx.CallAfter(reader.leer_mensaje, event.user.nickname + _(" ha compartido tu en vivo!"))
+                wx.CallAfter(reader.leer_mensaje, nombre + _(" ha compartido tu en vivo!"))
 
     async def on_view(self,event: RoomUserSeqEvent):
         title = self.chat.unique_id+_(' en vivo, actualmente ')+str(event.m_total)+_(' viendo ahora')
