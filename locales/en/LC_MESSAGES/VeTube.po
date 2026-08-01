@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-31 23:01+0200\n"
+"POT-Creation-Date: 2026-08-01 15:23+0200\n"
 "PO-Revision-Date: 2026-01-08 16:04+0100\n"
 "Last-Translator: 4Sense Gaming <lukas@4sensegaming.cz>\n"
 "Language: en\n"
@@ -111,11 +111,11 @@ msgid "Error al conectar con el chat: "
 msgstr "error reading chat: "
 
 #: controller/chat_controller.py:152 controller/estadisticas_controller.py:46
-#: controller/main_controller.py:78 controller/main_controller.py:163
-#: controller/main_controller.py:167 controller/main_controller.py:177
-#: controller/main_controller.py:217 controller/main_controller.py:246
-#: controller/main_controller.py:256 controller/main_controller.py:355
-#: controller/main_controller.py:357
+#: controller/main_controller.py:81 controller/main_controller.py:169
+#: controller/main_controller.py:173 controller/main_controller.py:182
+#: controller/main_controller.py:222 controller/main_controller.py:251
+#: controller/main_controller.py:261 controller/main_controller.py:360
+#: controller/main_controller.py:362
 #: controller/piper_downloader_controller.py:80
 #: controller/piper_downloader_controller.py:100
 #: controller/piper_downloader_controller.py:102
@@ -161,9 +161,9 @@ msgstr "This message is already in favorites"
 msgid "Mensaje agregado a favoritos"
 msgstr "Message added to favorites"
 
-#: controller/chat_controller.py:310 controller/main_controller.py:47
-#: controller/main_controller.py:122 controller/main_controller.py:135
-#: controller/main_controller.py:142
+#: controller/chat_controller.py:310 controller/main_controller.py:50
+#: controller/main_controller.py:125 controller/main_controller.py:138
+#: controller/main_controller.py:145
 #: controller/menus/chat_item_controller.py:52
 msgid "Tus mensajes archivados aparecerán aquí"
 msgstr "Your archived messages will appear here"
@@ -206,8 +206,8 @@ msgstr "sounds disabled."
 msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
 msgstr "Would you like to exit this window and stop reading messages in this chat?"
 
-#: controller/chat_dialog_controller.py:120 controller/main_controller.py:82
-#: controller/menus/main_menu_controller.py:110
+#: controller/chat_dialog_controller.py:120 controller/main_controller.py:85
+#: controller/menus/main_menu_controller.py:149
 #: controller/update_languages_controller.py:104
 msgid "¡Atención!"
 msgstr "Warning!"
@@ -221,7 +221,7 @@ msgstr ""
 "to proceed? This action cannot be undone."
 
 #: controller/editor_controller.py:43
-#: controller/menus/main_menu_controller.py:56 update/update.py:155
+#: controller/menus/main_menu_controller.py:57 update/update.py:162
 msgid "Atención:"
 msgstr "Warning:"
 
@@ -299,84 +299,85 @@ msgstr "Success"
 msgid "Error al guardar el archivo: {}"
 msgstr "Error saving file: {}"
 
-#: controller/main_controller.py:42
+#: controller/main_controller.py:45
 #, python-format
 msgid "Favoritos(%s)"
 msgstr "Favorites (%s)"
 
-#: controller/main_controller.py:44 controller/main_controller.py:77
-#: controller/main_controller.py:97 controller/menus/chat_menu_controller.py:56
+#: controller/main_controller.py:47 controller/main_controller.py:80
+#: controller/main_controller.py:100
+#: controller/menus/chat_menu_controller.py:56
 msgid "Tus favoritos aparecerán aquí"
 msgstr "Your favorites  will appear here"
 
-#: controller/main_controller.py:78
+#: controller/main_controller.py:81
 msgid "No hay favoritos que borrar"
 msgstr "No favorites to delete"
 
-#: controller/main_controller.py:82
+#: controller/main_controller.py:85
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr "Are you sure you want to delete all the favorites?"
 
-#: controller/main_controller.py:101
+#: controller/main_controller.py:104
 msgid "&Borrar mensajes"
 msgstr "&delete messages"
 
-#: controller/main_controller.py:102
+#: controller/main_controller.py:105
 msgid "Borrar todos los mensajes destacados"
 msgstr "Delete all starred messages"
 
-#: controller/main_controller.py:105 ui/main_window.py:72
+#: controller/main_controller.py:108 ui/main_window.py:72
 msgid "&Borrar mensaje"
 msgstr "&Delete message"
 
-#: controller/main_controller.py:106
+#: controller/main_controller.py:109
 msgid "Borrar el mensaje destacado seleccionado"
 msgstr "Delete selected starred message"
 
-#: controller/main_controller.py:111
+#: controller/main_controller.py:114
 msgid "&Borrar favoritos"
 msgstr "&Delete favorites"
 
-#: controller/main_controller.py:112
+#: controller/main_controller.py:115
 msgid "Borrar todos los favoritos"
 msgstr "Delete all favorites"
 
-#: controller/main_controller.py:115 ui/main_window.py:60
+#: controller/main_controller.py:118 ui/main_window.py:60
 msgid "&Borrar favorito"
 msgstr "&Delete favorite"
 
-#: controller/main_controller.py:116
+#: controller/main_controller.py:119
 msgid "Borrar el favorito seleccionado"
 msgstr "Delete selected favorite"
 
-#: controller/main_controller.py:130
+#: controller/main_controller.py:133
 msgid "No hay más elementos que borrar"
 msgstr "No items to delete"
 
-#: controller/main_controller.py:132 controller/main_controller.py:145
+#: controller/main_controller.py:135 controller/main_controller.py:148
 msgid "No hay mensajes que borrar"
 msgstr "No messages to delete"
 
-#: controller/main_controller.py:138
+#: controller/main_controller.py:141
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr "Are you sure you want to delete all messages?"
 
-#: controller/main_controller.py:163
+#: controller/main_controller.py:169
 #, python-brace-format
 msgid "Error al simplificar URL de TikTok: {}"
 msgstr "Error simplifying TikTok URL: {}"
 
-#: controller/main_controller.py:167 servicios/tiktok.py:89
+#: controller/main_controller.py:173 servicios/tiktok.py:89
 msgid "No se pudo obtener la URL real de TikTok."
 msgstr "Could not get the real TikTok URL."
 
-#: controller/main_controller.py:177
+#: controller/main_controller.py:182
 msgid ""
 "No se puede acceder porque el campo de texto está vacío, debe escribir "
 "algo."
 msgstr "Cannot access because the text field is empty, you must write something."
 
-#: controller/main_controller.py:217
+#: controller/main_controller.py:222
 msgid ""
 "Para Discord pega el enlace del canal de texto: haz clic derecho sobre el"
 " canal y elige «Copiar enlace»."
@@ -384,7 +385,7 @@ msgstr ""
 "For Discord, paste the text channel link: right-click the channel and "
 "choose “Copy Link”."
 
-#: controller/main_controller.py:246
+#: controller/main_controller.py:251
 msgid ""
 "El enlace de Discord no es válido. Copia el enlace del canal de texto "
 "(clic derecho sobre el canal, «Copiar enlace») y pégalo en VeTube."
@@ -392,17 +393,17 @@ msgstr ""
 "The Discord link is not valid. Copy the text channel link (right-click "
 "the channel, “Copy Link”) and paste it into VeTube."
 
-#: controller/main_controller.py:256
+#: controller/main_controller.py:261
 msgid ""
 "¡Parece que el enlace al cual está intentando acceder no es un enlace "
 "válido."
 msgstr "It seems that the link you are trying to access is not a valid link."
 
-#: controller/main_controller.py:291
+#: controller/main_controller.py:296
 msgid "Conectando..."
 msgstr "Connecting..."
 
-#: controller/main_controller.py:355
+#: controller/main_controller.py:360
 msgid ""
 "El token no es válido. Comprueba que lo copiaste completo desde el portal"
 " de desarrolladores de Discord."
@@ -410,7 +411,7 @@ msgstr ""
 "The token is not valid. Make sure you copied it in full from the Discord "
 "developer portal."
 
-#: controller/main_controller.py:357
+#: controller/main_controller.py:362
 msgid ""
 "No se pudo comprobar el token por un fallo de red. Revisa tu conexión a "
 "internet e inténtalo de nuevo."
@@ -418,13 +419,13 @@ msgstr ""
 "The token could not be checked due to a network error. Check your "
 "internet connection and try again."
 
-#: controller/main_controller.py:400
-#: controller/menus/main_menu_controller.py:61
+#: controller/main_controller.py:405
+#: controller/menus/main_menu_controller.py:62
 msgid "¿está seguro que desea salir del programa?"
 msgstr "Are you sure you want to exit the program?"
 
-#: controller/main_controller.py:400
-#: controller/menus/main_menu_controller.py:61
+#: controller/main_controller.py:405
+#: controller/menus/main_menu_controller.py:62
 msgid "¡atención!"
 msgstr "Warning!"
 
@@ -679,11 +680,11 @@ msgstr "Could not open the link"
 msgid "No se encontró un enlace válido para abrir."
 msgstr "No valid link found to open."
 
-#: controller/menus/main_menu_controller.py:38
+#: controller/menus/main_menu_controller.py:39
 msgid "Creadores del proyecto:"
 msgstr "Project creators:"
 
-#: controller/menus/main_menu_controller.py:39
+#: controller/menus/main_menu_controller.py:40
 msgid ""
 "Descripción:\n"
 " Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch,"
@@ -695,7 +696,7 @@ msgstr ""
 "Twitch read aloud, customize your preferences as you desire, and enhance "
 "your enjoyment of your favorite channels."
 
-#: controller/menus/main_menu_controller.py:56
+#: controller/menus/main_menu_controller.py:57
 msgid ""
 "Estás apunto de reiniciar la configuración a sus valores predeterminados,"
 " ¿Deseas proceder?"
@@ -703,29 +704,43 @@ msgstr ""
 "You are about to reset the settings to their default values, do you want "
 "to continue?"
 
-#: controller/menus/main_menu_controller.py:71
+#: controller/menus/main_menu_controller.py:69
+msgid "Ya hay una comprobación de idiomas en curso."
+msgstr "A language check is already in progress."
+
+#: controller/menus/main_menu_controller.py:69
+#: controller/menus/main_menu_controller.py:84
+#: controller/menus/main_menu_controller.py:95
+#: controller/menus/main_menu_controller.py:128
+msgid "Actualización de idiomas"
+msgstr "Language update"
+
+#: controller/menus/main_menu_controller.py:76
 #, python-brace-format
 msgid "Error al conectar con el servidor de idiomas: {}"
 msgstr "Error connecting to the language server: {}"
 
-#: controller/menus/main_menu_controller.py:71
+#: controller/menus/main_menu_controller.py:76
 msgid "Error de red"
 msgstr "Network error"
 
-#: controller/menus/main_menu_controller.py:79
-#: controller/menus/main_menu_controller.py:90
-msgid "Actualización de idiomas"
-msgstr "Language update"
-
-#: controller/menus/main_menu_controller.py:90 servicios/language_updater.py:66
+#: controller/menus/main_menu_controller.py:95 servicios/language_updater.py:66
 msgid "No hay actualizaciones ni nuevos idiomas disponibles."
 msgstr "No updates or new languages available."
 
-#: controller/menus/main_menu_controller.py:92
+#: controller/menus/main_menu_controller.py:97
 msgid "Error de actualización"
 msgstr "Update error"
 
-#: controller/menus/main_menu_controller.py:110
+#: controller/menus/main_menu_controller.py:128
+msgid ""
+"Hay una actualización disponible para el idioma del programa. ¿Quieres "
+"instalarla ahora?"
+msgstr ""
+"An update is available for the program's language. Would you like to "
+"install it now?"
+
+#: controller/menus/main_menu_controller.py:149
 msgid ""
 "Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea "
 "reiniciarlo ahora?"
@@ -1445,11 +1460,11 @@ msgstr "Categories"
 msgid "Sonidos"
 msgstr "Sounds"
 
-#: ui/ajustes/__init__.py:54 update/update.py:156
+#: ui/ajustes/__init__.py:54 update/update.py:163
 msgid "&Aceptar"
 msgstr "&OK"
 
-#: ui/ajustes/__init__.py:56 update/update.py:156
+#: ui/ajustes/__init__.py:56 update/update.py:163
 msgid "&Cancelar"
 msgstr "&Cancel"
 
@@ -1750,7 +1765,7 @@ msgstr "&About"
 msgid "&Salir...\tAlt+F4"
 msgstr "&Exit...\tAlt+F4"
 
-#: update/update.py:155
+#: update/update.py:162
 msgid ""
 "Con tu apoyo contribuyes a que este programa siga siendo gratuito. ¿Te "
 "unes a nuestra causa?"
