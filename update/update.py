@@ -70,8 +70,14 @@ async def async_check_update(endpoint, current_version):
         if not traducir:
             available_description = available_update.get('description', None)
         else:
-            translator = TranslatorWrapper()
-            available_description = translator.translate(available_update.get('description', None), target=languageHandler.curLang[:2])
+            # Si la traducción falla, la comprobación en sí fue bien: usar la
+            # descripción original en vez de convertirla en un falso error.
+            try:
+                translator = TranslatorWrapper()
+                available_description = translator.translate(available_update.get('description', None), target=languageHandler.curLang[:2])
+            except Exception:
+                logger.exception("No se pudo traducir la descripción de la actualización")
+                available_description = available_update.get('description', None)
             
         update_url = available_update['downloads'][arch_key]
         
@@ -82,8 +88,11 @@ async def async_check_update(endpoint, current_version):
             'donations': donations
         }
     except Exception as e:
-        logger.error(f"Error checking for updates: {e}")
-        return None
+        # Devolver la excepción, NO None: None significa "sin actualización", y la
+        # comprobación manual respondería "tienes la última versión" sin red.
+        # handle_check_result (updater.py) ya distingue una Exception y avisa.
+        logger.exception("Error al comprobar actualizaciones")
+        return e
 
 def download_update(update_url, update_destination, client, progress_callback=None, chunk_size=128*1024):
     total_downloaded = 0

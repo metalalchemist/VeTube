@@ -60,7 +60,7 @@ class ServicioSala:
                         if data_store.config['eventos'][1]:
                             wx.CallAfter(self.chat_controller.agregar_mensaje_miembro, message['author'] +': ' +message['message'])
                             if data_store.config['reader'] and data_store.config['unread'][1]: wx.CallAfter(reader.leer_mensaje, message['author'] +': ' +message['message'])
-                            if data_store.config['sonidos'] and data_store.config['listasonidos'][2]: wx.CallAfter(player.play, rutasonidos[2])
+                            if data_store.config['sonidos'] and data_store.config['listasonidos'][1]: wx.CallAfter(player.play, rutasonidos[1])
                 else:
                     if data_store.config['categorias'][0] and hasattr(self.chat_controller.ui, 'list_box_general'):
                         if data_store.config['eventos'][0]:
