@@ -35,7 +35,10 @@ class MainController:
         # 1. Verificar e instalar voces si es necesario
         if config.get('sistemaTTS') == "piper": configurar_piper(self.frame, carpeta_voces)
         # 2. Comprobar actualizaciones en segundo plano de forma segura
-        if config.get('updates', False): updater.do_update()
+        if config.get('updates', False):
+            updater.do_update()
+            # 3. Avisar también si el idioma activo tiene una actualización disponible
+            self.menu_controller.comprobar_idiomas_al_inicio()
     def inicializar_datos(self):
         self.frame.list_favorite.Set(favs)
         self.frame.favoritos_num = self.frame.list_favorite.GetCount()
