@@ -169,7 +169,6 @@ class MainController:
                         else:
                             wx.MessageBox(_("No se pudo obtener la URL real de TikTok."), _("Error"), wx.ICON_ERROR)
                     finally:
-                        # Liberamos el cerrojo y restauramos el cursor al final de todo
                         self.procesando_url = False
                         wx.EndBusyCursor()
 

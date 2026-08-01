@@ -67,17 +67,15 @@ async def async_check_update(endpoint, current_version):
             logger.debug("No update available or not for this architecture")
             return None
             
-        if not traducir:
-            available_description = available_update.get('description', None)
-        else:
-            # Si la traducción falla, la comprobación en sí fue bien: usar la
+        available_description = available_update.get('description', None)
+        if traducir:
+            # Si la traducción falla, la comprobación en sí fue bien: dejar la
             # descripción original en vez de convertirla en un falso error.
             try:
                 translator = TranslatorWrapper()
-                available_description = translator.translate(available_update.get('description', None), target=languageHandler.curLang[:2])
+                available_description = translator.translate(available_description, target=languageHandler.curLang[:2])
             except Exception:
                 logger.exception("No se pudo traducir la descripción de la actualización")
-                available_description = available_update.get('description', None)
             
         update_url = available_update['downloads'][arch_key]
         
