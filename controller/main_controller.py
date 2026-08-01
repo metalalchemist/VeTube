@@ -159,16 +159,18 @@ class MainController:
                 wx.BeginBusyCursor()
 
                 def handle_tiktok_result(result):
-                    if isinstance(result, Exception):
-                        wx.MessageBox(_("Error al simplificar URL de TikTok: {}").format(result), _("Error"), wx.ICON_ERROR)
-                    elif result:
-                        self._continuar_abriendo_chat(result)
-                    else:
-                        wx.MessageBox(_("No se pudo obtener la URL real de TikTok."), _("Error"), wx.ICON_ERROR)
-                    
-                    # Liberamos el cerrojo y restauramos el cursor al final de todo
-                    self.procesando_url = False
-                    wx.EndBusyCursor()
+                    # El finally garantiza soltar el cerrojo aunque algo falle aquí:
+                    # si quedara en True, ya no podría abrirse ningún chat más.
+                    try:
+                        if isinstance(result, Exception):
+                            wx.MessageBox(_("Error al simplificar URL de TikTok: {}").format(result), _("Error"), wx.ICON_ERROR)
+                        elif result:
+                            self._continuar_abriendo_chat(result)
+                        else:
+                            wx.MessageBox(_("No se pudo obtener la URL real de TikTok."), _("Error"), wx.ICON_ERROR)
+                    finally:
+                        self.procesando_url = False
+                        wx.EndBusyCursor()
 
                 network.execute(canonical_scraper.get_simplified_tiktok_live_url(url), callback=handle_tiktok_result)
             else:
