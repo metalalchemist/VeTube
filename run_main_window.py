@@ -8,7 +8,7 @@ from globals.resources import carpeta_voces,lista_voces_piper
 from controller.main_controller import MainController
 from update import updater,update
 from TTS.lector import detect_onnx_models
-from utils.app_utilitys import configurar_piper, limpiar_motor_antiguo
+from utils.app_utilitys import configurar_piper, limpiar_motor_antiguo, fijar_dispositivo_lector
 if sys.platform == "win32": asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 def run_app():
@@ -33,11 +33,7 @@ def run_app():
             modelo = kokoro_voice_config(config['voz'])
         if modelo is not None:
             setup.reader._lector.load_model(modelo)
-            nombres_dispositivos = setup.player.devicenames
-            dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres_dispositivos)]
-            nombre_actual = nombres_dispositivos[config["dispositivo"]-1]
-            salida_actual = setup.reader._lector.find_device_id(nombre_actual, known_devices=dispositivos_formateados)
-            setup.reader._lector.set_device(salida_actual)
+            fijar_dispositivo_lector()
         elif config['sistemaTTS'] == "kokoro":
             # Modelo Kokoro no disponible: avisar con la voz secundaria en lugar
             # de arrancar con la voz principal muda (revisión de accesibilidad).

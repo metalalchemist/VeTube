@@ -384,7 +384,6 @@ class AjustesController:
             self.dialog.lista_dispositivos.SetFocus()
             return
         valor = self.dialog.lista_dispositivos.GetSelection() + 1
-        valor_str = self.dialog.lista_dispositivos.GetStringSelection()
         config['dispositivo'] = valor
         player.setdevice(config["dispositivo"])
         player.play(f"sounds/{config['directorio']}/cambiardispositivo.mp3")
@@ -392,10 +391,9 @@ class AjustesController:
             hay_voz = config['sistemaTTS'] == "kokoro" or (
                 lista_voces_piper and lista_voces_piper[0] != _("No hay voces instaladas"))
             if hay_voz:
-                # Reutilizamos los nombres que ya tiene el player formateados para Sonata
-                nombres = player.devicenames
-                dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
-                reader._lector.set_device(reader._lector.find_device_id(valor_str, known_devices=dispositivos_formateados))
+                # La lista del diálogo se construye con player.devicenames, así que
+                # el nombre elegido y el que saca config['dispositivo'] son el mismo.
+                app_utilitys.fijar_dispositivo_lector()
             reader.leer_auto(_("Hablaré a través de este dispositivo."))
 
     def reproducirPrueva(self, event):
@@ -442,19 +440,12 @@ class AjustesController:
             from TTS.list_voices import obtener_ruta_voz
             # Simplemente cargamos el nuevo modelo en el lector existente
             reader._lector.load_model(obtener_ruta_voz(lista_voces_piper[config['voz']]))
-            # El dispositivo se mantiene o se actualiza si es necesario, usando dispositivos conocidos
-            nombres = player.devicenames
-            dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
-            salida_piper = reader._lector.find_device_id(nombres[config["dispositivo"]-1], known_devices=dispositivos_formateados)
-            reader._lector.set_device(salida_piper)
+            app_utilitys.fijar_dispositivo_lector()
         elif config['sistemaTTS'] == "kokoro":
             config_kokoro = kokoro_voice_config(config['voz'])
             if config_kokoro is not None:
                 reader._lector.load_model(config_kokoro)
-                nombres = player.devicenames
-                dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
-                salida_kokoro = reader._lector.find_device_id(nombres[config["dispositivo"]-1], known_devices=dispositivos_formateados)
-                reader._lector.set_device(salida_kokoro)
+                app_utilitys.fijar_dispositivo_lector()
             elif event is not None:
                 # Solo cuando el usuario elige una voz a mano: esta función
                 # también se llama sola (filtro de idioma, Cancelar), y ahí el
@@ -656,10 +647,7 @@ class AjustesController:
                     config['sistemaTTS'] == "piper" and lista_voces_piper
                     and lista_voces_piper[0] != _("No hay voces instaladas")))
                 if hay_voz_local:
-                    nombres = player.devicenames
-                    dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
-                    valor_str = nombres[config['dispositivo'] - 1]
-                    reader._lector.set_device(reader._lector.find_device_id(valor_str, known_devices=dispositivos_formateados))
+                    app_utilitys.fijar_dispositivo_lector()
             except Exception:
                 # Puede fallar si el dispositivo guardado desapareció mientras Ajustes estaba
                 # abierto (auriculares desconectados, etc. — mismo caso que setup.py al arrancar).
