@@ -525,19 +525,6 @@ msgstr "ended"
 msgid "Por favor, selecciona al menos una voz para descargar."
 msgstr "Please select at least one voice to download."
 
-#: controller/piper_downloader_controller.py:189
-msgid "Descargar variantes de Calidad Normal (Alta)"
-msgstr "Download Normal Quality (High) variants"
-
-#: controller/piper_downloader_controller.py:190
-msgid "Descargar variantes Rápidas (RT) donde estén disponibles"
-msgstr "Download Fast (RT) variants where available"
-
-#: controller/piper_downloader_controller.py:216
-#, python-format
-msgid "Descargando %s (%s) [%d/%d]..."
-msgstr "Downloading %s (%s) [%d/%d]..."
-
 #: controller/piper_downloader_controller.py:229
 #, python-format
 msgid "Error al descargar %s: %s"
@@ -1846,4 +1833,136 @@ msgstr "Piper reader initialized successfully."
 #: utils/languageHandler.py:72
 msgid "Idioma del sistema"
 msgstr "System language"
+
+#: ui/kokoro_downloader.py:10
+msgid "Instalar las voces Kokoro"
+msgstr "Install the Kokoro voices"
+
+#: ui/kokoro_downloader.py:14
+#, python-format
+msgid ""
+"Las voces Kokoro se instalan con un único paquete para todos los idiomas."
+" Se descarga una sola vez y ocupa %d MB aproximadamente."
+msgstr ""
+"The Kokoro voices are installed as a single package for all languages. It"
+" is downloaded only once and takes up about %d MB."
+
+#: controller/kokoro_downloader_controller.py:22
+msgid "Las voces Kokoro ya están instaladas en este equipo."
+msgstr "The Kokoro voices are already installed on this computer."
+
+#: controller/kokoro_downloader_controller.py:26
+msgid "Listo para descargar."
+msgstr "Ready to download."
+
+#: controller/kokoro_downloader_controller.py:37
+msgid "Descargando el paquete de voces..."
+msgstr "Downloading the voice package..."
+
+#: controller/kokoro_downloader_controller.py:50
+msgid "Descarga completada. Instalando el paquete..."
+msgstr "Download complete. Installing the package..."
+
+#: controller/kokoro_downloader_controller.py:64
+msgid "Instalación completada."
+msgstr "Installation complete."
+
+#: controller/kokoro_downloader_controller.py:67
+msgid ""
+"Las voces Kokoro se han instalado correctamente. Ya puedes seleccionarlas"
+" en los Ajustes de Voz."
+msgstr ""
+"The Kokoro voices have been installed successfully. You can now select "
+"them in the voice settings."
+
+#: controller/kokoro_downloader_controller.py:74
+msgid "La instalación ha fallado."
+msgstr "The installation has failed."
+
+#: controller/kokoro_downloader_controller.py:78
+#, python-format
+msgid "No se pudieron instalar las voces Kokoro: %s"
+msgstr "Could not install the Kokoro voices: %s"
+
+#: controller/kokoro_downloader_controller.py:100
+msgid "Cancelando la descarga..."
+msgstr "Cancelling the download..."
+
+#: servicios/kokoro_manager.py:62
+#, python-format
+msgid "No hay suficiente espacio libre en disco (se necesitan unos %d MB)."
+msgstr "Not enough free disk space (about %d MB are needed)."
+
+#: servicios/kokoro_manager.py:89
+#, python-format
+msgid "el servidor de descargas respondió con el error HTTP %d."
+msgstr "the download server responded with HTTP error %d."
+
+#: servicios/kokoro_manager.py:149
+#, python-format
+msgid "El paquete descargado está incompleto (falta %s)."
+msgstr "The downloaded package is incomplete (%s is missing)."
+
+#: controller/piper_downloader_controller.py:198
+#: controller/piper_migracion_rt_controller.py:46
+#, python-format
+msgid "Descargando %s [%d/%d]..."
+msgstr "Downloading %s [%d/%d]..."
+
+#: utils/app_utilitys.py:36
+#, python-format
+msgid ""
+"Las voces rápidas (RT) ya no existen en VeTube: el nuevo motor de voz no "
+"las necesita y la versión estándar suena igual. ¿Quieres descargar ahora "
+"la versión estándar de estas voces? %s"
+msgstr ""
+"Fast (RT) voices no longer exist in VeTube: the new voice engine does not"
+" need them and the standard version sounds the same. Do you want to "
+"download the standard version of these voices now? %s"
+
+#: utils/app_utilitys.py:37
+msgid "Voces por actualizar"
+msgstr "Voices to update"
+
+#: ui/piper_migracion_rt.py:10
+msgid "Actualizar las voces de Piper"
+msgstr "Update Piper voices"
+
+#: ui/piper_migracion_rt.py:14
+msgid ""
+"Descargando la versión estándar de tus voces rápidas (RT). Cada voz "
+"quedará instalada en su mismo lugar y conservará su configuración."
+msgstr ""
+"Downloading the standard version of your fast (RT) voices. Each voice "
+"will stay installed in the same place and keep its settings."
+
+#: controller/piper_migracion_rt_controller.py:29
+msgid "Conectando con el catálogo de voces..."
+msgstr "Connecting to the voice catalog..."
+
+#: controller/piper_migracion_rt_controller.py:79
+#, python-format
+msgid "Proceso finalizado. %d de %d voces actualizadas."
+msgstr "Process finished. %d of %d voices updated."
+
+#: controller/piper_migracion_rt_controller.py:81
+#, python-format
+msgid ""
+"No se pudieron actualizar todas las voces: %s\n"
+"VeTube lo volverá a intentar en el próximo inicio."
+msgstr ""
+"Not all voices could be updated: %s\n"
+"VeTube will try again on the next start."
+
+#: controller/piper_migracion_rt_controller.py:86
+msgid "Voces actualizadas correctamente."
+msgstr "Voices updated successfully."
+
+#: controller/ajustes_controller.py:306
+msgid ""
+"Para probar las voces Kokoro hay que descargar antes el paquete de voces."
+" ¿Quieres abrir el descargador ahora?"
+msgstr ""
+"To try the Kokoro voices you first need to download the voice package. Do"
+" you want to open the downloader now?"
 
