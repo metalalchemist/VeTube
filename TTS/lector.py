@@ -26,8 +26,10 @@ def configurar_tts(lector):
 def detect_onnx_models(path):
     onnx_models = glob.glob(path + '/*/*.onnx')
     if onnx_models:
-        # Filtrar encoder.onnx para no duplicar las voces RT en la UI
-        onnx_models = [m for m in onnx_models if os.path.basename(m).lower() != "encoder.onnx"]
+        # Los ficheros de las antiguas voces RT (encoder/decoder) no son voces
+        # completas: sin este filtro contarían como instaladas y el arranque
+        # intentaría cargarlas en vano.
+        onnx_models = [m for m in onnx_models if os.path.basename(m).lower() not in ("encoder.onnx", "decoder.onnx")]
         if len(onnx_models) > 1:
             return onnx_models
         elif len(onnx_models) == 1:

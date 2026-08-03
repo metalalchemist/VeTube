@@ -18,6 +18,9 @@ def run_app():
         # configurada y cargarla en el proceso residente.
         modelo = None
         if config['sistemaTTS'] == "piper":
+            # Si solo quedan restos de las antiguas voces RT, aquí no habrá
+            # voz que cargar: la migración se ofrece justo después, en
+            # configurar_piper (secuencia de arranque del MainController).
             if detect_onnx_models(carpeta_voces) is not None:
                 from TTS.list_voices import obtener_ruta_voz
                 if not (0 <= config['voz'] < len(lista_voces_piper)):
