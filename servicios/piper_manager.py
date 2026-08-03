@@ -180,15 +180,25 @@ class PiperManager(BaseDownloader):
                 except OSError:
                     pass
             return next(r for r in results if not r['success'])
-        for parte, final in partes:
-            os.replace(parte, final)
+        # Renombrado y preparación van dentro del try: un fallo aquí (fichero
+        # retenido por el antivirus, voz que se está reinstalando) reventaba la
+        # corrutina y dejaba el descargador congelado sin decir nada.
+        try:
+            for parte, final in partes:
+                os.replace(parte, final)
 
-        # El motor sherpa necesita el tokens.txt y los metadatos del .onnx:
-        # se preparan una vez desde el .json recién descargado (equivalente a
-        # lo que traen de fábrica los paquetes oficiales k2-fsa).
-        from TTS.sherpa_handler import preparar_voz_piper
-        for rel_path in archivos.keys():
-            if rel_path.endswith(".onnx.json"):
-                preparar_voz_piper(os.path.join(dest_dir, os.path.basename(rel_path)))
+            # El motor sherpa necesita el tokens.txt y los metadatos del .onnx:
+            # se preparan desde el .json recién descargado (equivalente a lo que
+            # traen de fábrica los paquetes oficiales k2-fsa). forzar=True
+            # porque al reinstalar una voz el tokens.txt anterior sigue ahí y el
+            # .onnx nuevo se quedaría sin metadatos.
+            from TTS.sherpa_handler import preparar_voz_piper
+            for rel_path in archivos.keys():
+                if rel_path.endswith(".onnx.json"):
+                    preparar_voz_piper(os.path.join(dest_dir, os.path.basename(rel_path)),
+                                       forzar=True)
+        except Exception as e:
+            traceback.print_exc()
+            return {'success': False, 'data': str(e)}
 
         return {'success': True, 'data': dest_dir}

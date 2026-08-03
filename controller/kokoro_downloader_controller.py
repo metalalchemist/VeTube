@@ -29,6 +29,10 @@ class KokoroDownloaderController:
         self.descargando = True
         self.fase_instalacion = False
         self.cancelacion_pedida = False
+        # Aquí y no dentro de instalar_modelo: la corrutina no arranca hasta que
+        # el bucle de red le hace sitio, y un Escape pulsado en ese hueco se
+        # habría borrado al empezar ella.
+        self.manager.cancelado = False
         self.view.btn_descargar.Disable()
         # El foco estaba en el botón recién deshabilitado: sin esto queda en el
         # limbo y un usuario de lector de pantalla ya no sabe dónde está.

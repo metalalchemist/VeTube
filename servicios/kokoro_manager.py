@@ -51,8 +51,12 @@ class KokoroManager(BaseDownloader):
 
     async def instalar_modelo(self, progress_callback=None):
         """Descarga el paquete, lo extrae en un temporal y lo mueve a voices/.
-        Devuelve {'success': bool, 'cancelado': bool, 'data': detalle}."""
-        self.cancelado = False
+        Devuelve {'success': bool, 'cancelado': bool, 'data': detalle}.
+
+        La bandera de cancelación NO se reinicia aquí: esta corrutina empieza a
+        correr cuando el bucle de red le hace sitio, y quien cancele entre medias
+        (el bucle también atiende los chats) se habría quedado sin efecto. La
+        reinicia quien lanza la descarga, antes de encolarla."""
         temp_dir = tempfile.mkdtemp(prefix="vetube_kokoro_")
         tar_path = os.path.join(temp_dir, CARPETA_MODELO + ".tar.bz2")
         try:
