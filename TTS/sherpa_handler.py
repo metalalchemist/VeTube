@@ -92,6 +92,28 @@ VOCES_KOKORO = [
 def kokoro_list_voices():
     return [voz[0] for voz in VOCES_KOKORO]
 
+def kokoro_idiomas_disponibles():
+    """Códigos de idioma que trae el modelo, sin repetir y en el orden de la
+    tabla. Sirve para ofrecer el filtro de idioma en los Ajustes."""
+    codigos = []
+    for etiqueta, sid, lang in VOCES_KOKORO:
+        if lang not in codigos:
+            codigos.append(lang)
+    return codigos
+
+def kokoro_voces_de_idioma(codigo=None):
+    """Devuelve [(índice, etiqueta)] de las voces de un idioma, o de todas si
+    no se pasa ninguno. El índice es el global de VOCES_KOKORO, que es el que
+    se guarda en config['voz']: una lista filtrada NO puede indexarse sola."""
+    return [(i, voz[0]) for i, voz in enumerate(VOCES_KOKORO)
+            if codigo is None or voz[2] == codigo]
+
+def kokoro_idioma_de_voz(index):
+    """Código de idioma de la voz que ocupa ese índice global, o None."""
+    if 0 <= index < len(VOCES_KOKORO):
+        return VOCES_KOKORO[index][2]
+    return None
+
 def kokoro_voice_config(index):
     """Devuelve el config_path «carpeta?sid=N&lang=xx» que entiende el puente,
     o None si el modelo no está disponible en esta máquina."""

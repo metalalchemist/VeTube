@@ -4,7 +4,9 @@ from globals.resources import rutasonidos,lista_voces,lista_voces_piper,recargar
 from setup import player,reader
 from utils import app_utilitys
 from TTS.list_voices import piper_list_voices , install_piper_voice
-from TTS.sherpa_handler import kokoro_list_voices, kokoro_voice_config
+from TTS.sherpa_handler import (kokoro_list_voices, kokoro_voice_config,
+                                kokoro_idiomas_disponibles, kokoro_voces_de_idioma,
+                                kokoro_idioma_de_voz)
 from controller.piper_downloader_controller import PiperDownloaderController
 from controller.kokoro_downloader_controller import KokoroDownloaderController
 from utils.menu_accesible import Accesible
@@ -12,6 +14,12 @@ from ui.dialog_response import response
 import wx
 
 logger = getLogger(__name__)
+
+def _sin_diacriticos(texto):
+    """Texto sin tildes ni diacríticos, para ordenar listas alfabéticamente sin
+    depender del locale del sistema."""
+    import unicodedata
+    return unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode().lower()
 
 class AccesibleInstalador(Accesible):
     """El botón de instalar abre un menú con Piper pero un diálogo con Kokoro:
@@ -41,6 +49,13 @@ class AjustesController:
     def __init__(self, dialog):
         self.dialog = dialog
         self.config_al_abrir = {clave: config.get(clave) for clave in self.CLAVES_EN_CALIENTE}
+        # Traducción entre lo que se ve en la lista de voces y lo que se guarda
+        # en config['voz'] (ver _mostrar_voces), y códigos del filtro de idioma.
+        self.indices_voces = []
+        self.codigos_idioma = []
+        # Última voz usada en cada idioma: cruzar idiomas con las flechas no
+        # debe hacer perder la voz elegida (ver cambiar_idioma_voz).
+        self.ultima_voz_por_idioma = {}
         self.dialog.instala_voces.SetAccessible(AccesibleInstalador(self.dialog.instala_voces))
         
         self.play_timer = wx.Timer(self.dialog)
@@ -50,27 +65,21 @@ class AjustesController:
         
         self._bind_events()
         self.actualizar_visibilidad_instalador()
+        self.actualizar_filtro_idioma()
         # Cargamos la lista de voces correcta al iniciar
-        self.dialog.choice_2.Clear()
         if config['sistemaTTS'] == "piper":
-            self.dialog.choice_2.AppendItems(lista_voces_piper)
+            self._mostrar_voces(lista_voces_piper)
         elif config['sistemaTTS'] == "kokoro":
-            self.dialog.choice_2.AppendItems(kokoro_list_voices())
+            self.rellenar_voces_kokoro()
         else:
             voces = reader._lector.list_voices()
             if not voces:
                 voces = [_("Controlado por el lector de pantalla")]
-            self.dialog.choice_2.AppendItems(voces)
+            self._mostrar_voces(voces)
         self.actualizar_habilitacion_controles()
-        # SetSelection fuera de rango no lanza excepción en wx: clamp explícito
-        # para que el lector de pantalla siempre anuncie una voz seleccionada.
-        if not (0 <= config['voz'] < self.dialog.choice_2.GetCount()):
-            config['voz'] = 0
-        try:
-            self.dialog.choice_2.SetSelection(config['voz'])
-        except:
-            self.dialog.choice_2.SetSelection(0)
-            config['voz'] = 0
+        # SetSelection fuera de rango no lanza excepción en wx: colocamos la voz
+        # a mano para que el lector de pantalla siempre anuncie una.
+        self._seleccionar_voz_activa()
 
         # Sincronización inicial de parámetros
         if config['sistemaTTS'] in ("piper", "kokoro"):
@@ -97,6 +106,7 @@ class AjustesController:
         self.dialog.seleccionar_TTS.Bind(wx.EVT_CHOICE, self.cambiar_sintetizador)
         self.dialog.establecer_dispositivo.Bind(wx.EVT_BUTTON, self.establecer_dispositivo)
         self.dialog.boton_prueva.Bind(wx.EVT_BUTTON, self.reproducirPrueva)
+        self.dialog.choice_idioma_voz.Bind(wx.EVT_CHOICE, self.cambiar_idioma_voz)
         self.dialog.choice_2.Bind(wx.EVT_CHOICE, self.cambiarVoz)
         self.dialog.slider_2.Bind(wx.EVT_SLIDER, self.cambiarVolumen)
         self.dialog.slider_1.Bind(wx.EVT_SLIDER, self.cambiarTono)
@@ -159,7 +169,7 @@ class AjustesController:
 
         config['sistemaTTS'] = self.dialog.seleccionar_TTS.GetStringSelection()
         reader.set_tts(config['sistemaTTS'])
-        self.dialog.choice_2.Clear()
+        self.actualizar_filtro_idioma()
         if config['sistemaTTS'] == "piper":
             if lista_voces_piper and lista_voces_piper[0] != _("No hay voces instaladas"):
                 voz_index = config.get('voz', 0)
@@ -169,7 +179,7 @@ class AjustesController:
                 from TTS.list_voices import obtener_ruta_voz
                 model_path = obtener_ruta_voz(lista_voces_piper[voz_index])
                 reader._lector.load_model(model_path)
-            self.dialog.choice_2.AppendItems(lista_voces_piper)
+            self._mostrar_voces(lista_voces_piper)
             # Sincronizar volumen, tono y velocidad de Piper
             reader._lector.set_volume(config['volume'])
             reader._lector.set_pitch(config['tono'])
@@ -183,10 +193,11 @@ class AjustesController:
             config_kokoro = kokoro_voice_config(voz_index)
             if config_kokoro is not None:
                 reader._lector.load_model(config_kokoro)
-            else:
-                # Modelo no disponible: avisar en voz alta en lugar de callar
+            elif event is not None:
+                # Modelo no disponible: avisar en voz alta en lugar de callar,
+                # pero no al revertir con Cancelar (el diálogo ya se cierra).
                 reader._leer.speak(_("No hay voces instaladas"))
-            self.dialog.choice_2.AppendItems(voces_kokoro)
+            self.rellenar_voces_kokoro()
             # Sincronizar volumen, tono y velocidad (misma escala que Piper)
             reader._lector.set_volume(config['volume'])
             reader._lector.set_pitch(config['tono'])
@@ -195,8 +206,8 @@ class AjustesController:
             voces = reader._lector.list_voices()
             if not voces:
                 voces = [_("Controlado por el lector de pantalla")]
-            self.dialog.choice_2.AppendItems(voces)
-            
+            self._mostrar_voces(voces)
+
             # Sincronizar volumen, tono y velocidad para SAPI/OneCore
             reader._lector.set_volume(config['volume'])
             reader._lector.set_pitch(config['tono'])
@@ -212,11 +223,7 @@ class AjustesController:
                 
         self.actualizar_visibilidad_instalador()
         self.actualizar_habilitacion_controles()
-        try:
-            self.dialog.choice_2.SetSelection(config['voz'])
-        except:
-            self.dialog.choice_2.SetSelection(0)
-            config['voz'] = 0
+        self._seleccionar_voz_activa()
 
     def actualizar_visibilidad_instalador(self):
         # El mismo botón instala voces de Piper o el paquete de Kokoro,
@@ -227,6 +234,100 @@ class AjustesController:
         self.dialog.slider_1.Enable()
         self.dialog.slider_2.Enable()
         self.dialog.treeItem_2.Layout()
+
+    def _nombre_idioma(self, codigo):
+        """Nombre del idioma de una voz de Kokoro. Se arma al llamar, no al
+        importar el módulo, para que respete el idioma de la interfaz."""
+        return {
+            "es": _("Español"),
+            "fr": _("Francés"),
+            "en-us": _("Inglés (Estados Unidos)"),
+            "en-gb": _("Inglés (Reino Unido)"),
+            "it": _("Italiano"),
+            "pt-br": _("Portugués (Brasil)"),
+            "hi": _("Hindi"),
+        }.get(codigo, codigo)
+
+    def actualizar_filtro_idioma(self):
+        """El filtro de idioma solo tiene sentido con Kokoro, que trae voces de
+        siete idiomas en un único paquete. Se coloca en el idioma de la voz
+        activa, que es lo que espera quien abre los Ajustes para cambiarla."""
+        es_kokoro = config['sistemaTTS'] == "kokoro"
+        self.dialog.label_idioma_voz.Show(es_kokoro)
+        self.dialog.choice_idioma_voz.Show(es_kokoro)
+        if es_kokoro:
+            # Orden alfabético por el nombre traducido: en una lista desplegable
+            # se salta a un idioma tecleando su inicial. Se ordena sin tildes ni
+            # diacríticos, si no «Španělština» acabaría después de la Z en checo.
+            codigos = sorted(kokoro_idiomas_disponibles(),
+                             key=lambda codigo: _sin_diacriticos(self._nombre_idioma(codigo)))
+            # La primera entrada no filtra nada, de ahí el None.
+            self.codigos_idioma = [None] + codigos
+            self.dialog.choice_idioma_voz.Clear()
+            self.dialog.choice_idioma_voz.AppendItems(
+                [_("Todos los idiomas")] + [self._nombre_idioma(c) for c in codigos])
+            idioma_actual = kokoro_idioma_de_voz(config['voz'])
+            self.dialog.choice_idioma_voz.SetSelection(
+                self.codigos_idioma.index(idioma_actual) if idioma_actual in self.codigos_idioma else 0)
+        else:
+            self.codigos_idioma = []
+        self.dialog.treeItem_2.Layout()
+
+    def _idioma_filtrado(self):
+        """Código del idioma elegido en el filtro, o None si son todos."""
+        seleccion = self.dialog.choice_idioma_voz.GetSelection()
+        if 0 <= seleccion < len(self.codigos_idioma):
+            return self.codigos_idioma[seleccion]
+        return None
+
+    def _mostrar_voces(self, etiquetas, indices=None):
+        """Llena la lista de voces. indices traduce cada posición mostrada al
+        número que se guarda en config['voz']: con Kokoro filtrado por idioma no
+        coinciden, y guardar la posición de la lista cambiaría de voz sola."""
+        self.indices_voces = list(indices) if indices is not None else list(range(len(etiquetas)))
+        self.dialog.choice_2.Clear()
+        self.dialog.choice_2.AppendItems(etiquetas)
+
+    def _seleccionar_voz_activa(self):
+        """Deja la lista sobre la voz de config['voz'] y devuelve True. Si esa
+        voz no está (índice inservible, o filtrada por idioma), cae en la
+        primera de la lista, actualiza config['voz'] y devuelve False."""
+        if config['voz'] in self.indices_voces:
+            self.dialog.choice_2.SetSelection(self.indices_voces.index(config['voz']))
+            return True
+        self.dialog.choice_2.SetSelection(0)
+        config['voz'] = self.indices_voces[0] if self.indices_voces else 0
+        return False
+
+    def _indice_global_seleccionado(self):
+        """Índice de la voz elegida en la lista, tal como se guarda en config."""
+        seleccion = self.dialog.choice_2.GetSelection()
+        if 0 <= seleccion < len(self.indices_voces):
+            return self.indices_voces[seleccion]
+        return config['voz']
+
+    def rellenar_voces_kokoro(self):
+        """Llena la lista con las voces del idioma elegido en el filtro."""
+        voces = kokoro_voces_de_idioma(self._idioma_filtrado())
+        self._mostrar_voces([etiqueta for indice, etiqueta in voces],
+                            [indice for indice, etiqueta in voces])
+
+    def cambiar_idioma_voz(self, event):
+        # Para llegar a un idioma se pasa por los de en medio con las flechas, y
+        # cada uno cambia de voz: guardamos la voz de cada idioma para
+        # devolverla si el usuario vuelve, en vez de dejarlo con la primera.
+        voz_anterior = config['voz']
+        idioma_anterior = kokoro_idioma_de_voz(voz_anterior)
+        if idioma_anterior:
+            self.ultima_voz_por_idioma[idioma_anterior] = voz_anterior
+        self.rellenar_voces_kokoro()
+        recordada = self.ultima_voz_por_idioma.get(self._idioma_filtrado())
+        if voz_anterior not in self.indices_voces and recordada in self.indices_voces:
+            config['voz'] = recordada
+        if not self._seleccionar_voz_activa() or config['voz'] != voz_anterior:
+            # La voz cambia con el idioma: cargarla igual que si el usuario la
+            # hubiera elegido en la lista.
+            self.cambiarVoz(None)
 
     def actualizar_habilitacion_controles(self):
         if config['sistemaTTS'] in ("piper", "kokoro"):
@@ -327,7 +428,7 @@ class AjustesController:
         self.dialog.boton_prueva.SetLabel(_("&Reproducir prueba."))
         self.reproduciendo_prueba = False
 
-        config['voz'] = self.dialog.choice_2.GetSelection()
+        config['voz'] = self._indice_global_seleccionado()
         if config['sistemaTTS'] == "piper":
             from TTS.list_voices import obtener_ruta_voz
             # Simplemente cargamos el nuevo modelo en el lector existente
@@ -345,7 +446,10 @@ class AjustesController:
                 dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
                 salida_kokoro = reader._lector.find_device_id(nombres[config["dispositivo"]-1], known_devices=dispositivos_formateados)
                 reader._lector.set_device(salida_kokoro)
-            else:
+            elif event is not None:
+                # Solo cuando el usuario elige una voz a mano: esta función
+                # también se llama sola (filtro de idioma, Cancelar), y ahí el
+                # aviso se repetiría en cada flecha, encima de lo que lee NVDA.
                 reader._leer.speak(_("No hay voces instaladas"))
         else:
             voces_lector = reader._lector.list_voices()
@@ -421,13 +525,11 @@ class AjustesController:
             
             # Actualizamos la UI si estamos en modo Piper
             if config['sistemaTTS'] == "piper":
-                self.dialog.choice_2.Clear()
-                self.dialog.choice_2.AppendItems(resources.lista_voces_piper)
-                # Intentamos mantener la selección o poner la primera
-                try:
-                    self.dialog.choice_2.SetSelection(config.get('voz', 0))
-                except:
-                    self.dialog.choice_2.SetSelection(0)
+                # Mantiene la selección si la voz sigue en la lista, o cae en la
+                # primera; _mostrar_voces deja además al día la equivalencia
+                # entre lo que se ve y lo que se guarda en config['voz'].
+                self._mostrar_voces(resources.lista_voces_piper)
+                self._seleccionar_voz_activa()
 
     def on_check_play_status(self, event):
         try:
@@ -493,7 +595,13 @@ class AjustesController:
                 else:
                     lista_voces_actual = reader._lector.list_voices()
                 if 0 <= config['voz'] < len(lista_voces_actual):
-                    self.dialog.choice_2.SetSelection(config['voz'])
+                    if config['sistemaTTS'] == "kokoro":
+                        # La lista puede haber quedado filtrada por otro idioma:
+                        # hay que devolverla al idioma de la voz original, si no
+                        # esta no aparece y se recargaría cualquier otra.
+                        self.actualizar_filtro_idioma()
+                        self.rellenar_voces_kokoro()
+                    self._seleccionar_voz_activa()
                     self.cambiarVoz(None)
                 else:
                     # SetSelection() con un índice fuera de rango no lanza excepción en wx: no

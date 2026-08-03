@@ -1971,3 +1971,38 @@ msgstr ""
 "Untuk mencoba suara Kokoro, Anda harus mengunduh paket suara terlebih "
 "dahulu. Apakah Anda ingin membuka pengunduh sekarang?"
 
+#: controller/ajustes_controller.py:256
+msgid "Todos los idiomas"
+msgstr "Semua bahasa"
+
+#: controller/ajustes_controller.py:232
+msgid "Español"
+msgstr "Spanyol"
+
+#: controller/ajustes_controller.py:233
+msgid "Francés"
+msgstr "Prancis"
+
+#: controller/ajustes_controller.py:234
+msgid "Inglés (Estados Unidos)"
+msgstr "Inggris (Amerika Serikat)"
+
+#: controller/ajustes_controller.py:235
+msgid "Inglés (Reino Unido)"
+msgstr "Inggris (Britania Raya)"
+
+#: controller/ajustes_controller.py:236
+msgid "Italiano"
+msgstr "Italia"
+
+#: controller/ajustes_controller.py:237
+msgid "Portugués (Brasil)"
+msgstr "Portugis (Brasil)"
+
+#: controller/ajustes_controller.py:238
+msgid "Hindi"
+msgstr "Hindi"
+
+#: ui/ajustes/voz.py:22
+msgid "Idioma de la voz: "
+msgstr "Bahasa suara: "

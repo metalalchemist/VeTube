@@ -1949,3 +1949,38 @@ msgstr ""
 "Před vyzkoušením hlasů Kokoro je potřeba nejdřív stáhnout balíček hlasů. "
 "Chceš teď otevřít stahovač?"
 
+#: controller/ajustes_controller.py:256
+msgid "Todos los idiomas"
+msgstr "Všechny jazyky"
+
+#: controller/ajustes_controller.py:232
+msgid "Español"
+msgstr "Španělština"
+
+#: controller/ajustes_controller.py:233
+msgid "Francés"
+msgstr "Francouzština"
+
+#: controller/ajustes_controller.py:234
+msgid "Inglés (Estados Unidos)"
+msgstr "Angličtina (Spojené státy)"
+
+#: controller/ajustes_controller.py:235
+msgid "Inglés (Reino Unido)"
+msgstr "Angličtina (Spojené království)"
+
+#: controller/ajustes_controller.py:236
+msgid "Italiano"
+msgstr "Italština"
+
+#: controller/ajustes_controller.py:237
+msgid "Portugués (Brasil)"
+msgstr "Portugalština (Brazílie)"
+
+#: controller/ajustes_controller.py:238
+msgid "Hindi"
+msgstr "Hindština"
+
+#: ui/ajustes/voz.py:22
+msgid "Idioma de la voz: "
+msgstr "Jazyk hlasu: "

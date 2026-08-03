@@ -1877,3 +1877,38 @@ msgid ""
 " ¿Quieres abrir el descargador ahora?"
 msgstr ""
 
+#: controller/ajustes_controller.py:256
+msgid "Todos los idiomas"
+msgstr ""
+
+#: controller/ajustes_controller.py:232
+msgid "Español"
+msgstr ""
+
+#: controller/ajustes_controller.py:233
+msgid "Francés"
+msgstr ""
+
+#: controller/ajustes_controller.py:234
+msgid "Inglés (Estados Unidos)"
+msgstr ""
+
+#: controller/ajustes_controller.py:235
+msgid "Inglés (Reino Unido)"
+msgstr ""
+
+#: controller/ajustes_controller.py:236
+msgid "Italiano"
+msgstr ""
+
+#: controller/ajustes_controller.py:237
+msgid "Portugués (Brasil)"
+msgstr ""
+
+#: controller/ajustes_controller.py:238
+msgid "Hindi"
+msgstr ""
+
+#: ui/ajustes/voz.py:22
+msgid "Idioma de la voz: "
+msgstr ""

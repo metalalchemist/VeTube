@@ -79,6 +79,8 @@ class configuracionDialog(wx.Dialog):
 		# Panel Voz
 		self.check_1 = self.panel_voz.check_1
 		self.seleccionar_TTS = self.panel_voz.seleccionar_TTS
+		self.label_idioma_voz = self.panel_voz.label_idioma_voz
+		self.choice_idioma_voz = self.panel_voz.choice_idioma_voz
 		self.choice_2 = self.panel_voz.choice_2
 		self.instala_voces = self.panel_voz.instala_voces
 		self.slider_1 = self.panel_voz.slider_1

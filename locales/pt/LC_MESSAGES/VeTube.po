@@ -1972,3 +1972,38 @@ msgstr ""
 "Para experimentar as vozes Kokoro é preciso baixar antes o pacote de "
 "vozes. Deseja abrir o gerenciador de download agora?"
 
+#: controller/ajustes_controller.py:256
+msgid "Todos los idiomas"
+msgstr "Todos os idiomas"
+
+#: controller/ajustes_controller.py:232
+msgid "Español"
+msgstr "Espanhol"
+
+#: controller/ajustes_controller.py:233
+msgid "Francés"
+msgstr "Francês"
+
+#: controller/ajustes_controller.py:234
+msgid "Inglés (Estados Unidos)"
+msgstr "Inglês (Estados Unidos)"
+
+#: controller/ajustes_controller.py:235
+msgid "Inglés (Reino Unido)"
+msgstr "Inglês (Reino Unido)"
+
+#: controller/ajustes_controller.py:236
+msgid "Italiano"
+msgstr "Italiano"
+
+#: controller/ajustes_controller.py:237
+msgid "Portugués (Brasil)"
+msgstr "Português (Brasil)"
+
+#: controller/ajustes_controller.py:238
+msgid "Hindi"
+msgstr "Híndi"
+
+#: ui/ajustes/voz.py:22
+msgid "Idioma de la voz: "
+msgstr "Idioma da voz: "

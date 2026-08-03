@@ -1970,3 +1970,38 @@ msgstr ""
 "Aby wypróbować głosy Kokoro, najpierw trzeba pobrać pakiet głosów. Czy "
 "chcesz teraz otworzyć instalator?"
 
+#: controller/ajustes_controller.py:256
+msgid "Todos los idiomas"
+msgstr "Wszystkie języki"
+
+#: controller/ajustes_controller.py:232
+msgid "Español"
+msgstr "Hiszpański"
+
+#: controller/ajustes_controller.py:233
+msgid "Francés"
+msgstr "Francuski"
+
+#: controller/ajustes_controller.py:234
+msgid "Inglés (Estados Unidos)"
+msgstr "Angielski (Stany Zjednoczone)"
+
+#: controller/ajustes_controller.py:235
+msgid "Inglés (Reino Unido)"
+msgstr "Angielski (Wielka Brytania)"
+
+#: controller/ajustes_controller.py:236
+msgid "Italiano"
+msgstr "Włoski"
+
+#: controller/ajustes_controller.py:237
+msgid "Portugués (Brasil)"
+msgstr "Portugalski (Brazylia)"
+
+#: controller/ajustes_controller.py:238
+msgid "Hindi"
+msgstr "Hindi"
+
+#: ui/ajustes/voz.py:22
+msgid "Idioma de la voz: "
+msgstr "Język głosu: "
