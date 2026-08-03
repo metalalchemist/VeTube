@@ -1,7 +1,7 @@
 import os
 import tarfile
 from .lector import detect_onnx_models
-from . import sonata_handler as speaker
+from . import sherpa_handler as speaker
 import wx
 def extract_tar(file, destination):
 	if not os.path.exists(destination):
@@ -23,7 +23,7 @@ def install_piper_voice(config, reader):
 	destino = os.path.join(os.getcwd(), "voices", nombre_paquete[:-3])
 	extract_tar(paquete, destino)
 	wx.MessageBox(_("¡Voz instalada satosfactoriamente! esta será establecida en VeTube ahora. Para cambiar de modelo de voz, puedes hacerlo a través de las configuraciones."), _("Listo"), wx.ICON_INFORMATION)
-	reader=speaker.piperSpeak(f"{destino}/{nombre_paquete}.onnx")
+	reader=speaker.sherpaSpeak(f"{destino}/{nombre_paquete}.onnx")
 	config['voz'] = 0
 	abrir_tar.Destroy()
 	return config, reader

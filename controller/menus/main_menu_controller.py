@@ -157,7 +157,12 @@ class MainMenuController:
             if idx >= len(voices_leer): idx = 0
             reader._leer.set_voice(voices_leer[idx])
         
-        if data_store.config['sistemaTTS'] != "piper":
+        if data_store.config['sistemaTTS'] in ("piper", "kokoro"):
+            # El puente sherpa usa la escala porcentaje_a_escala y no expone list_voices
+            reader._lector.set_rate(app_utilitys.porcentaje_a_escala(data_store.config['speed']))
+            reader._lector.set_pitch(data_store.config['tono'])
+            reader._lector.set_volume(data_store.config['volume'])
+        else:
             reader._lector.set_rate(data_store.config['speed'])
             if data_store.config['sistemaTTS'] == "onecore":
                 reader._lector.set_pitch(data_store.config.get('tono_onecore', 0.6))
@@ -169,14 +174,15 @@ class MainMenuController:
                 idx = data_store.config['voz']
                 if idx >= len(voices_lector): idx = 0
                 reader._lector.set_voice(voices_lector[idx])
-        
+
         reader.set_sapi(data_store.config['sapi'])
-        if data_store.config['sistemaTTS'] == "piper":
+        if data_store.config['sistemaTTS'] in ("piper", "kokoro"):
             nombres = player.devicenames
             dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
             salida_actual = reader._lector.find_device_id(nombres[data_store.config["dispositivo"]-1], known_devices=dispositivos_formateados)
             reader._lector.set_device(salida_actual)
-            app_utilitys.configurar_piper(self.frame, carpeta_voces)
+            if data_store.config['sistemaTTS'] == "piper":
+                app_utilitys.configurar_piper(self.frame, carpeta_voces)
         if cf.choice_moneditas.GetStringSelection()!='Por defecto':
             monedita=cf.choice_moneditas.GetStringSelection().split(', (')
             for k in currency_codes.CODES:

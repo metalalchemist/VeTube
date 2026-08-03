@@ -18,8 +18,15 @@ if voices_leer:
     if idx >= len(voices_leer): idx = 0
     reader._leer.set_voice(voices_leer[idx])
 
-# Configurar también el lector principal de chat si no es Piper
-if config['sistemaTTS'] != "piper":
+# Configurar el lector principal según el motor elegido
+if config['sistemaTTS'] in ("piper", "kokoro"):
+    # El puente sherpa guarda los parámetros y los aplica en cada speak; la
+    # voz se carga en run_main_window. Misma escala que app_utilitys.
+    # porcentaje_a_escala (no se importa para no crear un import circular).
+    reader._lector.set_rate(1.25 + config['speed'] * 0.125)
+    reader._lector.set_pitch(config['tono'])
+    reader._lector.set_volume(config['volume'])
+else:
     reader._lector.set_rate(config['speed'])
     if config['sistemaTTS'] == "onecore":
         reader._lector.set_pitch(config.get('tono_onecore', 0.6))

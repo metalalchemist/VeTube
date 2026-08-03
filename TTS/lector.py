@@ -1,5 +1,5 @@
 # lector:
-from . import sonata_handler as speaker
+from . import sherpa_handler
 import glob
 import os
 from helpers.reader_handler import PrismBackendWrapper
@@ -8,7 +8,8 @@ from prism import BackendId
 """
 Esto es un gestionador de TTS. Permite manejar el uso de diferentes motores de texto a voz como:
 1. Prism Accessibility Library
-2. Sonata (Motor Piper gRPC)
+2. Puente sherpa-onnx (protocolo sonata_grpc): voces Piper y modelo Kokoro
+   con un único proceso nativo compartido.
 """
 def configurar_tts(lector):
 	if lector == "auto":
@@ -17,8 +18,8 @@ def configurar_tts(lector):
 		return PrismBackendWrapper(BackendId.SAPI)
 	elif lector == "onecore":
 		return PrismBackendWrapper(BackendId.ONE_CORE)
-	elif lector == "piper":
-		return speaker.piperSpeak()
+	elif lector in ("piper", "kokoro"):
+		return sherpa_handler.sherpaSpeak()
 	else:
 		raise Exception("Lector no soportado.")
 

@@ -87,7 +87,7 @@ class PrismBackendWrapper:
 class ReaderHandler:
     def __init__(self, lector=None):
         sistema = config['sistemaTTS'] if lector is None else lector
-        if sistema == "piper":
+        if sistema in ("piper", "kokoro"):
             from TTS.lector import configurar_tts
             self._lector = configurar_tts(sistema)
         elif sistema == "onecore":
@@ -112,9 +112,9 @@ class ReaderHandler:
 
 
     def set_tts(self, nuevo_tts):
-        if nuevo_tts == "piper":
+        if nuevo_tts in ("piper", "kokoro"):
             from TTS.lector import configurar_tts
-            self._lector = configurar_tts("piper")
+            self._lector = configurar_tts(nuevo_tts)
         elif nuevo_tts == "onecore":
             self._lector = PrismBackendWrapper(BackendId.ONE_CORE)
         elif nuevo_tts == "sapi5":
@@ -132,7 +132,7 @@ class ReaderHandler:
             self.leer_auto(mensaje)
 
     def leer_sapi(self, mensaje):
-        if config['sistemaTTS'] == "piper":
+        if config['sistemaTTS'] in ("piper", "kokoro"):
             self.leer_auto(mensaje)
         else:
             self._leer.speak(mensaje)

@@ -135,7 +135,15 @@ class PiperManager(BaseDownloader):
         results = await asyncio.gather(*tasks)
         for r in results:
             if not r['success']: return r
-                
+
+        # El motor sherpa necesita el tokens.txt y los metadatos del .onnx:
+        # se preparan una vez desde el .json recién descargado (equivalente a
+        # lo que traen de fábrica los paquetes oficiales k2-fsa).
+        from TTS.sherpa_handler import preparar_voz_piper
+        for rel_path in archivos.keys():
+            if rel_path.endswith(".onnx.json"):
+                preparar_voz_piper(os.path.join(dest_dir, os.path.basename(rel_path)))
+
         return {'success': True, 'data': dest_dir}
 
     async def instalar_voz_rt(self, voice_key, progress_callback=None):

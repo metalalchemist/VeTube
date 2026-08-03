@@ -4,6 +4,7 @@ from globals.resources import rutasonidos,lista_voces,lista_voces_piper,recargar
 from setup import player,reader
 from utils import app_utilitys
 from TTS.list_voices import piper_list_voices , install_piper_voice
+from TTS.sherpa_handler import kokoro_list_voices, kokoro_voice_config
 from controller.piper_downloader_controller import PiperDownloaderController
 from utils.menu_accesible import Accesible
 import wx
@@ -36,20 +37,26 @@ class AjustesController:
         self.dialog.choice_2.Clear()
         if config['sistemaTTS'] == "piper":
             self.dialog.choice_2.AppendItems(lista_voces_piper)
+        elif config['sistemaTTS'] == "kokoro":
+            self.dialog.choice_2.AppendItems(kokoro_list_voices())
         else:
             voces = reader._lector.list_voices()
             if not voces:
                 voces = [_("Controlado por el lector de pantalla")]
             self.dialog.choice_2.AppendItems(voces)
         self.actualizar_habilitacion_controles()
+        # SetSelection fuera de rango no lanza excepción en wx: clamp explícito
+        # para que el lector de pantalla siempre anuncie una voz seleccionada.
+        if not (0 <= config['voz'] < self.dialog.choice_2.GetCount()):
+            config['voz'] = 0
         try:
             self.dialog.choice_2.SetSelection(config['voz'])
         except:
             self.dialog.choice_2.SetSelection(0)
             config['voz'] = 0
-        
+
         # Sincronización inicial de parámetros
-        if config['sistemaTTS'] == "piper":
+        if config['sistemaTTS'] in ("piper", "kokoro"):
             reader._lector.set_volume(config['volume'])
             reader._lector.set_pitch(config['tono'])
             # Aplicamos la velocidad inicial usando la escala correcta
@@ -150,6 +157,23 @@ class AjustesController:
             reader._lector.set_volume(config['volume'])
             reader._lector.set_pitch(config['tono'])
             reader._lector.set_rate(app_utilitys.porcentaje_a_escala(config['speed']))
+        elif config['sistemaTTS'] == "kokoro":
+            voces_kokoro = kokoro_list_voices()
+            voz_index = config.get('voz', 0)
+            if voz_index >= len(voces_kokoro):
+                voz_index = 0
+                config['voz'] = 0
+            config_kokoro = kokoro_voice_config(voz_index)
+            if config_kokoro is not None:
+                reader._lector.load_model(config_kokoro)
+            else:
+                # Modelo no disponible: avisar en voz alta en lugar de callar
+                reader._leer.speak(_("No hay voces instaladas"))
+            self.dialog.choice_2.AppendItems(voces_kokoro)
+            # Sincronizar volumen, tono y velocidad (misma escala que Piper)
+            reader._lector.set_volume(config['volume'])
+            reader._lector.set_pitch(config['tono'])
+            reader._lector.set_rate(app_utilitys.porcentaje_a_escala(config['speed']))
         else:
             voces = reader._lector.list_voices()
             if not voces:
@@ -186,7 +210,7 @@ class AjustesController:
         self.dialog.treeItem_2.Layout()
 
     def actualizar_habilitacion_controles(self):
-        if config['sistemaTTS'] == "piper":
+        if config['sistemaTTS'] in ("piper", "kokoro"):
             # Restaurar slider de tono al rango normal si venía de OneCore
             if self.dialog.slider_1.GetMax() == 4:
                 self.dialog.slider_1.SetRange(0, 20)
@@ -235,8 +259,10 @@ class AjustesController:
         config['dispositivo'] = valor
         player.setdevice(config["dispositivo"])
         player.play(f"sounds/{config['directorio']}/cambiardispositivo.mp3")
-        if config['sistemaTTS'] == "piper":
-            if lista_voces_piper and lista_voces_piper[0] != _("No hay voces instaladas"):
+        if config['sistemaTTS'] in ("piper", "kokoro"):
+            hay_voz = config['sistemaTTS'] == "kokoro" or (
+                lista_voces_piper and lista_voces_piper[0] != _("No hay voces instaladas"))
+            if hay_voz:
                 # Reutilizamos los nombres que ya tiene el player formateados para Sonata
                 nombres = player.devicenames
                 dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
@@ -244,22 +270,33 @@ class AjustesController:
             reader.leer_auto(_("Hablaré a través de este dispositivo."))
 
     def reproducirPrueva(self, event):
-        if config['sistemaTTS'] == "piper":
-            if self.dialog.choice_2.GetStringSelection() != _("No hay voces instaladas"):
-                reader.leer_auto(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
-        else:
-            if self.reproduciendo_prueba:
-                self.play_timer.Stop()
-                reader._lector.silence()
-                self.dialog.boton_prueva.SetLabel(_("&Reproducir prueba."))
-                self.reproduciendo_prueba = False
-                return
-            
+        # El botón alterna entre reproducir y detener con cualquier motor:
+        # el puente sherpa también sabe decir si sigue hablando (is_playing).
+        if self.reproduciendo_prueba:
+            self.play_timer.Stop()
             reader._lector.silence()
-            reader.leer_auto(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
-            self.dialog.boton_prueva.SetLabel(_("&Detener prueba."))
-            self.reproduciendo_prueba = True
-            self.play_timer.Start(200)
+            self.dialog.boton_prueva.SetLabel(_("&Reproducir prueba."))
+            self.reproduciendo_prueba = False
+            return
+
+        if config['sistemaTTS'] in ("piper", "kokoro"):
+            if config['sistemaTTS'] == "kokoro" and kokoro_voice_config(config['voz']) is None:
+                # Sin el modelo instalado la síntesis no arranca nunca: decir
+                # en voz alta lo que falta en vez de callar.
+                reader._leer.speak(_("No hay voces instaladas"))
+                return
+            if config['sistemaTTS'] == "piper" and self.dialog.choice_2.GetStringSelection() == _("No hay voces instaladas"):
+                # Mismo aviso hablado que con Kokoro: un botón que no hace
+                # nada en silencio desorienta al lector de pantalla.
+                reader._leer.speak(_("No hay voces instaladas"))
+                return
+        else:
+            reader._lector.silence()
+
+        reader.leer_auto(_("Hola, soy la voz que te acompañará de ahora en adelante a leer los mensajes de tus canales favoritos."))
+        self.dialog.boton_prueva.SetLabel(_("&Detener prueba."))
+        self.reproduciendo_prueba = True
+        self.play_timer.Start(200)
 
     def cambiarVoz(self, event):
         if self.play_timer.IsRunning():
@@ -272,12 +309,22 @@ class AjustesController:
         if config['sistemaTTS'] == "piper":
             from TTS.list_voices import obtener_ruta_voz
             # Simplemente cargamos el nuevo modelo en el lector existente
-            reader._lector.piperSpeak(obtener_ruta_voz(lista_voces_piper[config['voz']]))
+            reader._lector.load_model(obtener_ruta_voz(lista_voces_piper[config['voz']]))
             # El dispositivo se mantiene o se actualiza si es necesario, usando dispositivos conocidos
             nombres = player.devicenames
             dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
             salida_piper = reader._lector.find_device_id(nombres[config["dispositivo"]-1], known_devices=dispositivos_formateados)
             reader._lector.set_device(salida_piper)
+        elif config['sistemaTTS'] == "kokoro":
+            config_kokoro = kokoro_voice_config(config['voz'])
+            if config_kokoro is not None:
+                reader._lector.load_model(config_kokoro)
+                nombres = player.devicenames
+                dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
+                salida_kokoro = reader._lector.find_device_id(nombres[config["dispositivo"]-1], known_devices=dispositivos_formateados)
+                reader._lector.set_device(salida_kokoro)
+            else:
+                reader._leer.speak(_("No hay voces instaladas"))
         else:
             voces_lector = reader._lector.list_voices()
             if voces_lector and config['voz'] < len(voces_lector):
@@ -305,6 +352,8 @@ class AjustesController:
             voz_actual = lista_voces_piper[self.dialog.choice_2.GetSelection()]
             if voz_actual != _("No hay voces instaladas"):
                 reader._lector.set_rate(app_utilitys.porcentaje_a_escala(value))
+        elif config['sistemaTTS'] == "kokoro":
+            reader._lector.set_rate(app_utilitys.porcentaje_a_escala(value))
         else:
             reader._lector.set_rate(value)
         config['speed'] = value
@@ -356,18 +405,17 @@ class AjustesController:
                     self.dialog.choice_2.SetSelection(0)
 
     def on_check_play_status(self, event):
-        if config['sistemaTTS'] != "piper" and hasattr(reader._lector, 'backend'):
-            try:
-                if not reader._lector.backend.speaking:
-                    self.play_timer.Stop()
-                    self.dialog.boton_prueva.SetLabel(_("&Reproducir prueba."))
-                    self.reproduciendo_prueba = False
-            except Exception:
-                self.play_timer.Stop()
-                self.dialog.boton_prueva.SetLabel(_("&Reproducir prueba."))
-                self.reproduciendo_prueba = False
-        else:
+        try:
+            if config['sistemaTTS'] in ("piper", "kokoro"):
+                sigue_hablando = reader._lector.is_playing()
+            else:
+                sigue_hablando = reader._lector.backend.speaking
+        except Exception:
+            sigue_hablando = False
+        if not sigue_hablando:
             self.play_timer.Stop()
+            self.dialog.boton_prueva.SetLabel(_("&Reproducir prueba."))
+            self.reproduciendo_prueba = False
 
     def on_destroy(self, event):
         if hasattr(self, 'play_timer') and self.play_timer.IsRunning():
@@ -413,7 +461,12 @@ class AjustesController:
                 logger.exception("No se pudo restaurar el sistema TTS al cancelar Ajustes (sistemaTTS=%s)", config['sistemaTTS'])
         elif cambio_voz:
             try:
-                lista_voces_actual = lista_voces_piper if config['sistemaTTS'] == "piper" else reader._lector.list_voices()
+                if config['sistemaTTS'] == "piper":
+                    lista_voces_actual = lista_voces_piper
+                elif config['sistemaTTS'] == "kokoro":
+                    lista_voces_actual = kokoro_list_voices()
+                else:
+                    lista_voces_actual = reader._lector.list_voices()
                 if 0 <= config['voz'] < len(lista_voces_actual):
                     self.dialog.choice_2.SetSelection(config['voz'])
                     self.cambiarVoz(None)
@@ -457,7 +510,10 @@ class AjustesController:
             # establecer_dispositivo(): un Cancelar silencioso no debe sonar como un cambio aplicado.
             try:
                 player.setdevice(config['dispositivo'])
-                if config['sistemaTTS'] == "piper" and lista_voces_piper and lista_voces_piper[0] != _("No hay voces instaladas"):
+                hay_voz_local = (config['sistemaTTS'] == "kokoro" or (
+                    config['sistemaTTS'] == "piper" and lista_voces_piper
+                    and lista_voces_piper[0] != _("No hay voces instaladas")))
+                if hay_voz_local:
                     nombres = player.devicenames
                     dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
                     valor_str = nombres[config['dispositivo'] - 1]
