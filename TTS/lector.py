@@ -24,7 +24,12 @@ def configurar_tts(lector):
 		raise Exception("Lector no soportado.")
 
 def detect_onnx_models(path):
-    onnx_models = glob.glob(path + '/*/*.onnx')
+    # Solo las carpetas «voice-*», que son las de Piper: en voices/ vive también
+    # el paquete de Kokoro (voices/kokoro-multi-lang-v1_0/model.onnx), y contarlo
+    # como voz de Piper dejaba mudo a quien tuviera Kokoro y ninguna voz de
+    # Piper — el arranque creía que ya había una y no ofrecía descargarla.
+    # Mismo criterio que piper_list_voices().
+    onnx_models = glob.glob(path + '/voice-*/*.onnx')
     if onnx_models:
         # Los ficheros de las antiguas voces RT (encoder/decoder) no son voces
         # completas: sin este filtro contarían como instaladas y el arranque
