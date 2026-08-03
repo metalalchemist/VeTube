@@ -179,6 +179,11 @@ class AjustesController:
                 from TTS.list_voices import obtener_ruta_voz
                 model_path = obtener_ruta_voz(lista_voces_piper[voz_index])
                 reader._lector.load_model(model_path)
+            else:
+                # Sin voces de Piper no hay nada que cargar, y el puente es el
+                # mismo proceso: hay que soltar la voz de Kokoro que pudiera
+                # quedar cargada, o el chat se leería con ella.
+                reader._lector.unload_model()
             self._mostrar_voces(lista_voces_piper)
             # Sincronizar volumen, tono y velocidad de Piper
             reader._lector.set_volume(config['volume'])
@@ -193,10 +198,14 @@ class AjustesController:
             config_kokoro = kokoro_voice_config(voz_index)
             if config_kokoro is not None:
                 reader._lector.load_model(config_kokoro)
-            elif event is not None:
-                # Modelo no disponible: avisar en voz alta en lugar de callar,
-                # pero no al revertir con Cancelar (el diálogo ya se cierra).
-                reader._leer.speak(_("No hay voces instaladas"))
+            else:
+                # Mismo caso al revés: sin el paquete de Kokoro hay que soltar
+                # la voz de Piper que estuviera cargada en el puente.
+                reader._lector.unload_model()
+                if event is not None:
+                    # Avisar en voz alta en lugar de callar, pero no al
+                    # revertir con Cancelar (el diálogo ya se está cerrando).
+                    reader._leer.speak(_("No hay voces instaladas"))
             self.rellenar_voces_kokoro()
             # Sincronizar volumen, tono y velocidad (misma escala que Piper)
             reader._lector.set_volume(config['volume'])

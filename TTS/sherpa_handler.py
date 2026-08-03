@@ -455,8 +455,20 @@ class sherpaSpeak:
         self.load_model(model_path)
         return self
 
+    def unload_model(self):
+        """Suelta la voz cargada. El puente es un singleton que comparten los
+        dos motores, así que al pasar a uno que no tiene ninguna voz instalada
+        hay que olvidar la anterior: si no, el chat se seguiría leyendo con la
+        voz del otro motor."""
+        self.current_voice_path = None
+        self.voice_id = None
+
     def speak(self, text):
         if not text: return
+        # Sin voz pedida no hay nada que esperar: _speak_task_inner aguanta 12
+        # segundos a que termine de cargar, y eso solo tiene sentido si hay
+        # alguna voz en camino.
+        if not self.current_voice_path: return
         self.silence()
         self._sintetizando = True
         asyncio.run_coroutine_threadsafe(self._speak_task(text, self._speak_generation), self.loop)
