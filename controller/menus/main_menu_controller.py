@@ -14,6 +14,8 @@ from exchange import codes as currency_codes
 from servicios.language_updater import GestorRepositorios
 from ui.update_languages_dialog import UpdateLanguagesDialog
 from controller.update_languages_controller import UpdateLanguagesController
+from controller.kokoro_downloader_controller import KokoroDownloaderController
+from TTS.sherpa_handler import kokoro_model_instalado
 class MainMenuController:
     def __init__(self, frame, main_controller):
         self.frame = frame
@@ -52,6 +54,11 @@ class MainMenuController:
                 dlg.ajustes_controller.revertir_cambios_en_caliente()
         finally:
             dlg.Destroy()
+        # Pedido de César (2026-08-01): al Aceptar con Kokoro elegido y sin el
+        # modelo en el equipo, ofrecer la descarga en el acto — así el paquete
+        # de 334 MB solo lo baja quien de verdad va a usar estas voces.
+        if resultado == wx.ID_OK and data_store.config['sistemaTTS'] == "kokoro" and not kokoro_model_instalado():
+            KokoroDownloaderController(self.frame).show()
 
     def restaurar(self, event):
         if response(_("Estás apunto de reiniciar la configuración a sus valores predeterminados, ¿Deseas proceder?"), _("Atención:"))==wx.ID_YES:

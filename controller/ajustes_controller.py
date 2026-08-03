@@ -6,10 +6,27 @@ from utils import app_utilitys
 from TTS.list_voices import piper_list_voices , install_piper_voice
 from TTS.sherpa_handler import kokoro_list_voices, kokoro_voice_config
 from controller.piper_downloader_controller import PiperDownloaderController
+from controller.kokoro_downloader_controller import KokoroDownloaderController
 from utils.menu_accesible import Accesible
+from ui.dialog_response import response
 import wx
 
 logger = getLogger(__name__)
+
+class AccesibleInstalador(Accesible):
+    """El botón de instalar abre un menú con Piper pero un diálogo con Kokoro:
+    el rol que anuncia el lector de pantalla debe decir la verdad en ambos
+    casos, así que se decide en el momento en que se consulta."""
+    def GetRole(self, childId):
+        if config['sistemaTTS'] == "kokoro":
+            return (wx.ACC_OK, wx.ROLE_SYSTEM_PUSHBUTTON)
+        return super().GetRole(childId)
+
+    def GetDefaultAction(self, childId):
+        if config['sistemaTTS'] == "kokoro":
+            # Sin acción especial: que wx anuncie la de un botón normal
+            return (wx.ACC_NOT_IMPLEMENTED, "")
+        return super().GetDefaultAction(childId)
 
 class AjustesController:
     # Claves que los controles del diálogo escriben en config apenas cambian (en caliente),
@@ -24,7 +41,7 @@ class AjustesController:
     def __init__(self, dialog):
         self.dialog = dialog
         self.config_al_abrir = {clave: config.get(clave) for clave in self.CLAVES_EN_CALIENTE}
-        self.dialog.instala_voces.SetAccessible(Accesible(self.dialog.instala_voces))
+        self.dialog.instala_voces.SetAccessible(AccesibleInstalador(self.dialog.instala_voces))
         
         self.play_timer = wx.Timer(self.dialog)
         self.dialog.Bind(wx.EVT_TIMER, self.on_check_play_status, self.play_timer)
@@ -32,7 +49,7 @@ class AjustesController:
         self.dialog.Bind(wx.EVT_WINDOW_DESTROY, self.on_destroy)
         
         self._bind_events()
-        self.actualizar_visibilidad_piper()
+        self.actualizar_visibilidad_instalador()
         # Cargamos la lista de voces correcta al iniciar
         self.dialog.choice_2.Clear()
         if config['sistemaTTS'] == "piper":
@@ -84,7 +101,7 @@ class AjustesController:
         self.dialog.slider_2.Bind(wx.EVT_SLIDER, self.cambiarVolumen)
         self.dialog.slider_1.Bind(wx.EVT_SLIDER, self.cambiarTono)
         self.dialog.slider_3.Bind(wx.EVT_SLIDER, self.cambiarVelocidad)
-        self.dialog.instala_voces.Bind(wx.EVT_BUTTON, self.instalar_voz_piper)
+        self.dialog.instala_voces.Bind(wx.EVT_BUTTON, self.instalar_paquete_voz)
         self.dialog.check_reproducir.Bind(wx.EVT_CHECKBOX, self.on_check_reproducir)
         self.dialog.spin_tiempo.Bind(wx.EVT_SPINCTRL, self.on_spin_tiempo)
         self.dialog.slider_volumen_reproductor.Bind(wx.EVT_SLIDER, self.on_slider_volumen_reproductor)
@@ -131,7 +148,7 @@ class AjustesController:
     def checar_sapi(self, event):
         config['sapi'] = True if event.IsChecked() else False
         self.dialog.seleccionar_TTS.Enable(not event.IsChecked())
-        self.actualizar_visibilidad_piper()
+        self.actualizar_visibilidad_instalador()
 
     def cambiar_sintetizador(self, event):
         if self.play_timer.IsRunning():
@@ -193,7 +210,7 @@ class AjustesController:
                     config['voz'] = 0
                 reader._lector.set_voice(voces[voz_index])
                 
-        self.actualizar_visibilidad_piper()
+        self.actualizar_visibilidad_instalador()
         self.actualizar_habilitacion_controles()
         try:
             self.dialog.choice_2.SetSelection(config['voz'])
@@ -201,8 +218,10 @@ class AjustesController:
             self.dialog.choice_2.SetSelection(0)
             config['voz'] = 0
 
-    def actualizar_visibilidad_piper(self):
-        show = not config['sapi'] and config['sistemaTTS'] == "piper"
+    def actualizar_visibilidad_instalador(self):
+        # El mismo botón instala voces de Piper o el paquete de Kokoro,
+        # según el sistema TTS elegido.
+        show = not config['sapi'] and config['sistemaTTS'] in ("piper", "kokoro")
         self.dialog.instala_voces.Show(show)
         # Aseguramos que los controles de tono y volumen estén habilitados siempre
         self.dialog.slider_1.Enable()
@@ -281,9 +300,12 @@ class AjustesController:
 
         if config['sistemaTTS'] in ("piper", "kokoro"):
             if config['sistemaTTS'] == "kokoro" and kokoro_voice_config(config['voz']) is None:
-                # Sin el modelo instalado la síntesis no arranca nunca: decir
-                # en voz alta lo que falta en vez de callar.
-                reader._leer.speak(_("No hay voces instaladas"))
+                # Sin el modelo instalado la síntesis no arranca nunca: avisar
+                # de lo que falta y ofrecer el descargador ahí mismo (pedido
+                # de César; mismo patrón que configurar_piper).
+                if response(_("Para probar las voces Kokoro hay que descargar antes el paquete de voces. ¿Quieres abrir el descargador ahora?"),
+                            _("No hay voces instaladas")) == wx.ID_YES:
+                    KokoroDownloaderController(self.dialog).show()
                 return
             if config['sistemaTTS'] == "piper" and self.dialog.choice_2.GetStringSelection() == _("No hay voces instaladas"):
                 # Mismo aviso hablado que con Kokoro: un botón que no hace
@@ -357,7 +379,10 @@ class AjustesController:
         else:
             reader._lector.set_rate(value)
         config['speed'] = value
-    def instalar_voz_piper(self, event):
+    def instalar_paquete_voz(self, event):
+        if config['sistemaTTS'] == "kokoro":
+            KokoroDownloaderController(self.dialog).show()
+            return
         menu = wx.Menu()
         item_online = menu.Append(wx.ID_ANY, _("Descargar voces de internet..."))
         item_local = menu.Append(wx.ID_ANY, _("Instalar desde archivo local (.tar.gz)..."))
