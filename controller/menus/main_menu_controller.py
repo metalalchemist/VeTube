@@ -9,7 +9,7 @@ from ui.dialog_response import response
 from globals import data_store
 from globals.resources import carpeta_voces,codes,codigos_traduccion
 from controller.editor_controller import EditorController
-from setup import network, reader, player
+from setup import network, reader
 from exchange import codes as currency_codes
 from servicios.language_updater import GestorRepositorios
 from ui.update_languages_dialog import UpdateLanguagesDialog
@@ -184,10 +184,7 @@ class MainMenuController:
 
         reader.set_sapi(data_store.config['sapi'])
         if data_store.config['sistemaTTS'] in ("piper", "kokoro"):
-            nombres = player.devicenames
-            dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres)]
-            salida_actual = reader._lector.find_device_id(nombres[data_store.config["dispositivo"]-1], known_devices=dispositivos_formateados)
-            reader._lector.set_device(salida_actual)
+            app_utilitys.fijar_dispositivo_lector()
             if data_store.config['sistemaTTS'] == "piper":
                 app_utilitys.configurar_piper(self.frame, carpeta_voces)
         if cf.choice_moneditas.GetStringSelection()!='Por defecto':

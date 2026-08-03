@@ -21,6 +21,16 @@ def restart_program():
         os.remove(pidpath)
     os.execv(sys.executable, args)
 def porcentaje_a_escala(porcentaje): return 1.25 + porcentaje * 0.125
+def fijar_dispositivo_lector():
+    """Fija en el puente sherpa la salida de audio que marca config['dispositivo']
+    (1 = el primero de la lista, igual que para el player).
+
+    Los nombres que ya tiene el player valen de known_devices: así no hay que
+    volver a abrir el subsistema de audio solo para enumerar los dispositivos."""
+    nombres_dispositivos = player.devicenames
+    dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres_dispositivos)]
+    nombre_actual = nombres_dispositivos[config["dispositivo"]-1]
+    reader._lector.set_device(reader._lector.find_device_id(nombre_actual, known_devices=dispositivos_formateados))
 def limpiar_motor_antiguo():
     """Borra la carpeta del antiguo servidor sonata (64/sonata) si quedó de
     una instalación anterior. El actualizador copia la versión nueva POR
@@ -78,11 +88,7 @@ def _cargar_voz_piper_actual():
     if not model_path:
         return
     reader._lector = reader._lector.piperSpeak(model_path)
-    nombres_dispositivos = player.devicenames
-    dispositivos_formateados = [{'name': n, 'id': i} for i, n in enumerate(nombres_dispositivos)]
-    nombre_actual = nombres_dispositivos[config["dispositivo"]-1]
-    salida_actual = reader._lector.find_device_id(nombre_actual, known_devices=dispositivos_formateados)
-    reader._lector.set_device(salida_actual)
+    fijar_dispositivo_lector()
 def configurar_piper(parent, carpeta_voces):
     migrado = proponer_migracion_rt(parent)
     onnx_models = detect_onnx_models(carpeta_voces)

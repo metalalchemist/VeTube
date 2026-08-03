@@ -7,7 +7,6 @@ import shutil
 import httpx
 from logging import getLogger
 from .base_downloader import BaseDownloader
-from setup import network
 
 logger = getLogger(__name__)
 
@@ -79,36 +78,28 @@ class KokoroManager(BaseDownloader):
             shutil.rmtree(temp_dir, ignore_errors=True)
 
     async def _descargar(self, url, dest_path, progress_callback):
-        """Como BaseDownloader.download_file, pero cancelable y con el progreso
-        mapeado al tramo 0-90 (el 90-100 es de la extracción)."""
-        try:
+        """La descarga en sí la hace BaseDownloader.download_file: aquí solo se
+        le pasan las particularidades de este paquete y se traduce su resultado
+        al formato con 'cancelado' que espera el resto del instalador."""
+        res = await self.download_file(
+            url, dest_path,
+            progress_callback=progress_callback,
+            cancel_check=lambda: self.cancelado,
             # El cliente central no tiene timeout: aquí ponemos uno de lectura
             # para que una conexión congelada termine en error visible en vez
             # de dejar la descarga (y al usuario) esperando para siempre.
-            timeout = httpx.Timeout(60.0, connect=15.0)
-            async with network.client.stream("GET", url, follow_redirects=True, timeout=timeout) as response:
-                if response.status_code != 200:
-                    logger.error("HTTP %s al descargar %s", response.status_code, url)
-                    return {'success': False, 'cancelado': False,
-                            'data': _("el servidor de descargas respondió con el error HTTP %d.") % response.status_code}
-
-                total = int(response.headers.get('content-length', 0)) or TAMANO_DESCARGA
-                descargado = 0
-                ultimo_avance = -1
-                with open(dest_path, 'wb') as f:
-                    async for chunk in response.aiter_bytes():
-                        if self.cancelado:
-                            return {'success': False, 'cancelado': True, 'data': ''}
-                        f.write(chunk)
-                        descargado += len(chunk)
-                        avance = min(90, int(descargado / total * 90))
-                        if progress_callback and avance != ultimo_avance:
-                            ultimo_avance = avance
-                            progress_callback(avance)
-            return {'success': True, 'cancelado': False, 'data': dest_path}
-        except Exception as e:
-            logger.error("Fallo al descargar el modelo Kokoro", exc_info=True)
-            return {'success': False, 'cancelado': False, 'data': str(e)}
+            timeout=httpx.Timeout(60.0, connect=15.0),
+            total_estimado=TAMANO_DESCARGA,
+            tope_progreso=90)
+        if res.get('cancelado'):
+            # Sin detalle: al cancelar no se le enseña ningún mensaje al usuario.
+            return {'success': False, 'cancelado': True, 'data': ''}
+        if res.get('status_code'):
+            # Mensaje propio: el de la clase base lleva la URL cruda dentro y
+            # este se le enseña al usuario en un cuadro de diálogo.
+            return {'success': False, 'cancelado': False,
+                    'data': _("el servidor de descargas respondió con el error HTTP %d.") % res['status_code']}
+        return {'success': res['success'], 'cancelado': False, 'data': res['data']}
 
     def _extraer_e_instalar(self, tar_path, temp_dir, progress_callback):
         """Corre en un hilo aparte. Extrae en el temporal, verifica y mueve la
