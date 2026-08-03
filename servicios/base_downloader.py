@@ -26,6 +26,7 @@ class BaseDownloader:
 
                 total = int(response.headers.get('content-length', 0))
                 descargado = 0
+                ultimo_avance = -1
 
                 with open(dest_path, 'wb') as f:
                     async for chunk in response.aiter_bytes():
@@ -34,9 +35,14 @@ class BaseDownloader:
                         f.write(chunk)
                         descargado += len(chunk)
                         if progress_callback and total > 0:
-                            # Calculamos el progreso porcentual
+                            # Solo cuando el porcentaje cambia de verdad: cada
+                            # aviso cruza al hilo de la interfaz (wx.CallAfter)
+                            # y un fichero grande da miles de bloques para cien
+                            # valores distintos.
                             progreso_actual = int(descargado / total * 100)
-                            progress_callback(progreso_actual)
+                            if progreso_actual != ultimo_avance:
+                                ultimo_avance = progreso_actual
+                                progress_callback(progreso_actual)
 
             return {'success': True, 'data': dest_path}
         except Exception as e:
