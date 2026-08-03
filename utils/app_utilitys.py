@@ -43,6 +43,12 @@ def proponer_migracion_rt(parent):
     la voz de Piper (arranque y Aceptar de los Ajustes). Devuelve True si la
     lista de voces pudo cambiar."""
     from servicios.piper_manager import voces_rt_instaladas, limpiar_ficheros_rt
+    # config['voz'] es una POSICIÓN en la lista, y la migración la hace crecer
+    # (una carpeta RT pura pasa a contar como voz instalada): nos quedamos con
+    # el NOMBRE de la voz activa para recolocarla después. Comprobar solo el
+    # rango no sirve — un índice desplazado sigue estando dentro.
+    voz_activa = (lista_voces_piper[config['voz']]
+                  if 0 <= config['voz'] < len(lista_voces_piper) else None)
     puras, mixtas = voces_rt_instaladas()
     # Carpetas que ya tienen el modelo estándar: los restos RT solo ocupan sitio.
     for clave in mixtas:
@@ -60,7 +66,9 @@ def proponer_migracion_rt(parent):
     lista_voces_piper.clear()
     nuevas = piper_list_voices()
     lista_voces_piper.extend(nuevas if nuevas else [_("No hay voces instaladas")])
-    if not (0 <= config['voz'] < len(lista_voces_piper)):
+    if voz_activa in lista_voces_piper:
+        config['voz'] = lista_voces_piper.index(voz_activa)
+    elif not (0 <= config['voz'] < len(lista_voces_piper)):
         config['voz'] = 0
     return True
 def _cargar_voz_piper_actual():
