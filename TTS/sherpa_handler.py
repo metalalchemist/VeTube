@@ -144,7 +144,7 @@ def _entrada_metadata(clave, valor):
     interno = b"\x0a" + _varint(len(k)) + k + b"\x12" + _varint(len(v)) + v
     return b"\x72" + _varint(len(interno)) + interno
 
-def preparar_voz_piper(json_path):
+def preparar_voz_piper(json_path, forzar=False):
     """Prepara (una sola vez) una voz del catálogo rhasspy para sherpa-onnx.
 
     Los paquetes oficiales k2-fsa traen de fábrica dos piezas que las voces
@@ -159,11 +159,16 @@ def preparar_voz_piper(json_path):
     El tokens.txt se escribe EL ÚLTIMO porque hace de marcador de «voz ya
     preparada»: si algo se interrumpe a medias, el próximo intento rehace
     todo (los metadatos repetidos con el mismo valor son inofensivos).
+
+    forzar=True rehace la preparación aunque el marcador esté: hay que usarlo
+    siempre que se sustituya el .onnx de una carpeta ya preparada (reinstalar
+    una voz), porque el tokens.txt viejo sobrevive al fichero nuevo y este se
+    quedaría sin metadatos — y un .onnx sin metadatos aborta el puente entero.
     """
     try:
         carpeta = os.path.dirname(json_path)
         marcador = os.path.join(carpeta, "tokens.txt")
-        if os.path.isfile(marcador):
+        if os.path.isfile(marcador) and not forzar:
             return True
         with open(json_path, encoding="utf-8") as f:
             cfg = json.load(f)
@@ -307,13 +312,21 @@ class sherpaSpeak:
             pass
 
     def _cleanup_own_orphans(self):
-        """Mata instancias del puente que hayan quedado huérfanas."""
+        """Mata instancias del puente que hayan quedado huérfanas, pero SOLO las
+        lanzadas desde nuestra propia carpeta de binarios: comparar únicamente
+        el nombre del ejecutable mataba también el puente de otra instalación
+        de VeTube abierta a la vez (portable, copia de desarrollo), que se
+        quedaba muda sin volver a levantarlo."""
         try:
             import psutil
-            for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+            ruta_propia = os.path.normcase(os.path.abspath(EXE_PUENTE))
+            for proc in psutil.process_iter(['pid', 'name', 'exe']):
                 try:
                     nombre = (proc.info.get('name') or '').lower()
-                    if nombre == NOMBRE_EXE_PUENTE:
+                    if nombre != NOMBRE_EXE_PUENTE:
+                        continue
+                    ruta = proc.info.get('exe')
+                    if ruta and os.path.normcase(ruta) == ruta_propia:
                         proc.kill()
                 except (psutil.NoSuchProcess, psutil.AccessDenied):
                     pass
@@ -363,18 +376,32 @@ class sherpaSpeak:
             model_path = self.current_voice_path
         if not model_path: return
 
-        # Si el archivo ONNX no existe en la ruta dada (debido a diferencias de nombres de carpeta),
-        # lo buscamos dinámicamente dentro de subcarpetas de voices/
-        # (las rutas kokoro «carpeta?sid=..» no existen como fichero y pasan tal cual)
-        if not os.path.exists(model_path):
+        # Las rutas de Kokoro («carpeta?sid=..&lang=..») no son ficheros: pasan
+        # tal cual, sin buscarlas en el disco.
+        es_ruta_kokoro = "?" in model_path
+
+        # Si el .onnx no está en la ruta dada (nombres de carpeta que no
+        # coinciden), lo buscamos dentro de voices/. Solo en las carpetas
+        # «voice-*»: en voices/ vive también el paquete de Kokoro, y sus
+        # ficheros (model.onnx, tokens.txt) no son voces de Piper.
+        if not es_ruta_kokoro and not os.path.exists(model_path):
             import glob
             filename = os.path.basename(model_path)
-            coincidencias = glob.glob(os.path.join("voices", "*", filename))
+            coincidencias = glob.glob(os.path.join("voices", "voice-*", filename))
             if coincidencias:
                 model_path = coincidencias[0]
 
         if model_path.endswith(".onnx"):
             json_path = model_path + ".json"
+            if not os.path.exists(json_path):
+                # Voz colocada a mano: su configuración puede llamarse de otro
+                # modo (config.json, <nombre>.json). Sin este repli se enviaría
+                # el .onnx crudo, que se salta la preparación de abajo y llega
+                # al puente sin tokens.txt.
+                import glob
+                otros = [j for j in glob.glob(os.path.join(os.path.dirname(model_path), "*.json"))
+                         if "+RT" not in os.path.basename(j)]
+                json_path = otros[0] if otros else json_path
             if os.path.exists(json_path):
                 model_path = json_path
 
@@ -384,9 +411,18 @@ class sherpaSpeak:
         # el proceso del puente entero, no solo la carga.
         if model_path.endswith(".json") and not preparar_voz_piper(model_path):
             print(f"Voz no preparada para sherpa, no se carga: {model_path}")
+            # Soltar la voz anterior: si no, el puente seguiría hablando con
+            # ella (puede ser la del otro motor) mientras Ajustes muestra la
+            # que se acaba de elegir.
+            self.unload_model()
             return
 
         self.current_voice_path = model_path
+        # Invalidar la voz anterior antes de pedir la nueva: mientras el puente
+        # responde, un mensaje del chat encontraría el identificador viejo, no
+        # esperaría (ver _speak_task_inner) y se leería con la voz que el
+        # usuario acaba de abandonar, incluso la del otro motor.
+        self.voice_id = None
         asyncio.run_coroutine_threadsafe(self._load_voice_task(model_path), self.loop)
 
     async def _load_voice_task(self, model_path):
