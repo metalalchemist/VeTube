@@ -181,53 +181,32 @@ class PiperDownloaderController:
             return
         
         voces_seleccionadas = [self.voces_actuales[i] for i in checked_indices]
-        tiene_rt = any(v.get('has_rt') for v in voces_seleccionadas)
-        
-        if tiene_rt:
-            # Mostrar menú para elegir variante global para el lote
-            menu = wx.Menu()
-            item_normal = menu.Append(wx.ID_ANY, _("Descargar variantes de Calidad Normal (Alta)"))
-            item_rt = menu.Append(wx.ID_ANY, _("Descargar variantes Rápidas (RT) donde estén disponibles"))
-            
-            self.view.Bind(wx.EVT_MENU, lambda evt: self._iniciar_descarga_multiple(voces_seleccionadas, es_rt=False), item_normal)
-            self.view.Bind(wx.EVT_MENU, lambda evt: self._iniciar_descarga_multiple(voces_seleccionadas, es_rt=True), item_rt)
-            
-            self.view.PopupMenu(menu)
-            menu.Destroy()
-        else:
-            # Ninguna tiene RT, descarga normal para todas
-            self._iniciar_descarga_multiple(voces_seleccionadas, es_rt=False)
+        self._iniciar_descarga_multiple(voces_seleccionadas)
 
-    def _iniciar_descarga_multiple(self, voces, es_rt):
+    def _iniciar_descarga_multiple(self, voces):
         self.view.btn_descargar.Disable()
         self.view.lang_list.Disable()
         self.view.voice_list.Disable()
-        
-        network.execute(self._descargar_lote(voces, es_rt))
 
-    async def _descargar_lote(self, voces, preferir_rt):
+        network.execute(self._descargar_lote(voces))
+
+    async def _descargar_lote(self, voces):
         total = len(voces)
         completadas = 0
-        
+
         for voice in voces:
-            usar_rt = preferir_rt and voice.get('has_rt')
-            tipo_str = "RT" if usar_rt else "Normal"
-            
-            wx.CallAfter(self.view.set_status, _("Descargando %s (%s) [%d/%d]...") % (voice['name'], tipo_str, completadas + 1, total))
-            
+            wx.CallAfter(self.view.set_status, _("Descargando %s [%d/%d]...") % (voice['name'], completadas + 1, total))
+
             def cb(p):
                 wx.CallAfter(self.view.update_progress, p)
 
-            if usar_rt:
-                res = await self.manager.instalar_voz_rt(voice['key'], cb)
-            else:
-                res = await self.manager.instalar_voz(voice['key'], cb)
-            
+            res = await self.manager.instalar_voz(voice['key'], cb)
+
             if res['success']:
                 completadas += 1
             else:
                 wx.CallAfter(wx.MessageBox, _("Error al descargar %s: %s") % (voice['name'], res['data']), _("Error"))
-        
+
         wx.CallAfter(self._finalizar_descargas, completadas, total)
 
     def _finalizar_descargas(self, completadas, total):

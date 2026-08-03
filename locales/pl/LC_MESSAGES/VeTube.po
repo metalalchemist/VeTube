@@ -529,19 +529,6 @@ msgstr "Odtwarzanie próbki zakończone."
 msgid "Por favor, selecciona al menos una voz para descargar."
 msgstr "Wybierz co najmniej jeden głos do pobrania."
 
-#: controller/piper_downloader_controller.py:189
-msgid "Descargar variantes de Calidad Normal (Alta)"
-msgstr "Pobierz warianty o normalnej jakości (wysoka)"
-
-#: controller/piper_downloader_controller.py:190
-msgid "Descargar variantes Rápidas (RT) donde estén disponibles"
-msgstr "Pobierz szybkie warianty (RT), jeśli są dostępne"
-
-#: controller/piper_downloader_controller.py:216
-#, python-format
-msgid "Descargando %s (%s) [%d/%d]..."
-msgstr "Pobieranie %s (%s) [%d/%d]..."
-
 #: controller/piper_downloader_controller.py:229
 #, python-format
 msgid "Error al descargar %s: %s"
@@ -1851,3 +1838,170 @@ msgstr "Czytnik Piper został pomyślnie zainicjowany."
 msgid "Idioma del sistema"
 msgstr "Język systemu"
 
+#: ui/kokoro_downloader.py:10
+msgid "Instalar las voces Kokoro"
+msgstr "Instalacja głosów Kokoro"
+
+#: ui/kokoro_downloader.py:14
+#, python-format
+msgid ""
+"Las voces Kokoro se instalan con un único paquete para todos los idiomas."
+" Se descarga una sola vez y ocupa %d MB aproximadamente."
+msgstr ""
+"Głosy Kokoro są instalowane jako jeden pakiet dla wszystkich języków. "
+"Jest pobierany tylko raz i zajmuje około %d MB."
+
+#: controller/kokoro_downloader_controller.py:22
+msgid "Las voces Kokoro ya están instaladas en este equipo."
+msgstr "Głosy Kokoro są już zainstalowane na tym komputerze."
+
+#: controller/kokoro_downloader_controller.py:26
+msgid "Listo para descargar."
+msgstr "Gotowe do pobrania."
+
+#: controller/kokoro_downloader_controller.py:37
+msgid "Descargando el paquete de voces..."
+msgstr "Pobieranie pakietu głosów..."
+
+#: controller/kokoro_downloader_controller.py:50
+msgid "Descarga completada. Instalando el paquete..."
+msgstr "Pobieranie zakończone. Instalowanie pakietu..."
+
+#: controller/kokoro_downloader_controller.py:64
+msgid "Instalación completada."
+msgstr "Instalacja zakończona."
+
+#: controller/kokoro_downloader_controller.py:67
+msgid ""
+"Las voces Kokoro se han instalado correctamente. Ya puedes seleccionarlas"
+" en los Ajustes de Voz."
+msgstr ""
+"Głosy Kokoro zostały pomyślnie zainstalowane. Możesz je teraz wybrać w "
+"ustawieniach głosu."
+
+#: controller/kokoro_downloader_controller.py:74
+msgid "La instalación ha fallado."
+msgstr "Instalacja nie powiodła się."
+
+#: controller/kokoro_downloader_controller.py:78
+#, python-format
+msgid "No se pudieron instalar las voces Kokoro: %s"
+msgstr "Nie udało się zainstalować głosów Kokoro: %s"
+
+#: controller/kokoro_downloader_controller.py:100
+msgid "Cancelando la descarga..."
+msgstr "Anulowanie pobierania..."
+
+#: servicios/kokoro_manager.py:62
+#, python-format
+msgid "No hay suficiente espacio libre en disco (se necesitan unos %d MB)."
+msgstr "Za mało wolnego miejsca na dysku (potrzeba około %d MB)."
+
+#: servicios/kokoro_manager.py:89
+#, python-format
+msgid "el servidor de descargas respondió con el error HTTP %d."
+msgstr "serwer pobierania odpowiedział błędem HTTP %d."
+
+#: servicios/kokoro_manager.py:149
+#, python-format
+msgid "El paquete descargado está incompleto (falta %s)."
+msgstr "Pobrany pakiet jest niekompletny (brakuje %s)."
+
+#: controller/piper_downloader_controller.py:198
+#: controller/piper_migracion_rt_controller.py:46
+#, python-format
+msgid "Descargando %s [%d/%d]..."
+msgstr "Pobieranie %s [%d/%d]..."
+
+#: utils/app_utilitys.py:36
+#, python-format
+msgid ""
+"Las voces rápidas (RT) ya no existen en VeTube: el nuevo motor de voz no "
+"las necesita y la versión estándar suena igual. ¿Quieres descargar ahora "
+"la versión estándar de estas voces? %s"
+msgstr ""
+"Szybkie głosy (RT) już nie istnieją w VeTube: nowy silnik głosowy ich nie"
+" potrzebuje, a wersja standardowa brzmi tak samo. Czy chcesz teraz pobrać"
+" standardową wersję tych głosów? %s"
+
+#: utils/app_utilitys.py:37
+msgid "Voces por actualizar"
+msgstr "Głosy do aktualizacji"
+
+#: ui/piper_migracion_rt.py:10
+msgid "Actualizar las voces de Piper"
+msgstr "Aktualizuj głosy Piper"
+
+#: ui/piper_migracion_rt.py:14
+msgid ""
+"Descargando la versión estándar de tus voces rápidas (RT). Cada voz "
+"quedará instalada en su mismo lugar y conservará su configuración."
+msgstr ""
+"Pobieranie standardowej wersji twoich szybkich głosów (RT). Każdy głos "
+"pozostanie zainstalowany w tym samym miejscu i zachowa swoje ustawienia."
+
+#: controller/piper_migracion_rt_controller.py:29
+msgid "Conectando con el catálogo de voces..."
+msgstr "Łączenie z katalogiem głosów..."
+
+#: controller/piper_migracion_rt_controller.py:79
+#, python-format
+msgid "Proceso finalizado. %d de %d voces actualizadas."
+msgstr "Proces zakończony. Zaktualizowano %d z %d głosów."
+
+#: controller/piper_migracion_rt_controller.py:81
+#, python-format
+msgid ""
+"No se pudieron actualizar todas las voces: %s\n"
+"VeTube lo volverá a intentar en el próximo inicio."
+msgstr ""
+"Nie udało się zaktualizować wszystkich głosów: %s\n"
+"VeTube spróbuje ponownie przy następnym uruchomieniu."
+
+#: controller/piper_migracion_rt_controller.py:86
+msgid "Voces actualizadas correctamente."
+msgstr "Głosy zostały pomyślnie zaktualizowane."
+
+#: controller/ajustes_controller.py:306
+msgid ""
+"Para probar las voces Kokoro hay que descargar antes el paquete de voces."
+" ¿Quieres abrir el descargador ahora?"
+msgstr ""
+"Aby wypróbować głosy Kokoro, najpierw trzeba pobrać pakiet głosów. Czy "
+"chcesz teraz otworzyć instalator?"
+
+#: controller/ajustes_controller.py:256
+msgid "Todos los idiomas"
+msgstr "Wszystkie języki"
+
+#: controller/ajustes_controller.py:232
+msgid "Español"
+msgstr "Hiszpański"
+
+#: controller/ajustes_controller.py:233
+msgid "Francés"
+msgstr "Francuski"
+
+#: controller/ajustes_controller.py:234
+msgid "Inglés (Estados Unidos)"
+msgstr "Angielski (Stany Zjednoczone)"
+
+#: controller/ajustes_controller.py:235
+msgid "Inglés (Reino Unido)"
+msgstr "Angielski (Wielka Brytania)"
+
+#: controller/ajustes_controller.py:236
+msgid "Italiano"
+msgstr "Włoski"
+
+#: controller/ajustes_controller.py:237
+msgid "Portugués (Brasil)"
+msgstr "Portugalski (Brazylia)"
+
+#: controller/ajustes_controller.py:238
+msgid "Hindi"
+msgstr "Hindi"
+
+#: ui/ajustes/voz.py:22
+msgid "Idioma de la voz: "
+msgstr "Język głosu: "

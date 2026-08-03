@@ -1,5 +1,5 @@
 # lector:
-from . import sonata_handler as speaker
+from . import sherpa_handler
 import glob
 import os
 from helpers.reader_handler import PrismBackendWrapper
@@ -8,7 +8,8 @@ from prism import BackendId
 """
 Esto es un gestionador de TTS. Permite manejar el uso de diferentes motores de texto a voz como:
 1. Prism Accessibility Library
-2. Sonata (Motor Piper gRPC)
+2. Puente sherpa-onnx (protocolo sonata_grpc): voces Piper y modelo Kokoro
+   con un único proceso nativo compartido.
 """
 def configurar_tts(lector):
 	if lector == "auto":
@@ -17,16 +18,23 @@ def configurar_tts(lector):
 		return PrismBackendWrapper(BackendId.SAPI)
 	elif lector == "onecore":
 		return PrismBackendWrapper(BackendId.ONE_CORE)
-	elif lector == "piper":
-		return speaker.piperSpeak()
+	elif lector in ("piper", "kokoro"):
+		return sherpa_handler.sherpaSpeak()
 	else:
 		raise Exception("Lector no soportado.")
 
 def detect_onnx_models(path):
-    onnx_models = glob.glob(path + '/*/*.onnx')
+    # Solo las carpetas «voice-*», que son las de Piper: en voices/ vive también
+    # el paquete de Kokoro (voices/kokoro-multi-lang-v1_0/model.onnx), y contarlo
+    # como voz de Piper dejaba mudo a quien tuviera Kokoro y ninguna voz de
+    # Piper — el arranque creía que ya había una y no ofrecía descargarla.
+    # Mismo criterio que piper_list_voices().
+    onnx_models = glob.glob(path + '/voice-*/*.onnx')
     if onnx_models:
-        # Filtrar encoder.onnx para no duplicar las voces RT en la UI
-        onnx_models = [m for m in onnx_models if os.path.basename(m).lower() != "encoder.onnx"]
+        # Los ficheros de las antiguas voces RT (encoder/decoder) no son voces
+        # completas: sin este filtro contarían como instaladas y el arranque
+        # intentaría cargarlas en vano.
+        onnx_models = [m for m in onnx_models if os.path.basename(m).lower() not in ("encoder.onnx", "decoder.onnx")]
         if len(onnx_models) > 1:
             return onnx_models
         elif len(onnx_models) == 1:

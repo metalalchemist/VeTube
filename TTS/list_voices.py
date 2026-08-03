@@ -1,8 +1,12 @@
 import os
 import tarfile
 from .lector import detect_onnx_models
-from . import sonata_handler as speaker
+from . import sherpa_handler as speaker
 import wx
+
+# Ficheros de las antiguas voces RT: no son modelos completos y el motor
+# sherpa no puede usarlos (la variante RT se retiró del catálogo).
+_ONNX_RT = ("encoder.onnx", "decoder.onnx")
 def extract_tar(file, destination):
 	if not os.path.exists(destination):
 		os.makedirs(destination)
@@ -23,10 +27,17 @@ def install_piper_voice(config, reader):
 	destino = os.path.join(os.getcwd(), "voices", nombre_paquete[:-3])
 	extract_tar(paquete, destino)
 	wx.MessageBox(_("¡Voz instalada satosfactoriamente! esta será establecida en VeTube ahora. Para cambiar de modelo de voz, puedes hacerlo a través de las configuraciones."), _("Listo"), wx.ICON_INFORMATION)
-	reader=speaker.piperSpeak(f"{destino}/{nombre_paquete}.onnx")
+	reader=speaker.sherpaSpeak(f"{destino}/{nombre_paquete}.onnx")
 	config['voz'] = 0
 	abrir_tar.Destroy()
 	return config, reader
+
+def _onnx_completos(folder_path):
+	"""Modelos .onnx utilizables de una carpeta de voz (excluye los ficheros
+	partidos de las antiguas voces RT)."""
+	import glob
+	return [m for m in glob.glob(os.path.join(folder_path, "*.onnx"))
+		if os.path.basename(m).lower() not in _ONNX_RT]
 
 def piper_list_voices():
 	if not os.path.exists("voices"):
@@ -34,10 +45,7 @@ def piper_list_voices():
 	folders = [f for f in os.listdir("voices") if os.path.isdir(os.path.join("voices", f)) and f.startswith("voice-")]
 	valid_folders = []
 	for folder in folders:
-		folder_path = os.path.join("voices", folder)
-		import glob
-		onnx_files = glob.glob(os.path.join(folder_path, "*.onnx"))
-		if onnx_files:
+		if _onnx_completos(os.path.join("voices", folder)):
 			valid_folders.append(folder)
 	return valid_folders
 
@@ -47,15 +55,7 @@ def obtener_ruta_voz(nombre_carpeta):
 	# Si ya es una ruta completa/relativa a un archivo, la devolvemos directamente
 	if nombre_carpeta.endswith(".onnx") or nombre_carpeta.endswith(".json"):
 		return nombre_carpeta
-		
-	folder_path = os.path.join("voices", nombre_carpeta)
-	import glob
-	# Si es una voz RT, priorizamos decoder.onnx
-	rt_decoder = os.path.join(folder_path, "decoder.onnx")
-	if os.path.exists(rt_decoder):
-		return rt_decoder
-	# Si no, buscamos cualquier archivo .onnx en la carpeta
-	onnx_files = glob.glob(os.path.join(folder_path, "*.onnx"))
+	onnx_files = _onnx_completos(os.path.join("voices", nombre_carpeta))
 	if onnx_files:
 		return onnx_files[0]
 	return None
