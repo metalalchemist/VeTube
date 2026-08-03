@@ -21,6 +21,22 @@ def restart_program():
         os.remove(pidpath)
     os.execv(sys.executable, args)
 def porcentaje_a_escala(porcentaje): return 1.25 + porcentaje * 0.125
+def limpiar_motor_antiguo():
+    """Borra la carpeta del antiguo servidor sonata (64/sonata) si quedó de
+    una instalación anterior. El actualizador copia la versión nueva POR
+    ENCIMA sin borrar nada (copytree con dirs_exist_ok) y el instalador
+    tampoco limpia restos: sin esto, los dos motores convivirían para
+    siempre. Ningún sonata-grpc.exe puede seguir vivo (el Job Object de la
+    versión anterior lo mata al cerrarse VeTube, incluso tras un cierre
+    forzado); si aun así el borrado falla, se reintenta en el próximo
+    arranque."""
+    antigua = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "64", "sonata")
+    if os.path.isdir(antigua):
+        import shutil
+        try:
+            shutil.rmtree(antigua)
+        except OSError:
+            pass
 def proponer_migracion_rt(parent):
     """Detecta restos de las antiguas voces rápidas (RT) y reinstala en
     variante estándar las que se quedarían sin modelo. Llamar antes de cargar

@@ -8,10 +8,12 @@ from globals.resources import carpeta_voces,lista_voces_piper
 from controller.main_controller import MainController
 from update import updater,update
 from TTS.lector import detect_onnx_models
-from utils.app_utilitys import configurar_piper
+from utils.app_utilitys import configurar_piper, limpiar_motor_antiguo
 if sys.platform == "win32": asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 def run_app():
+    # Restos del motor de voz anterior (actualizaciones copian por encima)
+    limpiar_motor_antiguo()
     app = wx.App(False)
     if config['sistemaTTS'] in ("piper", "kokoro"):
         # Ambos motores viven en el mismo puente sherpa: localizar la voz
