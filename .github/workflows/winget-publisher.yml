@@ -50,3 +50,11 @@ jobs:
             --version $packageVersion `
             --urls "$installerUrl|x64" `
             --submit
+
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "No existing manifest found. Falling back to a new package submission."
+            .\wingetcreate.exe new $packageId `
+              --version $packageVersion `
+              --urls "$installerUrl|x64" `
+              --submit
+          }
