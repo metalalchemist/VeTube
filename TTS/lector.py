@@ -1,5 +1,6 @@
 # lector:
 from . import sherpa_handler
+from . import edge_handler
 import glob
 import os
 from helpers.reader_handler import PrismBackendWrapper
@@ -10,6 +11,7 @@ Esto es un gestionador de TTS. Permite manejar el uso de diferentes motores de t
 1. Prism Accessibility Library
 2. Puente sherpa-onnx (protocolo sonata_grpc): voces Piper y modelo Kokoro
    con un único proceso nativo compartido.
+3. Edge TTS (edge-tts): voces de Microsoft Edge por red.
 """
 def configurar_tts(lector):
 	if lector == "auto":
@@ -20,6 +22,8 @@ def configurar_tts(lector):
 		return PrismBackendWrapper(BackendId.ONE_CORE)
 	elif lector in ("piper", "kokoro"):
 		return sherpa_handler.sherpaSpeak()
+	elif lector == "edge":
+		return edge_handler.edgeSpeak()
 	else:
 		raise Exception("Lector no soportado.")
 

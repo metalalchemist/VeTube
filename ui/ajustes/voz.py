@@ -13,7 +13,7 @@ class PanelVoz(wx.Panel):
 		boxSizer_2.Add(self.check_1, 0, wx.ALL, 5)
 		label_tts = wx.StaticText(self, wx.ID_ANY, _("Sistema TTS a usar: "))
 		boxSizer_2.Add(label_tts, 0, wx.ALL, 5)
-		self.seleccionar_TTS = wx.Choice(self, wx.ID_ANY, choices=["auto", "piper", "kokoro", "sapi5", "onecore"])
+		self.seleccionar_TTS = wx.Choice(self, wx.ID_ANY, choices=["auto", "piper", "kokoro", "edge", "sapi5", "onecore"])
 		self.seleccionar_TTS.SetStringSelection(config['sistemaTTS'])
 		boxSizer_2.Add(self.seleccionar_TTS, 0, wx.EXPAND | wx.ALL, 5)
 		# Filtro de idioma: solo tiene sentido con Kokoro (un único paquete con

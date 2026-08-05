@@ -26,6 +26,12 @@ if config['sistemaTTS'] in ("piper", "kokoro"):
     reader._lector.set_rate(1.25 + config['speed'] * 0.125)
     reader._lector.set_pitch(config['tono'])
     reader._lector.set_volume(config['volume'])
+elif config['sistemaTTS'] == "edge":
+    # Edge guarda los parámetros y los aplica en cada speak; la voz se carga
+    # en run_main_window. La velocidad va nativa (-10 a 10) a edge-tts.
+    reader._lector.set_rate(config['speed'])
+    reader._lector.set_pitch(config['tono'])
+    reader._lector.set_volume(config['volume'])
 else:
     reader._lector.set_rate(config['speed'])
     if config['sistemaTTS'] == "onecore":

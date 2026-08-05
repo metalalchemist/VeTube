@@ -1,4 +1,5 @@
 v 3.94
+3 nuevos eventos para tiktok. super fan se une a tu en vivo, espectador se convierte en tu super fan y super fan envía un cofre para super fans.
 se corrige la lectura de los en vivos de tiktok. esto a causa de las librerías que hacían posible la lectura del mismo
 v 3.93
 se corrige que si un dispositivo había sido desconectado el programa iniciara correctamente, gracias a Enzo

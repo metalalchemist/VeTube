@@ -38,6 +38,16 @@ def run_app():
             # Modelo Kokoro no disponible: avisar con la voz secundaria en lugar
             # de arrancar con la voz principal muda (revisión de accesibilidad).
             setup.reader._leer.speak(_("No hay voces instaladas"))
+    elif config['sistemaTTS'] == "edge":
+        # Edge no tiene modelo local: basta con apuntar el lector al nombre
+        # corto de la voz elegida y fijar el dispositivo de salida.
+        from TTS.edge_handler import edge_voz_shortname, edge_iniciar_carga, edge_list_voices
+        if not (0 <= config['voz'] < len(edge_list_voices())):
+            config['voz'] = 0
+        setup.reader._lector.load_model(edge_voz_shortname(config['voz']))
+        fijar_dispositivo_lector()
+        # La lista de voces se descarga en segundo plano (para los Ajustes).
+        edge_iniciar_carga()
     
     # Mostrar donación si es necesario (síncrono al inicio está bien por ser un diálogo de bienvenida)
     if config['donations']: update.donation()

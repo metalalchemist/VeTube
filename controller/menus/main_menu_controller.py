@@ -169,6 +169,11 @@ class MainMenuController:
             reader._lector.set_rate(app_utilitys.porcentaje_a_escala(data_store.config['speed']))
             reader._lector.set_pitch(data_store.config['tono'])
             reader._lector.set_volume(data_store.config['volume'])
+        elif data_store.config['sistemaTTS'] == "edge":
+            # Edge: la velocidad va nativa (-10 a 10) a edge-tts
+            reader._lector.set_rate(data_store.config['speed'])
+            reader._lector.set_pitch(data_store.config['tono'])
+            reader._lector.set_volume(data_store.config['volume'])
         else:
             reader._lector.set_rate(data_store.config['speed'])
             if data_store.config['sistemaTTS'] == "onecore":
@@ -187,6 +192,8 @@ class MainMenuController:
             app_utilitys.fijar_dispositivo_lector()
             if data_store.config['sistemaTTS'] == "piper":
                 app_utilitys.configurar_piper(self.frame, carpeta_voces)
+        elif data_store.config['sistemaTTS'] == "edge":
+            app_utilitys.fijar_dispositivo_lector()
         if cf.choice_moneditas.GetStringSelection()!='Por defecto':
             monedita=cf.choice_moneditas.GetStringSelection().split(', (')
             for k in currency_codes.CODES:

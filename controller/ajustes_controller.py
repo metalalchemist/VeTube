@@ -2,11 +2,15 @@ from logging import getLogger
 from globals.data_store import config
 from globals.resources import rutasonidos,lista_voces,lista_voces_piper,recargar_rutasonidos
 from setup import player,reader
-from utils import app_utilitys
+from utils import app_utilitys, languageHandler
 from TTS.list_voices import piper_list_voices , install_piper_voice
 from TTS.sherpa_handler import (kokoro_list_voices, kokoro_voice_config,
                                 kokoro_idiomas_disponibles, kokoro_voces_de_idioma,
                                 kokoro_idioma_de_voz)
+from TTS.edge_handler import (edge_list_voices, edge_idiomas_disponibles,
+                              edge_voces_de_idioma, edge_idioma_de_voz,
+                              edge_voz_shortname, edge_iniciar_carga,
+                              edge_voces_listas)
 from controller.piper_downloader_controller import PiperDownloaderController
 from controller.kokoro_downloader_controller import KokoroDownloaderController
 from utils.menu_accesible import Accesible
@@ -70,7 +74,14 @@ class AjustesController:
         if config['sistemaTTS'] == "piper":
             self._mostrar_voces(lista_voces_piper)
         elif config['sistemaTTS'] == "kokoro":
-            self.rellenar_voces_kokoro()
+            self.rellenar_voces()
+        elif config['sistemaTTS'] == "edge":
+            # Las voces de Edge viven en el CDN: se descargan en segundo plano
+            # y se rellenan cuando llegan (ver _poblar_voces_edge).
+            if edge_voces_listas():
+                self.rellenar_voces()
+            else:
+                edge_iniciar_carga(self._voces_edge_listas)
         else:
             voces = reader._lector.list_voices()
             if not voces:
@@ -87,6 +98,11 @@ class AjustesController:
             reader._lector.set_pitch(config['tono'])
             # Aplicamos la velocidad inicial usando la escala correcta
             reader._lector.set_rate(app_utilitys.porcentaje_a_escala(config['speed']))
+        elif config['sistemaTTS'] == "edge":
+            reader._lector.set_volume(config['volume'])
+            reader._lector.set_pitch(config['tono'])
+            # Edge usa la velocidad nativa (-10 a 10) sin reescalar
+            reader._lector.set_rate(config['speed'])
         elif config['sistemaTTS'] == "onecore":
             reader._lector.set_volume(config['volume'])
             reader._lector.set_rate(config['speed'])
@@ -211,6 +227,21 @@ class AjustesController:
             reader._lector.set_volume(config['volume'])
             reader._lector.set_pitch(config['tono'])
             reader._lector.set_rate(app_utilitys.porcentaje_a_escala(config['speed']))
+        elif config['sistemaTTS'] == "edge":
+            # Edge no tiene nada local que cargar: solo apuntar el lector a la
+            # voz elegida (ShortName) y descargar la lista de voces en segundo
+            # plano si aún no está (la necesita el filtro de idioma y la lista).
+            voz_index = config.get('voz', 0)
+            reader._lector.load_model(edge_voz_shortname(voz_index))
+            reader._lector.set_volume(config['volume'])
+            reader._lector.set_pitch(config['tono'])
+            reader._lector.set_rate(config['speed'])
+            self.actualizar_filtro_idioma()
+            if edge_voces_listas():
+                self.rellenar_voces()
+                self._seleccionar_voz_activa()
+            else:
+                edge_iniciar_carga(self._voces_edge_listas)
         else:
             voces = reader._lector.list_voices()
             if not voces:
@@ -245,9 +276,12 @@ class AjustesController:
         self.dialog.treeItem_2.Layout()
 
     def _nombre_idioma(self, codigo):
-        """Nombre del idioma de una voz de Kokoro. Se arma al llamar, no al
-        importar el módulo, para que respete el idioma de la interfaz."""
-        return {
+        """Nombre de un código de idioma, traducido cuando hay traducción. Se
+        arma al llamar, no al importar el módulo, para que respete el idioma de
+        la interfaz. Vale para los códigos de Kokoro (es, en-us, en-gb…) y para
+        los de Edge (2 letras, p.ej. de, ja, zh): los que no están traducidos
+        caen en el nombre en inglés de googletrans."""
+        traducciones = {
             "es": _("Español"),
             "fr": _("Francés"),
             "en-us": _("Inglés (Estados Unidos)"),
@@ -255,29 +289,57 @@ class AjustesController:
             "it": _("Italiano"),
             "pt-br": _("Portugués (Brasil)"),
             "hi": _("Hindi"),
-        }.get(codigo, codigo)
+        }
+        if codigo in traducciones:
+            return traducciones[codigo]
+        from googletrans import LANGUAGES
+        nombre = LANGUAGES.get(codigo)
+        if nombre:
+            return nombre.capitalize()
+        return codigo
+
+    def _idiomas_disponibles(self):
+        """Códigos de idioma que ofrece el motor elegido, o [] si ninguno."""
+        if config['sistemaTTS'] == "kokoro":
+            return kokoro_idiomas_disponibles()
+        if config['sistemaTTS'] == "edge":
+            return edge_idiomas_disponibles()
+        return []
+
+    def _idioma_de_voz(self, index):
+        """Código de idioma de la voz que ocupa ese índice global, o None."""
+        if config['sistemaTTS'] == "kokoro":
+            return kokoro_idioma_de_voz(index)
+        if config['sistemaTTS'] == "edge":
+            return edge_idioma_de_voz(index)
+        return None
 
     def actualizar_filtro_idioma(self):
-        """El filtro de idioma solo tiene sentido con Kokoro, que trae voces de
-        siete idiomas en un único paquete. Se coloca en el idioma de la voz
-        activa, que es lo que espera quien abre los Ajustes para cambiarla."""
-        es_kokoro = config['sistemaTTS'] == "kokoro"
-        self.dialog.label_idioma_voz.Show(es_kokoro)
-        self.dialog.choice_idioma_voz.Show(es_kokoro)
-        if es_kokoro:
+        """El filtro de idioma solo tiene sentido con motores de voces de varios
+        idiomas: Kokoro (siete en un paquete) y Edge (todo el catálogo de
+        Microsoft). En ambos se coloca por defecto en el idioma del programa
+        (languageHandler.curLang), igual que en el menú principal
+        (main_menu_controller, curLang[:2])."""
+        es_multi = config['sistemaTTS'] in ("kokoro", "edge")
+        self.dialog.label_idioma_voz.Show(es_multi)
+        self.dialog.choice_idioma_voz.Show(es_multi)
+        if es_multi:
             # Orden alfabético por el nombre traducido: en una lista desplegable
             # se salta a un idioma tecleando su inicial. Se ordena sin tildes ni
             # diacríticos, si no «Španělština» acabaría después de la Z en checo.
-            codigos = sorted(kokoro_idiomas_disponibles(),
+            codigos = sorted(self._idiomas_disponibles(),
                              key=lambda codigo: _sin_diacriticos(self._nombre_idioma(codigo)))
             # La primera entrada no filtra nada, de ahí el None.
             self.codigos_idioma = [None] + codigos
             self.dialog.choice_idioma_voz.Clear()
             self.dialog.choice_idioma_voz.AppendItems(
                 [_("Todos los idiomas")] + [self._nombre_idioma(c) for c in codigos])
-            idioma_actual = kokoro_idioma_de_voz(config['voz'])
-            self.dialog.choice_idioma_voz.SetSelection(
-                self.codigos_idioma.index(idioma_actual) if idioma_actual in self.codigos_idioma else 0)
+            # Idioma del programa (languageHandler.curLang) como punto de
+            # partida del filtro para todos los motores multilingües.
+            codigo_usuario = (languageHandler.curLang or "es")[:2].lower()
+            seleccion = self.codigos_idioma.index(
+                codigo_usuario) if codigo_usuario in self.codigos_idioma else 0
+            self.dialog.choice_idioma_voz.SetSelection(seleccion)
         else:
             self.codigos_idioma = []
         self.dialog.treeItem_2.Layout()
@@ -317,19 +379,50 @@ class AjustesController:
 
     def rellenar_voces_kokoro(self):
         """Llena la lista con las voces del idioma elegido en el filtro."""
-        voces = kokoro_voces_de_idioma(self._idioma_filtrado())
+        self.rellenar_voces()
+
+    def rellenar_voces(self):
+        """Llena la lista con las voces del idioma elegido en el filtro, para
+        Kokoro o Edge según el motor activo."""
+        if config['sistemaTTS'] == "kokoro":
+            voces = kokoro_voces_de_idioma(self._idioma_filtrado())
+        elif config['sistemaTTS'] == "edge":
+            voces = edge_voces_de_idioma(self._idioma_filtrado())
+        else:
+            voces = []
         self._mostrar_voces([etiqueta for indice, etiqueta in voces],
                             [indice for indice, etiqueta in voces])
+
+    def _voces_edge_listas(self):
+        """Se llama desde el hilo del loop de edge-tts cuando termina la
+        descarga de voces: hay que volver al hilo de la UI antes de tocar wx."""
+        wx.CallAfter(self._poblar_voces_edge)
+
+    def _poblar_voces_edge(self):
+        if config['sistemaTTS'] != "edge":
+            return
+        try:
+            # El diálogo pudo cerrarse antes de que terminara la descarga: no
+            # tocar widgets ya destruidos.
+            self.dialog.seleccionar_TTS
+        except Exception:
+            return
+        self.actualizar_filtro_idioma()
+        self.rellenar_voces()
+        self._seleccionar_voz_activa()
+        # Asegurar que el lector apunta a la voz que queda seleccionada: si la
+        # lista se llenó después de abrir el diálogo, todavía no está cargada.
+        self.cambiarVoz(None)
 
     def cambiar_idioma_voz(self, event):
         # Para llegar a un idioma se pasa por los de en medio con las flechas, y
         # cada uno cambia de voz: guardamos la voz de cada idioma para
         # devolverla si el usuario vuelve, en vez de dejarlo con la primera.
         voz_anterior = config['voz']
-        idioma_anterior = kokoro_idioma_de_voz(voz_anterior)
+        idioma_anterior = self._idioma_de_voz(voz_anterior)
         if idioma_anterior:
             self.ultima_voz_por_idioma[idioma_anterior] = voz_anterior
-        self.rellenar_voces_kokoro()
+        self.rellenar_voces()
         recordada = self.ultima_voz_por_idioma.get(self._idioma_filtrado())
         if voz_anterior not in self.indices_voces and recordada in self.indices_voces:
             config['voz'] = recordada
@@ -339,7 +432,7 @@ class AjustesController:
             self.cambiarVoz(None)
 
     def actualizar_habilitacion_controles(self):
-        if config['sistemaTTS'] in ("piper", "kokoro"):
+        if config['sistemaTTS'] in ("piper", "kokoro", "edge"):
             # Restaurar slider de tono al rango normal si venía de OneCore
             if self.dialog.slider_1.GetMax() == 4:
                 self.dialog.slider_1.SetRange(0, 20)
@@ -395,6 +488,9 @@ class AjustesController:
                 # el nombre elegido y el que saca config['dispositivo'] son el mismo.
                 app_utilitys.fijar_dispositivo_lector()
             reader.leer_auto(_("Hablaré a través de este dispositivo."))
+        elif config['sistemaTTS'] == "edge":
+            app_utilitys.fijar_dispositivo_lector()
+            reader.leer_auto(_("Hablaré a través de este dispositivo."))
 
     def reproducirPrueva(self, event):
         # El botón alterna entre reproducir y detener con cualquier motor:
@@ -420,6 +516,18 @@ class AjustesController:
                 # nada en silencio desorienta al lector de pantalla.
                 reader._leer.speak(_("No hay voces instaladas"))
                 return
+        elif config['sistemaTTS'] == "edge":
+            if not edge_voz_shortname(config['voz']):
+                # Sin la lista de voces descargada no hay voz que apuntar: un
+                # botón que no hace nada en silencio desorienta. Si aún no ha
+                # llegado, se espera a que termine la descarga.
+                if not edge_voces_listas():
+                    reader._leer.speak(_("Cargando las voces de Edge TTS, espera un momento."))
+                    edge_iniciar_carga(self._voces_edge_listas)
+                return
+            # Apuntar el lector a la voz elegida por si la lista se cargó después
+            # de abrir el diálogo (mismo efecto que cambiarVoz).
+            reader._lector.load_model(edge_voz_shortname(config['voz']))
         else:
             reader._lector.silence()
 
@@ -451,6 +559,11 @@ class AjustesController:
                 # también se llama sola (filtro de idioma, Cancelar), y ahí el
                 # aviso se repetiría en cada flecha, encima de lo que lee NVDA.
                 reader._leer.speak(_("No hay voces instaladas"))
+        elif config['sistemaTTS'] == "edge":
+            shortname = edge_voz_shortname(config['voz'])
+            if shortname:
+                reader._lector.load_model(shortname)
+                app_utilitys.fijar_dispositivo_lector()
         else:
             voces_lector = reader._lector.list_voices()
             if voces_lector and config['voz'] < len(voces_lector):
@@ -480,6 +593,9 @@ class AjustesController:
                 reader._lector.set_rate(app_utilitys.porcentaje_a_escala(value))
         elif config['sistemaTTS'] == "kokoro":
             reader._lector.set_rate(app_utilitys.porcentaje_a_escala(value))
+        elif config['sistemaTTS'] == "edge":
+            # Edge usa la velocidad nativa (-10 a 10) sin reescalar
+            reader._lector.set_rate(value)
         else:
             reader._lector.set_rate(value)
         config['speed'] = value
@@ -533,7 +649,7 @@ class AjustesController:
 
     def on_check_play_status(self, event):
         try:
-            if config['sistemaTTS'] in ("piper", "kokoro"):
+            if config['sistemaTTS'] in ("piper", "kokoro", "edge"):
                 sigue_hablando = reader._lector.is_playing()
             else:
                 sigue_hablando = reader._lector.backend.speaking
@@ -592,15 +708,17 @@ class AjustesController:
                     lista_voces_actual = lista_voces_piper
                 elif config['sistemaTTS'] == "kokoro":
                     lista_voces_actual = kokoro_list_voices()
+                elif config['sistemaTTS'] == "edge":
+                    lista_voces_actual = edge_list_voices()
                 else:
                     lista_voces_actual = reader._lector.list_voices()
                 if 0 <= config['voz'] < len(lista_voces_actual):
-                    if config['sistemaTTS'] == "kokoro":
+                    if config['sistemaTTS'] in ("kokoro", "edge"):
                         # La lista puede haber quedado filtrada por otro idioma:
                         # hay que devolverla al idioma de la voz original, si no
                         # esta no aparece y se recargaría cualquier otra.
                         self.actualizar_filtro_idioma()
-                        self.rellenar_voces_kokoro()
+                        self.rellenar_voces()
                     self._seleccionar_voz_activa()
                     self.cambiarVoz(None)
                 else:
@@ -643,7 +761,7 @@ class AjustesController:
             # establecer_dispositivo(): un Cancelar silencioso no debe sonar como un cambio aplicado.
             try:
                 player.setdevice(config['dispositivo'])
-                hay_voz_local = (config['sistemaTTS'] == "kokoro" or (
+                hay_voz_local = (config['sistemaTTS'] in ("kokoro", "edge") or (
                     config['sistemaTTS'] == "piper" and lista_voces_piper
                     and lista_voces_piper[0] != _("No hay voces instaladas")))
                 if hay_voz_local:
