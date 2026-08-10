@@ -20,7 +20,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-      WINGET_CREATE_GITHUB_TOKEN: ${{ secrets.WINGET_TOKEN }}
+      WINGET_CREATE_GITHUB_TOKEN: ${{ secrets.WINGET_PAT }}
 
     steps:
       - name: Resolve tag and version
