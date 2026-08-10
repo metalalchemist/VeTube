@@ -3,15 +3,19 @@ name: Submit release to the WinGet community repository
 on:
   release:
     types: [published]
-  workflow_dispatch: # Permite la ejecución manual desde la pestaña Actions
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v3.95)"
+        required: true
 
 jobs:
   publish-winget:
     name: Submit to WinGet repository
+    if: ${{ !github.event.release.prerelease }}
 
     permissions:
       contents: read
-      pull-requests: write
 
     runs-on: windows-latest
 
@@ -19,34 +23,67 @@ jobs:
       WINGET_CREATE_GITHUB_TOKEN: ${{ secrets.WINGET_TOKEN }}
 
     steps:
-      - name: Submit package using wingetcreate
+      - name: Resolve tag and version
         shell: powershell
         run: |
-          $packageId = "metalalchemist.VeTube"
-
-          # Si se dispara manualmente, toma el tag de la versión actual 'v3.93'; si es un release, usa el tag del evento
           $tagName = "${{ github.event.release.tag_name }}"
           if ([string]::IsNullOrWhiteSpace($tagName)) {
-              $tagName = "v3.93"
+              $tagName = "${{ github.event.inputs.tag }}"
+          }
+          if ([string]::IsNullOrWhiteSpace($tagName)) {
+              Write-Error "No tag provided. Use workflow_dispatch with a tag or trigger from a release."
+              exit 1
           }
           $packageVersion = $tagName.TrimStart('v')
+          "TAG_NAME=$tagName" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "PACKAGE_VERSION=$packageVersion" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "Tag: $tagName | Version: $packageVersion"
 
-          # Obtener assets de la API si es ejecución manual, o del evento si es un release automático
+      - name: Get installer URL
+        shell: powershell
+        run: |
           if ('${{ github.event_name }}' -eq 'workflow_dispatch') {
-              $releaseResponse = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/$tagName"
+              $releaseResponse = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/$env:TAG_NAME"
               $assets = $releaseResponse.assets
           } else {
               $assets = '${{ toJSON(github.event.release.assets) }}' | ConvertFrom-Json
           }
+          $installerUrl = $assets | Where-Object -Property name -like 'vetube-*.msi' | Select-Object -ExpandProperty browser_download_url
+          if ([string]::IsNullOrWhiteSpace($installerUrl)) {
+              Write-Error "No MSI installer found in release assets. Expected: vetube-*.msi"
+              exit 1
+          }
+          "INSTALLER_URL=$installerUrl" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "Installer URL: $installerUrl"
 
-          $installerUrl = $assets | Where-Object -Property name -like '*VeTube-setup.exe' | Select-Object -ExpandProperty browser_download_url
-
-          Write-Host "Procesando versión: $packageVersion"
-          Write-Host "URL del instalador: $installerUrl"
-
-          # Descargar wingetcreate y ejecutar
+      - name: Download wingetcreate
+        shell: powershell
+        run: |
           curl.exe -JLO https://aka.ms/wingetcreate/latest
+          Write-Host "wingetcreate downloaded"
+
+      - name: Submit to WinGet (update or new)
+        shell: powershell
+        run: |
+          $packageId = "metalalchemist.VeTube"
+          Write-Host "Submitting $packageId v$env:PACKAGE_VERSION"
+
+          # Try update first (for existing packages)
           .\wingetcreate.exe update $packageId `
-            --version $packageVersion `
-            --urls "$installerUrl|x64" `
+            --version $env:PACKAGE_VERSION `
+            --urls "$env:INSTALLER_URL|x64" `
             --submit
+
+          if ($LASTEXITCODE -ne 0) {
+              Write-Host "Update failed (package may not exist yet). Trying 'new'..."
+              .\wingetcreate.exe new $packageId `
+                --version $env:PACKAGE_VERSION `
+                --urls "$env:INSTALLER_URL|x64" `
+                --submit
+
+              if ($LASTEXITCODE -ne 0) {
+                  Write-Error "Both update and new failed. Check wingetcreate output above."
+                  exit 1
+              }
+          }
+          Write-Host "Successfully submitted to WinGet"
