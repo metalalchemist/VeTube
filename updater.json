@@ -1,7 +1,7 @@
 {
-    "current_version": "3.94",
-    "description": "actualizar para leer en vivos de tiktok.",
+    "current_version": "3.95",
+    "description": "Nueva versión con mejoras de rendimiento y correcciones de errores.",
     "downloads": {
-        "Windows64": "https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-x64.zip"
+        "Windows64": "https://github.com/metalalchemist/VeTube/releases/latest/download/vetube-v3.95.7z"
     }
 }

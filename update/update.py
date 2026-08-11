@@ -25,7 +25,9 @@ def perform_update(update_url, donations=True, password=None, progress_callback=
     # solo vería que "no pasa nada". La registramos para poder diagnosticar el caso.
     try:
         base_path = tempfile.mkdtemp()
-        download_path = os.path.join(base_path, 'update.zip')
+        # Determinar extensión del archivo según la URL
+        url_ext = os.path.splitext(update_url)[1].lower() or '.7z'
+        download_path = os.path.join(base_path, f'update{url_ext}')
         update_path = os.path.join(base_path, 'update')
         logger.info("Iniciando actualización desde %s", update_url)
 
@@ -114,10 +116,24 @@ def download_update(update_url, update_destination, client, progress_callback=No
 
 def extract_update(update_archive, destination, password=None):
     """Given an update archive, extracts it. Returns the directory to which it has been extracted"""
-    with contextlib.closing(zipfile.ZipFile(update_archive)) as archive:
+    archive_ext = os.path.splitext(update_archive)[1].lower()
+    
+    if archive_ext == '.7z':
+        # Usar 7z.exe para archivos .7z
+        import subprocess
+        cmd = ['7z', 'x', update_archive, f'-o{destination}', '-y']
         if password:
-            archive.setpassword(password)
-        archive.extractall(path=destination)
+            cmd.extend([f'-p{password}'])
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode != 0:
+            raise RuntimeError(f"Error extracting 7z archive: {result.stderr}")
+    else:
+        # Usar zipfile para archivos .zip
+        with contextlib.closing(zipfile.ZipFile(update_archive)) as archive:
+            if password:
+                archive.setpassword(password)
+            archive.extractall(path=destination)
+    
     logger.debug("Update extracted")
     return destination
 
