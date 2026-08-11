@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 from . import update
+from .version import VERSION
 from builtins import str
 import logging
 from .wxUpdater import *
 from setup import network
 logger = logging.getLogger("updater")
-
-# Versión global del programa
-VERSION = "3.94"
 
 # Cerrojo global para evitar múltiples búsquedas simultáneas
 buscando = False
