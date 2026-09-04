@@ -87,10 +87,11 @@ class PrismBackendWrapper:
 
 class RespaldoPuente(PrismBackendWrapper):
     """Respaldo momentáneo cuando el motor elegido necesita un servidor que no
-    está en el equipo (sonata sin descargar). Habla por prism, pero además
-    absorbe la API propia de los puentes (load_model, set_device, is_playing…)
-    para que el código que cree estar hablando con Piper no reviente: esas
-    llamadas no tienen nada que hacer sin servidor, así que no hacen nada.
+    está en el equipo: sonata para las voces Piper, sherpa para las Kokoro, que
+    desde la 3.95 se descargan a la carta. Habla por prism, pero además absorbe
+    la API propia de los puentes (load_model, set_device, is_playing…) para que
+    el código que cree estar hablando con el motor no reviente: esas llamadas
+    no tienen nada que hacer sin servidor, así que no hacen nada.
 
     Es un respaldo del instante, no un cambio de configuración (decisión de
     César, 2026-08-16): config['sistemaTTS'] no se toca, y en cuanto el motor
@@ -120,8 +121,8 @@ class RespaldoPuente(PrismBackendWrapper):
             return False
 
     def set_rate(self, value):
-        # Quien le habla a un lector «piper» pre-escala la velocidad con
-        # porcentaje_a_escala (0 a 2,5, con 1,25 en el centro), no con el
+        # Quien le habla a un lector «piper» o «kokoro» pre-escala la velocidad
+        # con porcentaje_a_escala (0 a 2,5, con 1,25 en el centro), no con el
         # -10..10 que espera PrismBackendWrapper: hay que deshacer esa escala,
         # o el cursor de velocidad quedaría casi inerte en la voz de respaldo.
         try:

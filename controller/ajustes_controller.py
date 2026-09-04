@@ -741,6 +741,13 @@ class AjustesController:
                 # deja el puente levantado con su voz cargada y la prueba
                 # sigue su curso normal.
                 return
+            if config[
+                "sistemaTTS"
+            ] == "kokoro" and not app_utilitys.asegurar_motor_kokoro(self.dialog):
+                # Lo mismo con el motor de Kokoro, y antes que el paquete de
+                # voces: sin el servidor sherpa no hay síntesis que probar,
+                # aunque las voces estuvieran instaladas.
+                return
             if (
                 config["sistemaTTS"] == "kokoro"
                 and kokoro_voice_config(config["voz"]) is None

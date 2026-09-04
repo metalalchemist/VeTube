@@ -27,7 +27,11 @@ from ui.dialog_response import response
 from ui.main_window import PLATAFORMAS, MyFrame
 from update import updater
 from utils import canonical_scraper, fajustes, funciones, languageHandler
-from utils.app_utilitys import asegurar_motor_sonata, configurar_piper
+from utils.app_utilitys import (
+    asegurar_motor_kokoro,
+    asegurar_motor_sonata,
+    configurar_piper,
+)
 from utils.network import network_manager as network
 
 
@@ -51,6 +55,11 @@ class MainController:
         if motor_de_interfaz() == "piper":
             asegurar_motor_sonata(self.frame)
             configurar_piper(self.frame, carpeta_voces)
+        elif motor_de_interfaz() == "kokoro":
+            # Kokoro tiene su propio motor (sherpa), que tampoco viaja ya en el
+            # build. El paquete de voces no se pide aquí: sigue ofreciéndose al
+            # Aceptar los Ajustes y en la prueba de voz, como hasta ahora.
+            asegurar_motor_kokoro(self.frame)
         # 2. Comprobar actualizaciones en segundo plano de forma segura
         if config.get("updates", False):
             updater.do_update()

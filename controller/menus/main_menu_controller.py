@@ -3,6 +3,7 @@ import asyncio
 import wx
 
 from controller.kokoro_downloader_controller import KokoroDownloaderController
+from controller.sherpa_downloader_controller import SherpaDownloaderController
 from controller.sonata_downloader_controller import SonataDownloaderController
 from controller.update_languages_controller import UpdateLanguagesController
 from exchange import codes as currency_codes
@@ -10,7 +11,7 @@ from globals import data_store
 from globals.resources import carpeta_voces, codes, codigos_traduccion
 from servicios.language_updater import GestorRepositorios
 from setup import reader
-from TTS.sherpa_handler import kokoro_model_instalado
+from TTS.sherpa_handler import kokoro_model_instalado, sherpa_instalado
 from TTS.sonata_handler import sonata_instalado
 from ui.ajustes import configuracionDialog
 from ui.dialog_response import response
@@ -96,12 +97,13 @@ class MainMenuController:
         # Pedido de César (2026-08-01): al Aceptar con Kokoro elegido y sin el
         # modelo en el equipo, ofrecer la descarga en el acto — así el paquete
         # de 334 MB solo lo baja quien de verdad va a usar estas voces.
-        if (
-            resultado == wx.ID_OK
-            and data_store.motor_de_interfaz() == "kokoro"
-            and not kokoro_model_instalado()
-        ):
-            KokoroDownloaderController(self.frame).show()
+        # El motor va PRIMERO: es pequeño, tampoco viaja ya en el build, y sin
+        # él el paquete de voces no sonaría igualmente.
+        if resultado == wx.ID_OK and data_store.motor_de_interfaz() == "kokoro":
+            if not sherpa_instalado():
+                SherpaDownloaderController(self.frame).show()
+            if not kokoro_model_instalado():
+                KokoroDownloaderController(self.frame).show()
         # Lo mismo con Piper y su motor (pedido de César, 2026-08-16): al
         # Aceptar con Piper elegido y sin el motor sonata en el equipo, ofrecer
         # la descarga en el acto. Mientras tanto habla el respaldo SAPI del
