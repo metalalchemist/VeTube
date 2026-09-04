@@ -147,8 +147,10 @@ class MotorDownloaderController:
         self.cancelacion_pedida = True
         self.manager.cancelar()
         self.view.set_status(_("Cancelando la descarga..."))
-        # Con _leer (voz secundaria) y no leer_aviso: la voz principal puede
-        # ser justamente el respaldo del motor aún sin instalar.
+        # Con _leer (voz secundaria): el lector principal está justo entre dos
+        # puentes (el respaldo momentáneo y el motor que se estaba instalando),
+        # y la voz secundaria no depende de ese vaivén. El respaldo sí habla,
+        # así que no es cuestión de quedarse mudo, sino de no perder la frase.
         reader._leer.speak(_("Cancelando la descarga..."))
         return False
 

@@ -2143,6 +2143,10 @@ msgstr "Silnik głosów Piper został pomyślnie zainstalowany. Wiadomości mog�
 msgid "El motor de las voces Kokoro se ha instalado correctamente. Los mensajes ya pueden sonar con la voz elegida."
 msgstr "Silnik głosów Kokoro został pomyślnie zainstalowany. Wiadomości mogą już być odczytywane wybranym głosem."
 
+#: controller/sherpa_downloader_controller.py:48
+msgid "El motor de las voces Kokoro se ha instalado correctamente. Todavía falta el paquete de voces Kokoro para que puedan sonar."
+msgstr "Silnik głosów Kokoro został pomyślnie zainstalowany. Nadal brakuje pakietu głosów Kokoro, aby mogły zabrzmieć."
+
 #: controller/sonata_downloader_controller.py:95
 msgid "No se pudo instalar el motor de las voces Piper: %s"
 msgstr "Nie udało się zainstalować silnika głosów Piper: %s"

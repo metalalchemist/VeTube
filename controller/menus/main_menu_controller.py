@@ -102,7 +102,11 @@ class MainMenuController:
         if resultado == wx.ID_OK and data_store.motor_de_interfaz() == "kokoro":
             if not sherpa_instalado():
                 SherpaDownloaderController(self.frame).show()
-            if not kokoro_model_instalado():
+            # Y las voces solo si el motor está de verdad: si el usuario acaba
+            # de cerrar el diálogo anterior, ofrecerle 334 MB que no van a
+            # sonar no le sirve de nada. Se vuelve a comprobar en vez de mirar
+            # el resultado del diálogo, así vale igual si ya estaba instalado.
+            if sherpa_instalado() and not kokoro_model_instalado():
                 KokoroDownloaderController(self.frame).show()
         # Lo mismo con Piper y su motor (pedido de César, 2026-08-16): al
         # Aceptar con Piper elegido y sin el motor sonata en el equipo, ofrecer

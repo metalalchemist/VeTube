@@ -902,6 +902,11 @@ class AjustesController:
 
     def instalar_paquete_voz(self, event):
         if config["sistemaTTS"] == "kokoro":
+            # El motor antes que las voces, como en los otros tres sitios: sin
+            # sherpa, el paquete de 334 MB se descargaría para nada y el
+            # usuario se quedaría mudo sin saber qué le falta.
+            if not app_utilitys.asegurar_motor_kokoro(self.dialog):
+                return
             KokoroDownloaderController(self.dialog).show()
             return
         menu = wx.Menu()

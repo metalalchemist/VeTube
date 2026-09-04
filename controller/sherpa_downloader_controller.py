@@ -1,7 +1,11 @@
 from globals.data_store import config
 from servicios.sherpa_manager import SherpaManager
 from setup import reader
-from TTS.sherpa_handler import kokoro_voice_config, sherpa_instalado
+from TTS.sherpa_handler import (
+    kokoro_model_instalado,
+    kokoro_voice_config,
+    sherpa_instalado,
+)
 
 from .motor_downloader_controller import MotorDownloaderController
 
@@ -36,6 +40,13 @@ class SherpaDownloaderController(MotorDownloaderController):
         return _("El motor de las voces Kokoro ya está instalado en este equipo.")
 
     def texto_exito(self):
+        if not kokoro_model_instalado():
+            # Aquí no se puede prometer lo mismo que con sonata: las voces
+            # Kokoro son otro paquete, de 334 MB, que suele ofrecerse justo
+            # después. Decir que ya suena contradiría el diálogo siguiente.
+            return _(
+                "El motor de las voces Kokoro se ha instalado correctamente. Todavía falta el paquete de voces Kokoro para que puedan sonar."
+            )
         return _(
             "El motor de las voces Kokoro se ha instalado correctamente. Los mensajes ya pueden sonar con la voz elegida."
         )

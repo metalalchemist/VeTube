@@ -2145,6 +2145,10 @@ msgstr "Mesin suara Piper berhasil dipasang. Pesan sekarang dapat dibacakan deng
 msgid "El motor de las voces Kokoro se ha instalado correctamente. Los mensajes ya pueden sonar con la voz elegida."
 msgstr "Mesin suara Kokoro berhasil dipasang. Pesan sekarang dapat dibacakan dengan suara yang dipilih."
 
+#: controller/sherpa_downloader_controller.py:48
+msgid "El motor de las voces Kokoro se ha instalado correctamente. Todavía falta el paquete de voces Kokoro para que puedan sonar."
+msgstr "Mesin suara Kokoro berhasil dipasang. Paket suara Kokoro masih belum ada, sehingga suaranya belum dapat berbunyi."
+
 #: controller/sonata_downloader_controller.py:95
 msgid "No se pudo instalar el motor de las voces Piper: %s"
 msgstr "Mesin suara Piper tidak dapat dipasang: %s"
