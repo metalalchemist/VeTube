@@ -1,6 +1,6 @@
 import wx
 
-from globals.data_store import motor_de_interfaz
+from globals.data_store import config, motor_de_interfaz
 from setup import reader
 from ui.motor_downloader import MotorDownloaderDialog
 from utils.network import network_manager as network
@@ -135,6 +135,15 @@ class MotorDownloaderController:
         # levanta el puente de verdad en lugar del respaldo.
         reader.set_tts(self.MOTOR)
         self.cargar_voz_activa()
+        # El puente recién levantado nace con los valores de fábrica; los
+        # parámetros del usuario los tenía el respaldo, que acaba de morir.
+        # Misma escala que setup.py y ajustes_controller (import diferido:
+        # app_utilitys importa setup, que importa este paquete).
+        from utils.app_utilitys import porcentaje_a_escala
+
+        reader._lector.set_volume(config["volume"])
+        reader._lector.set_pitch(config["tono"])
+        reader._lector.set_rate(porcentaje_a_escala(config["speed"]))
 
     def _pedir_cancelacion(self):
         """Primera petición: anuncia en voz alta y espera a que la tarea suelte
