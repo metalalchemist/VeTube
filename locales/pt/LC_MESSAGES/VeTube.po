@@ -2113,13 +2113,25 @@ msgstr "Nenhuma versão compatível está disponível para o canal %s. O canal S
 msgid "Instalar el motor de las voces Piper"
 msgstr "Instalar o motor das vozes Piper"
 
+#: controller/sherpa_downloader_controller.py:24
+msgid "Instalar el motor de las voces Kokoro"
+msgstr "Instalar o motor das vozes Kokoro"
+
 #: ui/sonata_downloader.py:21
 msgid "Las voces Piper necesitan el motor sonata para poder sonar. Se descarga una sola vez y ocupa %d MB aproximadamente."
 msgstr "As vozes Piper precisam do motor sonata para poder falar. Ele é baixado uma única vez e ocupa aproximadamente %d MB."
 
+#: controller/sherpa_downloader_controller.py:29
+msgid "Las voces Kokoro necesitan el motor sherpa para poder sonar. Se descarga una sola vez y ocupa %d MB aproximadamente."
+msgstr "As vozes Kokoro precisam do motor sherpa para poder falar. Ele é baixado uma única vez e ocupa aproximadamente %d MB."
+
 #: controller/sonata_downloader_controller.py:30
 msgid "El motor de las voces Piper ya está instalado en este equipo."
 msgstr "O motor das vozes Piper já está instalado neste computador."
+
+#: controller/sherpa_downloader_controller.py:36
+msgid "El motor de las voces Kokoro ya está instalado en este equipo."
+msgstr "O motor das vozes Kokoro já está instalado neste computador."
 
 #: controller/sonata_downloader_controller.py:50
 msgid "Descargando el motor de voz..."
@@ -2129,9 +2141,21 @@ msgstr "Baixando o motor de voz..."
 msgid "El motor de las voces Piper se ha instalado correctamente. Los mensajes ya pueden sonar con la voz elegida."
 msgstr "O motor das vozes Piper foi instalado com sucesso. As mensagens já podem ser lidas com a voz escolhida."
 
+#: controller/sherpa_downloader_controller.py:40
+msgid "El motor de las voces Kokoro se ha instalado correctamente. Los mensajes ya pueden sonar con la voz elegida."
+msgstr "O motor das vozes Kokoro foi instalado com sucesso. As mensagens já podem ser lidas com a voz escolhida."
+
+#: controller/sherpa_downloader_controller.py:48
+msgid "El motor de las voces Kokoro se ha instalado correctamente. Todavía falta el paquete de voces Kokoro para que puedan sonar."
+msgstr "O motor das vozes Kokoro foi instalado com sucesso. Ainda falta o pacote de vozes Kokoro para que elas possam falar."
+
 #: controller/sonata_downloader_controller.py:95
 msgid "No se pudo instalar el motor de las voces Piper: %s"
 msgstr "Não foi possível instalar o motor das vozes Piper: %s"
+
+#: controller/sherpa_downloader_controller.py:44
+msgid "No se pudo instalar el motor de las voces Kokoro: %s"
+msgstr "Não foi possível instalar o motor das vozes Kokoro: %s"
 
 #: servicios/sonata_manager.py:188
 msgid "el paquete descargado no supera la comprobación de integridad. Inténtalo de nuevo."
@@ -2141,6 +2165,14 @@ msgstr "o pacote baixado não passou na verificação de integridade. Tente nova
 msgid "Las voces Piper necesitan su motor de voz, que aún no está en este equipo. ¿Deseas descargarlo ahora? Mientras tanto te acompañará una voz del sistema."
 msgstr "As vozes Piper precisam do seu motor de voz, que ainda não está neste computador. Deseja baixá-lo agora? Enquanto isso, uma voz do sistema irá acompanhá-lo."
 
+#: utils/app_utilitys.py:111
+msgid "Las voces Kokoro necesitan su motor de voz, que aún no está en este equipo. ¿Deseas descargarlo ahora? Mientras tanto te acompañará una voz del sistema."
+msgstr "As vozes Kokoro precisam do seu motor de voz, que ainda não está neste computador. Deseja baixá-lo agora? Enquanto isso, uma voz do sistema irá acompanhá-lo."
+
 #: utils/app_utilitys.py:81
 msgid "Falta el motor de las voces Piper"
 msgstr "Falta o motor das vozes Piper"
+
+#: utils/app_utilitys.py:113
+msgid "Falta el motor de las voces Kokoro"
+msgstr "Falta o motor das vozes Kokoro"

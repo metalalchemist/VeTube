@@ -55,9 +55,25 @@ def configurar_tts(lector):
                 "El motor sonata no está instalado: las voces Piper hablarán "
                 "por el respaldo SAPI hasta que se descargue."
             )
+            # El bucle de arriba solo cierra los OTROS puentes: si este motor
+            # ya hablaba y su exe desapareció en plena sesión, su puente
+            # seguiría vivo y huérfano detrás del respaldo. Idempotente.
+            sonata_handler.detener_puente()
             return crear_respaldo_puente()
         return sonata_handler.piperSpeak()
     elif lector == "kokoro":
+        if not sherpa_handler.sherpa_instalado():
+            # Mismo caso que Piper sin sonata: el motor sherpa tampoco viaja ya
+            # en el build (se descarga desde la release «motores»), así que sin
+            # él levantar el puente dejaría al usuario mudo sin explicación.
+            # Respaldo SAPI del instante, sin tocar config['sistemaTTS'].
+            logger.warning(
+                "El motor sherpa no está instalado: las voces Kokoro hablarán "
+                "por el respaldo SAPI hasta que se descargue."
+            )
+            # Mismo motivo que en Piper: el puente propio no lo cierra el bucle.
+            sherpa_handler.detener_puente()
+            return crear_respaldo_puente()
         return sherpa_handler.sherpaSpeak()
     elif lector == "edge":
         return edge_handler.edgeSpeak()

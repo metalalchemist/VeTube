@@ -12,7 +12,7 @@ import grpclib.const
 from grpclib.client import Channel
 from sound_lib import stream
 
-from globals.paths import VOICES_DIR
+from globals.paths import ENGINES_DIR, VOICES_DIR
 
 # Servidor TTS nativo: ejecutable Rust + sherpa-onnx (C-API oficial), proceso
 # separado sin Python ni numpy (el arranque de VeTube nunca depende de él,
@@ -22,9 +22,39 @@ from globals.paths import VOICES_DIR
 # hacía falta para servirlas desde aquí (preparación del tokens.txt, metadatos
 # del .onnx, resolución de rutas de fichero) se fue con ellas.
 _BASE_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-BIN_PUENTE = _BASE_DIR / "64" / "sherpa"
-EXE_PUENTE = str(BIN_PUENTE / "vetube-sherpa-grpc.exe")
 NOMBRE_EXE_PUENTE = "vetube-sherpa-grpc.exe"
+# Carpeta clásica, resuelta respecto a este módulo: en la app compilada cae en
+# lib/64/sherpa. Desde la 3.95 el build YA NO la copia (pyproject enumera 64/
+# archivo por archivo y deja sherpa fuera), así que solo existe en dos sitios:
+# el árbol de desarrollo, y las instalaciones que la recibieron de un build
+# anterior, donde quedó porque el actualizador no borra nada. En ambos casos
+# manda, porque es de la misma versión que la app que la trajo.
+_BIN_EMPAQUETADO = _BASE_DIR / "64" / "sherpa"
+# Carpeta del motor descargado: al lado del ejecutable (como voices/), porque
+# un directorio descargado no viaja en el build y lib/64/ no existe para él.
+_BIN_DESCARGADO = ENGINES_DIR / "sherpa"
+
+
+def sherpa_bin_dir():
+    """Carpeta del servidor sherpa. El empaquetado (64/sherpa) manda si está;
+    el descargado (engines/sherpa) es para las instalaciones que ya no lo traen.
+
+    Se resuelve en cada __init__ del puente y no al importar: un motor recién
+    descargado tiene que encontrarse sin reiniciar VeTube."""
+    if (_BIN_EMPAQUETADO / NOMBRE_EXE_PUENTE).is_file():
+        return _BIN_EMPAQUETADO
+    return _BIN_DESCARGADO
+
+
+def sherpa_instalado():
+    """True si el motor sherpa está en el equipo (empaquetado o descargado).
+    Sin él las voces Kokoro no pueden sonar: configurar_tts cae en el respaldo
+    SAPI momentáneo y la interfaz ofrece el descargador.
+
+    No confundir con kokoro_model_instalado(), que mira el paquete de voces:
+    para que suene algo hacen falta los dos, y se piden por separado."""
+    return (sherpa_bin_dir() / NOMBRE_EXE_PUENTE).is_file()
+
 
 # Modelo Kokoro local: vive en voices/ junto a las voces de Piper y lo instala
 # el descargador propio (servicios/kokoro_manager.py, release tts-models de k2-fsa).
@@ -215,6 +245,11 @@ class sherpaSpeak:
         self.current_voice_path = None
         self.job_handle = None
 
+        # Dónde está el motor, resuelto aquí y no al importar el módulo: si se
+        # acaba de descargar, este puente lo encuentra sin reiniciar VeTube.
+        self.bin_dir = sherpa_bin_dir()
+        self.exe = str(self.bin_dir / NOMBRE_EXE_PUENTE)
+
         # Parámetros de audio
         self.device = -1  # Dispositivo por defecto de BASS
         self.sample_rate = 24000
@@ -320,7 +355,7 @@ class sherpaSpeak:
         try:
             import psutil
 
-            ruta_propia = os.path.normcase(os.path.abspath(EXE_PUENTE))
+            ruta_propia = os.path.normcase(os.path.abspath(self.exe))
             for proc in psutil.process_iter(["pid", "name", "exe"]):
                 try:
                     nombre = (proc.info.get("name") or "").lower()
@@ -360,8 +395,8 @@ class sherpaSpeak:
         env["SONATA_GRPC_SERVER_PORT"] = str(self.port)
 
         self.process = subprocess.Popen(
-            [EXE_PUENTE],
-            cwd=os.path.dirname(EXE_PUENTE),
+            [self.exe],
+            cwd=str(self.bin_dir),
             env=env,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,

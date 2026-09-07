@@ -741,6 +741,13 @@ class AjustesController:
                 # deja el puente levantado con su voz cargada y la prueba
                 # sigue su curso normal.
                 return
+            if config[
+                "sistemaTTS"
+            ] == "kokoro" and not app_utilitys.asegurar_motor_kokoro(self.dialog):
+                # Lo mismo con el motor de Kokoro, y antes que el paquete de
+                # voces: sin el servidor sherpa no hay síntesis que probar,
+                # aunque las voces estuvieran instaladas.
+                return
             if (
                 config["sistemaTTS"] == "kokoro"
                 and kokoro_voice_config(config["voz"]) is None
@@ -895,6 +902,11 @@ class AjustesController:
 
     def instalar_paquete_voz(self, event):
         if config["sistemaTTS"] == "kokoro":
+            # El motor antes que las voces, como en los otros tres sitios: sin
+            # sherpa, el paquete de 334 MB se descargaría para nada y el
+            # usuario se quedaría mudo sin saber qué le falta.
+            if not app_utilitys.asegurar_motor_kokoro(self.dialog):
+                return
             KokoroDownloaderController(self.dialog).show()
             return
         menu = wx.Menu()

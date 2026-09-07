@@ -1,28 +1,23 @@
 import wx
 
 
-class SonataDownloaderDialog(wx.Dialog):
-    """Instalador del motor sonata, el servidor de las voces Piper.
+class MotorDownloaderDialog(wx.Dialog):
+    """Instalador de un motor de voz (sonata para las voces Piper, sherpa para
+    las Kokoro): el mismo diálogo para los dos, con el título y la presentación
+    que le pase su controlador.
     La barra es un wx.Gauge nativo para que los lectores de pantalla anuncien
     el avance por sí mismos (los pitidos de progreso de NVDA)."""
 
-    def __init__(self, parent, tamano_mb):
+    def __init__(self, parent, titulo, presentacion):
         super().__init__(
             parent,
-            title=_("Instalar el motor de las voces Piper"),
+            title=titulo,
             style=wx.DEFAULT_DIALOG_STYLE,
         )
 
         main_sizer = wx.BoxSizer(wx.VERTICAL)
 
-        self.intro = wx.StaticText(
-            self,
-            label=_(
-                "Las voces Piper necesitan el motor sonata para poder sonar. "
-                "Se descarga una sola vez y ocupa %d MB aproximadamente."
-            )
-            % tamano_mb,
-        )
+        self.intro = wx.StaticText(self, label=presentacion)
         self.intro.Wrap(520)
         main_sizer.Add(self.intro, 0, wx.ALL, 10)
 

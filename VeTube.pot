@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-23 10:26+0200\n"
+"POT-Creation-Date: 2026-09-04 10:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,15 +19,15 @@ msgstr ""
 
 #: controller/ajustes_controller.py:332 controller/ajustes_controller.py:350
 #: controller/ajustes_controller.py:372 controller/ajustes_controller.py:535
-#: controller/ajustes_controller.py:709 controller/ajustes_controller.py:756
-#: controller/ajustes_controller.py:765 controller/ajustes_controller.py:769
-#: controller/ajustes_controller.py:836 controller/ajustes_controller.py:886
-#: controller/ajustes_controller.py:1121
+#: controller/ajustes_controller.py:709 controller/ajustes_controller.py:763
+#: controller/ajustes_controller.py:772 controller/ajustes_controller.py:776
+#: controller/ajustes_controller.py:843 controller/ajustes_controller.py:893
+#: controller/ajustes_controller.py:1133
 #: controller/piper_downloader_controller.py:71
 #: controller/piper_downloader_controller.py:76
 #: controller/piper_downloader_controller.py:101
-#: controller/sonata_downloader_controller.py:109 globals/resources.py:62
-#: run_main_window.py:50 utils/app_utilitys.py:104
+#: controller/sonata_downloader_controller.py:45 globals/resources.py:62
+#: run_main_window.py:50 utils/app_utilitys.py:125
 msgid "No hay voces instaladas"
 msgstr ""
 
@@ -68,7 +68,7 @@ msgid "Listo"
 msgstr ""
 
 #: controller/ajustes_controller.py:307 controller/ajustes_controller.py:726
-#: controller/ajustes_controller.py:807 controller/ajustes_controller.py:959
+#: controller/ajustes_controller.py:814 controller/ajustes_controller.py:971
 #: ui/ajustes/voz.py:59
 msgid "&Reproducir prueba."
 msgstr ""
@@ -114,31 +114,31 @@ msgstr ""
 msgid "Hablaré a través de este dispositivo."
 msgstr ""
 
-#: controller/ajustes_controller.py:754
+#: controller/ajustes_controller.py:761
 msgid ""
 "Para probar las voces Kokoro hay que descargar antes el paquete de voces."
 " ¿Quieres abrir el descargador ahora?"
 msgstr ""
 
-#: controller/ajustes_controller.py:778
+#: controller/ajustes_controller.py:785
 msgid "Cargando las voces de Edge TTS, espera un momento."
 msgstr ""
 
-#: controller/ajustes_controller.py:789
+#: controller/ajustes_controller.py:796
 msgid ""
 "Hola, soy la voz que te acompañará de ahora en adelante a leer los "
 "mensajes de tus canales favoritos."
 msgstr ""
 
-#: controller/ajustes_controller.py:795
+#: controller/ajustes_controller.py:802
 msgid "&Detener prueba."
 msgstr ""
 
-#: controller/ajustes_controller.py:901
+#: controller/ajustes_controller.py:913
 msgid "Descargar voces de internet..."
 msgstr ""
 
-#: controller/ajustes_controller.py:903
+#: controller/ajustes_controller.py:915
 msgid "Instalar desde archivo local (.tar.gz)..."
 msgstr ""
 
@@ -148,18 +148,18 @@ msgstr ""
 
 #: controller/chat_controller.py:179 controller/estadisticas_controller.py:88
 #: controller/kokoro_downloader_controller.py:91
-#: controller/main_controller.py:108 controller/main_controller.py:223
-#: controller/main_controller.py:253 controller/main_controller.py:261
-#: controller/main_controller.py:320 controller/main_controller.py:359
-#: controller/main_controller.py:375 controller/main_controller.py:513
-#: controller/main_controller.py:521
+#: controller/main_controller.py:117 controller/main_controller.py:232
+#: controller/main_controller.py:262 controller/main_controller.py:270
+#: controller/main_controller.py:329 controller/main_controller.py:368
+#: controller/main_controller.py:384 controller/main_controller.py:522
+#: controller/main_controller.py:530
+#: controller/motor_downloader_controller.py:124
 #: controller/piper_downloader_controller.py:95
 #: controller/piper_downloader_controller.py:131
 #: controller/piper_downloader_controller.py:139
 #: controller/piper_downloader_controller.py:147
 #: controller/piper_downloader_controller.py:221
 #: controller/piper_downloader_controller.py:320
-#: controller/sonata_downloader_controller.py:96
 #: controller/update_languages_controller.py:97
 #: controller/update_languages_controller.py:111 ui/discord_token_dialog.py:56
 #: update/updater.py:133 update/updater.py:173
@@ -199,9 +199,9 @@ msgstr ""
 msgid "Mensaje agregado a favoritos"
 msgstr ""
 
-#: controller/chat_controller.py:379 controller/main_controller.py:71
-#: controller/main_controller.py:167 controller/main_controller.py:187
-#: controller/main_controller.py:201
+#: controller/chat_controller.py:379 controller/main_controller.py:80
+#: controller/main_controller.py:176 controller/main_controller.py:196
+#: controller/main_controller.py:210
 #: controller/menus/chat_item_controller.py:72
 msgid "Tus mensajes archivados aparecerán aquí"
 msgstr ""
@@ -244,8 +244,8 @@ msgstr ""
 msgid "¿Desea cerrar la ventana de lectura de los chats en vivo?"
 msgstr ""
 
-#: controller/chat_dialog_controller.py:139 controller/main_controller.py:115
-#: controller/menus/main_menu_controller.py:288
+#: controller/chat_dialog_controller.py:139 controller/main_controller.py:124
+#: controller/menus/main_menu_controller.py:294
 #: controller/update_languages_controller.py:143
 msgid "¡Atención!"
 msgstr ""
@@ -257,7 +257,7 @@ msgid ""
 msgstr ""
 
 #: controller/editor_controller.py:51
-#: controller/menus/main_menu_controller.py:122 update/update.py:119
+#: controller/menus/main_menu_controller.py:128 update/update.py:119
 msgid "Atención:"
 msgstr ""
 
@@ -327,8 +327,8 @@ msgstr ""
 
 #: controller/estadisticas_controller.py:82
 #: controller/kokoro_downloader_controller.py:78
+#: controller/motor_downloader_controller.py:111
 #: controller/piper_downloader_controller.py:347
-#: controller/sonata_downloader_controller.py:83
 msgid "Éxito"
 msgstr ""
 
@@ -342,7 +342,7 @@ msgid "Las voces Kokoro ya están instaladas en este equipo."
 msgstr ""
 
 #: controller/kokoro_downloader_controller.py:30
-#: controller/sonata_downloader_controller.py:35
+#: controller/motor_downloader_controller.py:40
 msgid "Listo para descargar."
 msgstr ""
 
@@ -351,12 +351,12 @@ msgid "Descargando el paquete de voces..."
 msgstr ""
 
 #: controller/kokoro_downloader_controller.py:58
-#: controller/sonata_downloader_controller.py:63
+#: controller/motor_downloader_controller.py:93
 msgid "Descarga completada. Instalando el paquete..."
 msgstr ""
 
 #: controller/kokoro_downloader_controller.py:72
-#: controller/sonata_downloader_controller.py:77
+#: controller/motor_downloader_controller.py:107
 msgid "Instalación completada."
 msgstr ""
 
@@ -367,7 +367,7 @@ msgid ""
 msgstr ""
 
 #: controller/kokoro_downloader_controller.py:86
-#: controller/sonata_downloader_controller.py:91
+#: controller/motor_downloader_controller.py:119
 msgid "La instalación ha fallado."
 msgstr ""
 
@@ -378,131 +378,135 @@ msgstr ""
 
 #: controller/kokoro_downloader_controller.py:114
 #: controller/kokoro_downloader_controller.py:117
-#: controller/sonata_downloader_controller.py:133
-#: controller/sonata_downloader_controller.py:136
+#: controller/motor_downloader_controller.py:149
+#: controller/motor_downloader_controller.py:154
 msgid "Cancelando la descarga..."
 msgstr ""
 
-#: controller/main_controller.py:64
+#: controller/main_controller.py:73
 #, python-format
 msgid "Favoritos(%s)"
 msgstr ""
 
-#: controller/main_controller.py:67 controller/main_controller.py:106
-#: controller/main_controller.py:134
+#: controller/main_controller.py:76 controller/main_controller.py:115
+#: controller/main_controller.py:143
 #: controller/menus/chat_menu_controller.py:90
 msgid "Tus favoritos aparecerán aquí"
 msgstr ""
 
-#: controller/main_controller.py:108
+#: controller/main_controller.py:117
 msgid "No hay favoritos que borrar"
 msgstr ""
 
-#: controller/main_controller.py:114
+#: controller/main_controller.py:123
 msgid "¿Estás seguro de borrar todos los favoritos de la lista?"
 msgstr ""
 
-#: controller/main_controller.py:138
+#: controller/main_controller.py:147
 msgid "&Borrar mensajes"
 msgstr ""
 
-#: controller/main_controller.py:140
+#: controller/main_controller.py:149
 msgid "Borrar todos los mensajes destacados"
 msgstr ""
 
-#: controller/main_controller.py:144 ui/main_window.py:111
+#: controller/main_controller.py:153 ui/main_window.py:111
 msgid "&Borrar mensaje"
 msgstr ""
 
-#: controller/main_controller.py:146
+#: controller/main_controller.py:155
 msgid "Borrar el mensaje destacado seleccionado"
 msgstr ""
 
-#: controller/main_controller.py:152
+#: controller/main_controller.py:161
 msgid "&Borrar favoritos"
 msgstr ""
 
-#: controller/main_controller.py:154
+#: controller/main_controller.py:163
 msgid "Borrar todos los favoritos"
 msgstr ""
 
-#: controller/main_controller.py:158 ui/main_window.py:93
+#: controller/main_controller.py:167 ui/main_window.py:93
 msgid "&Borrar favorito"
 msgstr ""
 
-#: controller/main_controller.py:160
+#: controller/main_controller.py:169
 msgid "Borrar el favorito seleccionado"
 msgstr ""
 
-#: controller/main_controller.py:181
+#: controller/main_controller.py:190
 msgid "No hay más elementos que borrar"
 msgstr ""
 
-#: controller/main_controller.py:184 controller/main_controller.py:204
+#: controller/main_controller.py:193 controller/main_controller.py:213
 msgid "No hay mensajes que borrar"
 msgstr ""
 
-#: controller/main_controller.py:192
+#: controller/main_controller.py:201
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr ""
 
-#: controller/main_controller.py:221
+#: controller/main_controller.py:230
 msgid ""
 "No se puede acceder porque el campo de texto está vacío, debe escribir "
 "algo."
 msgstr ""
 
-#: controller/main_controller.py:250
+#: controller/main_controller.py:259
 #, python-brace-format
 msgid "Error al simplificar URL de TikTok: {}"
 msgstr ""
 
-#: controller/main_controller.py:260 servicios/tiktok.py:118
+#: controller/main_controller.py:269 servicios/tiktok.py:118
 msgid "No se pudo obtener la URL real de TikTok."
 msgstr ""
 
-#: controller/main_controller.py:318
+#: controller/main_controller.py:327
 msgid ""
 "Para Discord pega el enlace del canal de texto: haz clic derecho sobre el"
 " canal y elige «Copiar enlace»."
 msgstr ""
 
-#: controller/main_controller.py:357
+#: controller/main_controller.py:366
 msgid ""
 "El enlace de Discord no es válido. Copia el enlace del canal de texto "
 "(clic derecho sobre el canal, «Copiar enlace») y pégalo en VeTube."
 msgstr ""
 
-#: controller/main_controller.py:373
+#: controller/main_controller.py:382
 msgid ""
 "¡Parece que el enlace al cual está intentando acceder no es un enlace "
 "válido."
 msgstr ""
 
-#: controller/main_controller.py:433
+#: controller/main_controller.py:442
 msgid "Conectando..."
 msgstr ""
 
-#: controller/main_controller.py:511
+#: controller/main_controller.py:520
 msgid ""
 "El token no es válido. Comprueba que lo copiaste completo desde el portal"
 " de desarrolladores de Discord."
 msgstr ""
 
-#: controller/main_controller.py:519
+#: controller/main_controller.py:528
 msgid ""
 "No se pudo comprobar el token por un fallo de red. Revisa tu conexión a "
 "internet e inténtalo de nuevo."
 msgstr ""
 
-#: controller/main_controller.py:570
-#: controller/menus/main_menu_controller.py:133
+#: controller/main_controller.py:579
+#: controller/menus/main_menu_controller.py:139
 msgid "¿está seguro que desea salir del programa?"
 msgstr ""
 
-#: controller/main_controller.py:570
-#: controller/menus/main_menu_controller.py:133
+#: controller/main_controller.py:579
+#: controller/menus/main_menu_controller.py:139
 msgid "¡atención!"
+msgstr ""
+
+#: controller/motor_downloader_controller.py:80
+msgid "Descargando el motor de voz..."
 msgstr ""
 
 #: controller/piper_downloader_controller.py:83
@@ -638,21 +642,60 @@ msgid ""
 " Ajustes de Voz."
 msgstr ""
 
-#: controller/sonata_downloader_controller.py:30
+#: controller/sherpa_downloader_controller.py:28
+msgid "Instalar el motor de las voces Kokoro"
+msgstr ""
+
+#: controller/sherpa_downloader_controller.py:33
+#, python-format
+msgid ""
+"Las voces Kokoro necesitan el motor sherpa para poder sonar. Se descarga "
+"una sola vez y ocupa %d MB aproximadamente."
+msgstr ""
+
+#: controller/sherpa_downloader_controller.py:40
+msgid "El motor de las voces Kokoro ya está instalado en este equipo."
+msgstr ""
+
+#: controller/sherpa_downloader_controller.py:48
+msgid ""
+"El motor de las voces Kokoro se ha instalado correctamente. Todavía falta"
+" el paquete de voces Kokoro para que puedan sonar."
+msgstr ""
+
+#: controller/sherpa_downloader_controller.py:51
+msgid ""
+"El motor de las voces Kokoro se ha instalado correctamente. Los mensajes "
+"ya pueden sonar con la voz elegida."
+msgstr ""
+
+#: controller/sherpa_downloader_controller.py:55
+#, python-format
+msgid "No se pudo instalar el motor de las voces Kokoro: %s"
+msgstr ""
+
+#: controller/sonata_downloader_controller.py:22
+msgid "Instalar el motor de las voces Piper"
+msgstr ""
+
+#: controller/sonata_downloader_controller.py:27
+#, python-format
+msgid ""
+"Las voces Piper necesitan el motor sonata para poder sonar. Se descarga "
+"una sola vez y ocupa %d MB aproximadamente."
+msgstr ""
+
+#: controller/sonata_downloader_controller.py:34
 msgid "El motor de las voces Piper ya está instalado en este equipo."
 msgstr ""
 
-#: controller/sonata_downloader_controller.py:50
-msgid "Descargando el motor de voz..."
-msgstr ""
-
-#: controller/sonata_downloader_controller.py:81
+#: controller/sonata_downloader_controller.py:38
 msgid ""
 "El motor de las voces Piper se ha instalado correctamente. Los mensajes "
 "ya pueden sonar con la voz elegida."
 msgstr ""
 
-#: controller/sonata_downloader_controller.py:95
+#: controller/sonata_downloader_controller.py:42
 #, python-format
 msgid "No se pudo instalar el motor de las voces Piper: %s"
 msgstr ""
@@ -773,11 +816,11 @@ msgstr ""
 msgid "No se encontró un enlace válido para abrir."
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:74
+#: controller/menus/main_menu_controller.py:75
 msgid "Creadores del proyecto:"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:77
+#: controller/menus/main_menu_controller.py:78
 msgid ""
 "Descripción:\n"
 " Lee en voz alta los mensajes de los directos en youtube, tiktok, twitch,"
@@ -785,48 +828,48 @@ msgid ""
 "disfruta más tus canales favoritos."
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:120
+#: controller/menus/main_menu_controller.py:126
 msgid ""
 "Estás apunto de reiniciar la configuración a sus valores predeterminados,"
 " ¿Deseas proceder?"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:146
+#: controller/menus/main_menu_controller.py:152
 msgid "Ya hay una comprobación de idiomas en curso."
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:147
-#: controller/menus/main_menu_controller.py:176
-#: controller/menus/main_menu_controller.py:192
-#: controller/menus/main_menu_controller.py:242
+#: controller/menus/main_menu_controller.py:153
+#: controller/menus/main_menu_controller.py:182
+#: controller/menus/main_menu_controller.py:198
+#: controller/menus/main_menu_controller.py:248
 msgid "Actualización de idiomas"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:160
+#: controller/menus/main_menu_controller.py:166
 #, python-brace-format
 msgid "Error al conectar con el servidor de idiomas: {}"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:163
+#: controller/menus/main_menu_controller.py:169
 msgid "Error de red"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:191
+#: controller/menus/main_menu_controller.py:197
 #: servicios/language_updater.py:97
 msgid "No hay actualizaciones ni nuevos idiomas disponibles."
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:196
+#: controller/menus/main_menu_controller.py:202
 msgid "Error de actualización"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:240
+#: controller/menus/main_menu_controller.py:246
 msgid ""
 "Hay una actualización disponible para el idioma del programa. ¿Quieres "
 "instalarla ahora?"
 msgstr ""
 
-#: controller/menus/main_menu_controller.py:286
+#: controller/menus/main_menu_controller.py:292
 msgid ""
 "Es necesario reiniciar el programa para aplicar el nuevo idioma. ¿desea "
 "reiniciarlo ahora?"
@@ -1111,18 +1154,18 @@ msgstr ""
 msgid " viendo ahora"
 msgstr ""
 
-#: servicios/kokoro_manager.py:74 servicios/sonata_manager.py:85
+#: servicios/kokoro_manager.py:77 servicios/motor_manager.py:102
 #, python-format
 msgid "No hay suficiente espacio libre en disco (se necesitan unos %d MB)."
 msgstr ""
 
-#: servicios/kokoro_manager.py:119 servicios/sonata_manager.py:136
+#: servicios/kokoro_manager.py:122 servicios/motor_manager.py:159
 #, python-format
 msgid "el servidor de descargas respondió con el error HTTP %d."
 msgstr ""
 
-#: servicios/kokoro_manager.py:176 servicios/kokoro_manager.py:183
-#: servicios/sonata_manager.py:238 servicios/sonata_manager.py:245
+#: servicios/kokoro_manager.py:179 servicios/kokoro_manager.py:186
+#: servicios/motor_manager.py:277 servicios/motor_manager.py:284
 #, python-format
 msgid "El paquete descargado está incompleto (falta %s)."
 msgstr ""
@@ -1159,18 +1202,18 @@ msgstr ""
 msgid "Error inesperado durante la instalación."
 msgstr ""
 
+#: servicios/motor_manager.py:226
+msgid ""
+"el paquete descargado no supera la comprobación de integridad. Inténtalo "
+"de nuevo."
+msgstr ""
+
 #: servicios/sala.py:37 servicios/twich.py:36 servicios/youtube.py:37
 msgid "Ingresando al chat."
 msgstr ""
 
 #: servicios/sala.py:38
 msgid "Chat de la sala de juegos"
-msgstr ""
-
-#: servicios/sonata_manager.py:188
-msgid ""
-"el paquete descargado no supera la comprobación de integridad. Inténtalo "
-"de nuevo."
 msgstr ""
 
 #: servicios/tiktok.py:136
@@ -1372,14 +1415,14 @@ msgid ""
 " Se descarga una sola vez y ocupa %d MB aproximadamente."
 msgstr ""
 
-#: ui/kokoro_downloader.py:34 ui/piper_downloader.py:87
-#: ui/sonata_downloader.py:36
+#: ui/kokoro_downloader.py:34 ui/motor_downloader.py:31
+#: ui/piper_downloader.py:87
 msgid "&Descargar e instalar"
 msgstr ""
 
 #: ui/editor/editor.py:35 ui/editor/nueva_combinacion.py:133
-#: ui/kokoro_downloader.py:36 ui/list_urls.py:38 ui/piper_downloader.py:89
-#: ui/sonata_downloader.py:38
+#: ui/kokoro_downloader.py:36 ui/list_urls.py:38 ui/motor_downloader.py:33
+#: ui/piper_downloader.py:89
 msgid "&Cerrar"
 msgstr ""
 
@@ -1535,17 +1578,6 @@ msgstr ""
 
 #: ui/show_comment.py:66
 msgid "mensaje en "
-msgstr ""
-
-#: ui/sonata_downloader.py:12
-msgid "Instalar el motor de las voces Piper"
-msgstr ""
-
-#: ui/sonata_downloader.py:21
-#, python-format
-msgid ""
-"Las voces Piper necesitan el motor sonata para poder sonar. Se descarga "
-"una sola vez y ocupa %d MB aproximadamente."
 msgstr ""
 
 #: ui/update_languages_dialog.py:8
@@ -2093,24 +2125,35 @@ msgstr ""
 msgid "¡Hecho!"
 msgstr ""
 
-#: utils/app_utilitys.py:79
+#: utils/app_utilitys.py:93
 msgid ""
 "Las voces Piper necesitan su motor de voz, que aún no está en este "
 "equipo. ¿Deseas descargarlo ahora? Mientras tanto te acompañará una voz "
 "del sistema."
 msgstr ""
 
-#: utils/app_utilitys.py:81
+#: utils/app_utilitys.py:95
 msgid "Falta el motor de las voces Piper"
 msgstr ""
 
-#: utils/app_utilitys.py:102
+#: utils/app_utilitys.py:111
+msgid ""
+"Las voces Kokoro necesitan su motor de voz, que aún no está en este "
+"equipo. ¿Deseas descargarlo ahora? Mientras tanto te acompañará una voz "
+"del sistema."
+msgstr ""
+
+#: utils/app_utilitys.py:113
+msgid "Falta el motor de las voces Kokoro"
+msgstr ""
+
+#: utils/app_utilitys.py:123
 msgid ""
 "Necesitas al menos una voz para poder usar el sintetizador Piper. ¿Deseas"
 " abrir el descargador de voces ahora para buscar e instalar una?"
 msgstr ""
 
-#: utils/app_utilitys.py:117
+#: utils/app_utilitys.py:144
 msgid "Lector Piper inicializado correctamente."
 msgstr ""
 

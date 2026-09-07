@@ -63,34 +63,55 @@ def _cargar_voz_piper_actual():
     fijar_dispositivo_lector()
 
 
+def _asegurar_motor(parent, esta_instalado, controlador, pregunta, titulo):
+    """True si el motor ya está en el equipo; si falta, ofrece descargarlo y
+    devuelve si quedó instalado. Común a los dos motores que se bajan a la
+    carta (sonata para Piper, sherpa para Kokoro)."""
+    if esta_instalado():
+        return True
+    if response(pregunta, titulo, wx.YES_NO | wx.ICON_ASTERISK) == wx.ID_YES:
+        controlador(parent).show()
+    return esta_instalado()
+
+
 def asegurar_motor_sonata(parent):
     """True si el motor sonata (el servidor de las voces Piper) está en el
     equipo, ofreciendo descargarlo si falta. Lo llaman el arranque con Piper
     elegido y la prueba de voz de los Ajustes; el Aceptar de los Ajustes abre
     el descargador directamente, como el de Kokoro. Mientras el motor falte,
     el chat habla por el respaldo SAPI del instante (ver configurar_tts)."""
+    # Imports diferidos: este módulo se importa desde setup y el controlador
+    # del descargador importa setup a su vez.
+    from controller.sonata_downloader_controller import SonataDownloaderController
     from TTS.sonata_handler import sonata_instalado
 
-    if sonata_instalado():
-        return True
-    if (
-        response(
-            _(
-                "Las voces Piper necesitan su motor de voz, que aún no está en este equipo. ¿Deseas descargarlo ahora? Mientras tanto te acompañará una voz del sistema."
-            ),
-            _("Falta el motor de las voces Piper"),
-            wx.YES_NO | wx.ICON_ASTERISK,
-        )
-        == wx.ID_YES
-    ):
-        # Import diferido: este módulo se importa desde setup y el controlador
-        # del descargador importa setup a su vez.
-        from controller.sonata_downloader_controller import (
-            SonataDownloaderController,
-        )
+    return _asegurar_motor(
+        parent,
+        sonata_instalado,
+        SonataDownloaderController,
+        _(
+            "Las voces Piper necesitan su motor de voz, que aún no está en este equipo. ¿Deseas descargarlo ahora? Mientras tanto te acompañará una voz del sistema."
+        ),
+        _("Falta el motor de las voces Piper"),
+    )
 
-        SonataDownloaderController(parent).show()
-    return sonata_instalado()
+
+def asegurar_motor_kokoro(parent):
+    """Lo mismo para el motor sherpa, el servidor de las voces Kokoro. Es el
+    motor, no el paquete de voces de 334 MB: ese se ofrece aparte y después,
+    porque sin motor no sonaría igualmente."""
+    from controller.sherpa_downloader_controller import SherpaDownloaderController
+    from TTS.sherpa_handler import sherpa_instalado
+
+    return _asegurar_motor(
+        parent,
+        sherpa_instalado,
+        SherpaDownloaderController,
+        _(
+            "Las voces Kokoro necesitan su motor de voz, que aún no está en este equipo. ¿Deseas descargarlo ahora? Mientras tanto te acompañará una voz del sistema."
+        ),
+        _("Falta el motor de las voces Kokoro"),
+    )
 
 
 def configurar_piper(parent, carpeta_voces):
