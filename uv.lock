@@ -1770,7 +1770,7 @@ wheels = [
 
 [[package]]
 name = "vetube"
-version = "3.95rc4"
+version = "3.95"
 source = { editable = "." }
 dependencies = [
     { name = "audioop-lts" },
