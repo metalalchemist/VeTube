@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-04 10:52+0200\n"
+"POT-Creation-Date: 2026-09-09 20:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -146,13 +146,17 @@ msgstr ""
 msgid "Error al conectar con el chat: "
 msgstr ""
 
-#: controller/chat_controller.py:179 controller/estadisticas_controller.py:88
+#: controller/chat_controller.py:179 controller/editor_controller.py:109
+#: controller/editor_controller.py:129 controller/editor_controller.py:157
+#: controller/estadisticas_controller.py:88
 #: controller/kokoro_downloader_controller.py:91
-#: controller/main_controller.py:117 controller/main_controller.py:232
-#: controller/main_controller.py:262 controller/main_controller.py:270
-#: controller/main_controller.py:329 controller/main_controller.py:368
-#: controller/main_controller.py:384 controller/main_controller.py:522
-#: controller/main_controller.py:530
+#: controller/main_controller.py:117 controller/main_controller.py:190
+#: controller/main_controller.py:193 controller/main_controller.py:213
+#: controller/main_controller.py:232 controller/main_controller.py:262
+#: controller/main_controller.py:270 controller/main_controller.py:329
+#: controller/main_controller.py:368 controller/main_controller.py:384
+#: controller/main_controller.py:452 controller/main_controller.py:526
+#: controller/main_controller.py:534
 #: controller/motor_downloader_controller.py:124
 #: controller/piper_downloader_controller.py:95
 #: controller/piper_downloader_controller.py:131
@@ -162,7 +166,7 @@ msgstr ""
 #: controller/piper_downloader_controller.py:320
 #: controller/update_languages_controller.py:97
 #: controller/update_languages_controller.py:111 ui/discord_token_dialog.py:56
-#: update/updater.py:133 update/updater.py:173
+#: ui/list_urls.py:47 update/updater.py:133 update/updater.py:173
 msgid "Error"
 msgstr ""
 
@@ -378,8 +382,8 @@ msgstr ""
 
 #: controller/kokoro_downloader_controller.py:114
 #: controller/kokoro_downloader_controller.py:117
-#: controller/motor_downloader_controller.py:149
-#: controller/motor_downloader_controller.py:154
+#: controller/motor_downloader_controller.py:158
+#: controller/motor_downloader_controller.py:163
 msgid "Cancelando la descarga..."
 msgstr ""
 
@@ -446,6 +450,10 @@ msgstr ""
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr ""
 
+#: controller/main_controller.py:202
+msgid "Confirmación"
+msgstr ""
+
 #: controller/main_controller.py:230
 msgid ""
 "No se puede acceder porque el campo de texto está vacío, debe escribir "
@@ -483,24 +491,29 @@ msgstr ""
 msgid "Conectando..."
 msgstr ""
 
-#: controller/main_controller.py:520
+#: controller/main_controller.py:451
+#, python-format
+msgid "Error al iniciar el chat: %s"
+msgstr ""
+
+#: controller/main_controller.py:524
 msgid ""
 "El token no es válido. Comprueba que lo copiaste completo desde el portal"
 " de desarrolladores de Discord."
 msgstr ""
 
-#: controller/main_controller.py:528
+#: controller/main_controller.py:532
 msgid ""
 "No se pudo comprobar el token por un fallo de red. Revisa tu conexión a "
 "internet e inténtalo de nuevo."
 msgstr ""
 
-#: controller/main_controller.py:579
+#: controller/main_controller.py:583
 #: controller/menus/main_menu_controller.py:139
 msgid "¿está seguro que desea salir del programa?"
 msgstr ""
 
-#: controller/main_controller.py:579
+#: controller/main_controller.py:583
 #: controller/menus/main_menu_controller.py:139
 msgid "¡atención!"
 msgstr ""
@@ -1422,7 +1435,7 @@ msgstr ""
 
 #: ui/editor/editor.py:35 ui/editor/nueva_combinacion.py:133
 #: ui/kokoro_downloader.py:36 ui/list_urls.py:38 ui/motor_downloader.py:33
-#: ui/piper_downloader.py:89
+#: ui/piper_downloader.py:89 ui/show_comment.py:38
 msgid "&Cerrar"
 msgstr ""
 

@@ -362,6 +362,10 @@ msgstr "Aucun message à supprimer"
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr "Êtes-vous sûr de vouloir supprimer tous les messages ?"
 
+#: controller/main_controller.py:202
+msgid "Confirmación"
+msgstr "Confirmation"
+
 #: controller/main_controller.py:169
 #, python-brace-format
 msgid "Error al simplificar URL de TikTok: {}"
@@ -406,6 +410,11 @@ msgstr ""
 #: controller/main_controller.py:296
 msgid "Conectando..."
 msgstr "Connexion..."
+
+#: controller/main_controller.py:451
+#, python-format
+msgid "Error al iniciar el chat: %s"
+msgstr "Erreur au démarrage du chat : %s"
 
 #: controller/main_controller.py:360
 msgid ""

@@ -21,6 +21,7 @@
 | Indonesian | `id` | Active | Community |
 | Polish | `pl` | Active | Community |
 | Portuguese | `pt` | Active | Community |
+| Russian | `ru` | Active | Kostenkov-2021 |
 | Spanish | `es` | Base language | — |
 
 **Missing your language?** See [Adding a New Language](#adding-a-new-language) below.

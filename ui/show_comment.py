@@ -35,7 +35,7 @@ class ShowCommentDialog(wx.Dialog):
         main_sizer.Add(translation_sizer, 0, wx.EXPAND | wx.ALL, 0)
         button_sizer = wx.BoxSizer(wx.HORIZONTAL)
         button_sizer.AddStretchSpacer()
-        cancelar = wx.Button(self, wx.ID_CANCEL, "&Cerrar")
+        cancelar = wx.Button(self, wx.ID_CANCEL, _("&Cerrar"))
         button_sizer.Add(cancelar, 0, wx.ALL, 5)
         main_sizer.Add(button_sizer, 0, wx.EXPAND | wx.ALL, 0)
         self.SetSizer(main_sizer)
