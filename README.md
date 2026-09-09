@@ -16,7 +16,7 @@ VeTube is a Windows desktop application that monitors live chat from streaming p
 - **Multi-platform support**: YouTube, Twitch, TikTok, Kick, Discord, and "La sala de juegos"
 - **Multiple TTS engines**: Piper (high-quality neural voices), Windows OneCore, SAPI5
 - **Real-time chat monitoring**: Instant message detection and voice synthesis
-- **Multi-language interface**: Available in Spanish, English, French, Portuguese, Polish, Czech, Indonesian
+- **Multi-language interface**: Available in Spanish, English, French, Portuguese, Polish, Czech, Indonesian, and Russian
 - **Customizable audio**: Sound effects, volume control, voice selection
 - **Chat statistics**: Track messages, members, donations, and more
 - **Message archiving**: Save and review important messages

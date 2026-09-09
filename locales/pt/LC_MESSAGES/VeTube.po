@@ -362,6 +362,10 @@ msgstr "Não há itens para excluir"
 msgid "¿Estás seguro de que quieres borrar todos los mensajes?"
 msgstr "Tem certeza de que deseja excluir todas as mensagens?"
 
+#: controller/main_controller.py:202
+msgid "Confirmación"
+msgstr "Confirmação"
+
 #: controller/main_controller.py:169
 #, python-brace-format
 msgid "Error al simplificar URL de TikTok: {}"
@@ -404,6 +408,11 @@ msgstr "Parece que o link que você está tentando acessar não é un link váli
 #: controller/main_controller.py:296
 msgid "Conectando..."
 msgstr "Conectando..."
+
+#: controller/main_controller.py:451
+#, python-format
+msgid "Error al iniciar el chat: %s"
+msgstr "Erro ao iniciar o bate-papo: %s"
 
 #: controller/main_controller.py:360
 msgid ""

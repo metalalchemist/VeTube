@@ -187,10 +187,10 @@ class MainController:
                     lf.SetFocus()
                 else:
                     wx.MessageBox(
-                        _("No hay más elementos que borrar"), "Error.", wx.ICON_ERROR
+                        _("No hay más elementos que borrar"), _("Error"), wx.ICON_ERROR
                     )
             else:
-                wx.MessageBox(_("No hay mensajes que borrar"), "Error.", wx.ICON_ERROR)
+                wx.MessageBox(_("No hay mensajes que borrar"), _("Error"), wx.ICON_ERROR)
                 lf.SetFocus()
             if lf.GetCount() <= 0:
                 lf.Append(_("Tus mensajes archivados aparecerán aquí"))
@@ -199,7 +199,7 @@ class MainController:
                 if (
                     wx.MessageBox(
                         _("¿Estás seguro de que quieres borrar todos los mensajes?"),
-                        "Confirmación",
+                        _("Confirmación"),
                         wx.YES_NO | wx.ICON_QUESTION,
                     )
                     == wx.YES
@@ -210,7 +210,7 @@ class MainController:
                     lf.Append(_("Tus mensajes archivados aparecerán aquí"))
                     lf.SetFocus()
             elif len(mensajes_destacados) <= 0:
-                wx.MessageBox(_("No hay mensajes que borrar"), "Error.", wx.ICON_ERROR)
+                wx.MessageBox(_("No hay mensajes que borrar"), _("Error"), wx.ICON_ERROR)
                 lf.SetFocus()
 
     def abrir_chat_dialog(self, event=None, url=""):
@@ -447,7 +447,11 @@ class MainController:
                 self.frame.text_ctrl_1.SetValue("")
 
         except Exception as e:
-            wx.MessageBox(f"Error al iniciar el chat: {e!s}", "error.", wx.ICON_ERROR)
+            wx.MessageBox(
+                _("Error al iniciar el chat: %s") % e,
+                _("Error"),
+                wx.ICON_ERROR,
+            )
             self.frame.text_ctrl_1.SetFocus()
             return
 

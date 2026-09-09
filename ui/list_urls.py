@@ -44,4 +44,4 @@ class ListUrlsDialog(wx.Dialog):
             self.ShowModal()
             self.Destroy()
         else:
-            wx.MessageBox(_("No hay URLS en este mensaje"), "Error", wx.ICON_ERROR)
+            wx.MessageBox(_("No hay URLS en este mensaje"), _("Error"), wx.ICON_ERROR)

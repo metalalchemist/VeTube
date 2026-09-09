@@ -106,7 +106,7 @@ class EditorController:
                     _(
                         "Debe escoger al menos una tecla de las casillas de verificación"
                     ),
-                    "error.",
+                    _("Error"),
                     wx.ICON_ERROR,
                 )
                 return
@@ -126,7 +126,7 @@ class EditorController:
                             ),
                             _("Función desconocida"),
                         ),
-                        "error.",
+                        _("Error"),
                         wx.ICON_ERROR,
                     )
                     return
@@ -154,7 +154,7 @@ class EditorController:
             # Failure. The key was not registered, likely because the OS blocked it.
             wx.MessageBox(
                 _("Esa combinación está siendo usada por el sistema operativo"),
-                "error.",
+                _("Error"),
                 wx.ICON_ERROR,
             )
 

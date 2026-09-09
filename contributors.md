@@ -149,6 +149,7 @@ VeTube is available in multiple languages thanks to our translation contributors
 - **Indonesian (Bahasa Indonesia)**: Muhammad
 - **Polish (Polski)**: Oriol
 - **Portuguese (Português)**: Community contributions
+- **Russian (Русский)**: Kostenkov-2021
 
 **Want to add a translation?** Check the [Translation Guide](translation-guide.md) to get started.
 
