@@ -1,7 +1,7 @@
 {
-    "current_version": "3.94",
-    "description": "actualizar para leer en vivos de tiktok.",
+    "current_version": "3.96",
+    "description": "Versión 3.96: actualizador renovado, motores de voz Piper y Kokoro descargables a demanda (instalación más ligera), idioma ruso completo, TikTok actualizado y varias correcciones.",
     "downloads": {
-        "Windows64": "https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-x64.zip"
+        "Windows64": "https://github.com/metalalchemist/VeTube/releases/download/v3.96/vetube-v3.96-transicion.zip"
     }
 }
