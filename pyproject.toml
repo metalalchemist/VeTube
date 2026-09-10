@@ -1,6 +1,6 @@
 [project]
 name = "vetube"
-version = "3.95"
+version = "3.96"
 description = "Aplicación VeTube"
 readme = "README.md"
 requires-python = ">=3.14"

@@ -47,6 +47,14 @@ jobs:
         if: github.ref_type == 'tag'
         run: uv lock --upgrade
 
+      # En push a master: no re-resuelve nada, solo reconcilia el lock con
+      # pyproject.toml (p. ej. cuando solo cambio el campo `version`) para que
+      # el build de comprobacion no salga rojo por un desajuste inofensivo.
+      # Este lock NO se commitea; solo vale para esta corrida.
+      - name: Reconcile lock with pyproject (non-release)
+        if: github.ref_type != 'tag'
+        run: uv lock
+
       - name: Install dependencies
         run: uv sync --locked --no-install-project
 
