@@ -9,6 +9,10 @@ voices/*/*.onnx.json
 # Motores descargados a demanda (engines/sonata): binarios junto al ejecutable,
 # como voices/. Anclado a la raíz para no ignorar un engines/ de otro sitio.
 /engines/
+# Los motores de voz no viven en el repo: se descargan a engines/. Si se
+# extraen en 64/ para pruebas locales, que no se versionen ni viajen al build.
+/64/sonata/
+/64/sherpa/
 data.json
 languages.json
 venv/

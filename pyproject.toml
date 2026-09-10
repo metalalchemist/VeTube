@@ -126,7 +126,6 @@ packages = [
     "utils",
     "update",
     "TTS",
-    "translates",
     "controller",
     "servicios",
 ]
@@ -164,20 +163,15 @@ include_files = [
     ["data.json", "data.json"],
     ["VERSION", "VERSION"],
 
-    ["translates/", "translates/"],
     ["locales/", "locales/"],
     ["sounds/", "sounds/"],
 
-    # OJO: el contenido de 64/ va enumerado UNO POR UNO, a propósito. Los dos
-    # motores de voz (64/sonata, unos 48 MB, y 64/sherpa, unos 40 MB) ya no
-    # viajan en el build: se descargan a demanda desde la release «motores».
-    # Como la carpeta ya no se copia entera, TODO lo que se añada dentro de
-    # 64/ hay que apuntarlo también aquí, o no llegará al build sin dar el
-    # menor aviso.
-    ["64/bypass64.exe", "lib/64/bypass64.exe"],
-    ["64/libvlc.dll", "lib/64/libvlc.dll"],
-    ["64/libvlccore.dll", "lib/64/libvlccore.dll"],
-    ["64/plugins/", "lib/64/plugins/"], # VLC
+    # La carpeta 64/ se copia entera (bypass64.exe + libvlc + plugins de VLC).
+    # Los motores de voz (64/sonata, 64/sherpa) NO están en el repo: se
+    # descargan a demanda a engines/ desde la release «motores», así que
+    # nunca aparecen aquí dentro. Si alguna vez los extraes en 64/ para
+    # probar, bórralos antes de compilar o viajarán en el build.
+    ["64/", "lib/64/"],
 
     [".venv/Lib/site-packages/sound_lib/lib/", "sound_lib/lib/"],
 ]

@@ -39,6 +39,10 @@ uv run python run_main_window.py
 uv run cxfreeze build
 ```
 
+> **`requirements.txt`**: kept only for contributors on a plain `venv` + `pip`
+> setup. It is generated automatically from `uv.lock` on every release — do
+> **not** edit it by hand. `pyproject.toml` + `uv.lock` are the source of truth.
+
 ### Project Structure
 
 ```
