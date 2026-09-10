@@ -127,6 +127,6 @@ VeTube позволяет доступно читать сообщения и у
 Ваша поддержка помогает проекту развиваться.
 
 - [Поддержать VeTube](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
-- [Скачать переносную 64-разрядную версию](https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-x64.zip)
-- [Скачать установщик 64-разрядной версии](https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-setup.exe)
+- [Скачать переносную 64-разрядную версию](https://github.com/metalalchemist/VeTube/releases/latest/download/vetube-v3.96.zip)
+- [Скачать установщик 64-разрядной версии](https://github.com/metalalchemist/VeTube/releases/latest/download/vetube-v3.96.msi)
 - [Скачать переносную 32-разрядную версию 3.7](https://github.com/metalalchemist/VeTube/releases/download/v3.7/VeTube-x86.zip)

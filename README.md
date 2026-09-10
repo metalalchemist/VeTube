@@ -13,7 +13,7 @@ VeTube is a Windows desktop application that monitors live chat from streaming p
 
 ## Features
 
-- **Multi-platform support**: YouTube, Twitch, TikTok, Kick, Discord, and "La sala de juegos"
+- **Multi-platform support**: YouTube, Twitch, TikTok, Kick, Discord, and "QuentinC Playroom"
 - **Multiple TTS engines**: Piper (high-quality neural voices), Windows OneCore, SAPI5
 - **Real-time chat monitoring**: Instant message detection and voice synthesis
 - **Multi-language interface**: Available in Spanish, English, French, Portuguese, Polish, Czech, Indonesian, and Russian
@@ -66,7 +66,7 @@ We're actively working on making VeTube available through additional package man
 ## Quick Start
 
 1. **Launch VeTube** from Start Menu or desktop shortcut
-2. **Select platform** from the dropdown (YouTube, Twitch, TikTok, Kick, Discord, or La sala de juegos)
+2. **Select platform** from the dropdown (YouTube, Twitch, TikTok, Kick, Discord, or QuentinC Playroom)
 3. **Enter channel URL or username** in the text field
 4. **Press Enter** or click "Connect" to start monitoring chat
 5. **Listen** as messages are read aloud in real-time
@@ -80,7 +80,7 @@ We're actively working on making VeTube available through additional package man
 | TikTok | `https://www.tiktok.com/@username/live` or `@username` |
 | Kick | `https://www.kick.com/channel` or just `channel` |
 | Discord | Paste text channel URL (requires token in settings) |
-| La sala de juegos | Leave empty and press Enter |
+| QuentinC Playroom | Select the platform from the combo box and press Enter |
 
 ## Documentation
 

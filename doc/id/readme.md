@@ -145,6 +145,6 @@ Dengan dukunganmu, program ini akan terus berkembang.
 
 [Bergabunglah dengan kami](https://www.paypal.com/donate/?hosted_button_id=5ZV23UDDJ4C5U)
 
-[Unduh program portabel untuk 64-bit](https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-x64.zip)
-[Unduh program instalasi untuk 64-bit](https://github.com/metalalchemist/VeTube/releases/latest/download/VeTube-setup.exe)
+[Unduh program portabel untuk 64-bit](https://github.com/metalalchemist/VeTube/releases/latest/download/vetube-v3.96.zip)
+[Unduh program instalasi untuk 64-bit](https://github.com/metalalchemist/VeTube/releases/latest/download/vetube-v3.96.msi)
 [Unduh program portabel untuk 32-bit](https://github.com/metalalchemist/VeTube/releases/download/v3.7/VeTube-x86.zip)
