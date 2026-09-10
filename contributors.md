@@ -79,13 +79,13 @@ Thanks to all the people who have contributed code, bug fixes, and improvements 
         <a href="https://github.com/metalalchemist/VeTube/commits?author=NightPurrer" title="Code">💻</a>
       </td>
       <td align="center" valign="top" width="14.28%">
-        <a href="https://github.com/galorasd">
-          <img src="https://github.com/galorasd.png?s=100" width="100px;" alt="Jesús Pavón Abián"/>
+        <a href="https://github.com/jpavonabian">
+          <img src="https://github.com/jpavonabian.png?s=100" width="100px;" alt="Jesús Pavón Abián"/>
           <br/>
           <sub><b>Jesús Pavón Abián</b></sub>
         </a>
         <br/>
-        <a href="https://github.com/metalalchemist/VeTube/commits?author=galorasd" title="Code">💻</a>
+        <a href="https://github.com/metalalchemist/VeTube/commits?author=jpavonabian" title="Code">💻</a>
       </td>
       <td align="center" valign="top" width="14.28%">
         <a href="https://github.com/MuhammadGagah">
