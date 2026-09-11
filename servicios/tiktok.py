@@ -263,8 +263,14 @@ class ServicioTiktok:
 
         def mostrar():
             try:
+                # El padre debe ser el panel del chat (dentro de la ventana de chat en
+                # vivo) y no self.frame (la ventana principal): al cerrarse un dialogo
+                # modal, Windows trae al frente a su ventana padre. Con self.frame como
+                # padre, aceptar el cartel dejaba al frente la ventana principal en vez
+                # de la ventana de chat en vivo ya abierta (a diferencia del cartel
+                # equivalente de youtube.py, que ya usa el panel del chat como padre).
                 dlg = wx.MessageDialog(
-                    self.frame,
+                    self.chat_controller.ui or self.frame,
                     _(
                         "No se pudo conectar al chat de TikTok por el servicio "
                         "habitual (suele estar caido).\n\n"
