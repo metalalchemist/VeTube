@@ -190,9 +190,24 @@ class ServicioTiktok:
         if self.is_running and self.loop and self.loop.is_running():
             self.is_running = False
             logger.info("Deteniendo servicio de TikTok...")
-            if self.chat:
-                asyncio.run_coroutine_threadsafe(self.chat.disconnect(), self.loop)
-            self.loop.call_soon_threadsafe(self.loop.stop)
+            # Cerrar y frenar en una sola corutina: así el disconnect se espera
+            # (await) de verdad antes de parar el bucle. Antes se programaba el
+            # disconnect por un lado y el stop por otro; si el bucle paraba
+            # primero, la corutina del disconnect quedaba sin await y saltaba un
+            # RuntimeWarning ("coroutine was never awaited").
+            loop = self.loop
+            chat = self.chat
+
+            async def _cerrar_y_frenar():
+                try:
+                    if chat:
+                        await chat.disconnect()
+                except Exception:
+                    logger.debug("Cierre del cliente con incidencia menor", exc_info=True)
+                finally:
+                    loop.stop()
+
+            asyncio.run_coroutine_threadsafe(_cerrar_y_frenar(), loop)
 
     def _instalar_firmador_local(self):
         """Deja el cliente leyendo el chat del navegador, si la opción está marcada.
