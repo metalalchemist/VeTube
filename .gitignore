@@ -35,3 +35,8 @@ src/vetube.egg-info/
 # Scratch / temp files
 @AutomationLog.txt
 issue-body.md
+
+# Extension: carpeta generada por Chrome al cargarla y salidas de prueba
+interceptor_extension/_metadata/
+ultima_captura.json
+tramas_capturadas.json

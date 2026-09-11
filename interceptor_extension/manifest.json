@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "VeTube - puente del chat de TikTok Live",
+  "version": "0.4.0",
+  "description": "Lee las tramas del chat del directo con la API de depuracion de Chrome (inmune a la CSP de TikTok) y se las pasa a VeTube por 127.0.0.1. No recalcula firmas ni manda tu sesion.",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "storage",
+    "debugger"
+  ],
+  "host_permissions": [
+    "https://*.tiktok.com/*",
+    "http://127.0.0.1:8790/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "VeTube: estado del puente"
+  }
+}

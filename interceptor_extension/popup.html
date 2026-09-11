@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>VeTube: estado del puente</title>
+    <style>
+      /* Colores en variables y con las dos combinaciones definidas: la usuaria
+         usa lector de pantalla, pero el popup lo puede mirar cualquiera y el
+         contraste no se negocia. Ningún estado se comunica SÓLO con color:
+         todos van escritos con palabras. */
+      :root {
+        color-scheme: light dark;
+        --fondo: #ffffff;
+        --texto: #14161a;
+        --tenue: #4a4f57;
+        --borde: #9aa0a8;
+        --foco: #0b57d0;
+        --aviso-fondo: #fff4e5;
+        --aviso-borde: #8a5300;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --fondo: #16181d;
+          --texto: #f2f4f7;
+          --tenue: #c2c8d0;
+          --borde: #6b7280;
+          --foco: #8ab4f8;
+          --aviso-fondo: #33270f;
+          --aviso-borde: #f0b357;
+        }
+      }
+
+      body {
+        width: 360px;
+        margin: 0;
+        padding: 12px 14px 16px;
+        background: var(--fondo);
+        color: var(--texto);
+        font: 15px/1.5 system-ui, "Segoe UI", sans-serif;
+      }
+
+      h1 {
+        font-size: 17px;
+        margin: 0 0 8px;
+      }
+      h2 {
+        font-size: 15px;
+        margin: 16px 0 6px;
+      }
+
+      #resumen {
+        margin: 0 0 8px;
+        padding: 8px 10px;
+        border: 1px solid var(--borde);
+        border-radius: 6px;
+        font-weight: 600;
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+      li {
+        margin-bottom: 4px;
+      }
+      .dato {
+        color: var(--tenue);
+      }
+
+      #aviso-recarga {
+        margin-top: 14px;
+        padding: 10px;
+        background: var(--aviso-fondo);
+        border: 2px solid var(--aviso-borde);
+        border-radius: 6px;
+      }
+      #aviso-recarga h2 {
+        margin-top: 0;
+      }
+      #aviso-recarga p {
+        margin: 0 0 8px;
+      }
+
+      button {
+        font: inherit;
+        min-height: 36px;
+        padding: 6px 12px;
+        margin: 4px 6px 4px 0;
+        color: var(--texto);
+        background: transparent;
+        border: 2px solid var(--borde);
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: var(--texto);
+      }
+      /* Foco visible y grueso: sin esto, moverse con teclado es a ciegas de
+         verdad para quien mira la pantalla. */
+      :focus-visible {
+        outline: 3px solid var(--foco);
+        outline-offset: 2px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 4px;
+      }
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+        font: 13px/1.4 ui-monospace, Consolas, monospace;
+        color: var(--texto);
+        background: var(--fondo);
+        border: 1px solid var(--borde);
+        border-radius: 6px;
+        padding: 6px;
+        resize: vertical;
+      }
+
+      p.nota {
+        color: var(--tenue);
+        margin: 8px 0 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>VeTube: estado del puente</h1>
+
+    <!-- role="status" (región viva educada): se anuncia solo al abrir el popup
+         y cada vez que se pulsa "Actualizar estado". No se refresca con un
+         temporizador a propósito: una región viva que cambia cada dos segundos
+         no para de hablar y vuelve el popup inservible con NVDA. -->
+    <p id="resumen" role="status">Consultando el estado…</p>
+
+    <h2>Detalle</h2>
+    <ul id="detalle">
+      <li>Cargando…</li>
+    </ul>
+
+    <div id="aviso-recarga" hidden>
+      <h2>Hace falta recargar el directo</h2>
+      <p id="texto-aviso"></p>
+      <button id="recargar" type="button">Recargar la página del directo</button>
+    </div>
+
+    <h2>Acciones</h2>
+    <button id="actualizar" type="button">Actualizar estado</button>
+
+    <h2>Diagnóstico</h2>
+    <label for="diag">
+      Texto de diagnóstico, sin datos privados (se puede copiar con Control+A y
+      Control+C)
+    </label>
+    <textarea id="diag" readonly rows="7"></textarea>
+    <button id="copiar" type="button">Copiar diagnóstico</button>
+
+    <p class="nota">
+      Esta extensión sólo habla con 127.0.0.1 en el puerto 8790. Nunca envía la
+      cookie de sesión.
+    </p>
+
+    <script src="logica.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

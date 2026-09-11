@@ -317,6 +317,8 @@ class MainController:
                 url = "https://www.twitch.tv/" + url
             elif plataforma_ids == 3:
                 url = "https://www.tiktok.com/@" + url + "/live"
+            elif plataforma_ids == 7:  # TikTok leido del navegador (firmador local)
+                url = "https://www.tiktok.com/@" + url + "/live"
             elif plataforma_ids == 5:  # Nuevo: Kick
                 url = "https://www.kick.com/" + url
             elif (
@@ -345,7 +347,10 @@ class MainController:
         elif "twitch" in url:
             self.set_plataforma(2)
         elif "tiktok" in url:
-            self.set_plataforma(3)
+            # Preservar la eleccion del navegador (indice 7). Sin esto, al haber
+            # construido una URL de tiktok, este autodetectado reajustaria el
+            # desplegable a 3 (TikTok normal) y se perderia el modo navegador.
+            self.set_plataforma(7 if plataforma_ids == 7 else 3)
         elif "sala" in url:
             self.set_plataforma(4)
         elif "kick" in url:  # Nuevo: Detección de URL para Kick
@@ -395,6 +400,14 @@ class MainController:
         # como genérica.
         plataforma = PLATAFORMAS[plataforma_ids]
 
+        # El origen del chat de TikTok se elige aca, en el desplegable "Capturar
+        # el chat de:": el indice 7 ("TikTok (navegador)") usa el firmador local
+        # (lee del navegador con la extension); el 3 ("TikTok") usa el firmador
+        # remoto de siempre. Es una bandera de ejecucion, no una preferencia
+        # guardada: se fija en cada conexion para que no queden dudas de que
+        # servicio esta en uso. La lee servicios/tiktok._instalar_firmador_local.
+        config["tiktok_firmador_local"] = plataforma_ids == 7
+
         # Create ChatController first
         chat_controller = ChatController(
             self, self.frame, plataforma=plataforma, chat_dialog=self.chat_dialog
@@ -411,6 +424,10 @@ class MainController:
                     self, url, self.frame, plataforma, chat_controller
                 )
             elif plataforma_ids == 3:
+                servicio = ServicioTiktok(
+                    self, url, self.frame, plataforma, chat_controller
+                )
+            elif plataforma_ids == 7:  # TikTok leido del navegador
                 servicio = ServicioTiktok(
                     self, url, self.frame, plataforma, chat_controller
                 )
