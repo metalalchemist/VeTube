@@ -13,6 +13,7 @@ PLATAFORMAS = [
     "La sala de juegos",
     "Kick",
     "Discord",
+    "TikTok",  # 7: mismo chat que TikTok, pero leido del navegador (firmador local)
 ]
 
 
@@ -61,6 +62,7 @@ class MyFrame(wx.Frame):
                 _("La sala de juegos"),
                 _("Kick"),
                 _("Discord"),
+                _("TikTok (navegador, experimental)"),
             ],
         )
         self.plataforma.SetSelection(0)

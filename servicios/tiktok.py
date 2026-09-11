@@ -75,6 +75,11 @@ class ServicioTiktok:
         self.media_controller = None
         self.translator = None
         self.filtrar_anteriores = False
+        # Fallback al navegador: si la conexion normal (firmador remoto) falla,
+        # se ofrece leer del navegador una sola vez. _usando_navegador es True
+        # desde el arranque solo si ya se eligio el navegador en el desplegable.
+        self._usando_navegador = False
+        self._navegador_ofrecido = False
 
     def iniciar_chat(self):
         self.is_running = True
@@ -118,6 +123,7 @@ class ServicioTiktok:
                 raise ValueError(_("No se pudo obtener la URL real de TikTok."))
             self.chat = TikTokLiveClient(unique_id=user_id)
             self._instrumentar_historial()
+            self._instalar_firmador_local()
             self._add_listeners()
             await self._run_client_async()
         except Exception as e:
@@ -158,10 +164,25 @@ class ServicioTiktok:
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                if self.is_running:
-                    logger.exception("Error en el bucle del cliente")
-                    wx.CallAfter(self.chat_controller.notificar_error, str(e))
-                    self.detener()
+                if not self.is_running:
+                    break
+                # El firmador remoto de TikTok suele caerse. Si la conexion
+                # normal falla y todavia no probamos el navegador, ofrecerlo una
+                # sola vez: si acepta, se instala el espejo y se reintenta en el
+                # mismo bucle; si no, se informa el error como siempre.
+                if not self._usando_navegador and not self._navegador_ofrecido:
+                    self._navegador_ofrecido = True
+                    logger.info(
+                        "La conexion normal de TikTok fallo; se ofrece el navegador: %s",
+                        e,
+                    )
+                    acepta = await asyncio.to_thread(self._ofrecer_navegador)
+                    if acepta and self.is_running and self._activar_navegador():
+                        self.last_live_status = None
+                        continue
+                logger.exception("Error en el bucle del cliente")
+                wx.CallAfter(self.chat_controller.notificar_error, str(e))
+                self.detener()
 
     def detener(self):
         if self.media_controller:
@@ -172,6 +193,106 @@ class ServicioTiktok:
             if self.chat:
                 asyncio.run_coroutine_threadsafe(self.chat.disconnect(), self.loop)
             self.loop.call_soon_threadsafe(self.loop.stop)
+
+    def _instalar_firmador_local(self):
+        """Deja el cliente leyendo el chat del navegador, si la opción está marcada.
+
+        TikTok exige que la petición al websocket del chat vaya firmada, y el
+        servicio externo que la firmaba está caído. El navegador del usuario, en
+        cambio, ya tiene el directo abierto con su websocket firmado y andando: la
+        extensión copia esas tramas y las manda a un puerto local. Aquí solo se
+        cambia de dónde saca el cliente sus mensajes (ver servicios/tiktok_espejo).
+
+        Apagado de fábrica: sin la extensión puesta no llegaría nada y el chat se
+        quedaría esperando en silencio, que es peor que fallar.
+        """
+        if not data_store.config.get("tiktok_firmador_local", False):
+            return
+        try:
+            from servicios import tiktok_espejo, tiktok_interceptor
+
+            servidor = tiktok_interceptor.servidor_compartido()
+            tiktok_espejo.instalar_espejo(
+                self.chat, servidor.sesiones, avisar=self._avisar_firmador
+            )
+            self._usando_navegador = True
+            self._navegador_ofrecido = True  # ya esta en el navegador: no ofrecerlo
+        except OSError:
+            # El puerto ocupado casi siempre significa otra copia de VeTube abierta;
+            # decirlo es más útil que un traceback en el log.
+            logger.exception("No se pudo abrir el puerto del firmador local")
+            wx.CallAfter(
+                self.chat_controller.notificar_error,
+                _(
+                    "No se pudo abrir el puerto del firmador local. "
+                    "¿Hay otra copia de VeTube abierta?"
+                ),
+            )
+        except Exception:
+            # Que falle el firmador no debe tumbar el chat: sin él, el cliente sigue
+            # intentando la conexión normal y el error queda en el log.
+            logger.exception("No se pudo instalar el firmador local")
+
+    def _avisar_firmador(self, texto):
+        # El espejo corre en el hilo de asyncio; los avisos tienen que volver al
+        # hilo de wx para que el lector de pantalla los anuncie.
+        wx.CallAfter(reader.leer_aviso, _(texto))
+
+    def _ofrecer_navegador(self):
+        """Muestra el cartel y espera la respuesta. Corre fuera del bucle asyncio
+        (con asyncio.to_thread) para no congelarlo mientras el dialogo esta abierto."""
+        import threading
+
+        evento = threading.Event()
+        resultado = {"aceptado": False}
+
+        def mostrar():
+            try:
+                dlg = wx.MessageDialog(
+                    self.frame,
+                    _(
+                        "No se pudo conectar al chat de TikTok por el servicio "
+                        "habitual (suele estar caido).\n\n"
+                        "Se puede leer desde el navegador. Asegurate de tener la "
+                        "extension de VeTube instalada y este directo abierto en "
+                        "el navegador, y pulsa Aceptar cuando este listo."
+                    ),
+                    _("Leer TikTok desde el navegador"),
+                    wx.OK | wx.CANCEL | wx.ICON_INFORMATION,
+                )
+                resultado["aceptado"] = dlg.ShowModal() == wx.ID_OK
+                dlg.Destroy()
+            finally:
+                evento.set()
+
+        wx.CallAfter(mostrar)
+        evento.wait()
+        return resultado["aceptado"]
+
+    def _activar_navegador(self):
+        """Instala el espejo sobre el cliente ya creado para reintentar leyendo
+        del navegador. Devuelve True si quedo listo."""
+        try:
+            from servicios import tiktok_espejo, tiktok_interceptor
+
+            servidor = tiktok_interceptor.servidor_compartido()
+            tiktok_espejo.instalar_espejo(
+                self.chat, servidor.sesiones, avisar=self._avisar_firmador
+            )
+            self._usando_navegador = True
+            return True
+        except OSError:
+            logger.exception("No se pudo abrir el puerto del firmador local")
+            wx.CallAfter(
+                self.chat_controller.notificar_error,
+                _(
+                    "No se pudo abrir el puerto del firmador local. "
+                    "¿Hay otra copia de VeTube abierta?"
+                ),
+            )
+        except Exception:
+            logger.exception("No se pudo instalar el firmador local")
+        return False
 
     def _instrumentar_historial(self):
         # TikTokLiveClient recibe de TikTok un indicador fiable (is_history) que dice si un

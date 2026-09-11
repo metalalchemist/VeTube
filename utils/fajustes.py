@@ -58,6 +58,11 @@ configuraciones = {
     "leer_historial": True,
     "update_channel": "stable",
     "create_backup_before_update": True,
+    # Firmador local del chat de TikTok: en vez de pedirle la firma a un
+    # servicio externo, VeTube lee las tramas que el navegador del usuario ya
+    # está recibiendo en el directo abierto. Apagado de fábrica porque hace
+    # falta la extensión puesta en el navegador para que llegue algo.
+    "tiktok_firmador_local": False,
 }
 actualizar_configuracion = False
 
