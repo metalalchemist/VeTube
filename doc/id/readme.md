@@ -7,7 +7,7 @@ Kelola dan baca chat dari siaran langsung milikmu atau dari kreator favoritmu de
 
 - YouTube (tayangan perdana, siaran langsung, dan yang sudah selesai)
 - Twitch.tv (siaran langsung dan yang sudah selesai)
-- TikTok (siaran langsung)
+- TikTok (siaran langsung; jika layanan biasa gagal, ada alternatif lewat browser, lihat [panduan ekstensi](tiktok_navegador.md))
 - Kick (siaran langsung)
 - QuentinC's playroom (chat dari berbagai meja permainan)
 - Discord (kanal teks server; [panduan penyiapan](discord.md))

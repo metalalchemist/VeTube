@@ -1,5 +1,6 @@
 # VeTube
 Čti si přístupným způsobem chaty u živých streamů (vlastních nebo svých oblíbených tvůrců) na YouTube, Twitchi, TikToku nebo QuentinC Playroomu.
+Pokud obvyklá služba TikToku selže, existuje alternativa čtení přes prohlížeč; viz [návod k rozšíření](tiktok_navegador.md).
 ## Funkce
 
 - Automatický režim: Nech si číst nové zprávy v chatu v reálném čase svým oblíbeným SAPI 5 hlasem

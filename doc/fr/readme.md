@@ -3,7 +3,7 @@ Lisez et gérez de manière accessible le chat de vos propres directs ou de ceux
 ## Sites pris en charge
 - YouTube (premières, directs en cours et passés)
 - Twitch.tv (directs en cours et passés)
-- TikTok (directs en cours)
+- TikTok (directs en cours ; si le service habituel échoue, il existe une alternative via le navigateur, voir le [guide de l'extension](tiktok_navegador.md))
 - Kick (directs en cours)
 - Le Salon (le chat des différentes tables)
 - Discord (canaux texte d'un serveur ; [guide de configuration](discord.md))

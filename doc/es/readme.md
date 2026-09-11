@@ -4,7 +4,7 @@ Lee y gestiona de manera accesible el chat de tus propios directos o en los de t
 ## sitios soportados:
 - youtube (extrenos y directos en curso y pasados)
 - twich.tv(directos en curso y pasados)
-- tiktok(directos en curso)
+- tiktok(directos en curso; si el servicio habitual falla, hay una alternativa leyendo desde el navegador, ver [guía de la extensión](tiktok_navegador.md))
 - kick (directos en curso)
 - la sala dejuegos(chat de las diversas mesas)
 - Discord (canales de texto de un servidor; [guía de configuración](discord.md))
@@ -87,7 +87,7 @@ Si deseas colaborar traduciendo VeTube a tu idioma, necesitarás instalar las he
     *Nota: Asegúrate de instalar el paquete `Babel` (mayúscula B recomendada en PyPI, aunque pip no distingue), evita paquetes incorrectos de tamaño diminuto.*
 
 2.  **Extraer textos para actualizar la plantilla (.pot):**
-    Si de nuevas cadenas se han añadido al código, actualiza el archivo plantilla:
+    Si nuevas cadenas se han añadido al código, actualiza el archivo plantilla:
     ```bash
     pybabel extract -F babel.cfg -o vetube.pot .
     ```

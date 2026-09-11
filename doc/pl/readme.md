@@ -4,7 +4,7 @@ Czytaj i zarządzaj w sposób dostępny czatem swoich własnych transmisji na ż
 ## obsługiwane witryny:
 - youtube (premiery oraz transmisje na żywo trwające i przeszłe)
 - twitch.tv (transmisje na żywo trwające i przeszłe)
-- tiktok (transmisje na żywo trwające)
+- tiktok (transmisje na żywo trwające; jeśli zwykła usługa zawiedzie, jest alternatywa przez przeglądarkę, zobacz [przewodnik po rozszerzeniu](tiktok_navegador.md))
 - kick (transmisje na żywo trwające)
 - playroom (czat różnych stołów)
 - Discord (kanały tekstowe serwera; [przewodnik konfiguracji](discord.md))

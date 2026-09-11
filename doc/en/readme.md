@@ -1,6 +1,7 @@
   # VeTube
 Accessably Read and manage YouTube, twich, kick, TikTok and Discord live chats on your own streams or those of your favorite creators.
 For Discord you can read the text channels of a server; see the [step-by-step setup guide](discord.md).
+If TikTok's usual chat service is down, there's a browser-based alternative; see the [extension guide](tiktok_navegador.md).
 ## Features
 
 - Automatic mode: Read incoming  chat messages in real time using your preferred sapi5 voice

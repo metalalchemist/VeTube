@@ -1,6 +1,7 @@
 # vetube
 Leia e gerencie de forma acessível o bate-papo do youtube, TikTok, Kick, twitch e Discord em suas próprias transmissões ou nas de seus criadores favoritos.
 No Discord é possível ler os canais de texto de um servidor; veja o [guia de configuração passo a passo](discord.md).
+Se o serviço habitual do TikTok cair, há uma alternativa lendo pelo navegador; veja o [guia da extensão](tiktok_navegador.md).
 [demonstração do produto em funcionamento](https://www.youtube.com/watch?v=KljpMJNVYCw)
 ## Caracteristicas
 - Modo automático: leia mensagens de bate-papo em tempo real usando a voz sapy5
