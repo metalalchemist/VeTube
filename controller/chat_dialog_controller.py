@@ -152,6 +152,15 @@ class ChatDialogController:
         for url, (controller, page_index) in list(self.chat_sessions.items()):
             if controller.servicio:
                 controller.servicio.detener()
+        # Devolver el foco a la ventana principal ANTES de destruir el diálogo (mismo
+        # gesto que toggle_chat_window_visibility). Si el diálogo se destruye siendo la
+        # ventana activa, Windows activa la aplicación anterior o deja el teclado «en el
+        # aire»: ningún control de VeTube tiene el foco hasta un Alt+Tab de ida y vuelta.
+        self.view.Hide()
+        frame = self.main_controller.frame
+        frame.Show()
+        frame.Raise()
+        frame.text_ctrl_1.SetFocus()
         self.view.Destroy()
 
     def close_chat_session(self, chat_controller):
