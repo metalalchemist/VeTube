@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-09 20:20+0200\n"
+"POT-Creation-Date: 2026-09-14 12:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1641,19 +1641,19 @@ msgstr ""
 msgid "Opciones del chat"
 msgstr ""
 
-#: ui/ajustes/chat.py:15
-msgid "Leer los mensajes anteriores al chat"
+#: ui/ajustes/chat.py:17
+msgid "Leer los mensajes anteriores al chat (solo YouTube y TikTok)"
 msgstr ""
 
-#: ui/ajustes/chat.py:19
+#: ui/ajustes/chat.py:21
 msgid "traducción de mensajes: "
 msgstr ""
 
-#: ui/ajustes/chat.py:28
+#: ui/ajustes/chat.py:30
 msgid "Activar lectura de mensajes automática"
 msgstr ""
 
-#: ui/ajustes/chat.py:33
+#: ui/ajustes/chat.py:35
 msgid "convertir las donaciones a la divisa: "
 msgstr ""
 
