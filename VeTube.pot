@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-09 20:20+0200\n"
+"POT-Creation-Date: 2026-09-16 10:59-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.18.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: controller/ajustes_controller.py:332 controller/ajustes_controller.py:350
 #: controller/ajustes_controller.py:372 controller/ajustes_controller.py:535
@@ -153,10 +153,10 @@ msgstr ""
 #: controller/main_controller.py:117 controller/main_controller.py:190
 #: controller/main_controller.py:193 controller/main_controller.py:213
 #: controller/main_controller.py:232 controller/main_controller.py:262
-#: controller/main_controller.py:270 controller/main_controller.py:329
-#: controller/main_controller.py:368 controller/main_controller.py:384
-#: controller/main_controller.py:452 controller/main_controller.py:526
-#: controller/main_controller.py:534
+#: controller/main_controller.py:270 controller/main_controller.py:331
+#: controller/main_controller.py:373 controller/main_controller.py:389
+#: controller/main_controller.py:469 controller/main_controller.py:543
+#: controller/main_controller.py:551
 #: controller/motor_downloader_controller.py:124
 #: controller/piper_downloader_controller.py:95
 #: controller/piper_downloader_controller.py:131
@@ -191,7 +191,7 @@ msgid "Mensaje copiado"
 msgstr ""
 
 #: controller/chat_controller.py:354 globals/mensajes.py:36 ui/chat_ui.py:80
-#: ui/main_window.py:84
+#: ui/main_window.py:86
 msgid "Favoritos"
 msgstr ""
 
@@ -414,7 +414,7 @@ msgstr ""
 msgid "Borrar todos los mensajes destacados"
 msgstr ""
 
-#: controller/main_controller.py:153 ui/main_window.py:111
+#: controller/main_controller.py:153 ui/main_window.py:113
 msgid "&Borrar mensaje"
 msgstr ""
 
@@ -430,7 +430,7 @@ msgstr ""
 msgid "Borrar todos los favoritos"
 msgstr ""
 
-#: controller/main_controller.py:167 ui/main_window.py:93
+#: controller/main_controller.py:167 ui/main_window.py:95
 msgid "&Borrar favorito"
 msgstr ""
 
@@ -465,55 +465,55 @@ msgstr ""
 msgid "Error al simplificar URL de TikTok: {}"
 msgstr ""
 
-#: controller/main_controller.py:269 servicios/tiktok.py:118
+#: controller/main_controller.py:269 servicios/tiktok.py:123
 msgid "No se pudo obtener la URL real de TikTok."
 msgstr ""
 
-#: controller/main_controller.py:327
+#: controller/main_controller.py:329
 msgid ""
 "Para Discord pega el enlace del canal de texto: haz clic derecho sobre el"
 " canal y elige «Copiar enlace»."
 msgstr ""
 
-#: controller/main_controller.py:366
+#: controller/main_controller.py:371
 msgid ""
 "El enlace de Discord no es válido. Copia el enlace del canal de texto "
 "(clic derecho sobre el canal, «Copiar enlace») y pégalo en VeTube."
 msgstr ""
 
-#: controller/main_controller.py:382
+#: controller/main_controller.py:387
 msgid ""
 "¡Parece que el enlace al cual está intentando acceder no es un enlace "
 "válido."
 msgstr ""
 
-#: controller/main_controller.py:442
+#: controller/main_controller.py:459
 msgid "Conectando..."
 msgstr ""
 
-#: controller/main_controller.py:451
+#: controller/main_controller.py:468
 #, python-format
 msgid "Error al iniciar el chat: %s"
 msgstr ""
 
-#: controller/main_controller.py:524
+#: controller/main_controller.py:541
 msgid ""
 "El token no es válido. Comprueba que lo copiaste completo desde el portal"
 " de desarrolladores de Discord."
 msgstr ""
 
-#: controller/main_controller.py:532
+#: controller/main_controller.py:549
 msgid ""
 "No se pudo comprobar el token por un fallo de red. Revisa tu conexión a "
 "internet e inténtalo de nuevo."
 msgstr ""
 
-#: controller/main_controller.py:583
+#: controller/main_controller.py:600
 #: controller/menus/main_menu_controller.py:139
 msgid "¿está seguro que desea salir del programa?"
 msgstr ""
 
-#: controller/main_controller.py:583
+#: controller/main_controller.py:600
 #: controller/menus/main_menu_controller.py:139
 msgid "¡atención!"
 msgstr ""
@@ -1116,6 +1116,10 @@ msgstr ""
 msgid "proceso playroom no abierto"
 msgstr ""
 
+#: servicios/YouTubeRealDataTime.py:44
+msgid "Cambiando a servicio de tiempo real."
+msgstr ""
+
 #: servicios/discord.py:67 servicios/kick.py:82 ui/piper_downloader.py:81
 msgid "Cargando..."
 msgstr ""
@@ -1132,7 +1136,7 @@ msgid ""
 "desarrolladores de Discord. Actívalo y vuelve a intentarlo."
 msgstr ""
 
-#: servicios/discord.py:130 servicios/kick.py:113 servicios/tiktok.py:269
+#: servicios/discord.py:130 servicios/kick.py:113 servicios/tiktok.py:411
 msgid "Ingresando al chat"
 msgstr ""
 
@@ -1154,16 +1158,16 @@ msgstr ""
 msgid "error_conectar_kick_chatroom"
 msgstr ""
 
-#: servicios/kick.py:217 servicios/kick.py:224 servicios/tiktok.py:345
-#: servicios/tiktok.py:351
+#: servicios/kick.py:217 servicios/kick.py:224 servicios/tiktok.py:487
+#: servicios/tiktok.py:493
 msgid " comenzó a seguirte!"
 msgstr ""
 
-#: servicios/kick.py:266 servicios/tiktok.py:508 servicios/youtube.py:341
+#: servicios/kick.py:266 servicios/tiktok.py:650 servicios/youtube.py:341
 msgid " en vivo, actualmente "
 msgstr ""
 
-#: servicios/kick.py:268 servicios/tiktok.py:510 servicios/youtube.py:343
+#: servicios/kick.py:268 servicios/tiktok.py:652 servicios/youtube.py:343
 msgid " viendo ahora"
 msgstr ""
 
@@ -1229,58 +1233,86 @@ msgstr ""
 msgid "Chat de la sala de juegos"
 msgstr ""
 
-#: servicios/tiktok.py:136
+#: servicios/tiktok.py:142
 msgid "El usuario está en vivo. Conectando..."
 msgstr ""
 
-#: servicios/tiktok.py:153
+#: servicios/tiktok.py:159
 msgid "El usuario no está en vivo. Reintentando en un minuto."
 msgstr ""
 
-#: servicios/tiktok.py:253
+#: servicios/tiktok.py:242 servicios/tiktok.py:310
+msgid ""
+"No se pudo abrir el puerto del firmador local. ¿Hay otra copia de VeTube "
+"abierta?"
+msgstr ""
+
+#: servicios/tiktok.py:275
+msgid ""
+"No se pudo conectar al chat de TikTok por el servicio habitual (suele "
+"estar caido).\n"
+"\n"
+"Se puede leer desde el navegador. Asegurate de tener la extension de "
+"VeTube instalada y este directo abierto en el navegador, y pulsa Aceptar "
+"cuando este listo."
+msgstr ""
+
+#: servicios/tiktok.py:281
+msgid "Leer TikTok desde el navegador"
+msgstr ""
+
+#: servicios/tiktok.py:395
 msgid "El directo ha finalizado. Se buscará de nuevo en un minuto."
 msgstr ""
 
-#: servicios/tiktok.py:264
+#: servicios/tiktok.py:406
 msgid "Se ha perdido la conexión. El servicio se ha detenido."
 msgstr ""
 
-#: servicios/tiktok.py:312 servicios/tiktok.py:317
+#: servicios/tiktok.py:454 servicios/tiktok.py:459
 msgid " envió un emogi."
 msgstr ""
 
-#: servicios/tiktok.py:326
+#: servicios/tiktok.py:468
 msgid " ha enviado un cofre!"
 msgstr ""
 
-#: servicios/tiktok.py:372
+#: servicios/tiktok.py:514
 #, python-format
 msgid "%s ha enviado %s %s (%s %s)"
 msgstr ""
 
-#: servicios/tiktok.py:380
+#: servicios/tiktok.py:522
 #, python-format
 msgid "%s ha enviado %s %s (%s diamante)"
 msgstr ""
 
-#: servicios/tiktok.py:407 servicios/tiktok.py:414 servicios/tiktok.py:465
+#: servicios/tiktok.py:549 servicios/tiktok.py:556 servicios/tiktok.py:607
 msgid " se ha unido a tu en vivo."
 msgstr ""
 
-#: servicios/tiktok.py:427 servicios/tiktok.py:435
+#: servicios/tiktok.py:569 servicios/tiktok.py:577
 msgid " le ha dado me gusta a tu en vivo."
 msgstr ""
 
-#: servicios/tiktok.py:448 servicios/tiktok.py:455
+#: servicios/tiktok.py:590 servicios/tiktok.py:597
 msgid " ha compartido tu en vivo!"
 msgstr ""
 
-#: servicios/tiktok.py:479
+#: servicios/tiktok.py:621
 msgid " ¡se ha convertido en super fan!"
 msgstr ""
 
-#: servicios/tiktok.py:496
+#: servicios/tiktok.py:638
 msgid " ha enviado un cofre de super fan!"
+msgstr ""
+
+#: servicios/tiktok_espejo.py:186
+msgid "Leyendo el chat desde el navegador."
+msgstr ""
+
+#: servicios/tiktok_espejo.py:281
+msgid "Abrí el directo en el navegador con la extensión puesta. Esperando..."
 msgstr ""
 
 #: servicios/twich.py:85
@@ -1447,76 +1479,80 @@ msgstr ""
 msgid "No hay URLS en este mensaje"
 msgstr ""
 
-#: ui/main_window.py:30
+#: ui/main_window.py:31
 msgid "&Más opciones"
 msgstr ""
 
-#: ui/main_window.py:36
+#: ui/main_window.py:37
 msgid "Inicio"
 msgstr ""
 
-#: ui/main_window.py:41
+#: ui/main_window.py:42
 msgid "Escriba o pegue una URL o usuario"
 msgstr ""
 
-#: ui/main_window.py:50
+#: ui/main_window.py:51
 msgid "Capturar el chat de: "
 msgstr ""
 
-#: ui/main_window.py:57
+#: ui/main_window.py:58
 msgid "detectar"
 msgstr ""
 
-#: ui/main_window.py:58
+#: ui/main_window.py:59
 msgid "YouTube"
 msgstr ""
 
-#: ui/main_window.py:59
+#: ui/main_window.py:60
 msgid "Twich"
 msgstr ""
 
-#: ui/main_window.py:60
+#: ui/main_window.py:61
 msgid "TikTok"
 msgstr ""
 
-#: ui/main_window.py:61
+#: ui/main_window.py:62
 msgid "La sala de juegos"
 msgstr ""
 
-#: ui/main_window.py:62
+#: ui/main_window.py:63
 msgid "Kick"
 msgstr ""
 
-#: ui/main_window.py:63
+#: ui/main_window.py:64
 msgid "Discord"
 msgstr ""
 
-#: ui/main_window.py:70
+#: ui/main_window.py:65
+msgid "TikTok (navegador, experimental)"
+msgstr ""
+
+#: ui/main_window.py:72
 msgid "&Acceder"
 msgstr ""
 
-#: ui/main_window.py:73
+#: ui/main_window.py:75
 msgid "&Borrar"
 msgstr ""
 
-#: ui/main_window.py:86
+#: ui/main_window.py:88
 msgid "&Tus favoritos: "
 msgstr ""
 
-#: ui/main_window.py:90
+#: ui/main_window.py:92
 #, python-format
 msgid "Favoritos (%s)"
 msgstr ""
 
-#: ui/main_window.py:97 ui/main_window.py:115
+#: ui/main_window.py:99 ui/main_window.py:117
 msgid "&Seleccionar todos los elementos"
 msgstr ""
 
-#: ui/main_window.py:102
+#: ui/main_window.py:104
 msgid "mensajes archivados"
 msgstr ""
 
-#: ui/main_window.py:105
+#: ui/main_window.py:107
 msgid "&Mensajes archivados: "
 msgstr ""
 

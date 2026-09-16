@@ -41,7 +41,7 @@ class YouTubeRealTimeService:
         threading.Thread(target=self.prepare, daemon=True).start()
         self._hilo = threading.Thread(target=self.recibir, daemon=True)
         self._hilo.start()
-        wx.CallAfter(reader.leer_aviso, "Cambiando a servicio de tiempo real.")
+        wx.CallAfter(reader.leer_aviso, _("Cambiando a servicio de tiempo real."))
 
     def detener(self):
         if self.chat:

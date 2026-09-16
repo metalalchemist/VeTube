@@ -183,7 +183,7 @@ class WebsocketEspejo:
             sesion.unique_id or "(comodín)",
             sesion.room_id or "desconocida",
         )
-        self._aviso("Leyendo el chat desde el navegador.")
+        self._aviso(_("Leyendo el chat desde el navegador."))
 
         try:
             if initial_webcast_response is not None:
@@ -278,7 +278,7 @@ def instalar_espejo(
         )
         if avisar is not None:
             avisar(
-                "Abrí el directo en el navegador con la extensión puesta. Esperando..."
+                _("Abrí el directo en el navegador con la extensión puesta. Esperando...")
             )
         # El almacén bloquea con hilos; se saca del hilo del bucle asyncio.
         sesion = await asyncio.to_thread(sesiones.esperar, id_cliente, timeout)
