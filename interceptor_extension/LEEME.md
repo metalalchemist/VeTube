@@ -19,8 +19,8 @@ Sirve en Chrome y en navegadores basados en Chromium (Edge, Brave, etc.).
 
 ## Cómo probarla
 
-1. Abrí VeTube (o el receptor de prueba `../recibir_captura.py`, que levanta el
-   mismo servidor local e imprime, sin secretos, qué va llegando).
+1. Abrí VeTube (o el receptor de prueba `../tests/recibir_captura.py`, que levanta
+   el mismo servidor local e imprime, sin secretos, qué va llegando).
 2. Abrí un directo de TikTok: `https://www.tiktok.com/@usuario/live`.
 3. Chrome mostrará la barra *"… está depurando este navegador"*: **es normal**, es
    la señal de que la extensión está leyendo el chat.
@@ -46,8 +46,16 @@ usan el mismo canal de depuración y chocan.
   de secuencia). No toca el navegador, para poder probarla con Node.
 - `popup.html` / `popup.js` — popup de estado, pensado para lectores de pantalla:
   todo el estado escrito con palabras, sin depender de color ni de iconos.
-- `pruebas/pruebas.js` — banco de pruebas de `logica.js`, ejecutable sin navegador
-  (`node pruebas/pruebas.js`).
+- `iconos/` — el ícono de la extensión en 16, 32, 48 y 128 píxeles.
+- `pruebas/pruebas.js` — banco de pruebas de `logica.js`, del manifiesto y del
+  popup, ejecutable sin navegador (`node pruebas/pruebas.js`). También comprueba
+  los límites que la Chrome Web Store aplica al manifiesto.
+- `PRIVACIDAD.md` — la política de privacidad que exige la Chrome Web Store.
+- `tienda/` — lo necesario para publicar en la Chrome Web Store, que no viaja
+  dentro de la extensión: `FICHA.md` (qué va en cada campo del panel),
+  `empaquetar.cmd` (arma el ZIP), `generar_imagenes.js` (regenera íconos,
+  captura y mosaico con Chrome), `icono.svg` (el original del ícono) e
+  `imagenes/`.
 
 ## Por qué la API de depuración
 

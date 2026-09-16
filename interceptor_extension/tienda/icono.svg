@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Icono de la extensión. Lienzo de 128 con 16 px de margen transparente
+       (lo que pide la Chrome Web Store); para los tamaños chicos se recorta al
+       cuadro 16 16 96 96. Globo de chat blanco con una V, sobre azul. -->
+  <rect x="16" y="16" width="96" height="96" rx="22" fill="#0b57d0"/>
+  <path d="M42 34h44a12 12 0 0 1 12 12v24a12 12 0 0 1-12 12H58l-16 13V82a12 12 0 0 1-12-12V46a12 12 0 0 1 12-12z" fill="#ffffff"/>
+  <polyline points="50,44 64,70 78,44" fill="none" stroke="#0b57d0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

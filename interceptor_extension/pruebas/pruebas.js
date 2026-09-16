@@ -474,16 +474,18 @@ prueba("manifest.json es JSON válido y es Manifest V3", function () {
   assert.ok(manifiesto.name && manifiesto.version && manifiesto.description);
 });
 
-prueba("no pide webRequest (la ruta B no lo necesita)", function () {
+prueba("no pide webRequest (la captura va por el depurador)", function () {
   assert.ok(
     (manifiesto.permissions || []).indexOf("webRequest") === -1,
-    "webRequest sobra: la URL la da inject.js y las tramas no pasan por ahí"
+    "webRequest sobra: las tramas llegan por Network.webSocketFrameReceived"
   );
 });
 
-prueba("los permisos son los mínimos: cookies y storage", function () {
+// Desde la 0.4.0 no se leen cookies: el chat de un directo público funciona
+// sin login, así que el permiso "cookies" ni siquiera se pide.
+prueba("los permisos son los mínimos: debugger y storage", function () {
   assert.deepStrictEqual((manifiesto.permissions || []).slice().sort(), [
-    "cookies",
+    "debugger",
     "storage",
   ]);
 });
@@ -502,30 +504,50 @@ prueba("sólo habla con tiktok.com y con 127.0.0.1:8790", function () {
   });
 });
 
-prueba("logica.js va antes que inject.js y que content.js en los dos mundos", function () {
-  const cs = manifiesto.content_scripts || [];
-  assert.strictEqual(cs.length, 2);
-  const mundos = cs.map(function (e) {
-    return e.world;
-  });
-  assert.ok(mundos.indexOf("MAIN") !== -1 && mundos.indexOf("ISOLATED") !== -1);
-  cs.forEach(function (e) {
-    assert.strictEqual(e.run_at, "document_start", "hay que estar antes que TikTok");
-    assert.strictEqual(e.js[0], "logica.js", "logica.js tiene que cargarse primero");
-  });
+// La CSP de TikTok bloquea los content scripts del mundo MAIN (ver LEEME.md):
+// si alguien los vuelve a declarar, la captura deja de funcionar en silencio.
+prueba("no declara content scripts: la captura va por el depurador", function () {
+  assert.strictEqual(manifiesto.content_scripts, undefined);
 });
 
-prueba("todos los archivos que nombra el manifiesto existen", function () {
-  const esperados = ["background.js", "popup.html", "popup.js", "logica.js", "inject.js", "content.js"];
-  esperados.forEach(function (f) {
-    assert.ok(fs.existsSync(path.join(RAIZ, f)), "falta " + f);
+// Todo lo que la extensión carga en el navegador, sacado de sus propias
+// declaraciones: el manifiesto, los importScripts del worker y los <script>
+// del popup. Lo usan esta prueba y la del empaquetado.
+const ARCHIVOS_EN_USO = (function () {
+  const lista = new Set(["manifest.json"]);
+  lista.add(manifiesto.background.service_worker);
+  lista.add(manifiesto.action.default_popup);
+  const worker = fs.readFileSync(path.join(RAIZ, manifiesto.background.service_worker), "utf8");
+  (worker.match(/importScripts\(([^)]*)\)/g) || []).forEach(function (llamada) {
+    (llamada.match(/"([^"]+)"/g) || []).forEach(function (s) {
+      lista.add(s.slice(1, -1));
+    });
   });
+  const popup = fs.readFileSync(path.join(RAIZ, manifiesto.action.default_popup), "utf8");
+  (popup.match(/<script[^>]*\ssrc="([^"]+)"/g) || []).forEach(function (t) {
+    lista.add(t.match(/src="([^"]+)"/)[1]);
+  });
+  [manifiesto.icons || {}, manifiesto.action.default_icon || {}].forEach(function (mapa) {
+    Object.keys(mapa).forEach(function (tam) {
+      lista.add(mapa[tam]);
+    });
+  });
+  return Array.from(lista);
+})();
+
+prueba("todos los archivos que nombra la extensión existen", function () {
   assert.strictEqual(manifiesto.background.service_worker, "background.js");
   assert.strictEqual(manifiesto.action.default_popup, "popup.html");
+  ["background.js", "popup.html", "popup.js", "logica.js"].forEach(function (f) {
+    assert.ok(ARCHIVOS_EN_USO.indexOf(f) !== -1, f + " ya no se carga desde ningún lado");
+  });
+  ARCHIVOS_EN_USO.forEach(function (f) {
+    assert.ok(fs.existsSync(path.join(RAIZ, f)), "falta " + f);
+  });
 });
 
 prueba("ningún archivo de la extensión menciona sessionid como cookie a enviar", function () {
-  ["background.js", "content.js", "inject.js", "popup.js"].forEach(function (f) {
+  ["background.js", "popup.js"].forEach(function (f) {
     const texto = fs.readFileSync(path.join(RAIZ, f), "utf8");
     const lineas = texto.split("\n").filter(function (l) {
       return /sessionid/.test(l) && !/^\s*\/\//.test(l.trim());
@@ -539,7 +561,7 @@ prueba("ningún archivo de la extensión menciona sessionid como cookie a enviar
 });
 
 prueba("ninguna URL de tercero: sólo 127.0.0.1", function () {
-  ["background.js", "content.js", "inject.js", "popup.js"].forEach(function (f) {
+  ["background.js", "popup.js"].forEach(function (f) {
     const texto = fs.readFileSync(path.join(RAIZ, f), "utf8");
     const urls = texto.match(/https?:\/\/[^\s"'`)]+/g) || [];
     urls.forEach(function (u) {
@@ -548,6 +570,58 @@ prueba("ninguna URL de tercero: sólo 127.0.0.1", function () {
         f + " apunta a un tercero: " + u
       );
     });
+  });
+});
+
+// =====================================================================
+grupo("7b. Requisitos de la Chrome Web Store");
+
+// La tienda rechaza el ZIP al subirlo si no se cumplen, y después no deja
+// corregir el manifiesto desde el panel: hay que subir otra versión.
+prueba("nombre de hasta 75 caracteres y descripción de hasta 132", function () {
+  assert.ok(manifiesto.name.length <= 75, "nombre de " + manifiesto.name.length + " caracteres");
+  assert.ok(
+    manifiesto.description.length <= 132,
+    "descripción de " + manifiesto.description.length + " caracteres"
+  );
+});
+
+prueba("la versión son de uno a cuatro números separados por puntos", function () {
+  assert.ok(/^\d+(\.\d+){0,3}$/.test(manifiesto.version), "versión inválida: " + manifiesto.version);
+});
+
+// Ancho y alto de un PNG: bytes 16 a 23 de la cabecera IHDR.
+function medidasPng(ruta) {
+  const b = fs.readFileSync(ruta);
+  assert.strictEqual(b.toString("latin1", 1, 4), "PNG", ruta + " no es un PNG");
+  return [b.readUInt32BE(16), b.readUInt32BE(20)];
+}
+
+prueba("declara el icono de 128 (obligatorio) y cada PNG mide lo que dice", function () {
+  const iconos = manifiesto.icons || {};
+  assert.ok(iconos["128"], "falta el icono de 128 en icons");
+  [iconos, manifiesto.action.default_icon || {}].forEach(function (mapa) {
+    Object.keys(mapa).forEach(function (tam) {
+      const lado = Number(tam);
+      assert.deepStrictEqual(medidasPng(path.join(RAIZ, mapa[tam])), [lado, lado], mapa[tam]);
+    });
+  });
+});
+
+prueba("empaquetar.cmd mete todo lo que la extensión usa y nada más", function () {
+  const script = fs.readFileSync(path.join(RAIZ, "tienda", "empaquetar.cmd"), "utf8");
+  const m = script.match(/set "ARCHIVOS=([^"]+)"/);
+  assert.ok(m, 'no encuentro la línea set "ARCHIVOS=..." en empaquetar.cmd');
+  const entradas = m[1].trim().split(/\s+/);
+  ARCHIVOS_EN_USO.forEach(function (f) {
+    const cubierto = entradas.some(function (e) {
+      return f === e || f.indexOf(e + "/") === 0;
+    });
+    assert.ok(cubierto, f + " no entra en el ZIP");
+  });
+  entradas.forEach(function (e) {
+    assert.ok(fs.existsSync(path.join(RAIZ, e)), "empaquetar.cmd nombra " + e + ", que no existe");
+    assert.ok(!/^(pruebas|tienda)$|\.md$/i.test(e), e + " no tiene que viajar en el ZIP");
   });
 });
 
