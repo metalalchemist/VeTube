@@ -12,7 +12,9 @@ class PanelChat(wx.Panel):
         box_chat = wx.StaticBox(self, -1, _("Opciones del chat"))
         boxSizer_chat = wx.StaticBoxSizer(box_chat, wx.VERTICAL)
         self.check_historial = wx.CheckBox(
-            self, wx.ID_ANY, _("Leer los mensajes anteriores al chat")
+            self,
+            wx.ID_ANY,
+            _("Leer los mensajes anteriores al chat (solo YouTube y TikTok)"),
         )
         self.check_historial.SetValue(config.get("leer_historial", True))
         boxSizer_chat.Add(self.check_historial, 0, wx.ALL, 5)
