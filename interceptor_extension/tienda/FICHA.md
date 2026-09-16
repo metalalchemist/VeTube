@@ -2,6 +2,10 @@
 
 Qué va en cada pestaña y campo del [panel de desarrollador de la Chrome Web Store](https://chrome.google.com/webstore/devconsole), listo para copiar y pegar. Los nombres de pestañas y campos están en inglés, como en la documentación de Google; si el panel está en español, pueden aparecer traducidos.
 
+## Quién la publica
+
+La ficha de la extensión la publica y la mantiene [piapenia](https://github.com/piapenia) desde su cuenta de desarrollador, en coordinación con metalalchemist. Los cambios a la extensión se integran en este repositorio como siempre; para que lleguen a quienes la instalaron desde la tienda, piapenia sube la versión nueva (ver «Después de publicar»).
+
 ## Antes de empezar
 
 - **Cuenta de desarrollador:** Google pide tener activada la verificación en dos pasos y un correo de contacto verificado, y declarar si quien publica actúa como comerciante (*trader*) o no (*non-trader*), por la ley de servicios digitales de la Unión Europea. Esa declaración es personal: depende de la situación de quien publica, no de la extensión.
