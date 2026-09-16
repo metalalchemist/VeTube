@@ -136,10 +136,10 @@ async function refrescar(porPeticion) {
 
   const dg0 = est.diag || {};
   lineas.push(
-    "Captura por depurador: " + (dg0.adjuntas || 0) + " pestana(s) de TikTok enganchada(s). " +
+    "Captura por depurador: " + (dg0.adjuntas || 0) + " pestaña(s) de TikTok enganchada(s). " +
       "Websockets del webcast vistos: " + (dg0.wsWebcast || 0) + ". " +
-      "Tramas del chat leidas: " + (dg0.framesWebcast || 0) + "." +
-      (dg0.ultimoError ? " Ultimo aviso del depurador: " + dg0.ultimoError + "." : "")
+      "Tramas del chat leídas: " + (dg0.framesWebcast || 0) + "." +
+      (dg0.ultimoError ? " Último aviso del depurador: " + dg0.ultimoError + "." : "")
   );
 
   pintarLista(lineas);
@@ -213,10 +213,10 @@ async function refrescar(porPeticion) {
   diag.push("Lotes fallidos: " + (c.lotesFallidos || 0));
   const dgx = est.diag || {};
   diag.push("Captura: por depurador (chrome.debugger)");
-  diag.push("Pestanas enganchadas: " + (dgx.adjuntas || 0));
+  diag.push("Pestañas enganchadas: " + (dgx.adjuntas || 0));
   diag.push("Websockets del webcast vistos: " + (dgx.wsWebcast || 0));
-  diag.push("Tramas del chat leidas: " + (dgx.framesWebcast || 0));
-  diag.push("Ultimo aviso del depurador: " + (dgx.ultimoError || "ninguno"));
+  diag.push("Tramas del chat leídas: " + (dgx.framesWebcast || 0));
+  diag.push("Último aviso del depurador: " + (dgx.ultimoError || "ninguno"));
   diag.push("Tramas descartadas: " + (c.tramasDescartadas || 0));
   diag.push("Pestaña actual es un directo: " + (enDirecto ? "sí" : "no"));
   $("diag").value = diag.join("\n");
