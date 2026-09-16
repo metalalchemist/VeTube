@@ -275,7 +275,7 @@ jobs:
   update-docs:
     name: Update README download links
     needs: [release]
-    if: github.ref_type == 'tag'
+    if: github.ref_type == 'tag' && !contains(github.ref_name, '-')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout master

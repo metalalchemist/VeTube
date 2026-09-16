@@ -1,6 +1,27 @@
-from sound_lib import stream
-from sound_lib.main import BassError
-from sound_lib.output import Output
+import os
+import sys
+import types
+
+# Bloquear la carga de plugins BASS en sound_lib.external.__init__.
+# Ese __init__.py importa TODOS los plugins (bassopus, basswma, bass_aac,
+# bass_alac, bassflac, bassmidi) al arrancar, lo que carga 6 DLLs extra
+# en cadena. En HDD eso suma ~10 s al arranque. VeTube solo necesita
+# bass.dll (MP3/WAV son nativos), así que sustituimos el paquete por un
+# stub: el __init__. real nunca se ejecuta y los plugins no se cargan.
+# Los stream de audio que necesiten un codec (Opus, FLAC…) se cargan
+# bajo demanda cuando BASS devuelva BASS_ERROR_CODEC (20).
+if "sound_lib.external" not in sys.modules:
+    import sound_lib as _sl
+
+    _ext_dir = os.path.join(os.path.dirname(_sl.__file__), "external")
+    _stub = types.ModuleType("sound_lib.external")
+    _stub.__path__ = [_ext_dir]  # permite resolver pybass, paths, etc.
+    _stub.__package__ = "sound_lib.external"
+    sys.modules["sound_lib.external"] = _stub
+
+from sound_lib import stream  # noqa: E402
+from sound_lib.main import BassError  # noqa: E402
+from sound_lib.output import Output  # noqa: E402
 
 
 class SoundPlayer:
