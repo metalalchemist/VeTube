@@ -60,7 +60,7 @@ def _read_version() -> str:
         except ModuleNotFoundError:
             import tomli as tomllib
 
-        pyproject_path = Path(__file__).parent.parent / "pyproject.toml"
+        pyproject_path = Path(__file__).parent.parent.parent / "pyproject.toml"
         with open(pyproject_path, "rb") as f:
             data = tomllib.load(f)
         return data["project"]["version"]

@@ -62,9 +62,9 @@ pytchat = { git = "https://github.com/KaitoCross/pytchat" }
 
 [tool.poe.tasks]
 build = "cxfreeze build"
-dev = "run_main_window.py"
-format = "ruff format src ui utils update TTS translates controller servicios"
-lint = "ruff check --fix src ui utils update TTS translates controller servicios"
+dev = "src/run_main_window.py"
+format = "ruff format src translates"
+lint = "ruff check --fix src translates"
 msi = "cxfreeze bdist_msi"
 test = "pytest -v --maxfail=1 --disable-warnings tests/"
 check = ["format", "lint", "test"]
@@ -72,9 +72,12 @@ check = ["format", "lint", "test"]
 # Documentación: https://cx-freeze.readthedocs.io/
 # Skill: cxfreeze-config (referencias completas en assets/ y references/)
 
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
 [tool.cxfreeze]
 [[tool.cxfreeze.executables]]
-script = "run_main_window.py"
+script = "src/run_main_window.py"
 base = "gui"
 target_name = "VeTube.exe"
 shortcut_name = "VeTube"
@@ -82,7 +85,7 @@ shortcut_dir = "ProgramMenuFolder"
 copyright = "Copyright (C) 2026 VeTube Team"
 
 [[tool.cxfreeze.executables]]
-script = "update/bootstrap_fix.py"
+script = "src/update/bootstrap_fix.py"
 base = "gui"
 target_name = "bootstrap.exe"
 
@@ -121,7 +124,6 @@ packages = [
     "psutil",
     "pyperclip",
     "audioop",
-    "src",
     "ui",
     "utils",
     "update",

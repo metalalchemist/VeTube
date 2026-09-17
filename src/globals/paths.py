@@ -2,11 +2,11 @@ import sys
 from pathlib import Path
 
 # En app compilada (cx-Freeze), sys.executable apunta al .exe
-# En desarrollo, usamos la raíz del proyecto (2 niveles arriba de este archivo)
+# En desarrollo, usamos la raíz del proyecto (3 niveles arriba: globals/ -> src/ -> raíz)
 if getattr(sys, "frozen", False):
     BASE_DIR = Path(sys.executable).parent
 else:
-    BASE_DIR = Path(__file__).parent.parent
+    BASE_DIR = Path(__file__).parent.parent.parent
 
 # Rutas a recursos
 LOCALES_DIR = BASE_DIR / "locales"
