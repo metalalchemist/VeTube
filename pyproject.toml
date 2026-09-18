@@ -53,6 +53,9 @@ dev = [
 requires = ["uv_build>=0.12.3,<0.13.0"]
 build-backend = "uv_build"
 
+[tool.uv]
+package = false
+
 [tool.uv.sources]
 kick-py = { git = "https://github.com/iamoverit/kick.py" }
 chat-downloader = { git = "https://github.com/owsombra/chat-downloader" }
@@ -160,7 +163,7 @@ bin_includes = []
 
 bin_excludes = ["api-ms-win-*.dll"]
 
-include_msvcr = false
+include_msvcr = true
 include_files = [
     ["data.json", "data.json"],
     ["VERSION", "VERSION"],
