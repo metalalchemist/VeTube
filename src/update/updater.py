@@ -20,6 +20,7 @@ from update.channel import get_channel
 from update.downloader import download
 from update.extractor import extract
 from update.release_notes_dialog import show_release_notes_dialog
+from update.update import donation
 from update.verifier import verify
 from update.wxUpdater import progress_callback, update_finished
 
@@ -193,6 +194,11 @@ def _install_update(release: github_client.ReleaseInfo) -> None:
 
     # Check if backup should be created
     create_backup_flag = config.get("create_backup_before_update", True)
+
+    # Quien tiene desactivado el diálogo de donaciones al inicio no lo ve
+    # nunca: aprovechamos que ya está actualizando para darle esa oportunidad.
+    if not config.get("donations", True):
+        wx.CallAfter(donation)
 
     try:
         logger.info("Starting update to v%s", release.version)

@@ -1,6 +1,5 @@
 """Focused branch tests for updater support modules."""
 
-import asyncio
 import io
 import sys
 from types import SimpleNamespace
@@ -288,54 +287,75 @@ def test_fetch_checksum_success_and_http_failure():
         assert updater._fetch_checksum("url") is None
 
 
-def test_legacy_async_update_paths(tmp_path, monkeypatch):
-    monkeypatch.setattr(update, "get_channel", lambda: "stable")
+def test_donation_dialog_accept_opens_browser(monkeypatch):
     monkeypatch.setattr(update, "_", lambda text: text, raising=False)
-    release = SimpleNamespace(version="9.0", zip_url="zip", description="notes")
-    data_file = MagicMock(exists=MagicMock(return_value=False))
+    dialog = MagicMock(ShowModal=MagicMock(return_value=update.wx.ID_YES))
     with (
-        patch.object(update, "DATA_FILE", data_file),
-        patch.object(update.github_client, "get_latest_release", return_value=release),
-        patch("update.updater.VERSION", "1.0"),
+        patch.object(update.wx, "MessageDialog", return_value=dialog),
+        patch.object(update.wx, "LaunchDefaultBrowser") as launch,
     ):
-        result = asyncio.run(update.async_check_update())
-    assert result["available_version"] == "9.0"
-    with patch.object(update.github_client, "get_latest_release", return_value=None):
-        assert asyncio.run(update.async_check_update()) is None
-    with patch.object(
-        update.github_client, "get_latest_release", side_effect=RuntimeError("x")
-    ):
-        assert isinstance(asyncio.run(update.async_check_update()), RuntimeError)
-    old_release = SimpleNamespace(version="1.0", zip_url="zip", description="notes")
-    with (
-        patch.object(update.github_client, "get_latest_release", return_value=old_release),
-        patch("update.updater.VERSION", "1.0"),
-    ):
-        assert asyncio.run(update.async_check_update()) is None
+        update.donation()
+    launch.assert_called_once()
 
 
-def test_legacy_perform_update_and_donation():
-    callback = MagicMock()
+def test_donation_dialog_decline_does_not_open_browser(monkeypatch):
+    monkeypatch.setattr(update, "_", lambda text: text, raising=False)
+    dialog = MagicMock(ShowModal=MagicMock(return_value=update.wx.ID_NO))
     with (
-        patch("update.update.tempfile.mkdtemp", return_value="tmp"),
-        patch("update.update.download") as download,
-        patch("update.update.extract") as extract,
+        patch.object(update.wx, "MessageDialog", return_value=dialog),
+        patch.object(update.wx, "LaunchDefaultBrowser") as launch,
     ):
-        update.perform_update(
-            "url",
-            donations=True,
-            progress_callback=callback,
-            update_complete_callback=callback,
-        )
-    download.assert_called_once()
-    extract.assert_called_once()
-    assert callback.call_count == 1
+        update.donation()
+    launch.assert_not_called()
+
+
+def test_install_update_shows_donation_dialog_when_disabled():
+    release = SimpleNamespace(
+        version="4.0", zip_name="update.zip", zip_url="zip", checksum_url="sum"
+    )
     with (
-        patch.object(update.wx, "CallAfter", side_effect=lambda fn: fn()),
-        patch.object(update, "donation") as donation,
+        patch.object(
+            updater,
+            "config",
+            {"create_backup_before_update": True, "donations": False},
+        ),
+        patch.object(updater.wx, "CallAfter", side_effect=lambda fn, *a: fn(*a)),
+        patch("update.updater.donation") as donation,
+        patch("update.updater.download"),
+        patch("update.updater._fetch_checksum", return_value="hash"),
+        patch("update.updater.verify", return_value=True),
+        patch("update.updater.create_backup", return_value="backup"),
+        patch("update.updater.extract"),
+        patch("update.updater.launch_bootstrap", return_value=0),
+        patch("update.updater.cleanup_backup"),
+        patch("update.updater.update_finished"),
     ):
-        update.perform_update("url", donations=False)
-        donation.assert_called_once()
+        updater._install_update(release)
+    donation.assert_called_once()
+
+
+def test_install_update_skips_donation_dialog_when_enabled():
+    release = SimpleNamespace(
+        version="4.0", zip_name="update.zip", zip_url="zip", checksum_url="sum"
+    )
+    with (
+        patch.object(
+            updater,
+            "config",
+            {"create_backup_before_update": True, "donations": True},
+        ),
+        patch.object(updater.wx, "CallAfter") as call_after,
+        patch("update.updater.download"),
+        patch("update.updater._fetch_checksum", return_value="hash"),
+        patch("update.updater.verify", return_value=True),
+        patch("update.updater.create_backup", return_value="backup"),
+        patch("update.updater.extract"),
+        patch("update.updater.launch_bootstrap", return_value=0),
+        patch("update.updater.cleanup_backup"),
+        patch("update.updater.update_finished"),
+    ):
+        updater._install_update(release)
+    call_after.assert_not_called()
 
 
 def test_wx_updater_progress_and_notifications(monkeypatch):
