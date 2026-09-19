@@ -1751,8 +1751,8 @@ msgid "Opciones del chat"
 msgstr "Možnosti chatu"
 
 #: ui/ajustes/chat.py:15
-msgid "Leer los mensajes anteriores al chat"
-msgstr "Číst předchozí zprávy chatu"
+msgid "Leer los mensajes anteriores al chat (solo YouTube y TikTok)"
+msgstr "Číst předchozí zprávy chatu (pouze YouTube a TikTok)"
 
 #: ui/ajustes/chat.py:19
 msgid "traducción de mensajes: "
