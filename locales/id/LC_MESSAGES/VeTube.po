@@ -1774,8 +1774,8 @@ msgid "Opciones del chat"
 msgstr "Opsi obrolan"
 
 #: ui/ajustes/chat.py:15
-msgid "Leer los mensajes anteriores al chat"
-msgstr "Baca pesan obrolan sebelumnya"
+msgid "Leer los mensajes anteriores al chat (solo YouTube y TikTok)"
+msgstr "Baca pesan obrolan sebelumnya (hanya YouTube dan TikTok)"
 
 #: ui/ajustes/chat.py:19
 msgid "traducción de mensajes: "
