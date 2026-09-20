@@ -14,6 +14,12 @@ def _clear_gh_cache():
     clear_cache()
 
 
+def updater_version():
+    from update.updater import VERSION
+
+    return VERSION
+
+
 def _make_release(tag="v4.0", version="4.0"):
     return ReleaseInfo(
         tag=tag,
@@ -27,7 +33,6 @@ def _make_release(tag="v4.0", version="4.0"):
 
 
 class TestInstallUpdateFlow:
-    @patch("update.updater.update_finished")
     @patch("update.updater.launch_bootstrap")
     @patch("update.updater.extract")
     @patch("update.updater.create_backup")
@@ -44,10 +49,15 @@ class TestInstallUpdateFlow:
         mock_backup,
         mock_extract,
         mock_bootstrap,
-        mock_finished,
         tmp_path,
+        sin_interfaz,
     ):
-        from update.updater import _install_update
+        from update.updater import (
+            _install_update,
+            aviso_descargada,
+            iniciar_descarga,
+            mostrar_ventanas,
+        )
 
         release = _make_release()
         mock_download.return_value = str(tmp_path / "VeTube.zip")
@@ -66,17 +76,24 @@ class TestInstallUpdateFlow:
         mock_backup.assert_called_once()
         mock_extract.assert_called_once()
         mock_bootstrap.assert_called_once()
+        # La copia de seguridad viaja al bootstrap: es él quien la usa o la borra.
+        assert mock_bootstrap.call_args.kwargs["backup_dir"] == str(tmp_path / "backup")
         mock_cleanup.assert_called_once_with(str(tmp_path / "backup"))
-        mock_finished.assert_called_once()
+        # Primero se esconde el programa; el aviso «descargada» se muestra ANTES
+        # de lanzar el bootstrap (que cierra VeTube), esperando al Aceptar.
+        # (y con VeTube todavía vivo tras un código 0, la interfaz vuelve)
+        assert sin_interfaz.llamadas == [iniciar_descarga, aviso_descargada, mostrar_ventanas]
+        assert sin_interfaz.call_args_list[1].kwargs == {"esperar": True}
+        sin_interfaz.aviso.assert_not_called()
 
-    @patch("update.updater.restore_backup")
+    @patch("update.updater.cleanup_backup")
     @patch("update.updater.launch_bootstrap")
     @patch("update.updater.extract")
     @patch("update.updater.create_backup")
     @patch("update.updater.verify")
     @patch("update.updater._fetch_checksum")
     @patch("update.updater.download")
-    def test_verification_fail_no_backup_to_restore(
+    def test_verification_fail_shows_windows_again(
         self,
         mock_download,
         mock_fetch_checksum,
@@ -84,10 +101,11 @@ class TestInstallUpdateFlow:
         mock_backup,
         mock_extract,
         mock_bootstrap,
-        mock_restore,
+        mock_cleanup,
         tmp_path,
+        sin_interfaz,
     ):
-        from update.updater import _install_update
+        from update.updater import _install_update, mostrar_ventanas
 
         release = _make_release()
         mock_download.return_value = str(tmp_path / "VeTube.zip")
@@ -99,16 +117,24 @@ class TestInstallUpdateFlow:
         mock_backup.assert_not_called()
         mock_extract.assert_not_called()
         mock_bootstrap.assert_not_called()
-        mock_restore.assert_not_called()
+        # Aunque no se llegó a crear la copia de seguridad, se limpia su carpeta
+        # (una copia a medias de un intento anterior no debe quedarse).
+        assert mock_cleanup.call_args.args[0].endswith("_backup_v" + updater_version())
+        # Orden fijo: primero vuelven las ventanas, después el aviso.
+        assert sin_interfaz.llamadas[-2] is mostrar_ventanas
+        sin_interfaz.llamadas[-1]()
+        sin_interfaz.aviso.assert_called_once_with(
+            "el archivo descargado no supera la comprobación de integridad"
+        )
 
-    @patch("update.updater.restore_backup")
+    @patch("update.updater.cleanup_backup")
     @patch("update.updater.launch_bootstrap")
     @patch("update.updater.extract")
     @patch("update.updater.create_backup")
     @patch("update.updater.verify")
     @patch("update.updater._fetch_checksum")
     @patch("update.updater.download")
-    def test_extraction_fail_triggers_rollback(
+    def test_extraction_fail_discards_backup_without_restoring(
         self,
         mock_download,
         mock_fetch_checksum,
@@ -116,10 +142,14 @@ class TestInstallUpdateFlow:
         mock_backup,
         mock_extract,
         mock_bootstrap,
-        mock_restore,
+        mock_cleanup,
         tmp_path,
+        sin_interfaz,
     ):
-        from update.updater import _install_update
+        """Antes del bootstrap no se ha tocado la instalación: no hay nada que
+        restaurar (restaurar con VeTube abierto borraba archivos en uso). La
+        copia de seguridad, ya inútil, se borra."""
+        from update.updater import _install_update, mostrar_ventanas
 
         release = _make_release()
         mock_download.return_value = str(tmp_path / "VeTube.zip")
@@ -128,20 +158,36 @@ class TestInstallUpdateFlow:
         mock_backup.return_value = str(tmp_path / "backup")
         mock_extract.side_effect = OSError("extraction failed")
 
-        with patch("update.updater.os.path.isdir", return_value=True):
-            _install_update(release)
+        _install_update(release)
 
         mock_bootstrap.assert_not_called()
-        mock_restore.assert_called_once()
+        mock_cleanup.assert_called_once_with(str(tmp_path / "backup"))
+        assert sin_interfaz.llamadas[-2] is mostrar_ventanas
+        sin_interfaz.llamadas[-1]()
+        sin_interfaz.aviso.assert_called_once_with("extraction failed")
+        # Cada fase se anuncia por la voz del programa.
+        assert [c.args[0] for c in sin_interfaz.anunciar.call_args_list] == [
+            "Descargando la actualización",
+            "Creando la copia de seguridad...",
+            "Extrayendo la actualización...",
+        ]
 
-    @patch("update.updater.restore_backup")
+    @pytest.mark.parametrize(
+        ("exit_code", "borra_backup", "motivo"),
+        [
+            (1, True, "el instalador no pudo arrancar (código 1)"),
+            (2, True, "Windows no dio permiso para instalar"),  # UAC rechazado
+            (-1, False, "el instalador sigue en marcha tras 30 segundos"),  # se le deja la copia
+        ],
+    )
+    @patch("update.updater.cleanup_backup")
     @patch("update.updater.launch_bootstrap")
     @patch("update.updater.extract")
     @patch("update.updater.create_backup")
     @patch("update.updater.verify")
     @patch("update.updater._fetch_checksum")
     @patch("update.updater.download")
-    def test_bootstrap_fail_triggers_rollback(
+    def test_bootstrap_not_run_shows_windows_again(
         self,
         mock_download,
         mock_fetch_checksum,
@@ -149,23 +195,28 @@ class TestInstallUpdateFlow:
         mock_backup,
         mock_extract,
         mock_bootstrap,
-        mock_restore,
+        mock_cleanup,
+        exit_code,
+        borra_backup,
+        motivo,
         tmp_path,
+        sin_interfaz,
     ):
-        from update.updater import _install_update
+        from update.updater import _install_update, mostrar_ventanas
 
         release = _make_release()
         mock_download.return_value = str(tmp_path / "VeTube.zip")
         mock_fetch_checksum.return_value = "abc123  VeTube.zip\n"
         mock_verify.return_value = True
         mock_backup.return_value = str(tmp_path / "backup")
-        mock_bootstrap.return_value = 1
+        mock_bootstrap.return_value = exit_code
 
         _install_update(release)
 
-        mock_restore.assert_called_once_with(
-            str(tmp_path / "backup"), mock_backup.call_args[0][0]
-        )
+        assert mock_cleanup.called is borra_backup
+        assert sin_interfaz.llamadas[-2] is mostrar_ventanas
+        sin_interfaz.llamadas[-1]()
+        sin_interfaz.aviso.assert_called_once_with(motivo)
 
 
 class TestVersionComparison:

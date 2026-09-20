@@ -2195,33 +2195,10 @@ msgstr "Tylko oficjalne wersje. Zalecane dla większości użytkowników."
 msgid "Incluye versiones previas y novedades tempranas. Puede ser inestable."
 msgstr "Zawiera wersje wstępne i wczesne nowości. Może być niestabilna."
 
-#: update/wxUpdater.py:89
-msgid "Copia de seguridad"
-msgstr "Kopia zapasowa"
-
-#: update/wxUpdater.py:90
-msgid "Creando la copia de seguridad..."
-msgstr "Tworzenie kopii zapasowej..."
-
 #: update/wxUpdater.py:103
 #, python-format
 msgid "Creando la copia de seguridad... %d%%"
 msgstr "Tworzenie kopii zapasowej... %d%%"
-
-#: update/wxUpdater.py:120
-#, python-format
-msgid ""
-"La actualización ha fallado: %s\n"
-"\n"
-"Volviendo a la versión anterior. Tus datos están a salvo."
-msgstr ""
-"Aktualizacja nie powiodła się: %s\n"
-"\n"
-"Powrót do poprzedniej wersji. Twoje dane są bezpieczne."
-
-#: update/wxUpdater.py:125
-msgid "Actualización fallida: volviendo atrás"
-msgstr "Aktualizacja nie powiodła się: powrót"
 
 #: update/wxUpdater.py:139
 msgid "Comprobando actualizaciones"
@@ -2278,18 +2255,6 @@ msgstr "Pobieranie aktualizacji"
 msgid "Actualizando... %s de %s"
 msgstr "Aktualizowanie... %s z %s"
 
-#: update/wxUpdater.py:227
-msgid ""
-"La actualización se ha descargado e instalado exitosamente. Pulse en "
-"aceptar para continuar."
-msgstr ""
-"Aktualizacja została pomyślnie pobrana i zainstalowana. Kliknij OK, aby "
-"kontynuować."
-
-#: update/wxUpdater.py:230
-msgid "¡Hecho!"
-msgstr "Gotowe!"
-
 #: utils/app_utilitys.py:93
 msgid ""
 "Las voces Piper necesitan su motor de voz, que aún no está en este "
@@ -2334,3 +2299,57 @@ msgstr "Czytnik Piper został pomyślnie zainicjowany."
 msgid "Idioma del sistema"
 msgstr "Język systemu"
 
+#: src/update/wxUpdater.py:288
+msgid "Actualización descargada"
+msgstr "Aktualizacja pobrana"
+
+#: src/update/updater.py:317
+#, python-format
+msgid "el instalador no pudo arrancar (código %d)"
+msgstr "instalator nie mógł się uruchomić (kod %d)"
+
+#: src/update/wxUpdater.py:128
+#, python-format
+msgid ""
+"La actualización no se ha podido completar: %s\n"
+"\n"
+"VeTube sigue en la versión de siempre y tus datos están a salvo."
+msgstr ""
+"Nie udało się dokończyć aktualizacji: %s\n"
+"\n"
+"VeTube pozostaje w dotychczasowej wersji, a Twoje dane są bezpieczne."
+
+#: src/update/wxUpdater.py:321
+msgid ""
+"La actualización se ha descargado. Pulsa Aceptar para instalarla: Windows"
+" te pedirá permiso, VeTube se cerrará y se volverá a abrir solo."
+msgstr ""
+"Aktualizacja została pobrana. Kliknij OK, aby ją zainstalować: Windows "
+"poprosi o zgodę, VeTube zamknie się i sam otworzy ponownie."
+
+#: src/update/updater.py:308
+msgid "el archivo descargado no supera la comprobación de integridad"
+msgstr "pobrany plik nie przechodzi kontroli integralności"
+
+#: src/update/updater.py:236
+#, python-format
+msgid ""
+"no hay espacio suficiente en el disco: hacen falta %d MB libres para la "
+"copia de seguridad"
+msgstr "za mało miejsca na dysku: kopia zapasowa wymaga %d MB wolnych"
+
+#: src/update/updater.py:358
+msgid "Windows no dio permiso para instalar"
+msgstr "Windows nie wyraził zgody na instalację"
+
+#: src/update/updater.py:321
+msgid "Extrayendo la actualización..."
+msgstr "Rozpakowywanie aktualizacji..."
+
+#: src/update/updater.py:313
+msgid "Creando la copia de seguridad..."
+msgstr "Tworzenie kopii zapasowej..."
+
+#: src/update/updater.py:374
+msgid "el instalador sigue en marcha tras 30 segundos"
+msgstr "instalator nadal działa po 30 sekundach"

@@ -237,7 +237,7 @@ def test_install_update_handles_checksum_and_disabled_backup(tmp_path):
     extract.assert_not_called()
 
 
-def test_install_update_success_cleans_backup_and_notifies(monkeypatch):
+def test_install_update_success_cleans_backup_and_notifies(sin_interfaz):
     release = SimpleNamespace(
         version="4.0", zip_name="update.zip", zip_url="zip", checksum_url="sum"
     )
@@ -248,16 +248,42 @@ def test_install_update_success_cleans_backup_and_notifies(monkeypatch):
         patch("update.updater.verify", return_value=True),
         patch("update.updater.create_backup", return_value="backup"),
         patch("update.updater.extract"),
-        patch("update.updater.launch_bootstrap", return_value=0),
+        patch("update.updater.launch_bootstrap", return_value=0) as bootstrap,
         patch("update.updater.cleanup_backup") as cleanup,
-        patch("update.updater.update_finished") as finished,
     ):
         updater._install_update(release)
     cleanup.assert_called_once_with("backup")
-    finished.assert_called_once_with()
+    assert bootstrap.call_args.kwargs["backup_dir"] == "backup"
+    assert sin_interfaz.llamadas == [
+        updater.iniciar_descarga,
+        updater.aviso_descargada,
+        updater.mostrar_ventanas,
+    ]
 
 
-def test_install_update_restores_when_bootstrap_fails():
+def test_install_update_removes_a_half_made_backup(sin_interfaz, tmp_path):
+    """Si create_backup falla a medias, backup_path sigue en None: la carpeta
+    a medio copiar se borra igual (se conoce su sitio)."""
+    release = SimpleNamespace(
+        version="4.0", zip_name="update.zip", zip_url="zip", checksum_url="sum"
+    )
+    with (
+        patch.object(updater, "config", {"create_backup_before_update": True}),
+        patch.object(updater, "BASE_DIR", tmp_path / "VeTube"),
+        patch("update.updater.download"),
+        patch("update.updater._fetch_checksum", return_value="hash"),
+        patch("update.updater.verify", return_value=True),
+        patch("update.updater.create_backup", side_effect=OSError("disco lleno")),
+        patch("update.updater.cleanup_backup") as cleanup,
+    ):
+        updater._install_update(release)
+    cleanup.assert_called_once_with(str(tmp_path / f"_backup_v{updater.VERSION}"))
+
+
+def test_install_update_discards_backup_when_bootstrap_does_not_start(sin_interfaz):
+    """El bootstrap no arrancó (código 1): la instalación está intacta, así
+    que no hay nada que restaurar; la copia de seguridad se borra, las
+    ventanas vuelven y se avisa."""
     release = SimpleNamespace(
         version="4.0", zip_name="update.zip", zip_url="zip", checksum_url="sum"
     )
@@ -269,10 +295,71 @@ def test_install_update_restores_when_bootstrap_fails():
         patch("update.updater.create_backup", return_value="backup"),
         patch("update.updater.extract"),
         patch("update.updater.launch_bootstrap", return_value=1),
-        patch("update.updater.restore_backup") as restore,
+        patch("update.updater.cleanup_backup") as cleanup,
     ):
         updater._install_update(release)
-    restore.assert_called_once()
+    cleanup.assert_called_once_with("backup")
+    assert sin_interfaz.llamadas[-2] is updater.mostrar_ventanas
+    sin_interfaz.llamadas[-1]()
+    sin_interfaz.aviso.assert_called_once_with("el instalador no pudo arrancar (código 1)")
+
+
+def test_install_update_translates_the_disk_space_reason(sin_interfaz):
+    """Sin espacio para la copia de seguridad es el fallo en el que el usuario
+    puede hacer algo: se le dice en su idioma y con la cifra."""
+    from update.backup import InsufficientSpaceError
+
+    release = SimpleNamespace(
+        version="4.0", zip_name="update.zip", zip_url="zip", checksum_url="sum"
+    )
+    error = InsufficientSpaceError("Need 1200 MB")
+    error.required_mb = 1200
+    with (
+        patch.object(updater, "config", {"create_backup_before_update": True}),
+        patch("update.updater.download"),
+        patch("update.updater._fetch_checksum", return_value="hash"),
+        patch("update.updater.verify", return_value=True),
+        patch("update.updater.create_backup", side_effect=error),
+        patch("update.updater.extract") as extract,
+    ):
+        updater._install_update(release)
+    extract.assert_not_called()
+    sin_interfaz.llamadas[-1]()
+    sin_interfaz.aviso.assert_called_once_with(
+        "no hay espacio suficiente en el disco: hacen falta 1200 MB libres para la copia de seguridad"
+    )
+
+
+def test_en_interfaz_waits_for_the_progress_bar_update_to_finish(sin_interfaz):
+    """Si la petición llega mientras ProgressDialog.Update() está en curso,
+    se aplaza con un temporizador y el hilo de descarga sigue esperando; solo
+    cuando corre de verdad se libera."""
+    from update import updater as real
+
+    en_interfaz = sin_interfaz.original  # la fixture sustituye la función; aquí se prueba la real
+    estados = iter([True, True, False])
+    aplazadas = []
+    hecho = []
+    with (
+        patch("update.updater.dentro_de_update", side_effect=lambda: next(estados)),
+        patch.object(real.wx, "CallAfter", side_effect=lambda fn: fn()),
+        patch.object(real.wx, "CallLater", side_effect=lambda ms, fn: aplazadas.append(fn)),
+    ):
+        en_interfaz(lambda: hecho.append(True), esperar=False)
+        assert hecho == [] and len(aplazadas) == 1
+        aplazadas.pop()()  # el temporizador dispara, sigue dentro de Update
+        assert hecho == [] and len(aplazadas) == 1
+        aplazadas.pop()()  # Update terminó
+        assert hecho == [True] and aplazadas == []
+
+
+def test_bootstrap_del_paquete_prefers_the_downloaded_one(tmp_path):
+    """El bootstrap de la instalación se traba a sí mismo (tiene abiertos sus
+    .pyd de lib/); se lanza el del paquete descargado, que corre desde la
+    carpeta temporal. Si el paquete no trae ninguno, se usa el instalado."""
+    assert updater._bootstrap_del_paquete(str(tmp_path)) == str(updater.BOOTSTRAP_EXE)
+    (tmp_path / "bootstrap.exe").write_bytes(b"")
+    assert updater._bootstrap_del_paquete(str(tmp_path)) == str(tmp_path / "bootstrap.exe")
 
 
 def test_fetch_checksum_success_and_http_failure():
@@ -309,53 +396,71 @@ def test_donation_dialog_decline_does_not_open_browser(monkeypatch):
     launch.assert_not_called()
 
 
-def test_install_update_shows_donation_dialog_when_disabled():
+def _do_update_con_release(monkeypatch, donations, donation, install):
+    """do_update() con una versión nueva aceptada; devuelve el orden de los gestos."""
+    monkeypatch.setattr(updater.sys, "frozen", True, raising=False)
+    release = SimpleNamespace(version="99.0", description="notes")
+    orden = []
+    donation.side_effect = lambda: orden.append("donation")
+    install.side_effect = lambda r: orden.append("install")
+
+    def run_thread(*, target, args=(), daemon=True):
+        return SimpleNamespace(start=lambda: target(*args))
+
+    with (
+        patch.object(updater, "config", {"donations": donations}),
+        patch.object(
+            updater.github_client,
+            "get_latest_release_result",
+            return_value=updater.github_client.ReleaseLookupResult(
+                updater.github_client.ReleaseLookupStatus.SUCCESS, release
+            ),
+        ),
+        patch("update.updater.show_release_notes_dialog", return_value=True),
+        patch.object(updater.wx, "CallAfter", side_effect=lambda fn, *a: fn(*a)),
+        patch.object(updater.threading, "Thread", side_effect=run_thread),
+    ):
+        updater.do_update()
+    return orden
+
+
+def test_donation_dialog_is_answered_before_the_download_starts(monkeypatch):
+    """Con las donaciones desactivadas, el diálogo se muestra en el hilo de la
+    interfaz tras «Actualizar ahora» y ANTES de arrancar el hilo de descarga:
+    lanzado con CallAfter durante la descarga se abría con su dueña (la
+    ventana principal) ya escondida y desaparecía sin respuesta."""
+    with (
+        patch("update.updater.donation") as donation,
+        patch("update.updater._install_update") as install,
+    ):
+        orden = _do_update_con_release(monkeypatch, False, donation, install)
+    assert orden == ["donation", "install"]
+
+
+def test_donation_dialog_is_skipped_when_enabled(monkeypatch):
+    with (
+        patch("update.updater.donation") as donation,
+        patch("update.updater._install_update") as install,
+    ):
+        orden = _do_update_con_release(monkeypatch, True, donation, install)
+    assert orden == ["install"]
+
+
+def test_install_update_never_opens_the_donation_dialog(sin_interfaz):
     release = SimpleNamespace(
         version="4.0", zip_name="update.zip", zip_url="zip", checksum_url="sum"
     )
     with (
-        patch.object(
-            updater,
-            "config",
-            {"create_backup_before_update": True, "donations": False},
-        ),
-        patch.object(updater.wx, "CallAfter", side_effect=lambda fn, *a: fn(*a)),
+        patch.object(updater, "config", {"create_backup_before_update": False, "donations": False}),
         patch("update.updater.donation") as donation,
         patch("update.updater.download"),
         patch("update.updater._fetch_checksum", return_value="hash"),
         patch("update.updater.verify", return_value=True),
-        patch("update.updater.create_backup", return_value="backup"),
         patch("update.updater.extract"),
         patch("update.updater.launch_bootstrap", return_value=0),
-        patch("update.updater.cleanup_backup"),
-        patch("update.updater.update_finished"),
     ):
         updater._install_update(release)
-    donation.assert_called_once()
-
-
-def test_install_update_skips_donation_dialog_when_enabled():
-    release = SimpleNamespace(
-        version="4.0", zip_name="update.zip", zip_url="zip", checksum_url="sum"
-    )
-    with (
-        patch.object(
-            updater,
-            "config",
-            {"create_backup_before_update": True, "donations": True},
-        ),
-        patch.object(updater.wx, "CallAfter") as call_after,
-        patch("update.updater.download"),
-        patch("update.updater._fetch_checksum", return_value="hash"),
-        patch("update.updater.verify", return_value=True),
-        patch("update.updater.create_backup", return_value="backup"),
-        patch("update.updater.extract"),
-        patch("update.updater.launch_bootstrap", return_value=0),
-        patch("update.updater.cleanup_backup"),
-        patch("update.updater.update_finished"),
-    ):
-        updater._install_update(release)
-    call_after.assert_not_called()
+    donation.assert_not_called()
 
 
 def test_wx_updater_progress_and_notifications(monkeypatch):
@@ -368,24 +473,111 @@ def test_wx_updater_progress_and_notifications(monkeypatch):
     ):
         wxUpdater.progress_callback(10, 100)
         wxUpdater.progress_callback(100, 100)
-    dialog.Update.assert_called_once()
-    assert wxUpdater.progress_dialog is None
-    wxUpdater.backup_dialog = None
-    backup = MagicMock()
-    with (
-        patch.object(wxUpdater.wx, "CallAfter", side_effect=lambda fn: fn()),
-        patch.object(wxUpdater.wx, "ProgressDialog", return_value=backup),
-    ):
+        # La misma barra sigue para la copia de seguridad: no se destruye
+        # al terminar la descarga, y nunca llega al máximo (sin PD_AUTO_HIDE,
+        # Update(100) no vuelve hasta que el usuario pulse Cerrar).
         wxUpdater.backup_progress_callback(1, 2)
         wxUpdater.backup_progress_callback(2, 2)
-    backup.Destroy.assert_called_once()
+    dialog.Show.assert_called_once()
+    dialog.Destroy.assert_not_called()
+    assert [c.args[0] for c in dialog.Update.call_args_list] == [10, 99, 50, 99]
+    assert "copia de seguridad" in dialog.Update.call_args_list[2].args[1]
+    assert wxUpdater.progress_dialog is dialog
+    assert not wxUpdater.dentro_de_update()
+    wxUpdater.cerrar_barra()
+    dialog.Destroy.assert_called_once()
+    assert wxUpdater.progress_dialog is None
     with (
         patch.object(wxUpdater.wx, "CallAfter", side_effect=lambda fn: fn()),
         patch.object(wxUpdater.wx, "MessageDialog", return_value=MagicMock()),
     ):
         wxUpdater.rollback_notification("checksum")
         wxUpdater.no_updates_dialog("1.0")
-        wxUpdater.update_finished()
+    wxUpdater.progress_dialog = dialog
+    with patch.object(wxUpdater.wx, "MessageDialog", return_value=MagicMock()) as aviso:
+        wxUpdater.aviso_descargada()
+    aviso.return_value.ShowModal.assert_called_once()
+    # La barra es la madre del aviso: así sale delante aunque el programa esté escondido.
+    assert aviso.call_args.args[0] is dialog
+    # El botón se llama como dice la frase, en el idioma de VeTube y no en el de Windows.
+    aviso.return_value.SetOKLabel.assert_called_once_with("&Aceptar")
+    wxUpdater.progress_dialog = None
+
+
+def test_wx_updater_update_reentrancy_is_visible(monkeypatch):
+    """Update() procesa CallAfter pendientes: dentro_de_update() debe ser True
+    mientras corre (anidado incluido) y False al salir, para que updater.py
+    aplace lo que no puede ejecutarse ahí dentro."""
+    monkeypatch.setattr(wxUpdater, "_", lambda text: text, raising=False)
+    vistos = []
+    dialog = MagicMock()
+
+    def _update(pct, msg):
+        vistos.append(wxUpdater.dentro_de_update())
+        if pct == 10:
+            wxUpdater._actualizar_barra(20, "anidado")  # como haría el yield interno
+            vistos.append(wxUpdater.dentro_de_update())
+
+    dialog.Update.side_effect = _update
+    wxUpdater.progress_dialog = dialog
+    wxUpdater._actualizar_barra(10, "x")
+    assert vistos == [True, True, True]
+    assert not wxUpdater.dentro_de_update()
+    wxUpdater.progress_dialog = None
+
+
+def test_wx_updater_hides_and_restores_windows(monkeypatch):
+    """iniciar_descarga crea la barra de progreso ANTES de esconder las
+    ventanas (el foco pasa a la barra); mostrar_ventanas devuelve solo las
+    que estaban a la vista y sigue viva la referencia."""
+    monkeypatch.setattr(wxUpdater, "_", lambda text: text, raising=False)
+    wxUpdater.progress_dialog = None
+    wxUpdater._ventanas_ocultas = []
+    principal = MagicMock(); principal.IsShown.return_value = True
+    escondida = MagicMock(); escondida.IsShown.return_value = False
+    destruida = MagicMock(); destruida.IsShown.return_value = True
+    destruida.__bool__ = lambda self: False
+    dialogo = MagicMock(); dialogo.IsShown.return_value = True
+    with (
+        patch.object(wxUpdater, "create_progress_dialog", return_value=dialogo),
+        patch.object(
+            wxUpdater.wx,
+            "GetTopLevelWindows",
+            return_value=[principal, escondida, dialogo, destruida],
+        ),
+        patch.object(wxUpdater.wx, "GetActiveWindow", return_value=principal),
+    ):
+        wxUpdater.iniciar_descarga()
+    dialogo.Show.assert_called_once()
+    dialogo.Hide.assert_not_called()
+    principal.Hide.assert_called_once()
+    escondida.Hide.assert_not_called()
+    assert wxUpdater._ventanas_ocultas == [principal, destruida]
+
+    with patch.object(wxUpdater.wx, "CallAfter", side_effect=lambda fn: fn()):
+        wxUpdater.mostrar_ventanas()
+    principal.Show.assert_called_once()
+    principal.Raise.assert_called_once()
+    principal.SetFocus.assert_called_once()
+    destruida.Show.assert_not_called()
+    assert wxUpdater._ventanas_ocultas == []
+    # Al volver, la barra se cierra (después de mostrar: el primer plano
+    # pasa de la barra a la ventana principal, no a otro programa).
+    dialogo.Destroy.assert_called_once()
+    assert wxUpdater.progress_dialog is None
+
+
+def test_wx_updater_restores_the_window_that_had_focus_first(monkeypatch):
+    monkeypatch.setattr(wxUpdater, "_", lambda text: text, raising=False)
+    wxUpdater.progress_dialog = MagicMock()
+    principal = MagicMock(); principal.IsShown.return_value = True
+    chat = MagicMock(); chat.IsShown.return_value = True
+    with patch.object(wxUpdater.wx, "GetTopLevelWindows", return_value=[principal, chat]):
+        wxUpdater.ocultar_ventanas(activa=chat)
+    # La que tenía el foco (el chat) es la que vuelve al frente.
+    assert wxUpdater._ventanas_ocultas == [chat, principal]
+    wxUpdater._ventanas_ocultas = []
+    wxUpdater.progress_dialog = None
 
 
 def test_wx_updater_dialog_choices(monkeypatch):

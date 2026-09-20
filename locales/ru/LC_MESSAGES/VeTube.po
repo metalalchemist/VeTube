@@ -2185,33 +2185,10 @@ msgstr ""
 "Включает предварительные выпуски и ранний доступ к новым функциям. Может "
 "быть нестабильным."
 
-#: update/wxUpdater.py:89
-msgid "Copia de seguridad"
-msgstr "Резервная копия"
-
-#: update/wxUpdater.py:90
-msgid "Creando la copia de seguridad..."
-msgstr "Создание резервной копии…"
-
 #: update/wxUpdater.py:103
 #, python-format
 msgid "Creando la copia de seguridad... %d%%"
 msgstr "Создание резервной копии… %d%%"
-
-#: update/wxUpdater.py:120
-#, python-format
-msgid ""
-"La actualización ha fallado: %s\n"
-"\n"
-"Volviendo a la versión anterior. Tus datos están a salvo."
-msgstr ""
-"Не удалось обновить: %s\n"
-"\n"
-"Выполняется возврат к предыдущей версии. Ваши данные в безопасности."
-
-#: update/wxUpdater.py:125
-msgid "Actualización fallida: volviendo atrás"
-msgstr "Не удалось обновить: возврат к прежней версии"
 
 #: update/wxUpdater.py:139
 msgid "Comprobando actualizaciones"
@@ -2268,16 +2245,6 @@ msgstr "Скачивание обновления"
 msgid "Actualizando... %s de %s"
 msgstr "Обновление… %s из %s"
 
-#: update/wxUpdater.py:227
-msgid ""
-"La actualización se ha descargado e instalado exitosamente. Pulse en "
-"aceptar para continuar."
-msgstr "Обновление успешно скачано и установлено. Нажмите «ОК», чтобы продолжить."
-
-#: update/wxUpdater.py:230
-msgid "¡Hecho!"
-msgstr "Готово!"
-
 #: utils/app_utilitys.py:93
 msgid ""
 "Las voces Piper necesitan su motor de voz, que aún no está en este "
@@ -2322,3 +2289,57 @@ msgstr "Piper успешно инициализирован."
 msgid "Idioma del sistema"
 msgstr "Язык системы"
 
+#: src/update/wxUpdater.py:288
+msgid "Actualización descargada"
+msgstr "Обновление загружено"
+
+#: src/update/updater.py:317
+#, python-format
+msgid "el instalador no pudo arrancar (código %d)"
+msgstr "не удалось запустить установщик (код %d)"
+
+#: src/update/wxUpdater.py:128
+#, python-format
+msgid ""
+"La actualización no se ha podido completar: %s\n"
+"\n"
+"VeTube sigue en la versión de siempre y tus datos están a salvo."
+msgstr ""
+"Не удалось завершить обновление: %s\n"
+"\n"
+"VeTube остаётся на прежней версии, ваши данные в безопасности."
+
+#: src/update/wxUpdater.py:321
+msgid ""
+"La actualización se ha descargado. Pulsa Aceptar para instalarla: Windows"
+" te pedirá permiso, VeTube se cerrará y se volverá a abrir solo."
+msgstr ""
+"Обновление загружено. Нажмите «ОК», чтобы установить его: Windows "
+"запросит разрешение, VeTube закроется и снова откроется сам."
+
+#: src/update/updater.py:308
+msgid "el archivo descargado no supera la comprobación de integridad"
+msgstr "загруженный файл не прошёл проверку целостности"
+
+#: src/update/updater.py:236
+#, python-format
+msgid ""
+"no hay espacio suficiente en el disco: hacen falta %d MB libres para la "
+"copia de seguridad"
+msgstr "недостаточно места на диске: для резервной копии нужно %d МБ свободных"
+
+#: src/update/updater.py:358
+msgid "Windows no dio permiso para instalar"
+msgstr "Windows не дал разрешения на установку"
+
+#: src/update/updater.py:321
+msgid "Extrayendo la actualización..."
+msgstr "Распаковка обновления..."
+
+#: src/update/updater.py:313
+msgid "Creando la copia de seguridad..."
+msgstr "Создание резервной копии…"
+
+#: src/update/updater.py:374
+msgid "el instalador sigue en marcha tras 30 segundos"
+msgstr "установщик всё ещё работает спустя 30 секунд"

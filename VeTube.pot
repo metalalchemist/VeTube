@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-19 20:11+0200\n"
+"POT-Creation-Date: 2026-09-20 13:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -178,7 +178,7 @@ msgstr ""
 #: src/controller/update_languages_controller.py:97
 #: src/controller/update_languages_controller.py:111
 #: src/ui/discord_token_dialog.py:56 src/ui/list_urls.py:47
-#: src/update/updater.py:134 src/update/updater.py:174
+#: src/update/updater.py:147 src/update/updater.py:195
 msgid "Error"
 msgstr ""
 
@@ -888,7 +888,7 @@ msgstr ""
 msgid "No hay actualizaciones ni nuevos idiomas disponibles."
 msgstr ""
 
-#: src/controller/menus/main_menu_controller.py:202
+#: src/controller/menus/main_menu_controller.py:202 src/update/wxUpdater.py:127
 msgid "Error de actualización"
 msgstr ""
 
@@ -1685,6 +1685,7 @@ msgid "Sonidos"
 msgstr ""
 
 #: src/ui/ajustes/__init__.py:60 src/update/update.py:16
+#: src/update/wxUpdater.py:343
 msgid "&Aceptar"
 msgstr ""
 
@@ -2055,7 +2056,7 @@ msgid ""
 "unes a nuestra causa?"
 msgstr ""
 
-#: src/update/updater.py:94
+#: src/update/updater.py:107
 msgid ""
 "Las actualizaciones no están disponibles al ejecutar desde el código "
 "fuente.\n"
@@ -2063,11 +2064,11 @@ msgid ""
 "Usa la versión compilada (.exe) para buscar actualizaciones."
 msgstr ""
 
-#: src/update/updater.py:97
+#: src/update/updater.py:110
 msgid "Modo de desarrollo"
 msgstr ""
 
-#: src/update/updater.py:118
+#: src/update/updater.py:131
 #, python-format
 msgid ""
 "No hay una versión compatible disponible para el canal %s. El canal "
@@ -2075,69 +2076,93 @@ msgid ""
 " incluir versiones preliminares."
 msgstr ""
 
-#: src/update/updater.py:124 src/update/updater.py:151
+#: src/update/updater.py:137 src/update/updater.py:164
 msgid "Información"
 msgstr ""
 
-#: src/update/updater.py:133
+#: src/update/updater.py:146
 msgid "No se pudo comprobar actualizaciones. Verifica tu conexión."
 msgstr ""
 
-#: src/update/updater.py:150
+#: src/update/updater.py:163
 msgid "Al parecer tienes la última versión del programa"
 msgstr ""
 
-#: src/update/updater.py:173
+#: src/update/updater.py:194
 msgid "Error al comprobar actualizaciones."
 msgstr ""
 
-#: src/update/wxUpdater.py:19 src/update/wxUpdater.py:37
-msgid "Estable"
+#: src/update/updater.py:241
+#, python-format
+msgid ""
+"no hay espacio suficiente en el disco: hacen falta %d MB libres para la "
+"copia de seguridad"
 msgstr ""
 
-#: src/update/wxUpdater.py:19 src/update/wxUpdater.py:45
-msgid "Beta"
+#: src/update/updater.py:305 src/update/wxUpdater.py:194
+msgid "Descargando la actualización"
 msgstr ""
 
-#: src/update/wxUpdater.py:30
-msgid "Canal de actualizaciones"
+#: src/update/updater.py:314
+msgid "el archivo descargado no supera la comprobación de integridad"
 msgstr ""
 
-#: src/update/wxUpdater.py:33
-msgid "Elige qué actualizaciones quieres recibir:"
-msgstr ""
-
-#: src/update/wxUpdater.py:40
-msgid "Solo versiones oficiales. Lo recomendado para la mayoría."
-msgstr ""
-
-#: src/update/wxUpdater.py:50
-msgid "Incluye versiones previas y novedades tempranas. Puede ser inestable."
-msgstr ""
-
-#: src/update/wxUpdater.py:89
-msgid "Copia de seguridad"
-msgstr ""
-
-#: src/update/wxUpdater.py:90
+#: src/update/updater.py:319
 msgid "Creando la copia de seguridad..."
 msgstr ""
 
-#: src/update/wxUpdater.py:103
+#: src/update/updater.py:327
+msgid "Extrayendo la actualización..."
+msgstr ""
+
+#: src/update/updater.py:367
+msgid "Windows no dio permiso para instalar"
+msgstr ""
+
+#: src/update/updater.py:372
+#, python-format
+msgid "el instalador no pudo arrancar (código %d)"
+msgstr ""
+
+#: src/update/updater.py:378
+msgid "el instalador sigue en marcha tras 30 segundos"
+msgstr ""
+
+#: src/update/wxUpdater.py:33 src/update/wxUpdater.py:51
+msgid "Estable"
+msgstr ""
+
+#: src/update/wxUpdater.py:33 src/update/wxUpdater.py:59
+msgid "Beta"
+msgstr ""
+
+#: src/update/wxUpdater.py:44
+msgid "Canal de actualizaciones"
+msgstr ""
+
+#: src/update/wxUpdater.py:47
+msgid "Elige qué actualizaciones quieres recibir:"
+msgstr ""
+
+#: src/update/wxUpdater.py:54
+msgid "Solo versiones oficiales. Lo recomendado para la mayoría."
+msgstr ""
+
+#: src/update/wxUpdater.py:64
+msgid "Incluye versiones previas y novedades tempranas. Puede ser inestable."
+msgstr ""
+
+#: src/update/wxUpdater.py:101
 #, python-format
 msgid "Creando la copia de seguridad... %d%%"
 msgstr ""
 
-#: src/update/wxUpdater.py:120
+#: src/update/wxUpdater.py:123
 #, python-format
 msgid ""
-"La actualización ha fallado: %s\n"
+"La actualización no se ha podido completar: %s\n"
 "\n"
-"Volviendo a la versión anterior. Tus datos están a salvo."
-msgstr ""
-
-#: src/update/wxUpdater.py:125
-msgid "Actualización fallida: volviendo atrás"
+"VeTube sigue en la versión de siempre y tus datos están a salvo."
 msgstr ""
 
 #: src/update/wxUpdater.py:139
@@ -2174,27 +2199,23 @@ msgstr ""
 msgid "Nueva versión de VeTube"
 msgstr ""
 
-#: src/update/wxUpdater.py:190
+#: src/update/wxUpdater.py:193
 msgid "Descarga en progreso"
 msgstr ""
 
-#: src/update/wxUpdater.py:191
-msgid "Descargando la actualización"
-msgstr ""
-
-#: src/update/wxUpdater.py:212
+#: src/update/wxUpdater.py:250
 #, python-format
 msgid "Actualizando... %s de %s"
 msgstr ""
 
-#: src/update/wxUpdater.py:227
+#: src/update/wxUpdater.py:334
 msgid ""
-"La actualización se ha descargado e instalado exitosamente. Pulse en "
-"aceptar para continuar."
+"La actualización se ha descargado. Pulsa Aceptar para instalarla: Windows"
+" te pedirá permiso, VeTube se cerrará y se volverá a abrir solo."
 msgstr ""
 
-#: src/update/wxUpdater.py:230
-msgid "¡Hecho!"
+#: src/update/wxUpdater.py:337
+msgid "Actualización descargada"
 msgstr ""
 
 #: src/utils/app_utilitys.py:93

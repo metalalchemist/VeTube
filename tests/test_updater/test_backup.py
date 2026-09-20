@@ -111,3 +111,30 @@ class TestCleanupBackup:
 
     def test_silent_if_missing(self, tmp_path):
         cleanup_backup(str(tmp_path / "nonexistent"))
+
+
+class TestBackupProgress:
+    @patch("update.backup.check_disk_space", return_value=(True, 0))
+    def test_reports_every_file_and_the_total(self, mock_check, tmp_path):
+        install = tmp_path / "install"
+        (install / "lib").mkdir(parents=True)
+        (install / "VeTube.exe").write_bytes(b"app")
+        (install / "lib" / "a.pyd").write_bytes(b"a")
+        (install / "lib" / "b.pyd").write_bytes(b"b")
+        avisos = []
+
+        result = create_backup(
+            str(install), "1.0", progress_callback=lambda c, t: avisos.append((c, t))
+        )
+
+        assert avisos == [(1, 3), (2, 3), (3, 3)]
+        assert (tmp_path / "_backup_v1.0" / "lib" / "b.pyd").read_bytes() == b"b"
+        assert result == str(tmp_path / "_backup_v1.0")
+
+    @patch("update.backup.check_disk_space", return_value=(True, 0))
+    def test_empty_install_still_closes_the_dialog(self, mock_check, tmp_path):
+        install = tmp_path / "install"
+        install.mkdir()
+        avisos = []
+        create_backup(str(install), "1.0", progress_callback=lambda c, t: avisos.append((c, t)))
+        assert avisos == [(0, 0)]

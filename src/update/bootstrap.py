@@ -13,9 +13,19 @@ _EXIT_TIMEOUT = -1
 _WAIT_TIMEOUT_SECONDS = 30
 
 
-def _build_args(pid: int, source_dir: str, dest_dir: str, exe_path: str) -> str:
-    """Build the command-line argument string for bootstrap.exe."""
-    return f'"{pid}" "{source_dir}" "{dest_dir}" "{exe_path}"'
+def _build_args(
+    pid: int, source_dir: str, dest_dir: str, exe_path: str, backup_dir: str | None = None
+) -> str:
+    """Build the command-line argument string for bootstrap.exe.
+
+    ``backup_dir`` (optional fifth argument) lets the bootstrap roll back to
+    the pre-update copy if the file copy fails, and delete it once the update
+    is installed. Older bootstraps ignore extra arguments.
+    """
+    args = f'"{pid}" "{source_dir}" "{dest_dir}" "{exe_path}"'
+    if backup_dir:
+        args += f' "{backup_dir}"'
+    return args
 
 
 def _is_process_running(name: str) -> bool:
@@ -40,6 +50,7 @@ def launch_bootstrap(
     source_dir: str,
     dest_dir: str,
     exe_path: str,
+    backup_dir: str | None = None,
 ) -> int:
     """Launch bootstrap.exe to replace files and relaunch the app.
 
@@ -52,6 +63,7 @@ def launch_bootstrap(
         source_dir: Directory containing the new version files.
         dest_dir: Target installation directory.
         exe_path: Path to the application executable to relaunch.
+        backup_dir: Pre-update copy of dest_dir, or None when backups are off.
 
     Returns:
         Exit code: 0=success, 1=failure, 2=cancelled by user, -1=timeout.
@@ -59,7 +71,7 @@ def launch_bootstrap(
     import win32api
     import win32con
 
-    args = _build_args(pid, source_dir, dest_dir, exe_path)
+    args = _build_args(pid, source_dir, dest_dir, exe_path, backup_dir)
     logger.info("Launching bootstrap: '%s' %s", bootstrap_exe, args)
 
     try:
