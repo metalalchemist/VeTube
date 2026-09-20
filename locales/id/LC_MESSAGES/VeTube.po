@@ -2200,33 +2200,10 @@ msgstr "Hanya rilis resmi. Disarankan untuk sebagian besar pengguna."
 msgid "Incluye versiones previas y novedades tempranas. Puede ser inestable."
 msgstr "Termasuk pra-rilis dan fitur awal. Mungkin tidak stabil."
 
-#: update/wxUpdater.py:89
-msgid "Copia de seguridad"
-msgstr "Cadangan"
-
-#: update/wxUpdater.py:90
-msgid "Creando la copia de seguridad..."
-msgstr "Membuat cadangan..."
-
 #: update/wxUpdater.py:103
 #, python-format
 msgid "Creando la copia de seguridad... %d%%"
 msgstr "Membuat cadangan... %d%%"
-
-#: update/wxUpdater.py:120
-#, python-format
-msgid ""
-"La actualización ha fallado: %s\n"
-"\n"
-"Volviendo a la versión anterior. Tus datos están a salvo."
-msgstr ""
-"Pembaruan gagal: %s\n"
-"\n"
-"Kembali ke versi sebelumnya. Data Anda aman."
-
-#: update/wxUpdater.py:125
-msgid "Actualización fallida: volviendo atrás"
-msgstr "Pembaruan gagal: mengembalikan"
 
 #: update/wxUpdater.py:139
 msgid "Comprobando actualizaciones"
@@ -2283,16 +2260,6 @@ msgstr "Mengunduh pembaruan"
 msgid "Actualizando... %s de %s"
 msgstr "Memperbarui... %s dari %s"
 
-#: update/wxUpdater.py:227
-msgid ""
-"La actualización se ha descargado e instalado exitosamente. Pulse en "
-"aceptar para continuar."
-msgstr "Pembaruan telah berhasil diunduh dan diinstal. Klik OK untuk melanjutkan."
-
-#: update/wxUpdater.py:230
-msgid "¡Hecho!"
-msgstr "Selesai!"
-
 #: utils/app_utilitys.py:93
 msgid ""
 "Las voces Piper necesitan su motor de voz, que aún no está en este "
@@ -2338,3 +2305,57 @@ msgstr "Pembaca Piper berhasil diinisialisasi."
 msgid "Idioma del sistema"
 msgstr "Bahasa sistem"
 
+#: src/update/wxUpdater.py:288
+msgid "Actualización descargada"
+msgstr "Pembaruan diunduh"
+
+#: src/update/updater.py:317
+#, python-format
+msgid "el instalador no pudo arrancar (código %d)"
+msgstr "pemasang tidak dapat dijalankan (kode %d)"
+
+#: src/update/wxUpdater.py:128
+#, python-format
+msgid ""
+"La actualización no se ha podido completar: %s\n"
+"\n"
+"VeTube sigue en la versión de siempre y tus datos están a salvo."
+msgstr ""
+"Pembaruan tidak dapat diselesaikan: %s\n"
+"\n"
+"VeTube tetap pada versi yang sekarang dan data Anda aman."
+
+#: src/update/wxUpdater.py:321
+msgid ""
+"La actualización se ha descargado. Pulsa Aceptar para instalarla: Windows"
+" te pedirá permiso, VeTube se cerrará y se volverá a abrir solo."
+msgstr ""
+"Pembaruan telah diunduh. Klik Oke untuk memasangnya: Windows akan meminta"
+" izin, VeTube akan menutup dan membuka kembali dengan sendirinya."
+
+#: src/update/updater.py:308
+msgid "el archivo descargado no supera la comprobación de integridad"
+msgstr "berkas yang diunduh tidak lolos pemeriksaan integritas"
+
+#: src/update/updater.py:236
+#, python-format
+msgid ""
+"no hay espacio suficiente en el disco: hacen falta %d MB libres para la "
+"copia de seguridad"
+msgstr "ruang disk tidak cukup: diperlukan %d MB kosong untuk cadangan"
+
+#: src/update/updater.py:358
+msgid "Windows no dio permiso para instalar"
+msgstr "Windows tidak memberikan izin untuk memasang"
+
+#: src/update/updater.py:321
+msgid "Extrayendo la actualización..."
+msgstr "Mengekstrak pembaruan..."
+
+#: src/update/updater.py:313
+msgid "Creando la copia de seguridad..."
+msgstr "Membuat cadangan..."
+
+#: src/update/updater.py:374
+msgid "el instalador sigue en marcha tras 30 segundos"
+msgstr "pemasang masih berjalan setelah 30 detik"

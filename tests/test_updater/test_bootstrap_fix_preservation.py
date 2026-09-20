@@ -364,7 +364,7 @@ def test_main_finalize_mode_delegates(tmp_path):
 
     assert error.value.code == EXIT_SUCCESS
     finalize.assert_called_once_with(
-        42, str(tmp_path), "app.exe", "bootstrap.exe", "bootstrap.next.exe"
+        42, str(tmp_path), "app.exe", "bootstrap.exe", "bootstrap.next.exe", ""
     )
 
 
@@ -400,3 +400,170 @@ def test_main_rejects_missing_update_source(tmp_path):
         bootstrap_fix.main()
 
     assert error.value.code == EXIT_FAILURE
+
+
+def _instalacion_con_backup(tmp_path):
+    """Una instalación, su copia de seguridad y un paquete que la actualiza."""
+    source = tmp_path / "source"
+    destination = tmp_path / "destination"
+    backup = tmp_path / "_backup_v1.0"
+    for carpeta in (source, destination, backup):
+        (carpeta / "lib").mkdir(parents=True)
+    for carpeta, version in ((destination, b"1.0"), (backup, b"1.0"), (source, b"2.0")):
+        (carpeta / "VERSION").write_bytes(version)
+        (carpeta / "lib" / "modulo.pyd").write_bytes(version)
+    app = destination / "VeTube.exe"
+    app.write_bytes(b"app")
+    (backup / "VeTube.exe").write_bytes(b"app")
+    return source, destination, backup, app
+
+
+def test_copy_failure_restores_backup_and_relaunches_old_app(tmp_path):
+    """Copia a medias: VERSION ya decía 2.0 sobre un código 1.0 (y el
+    actualizador respondía «ya tienes la última versión»). Con la copia de
+    seguridad se vuelve atrás y se relanza la app vieja."""
+    from update import bootstrap_fix
+
+    source, destination, backup, app = _instalacion_con_backup(tmp_path)
+    argv = ["bootstrap.exe", "42", str(source), str(destination), str(app), str(backup)]
+    copiados = []
+
+    def _copy2(src, dst, *args, **kwargs):
+        if str(src).endswith("modulo.pyd") and str(src).startswith(str(source)):
+            raise PermissionError("locked")
+        copiados.append(dst)
+        with open(src, "rb") as f, open(dst, "wb") as g:
+            g.write(f.read())
+
+    with patch.object(sys, "argv", argv), patch.object(bootstrap_fix, "kill_process"), patch.object(
+        bootstrap_fix.time, "sleep"
+    ), patch.object(bootstrap_fix.shutil, "copy2", side_effect=_copy2), patch.object(
+        bootstrap_fix, "_launch_executable", return_value=True
+    ) as launch, pytest.raises(SystemExit) as error:
+        bootstrap_fix.main()
+
+    assert error.value.code == bootstrap_fix.EXIT_CANCELLED
+    assert (destination / "VERSION").read_bytes() == b"1.0"
+    assert (destination / "lib" / "modulo.pyd").read_bytes() == b"1.0"
+    assert (destination / "_rollback_needed").exists()
+    launch.assert_called_once_with(str(app))
+    assert backup.is_dir()
+
+
+def test_restore_backup_leaves_the_running_bootstrap_and_user_data_alone(tmp_path):
+    """La restauración sigue la política de la copia: bootstrap.exe (que puede
+    ser el que corre), data.json y keymaps no se tocan; el resto vuelve."""
+    from update import bootstrap_fix
+
+    backup = tmp_path / "_backup"
+    dest = tmp_path / "dest"
+    (backup / "lib").mkdir(parents=True)
+    dest.mkdir()
+    (backup / "bootstrap.exe").write_bytes(b"old-bootstrap")
+    (backup / "data.json").write_bytes(b"old-data")
+    (backup / "VERSION").write_bytes(b"1.0")
+    (backup / "lib" / "modulo.pyd").write_bytes(b"1.0")
+    (dest / "bootstrap.exe").write_bytes(b"running")
+    (dest / "data.json").write_bytes(b"current-data")
+    (dest / "VERSION").write_bytes(b"2.0")
+
+    assert bootstrap_fix._restore_backup(str(backup), str(dest)) is True
+    assert (dest / "bootstrap.exe").read_bytes() == b"running"
+    assert (dest / "data.json").read_bytes() == b"current-data"
+    assert (dest / "VERSION").read_bytes() == b"1.0"
+    assert (dest / "lib" / "modulo.pyd").read_bytes() == b"1.0"
+
+
+def test_successful_copy_clears_a_stale_rollback_signal(tmp_path):
+    from update import bootstrap_fix
+
+    source, destination, backup, app = _instalacion_con_backup(tmp_path)
+    (destination / "_rollback_needed").write_bytes(b"1")
+    argv = ["bootstrap.exe", "42", str(source), str(destination), str(app)]
+    with patch.object(sys, "argv", argv), patch.object(bootstrap_fix, "kill_process"), patch.object(
+        bootstrap_fix.time, "sleep"
+    ), patch.object(bootstrap_fix, "_launch_executable", return_value=True), pytest.raises(
+        SystemExit
+    ) as error:
+        bootstrap_fix.main()
+    assert error.value.code == EXIT_SUCCESS
+    assert not (destination / "_rollback_needed").exists()
+
+
+def test_copy_failure_without_backup_still_relaunches(tmp_path):
+    from update import bootstrap_fix
+
+    source, destination, backup, app = _instalacion_con_backup(tmp_path)
+    argv = ["bootstrap.exe", "42", str(source), str(destination), str(app)]
+
+    with patch.object(sys, "argv", argv), patch.object(bootstrap_fix, "kill_process"), patch.object(
+        bootstrap_fix.time, "sleep"
+    ), patch.object(bootstrap_fix, "_copy_update_files", side_effect=OSError("disk")), patch.object(
+        bootstrap_fix, "_launch_executable", return_value=True
+    ) as launch, pytest.raises(SystemExit) as error:
+        bootstrap_fix.main()
+
+    assert error.value.code == EXIT_FAILURE
+    launch.assert_called_once_with(str(app))
+
+
+def test_finalizer_receives_backup_and_removes_it_after_relaunch(tmp_path):
+    from update import bootstrap_fix
+
+    source, destination, backup, app = _instalacion_con_backup(tmp_path)
+    (source / "bootstrap.exe").write_bytes(b"new")
+    (destination / "bootstrap.exe").write_bytes(b"old")
+    argv = ["bootstrap.exe", "42", str(source), str(destination), str(app), str(backup)]
+
+    with patch.object(sys, "argv", argv), patch.object(bootstrap_fix, "kill_process"), patch.object(
+        bootstrap_fix.time, "sleep"
+    ), patch.object(bootstrap_fix.subprocess, "Popen") as popen:
+        bootstrap_fix.main()
+
+    assert popen.call_args.args[0][-1] == str(backup)
+    assert (destination / "VERSION").read_bytes() == b"2.0"
+    assert backup.is_dir()  # la borra el finalizador, no la fase uno
+
+    staged = destination / "bootstrap.next.exe"
+    with patch.object(bootstrap_fix, "_wait_for_process_exit", return_value=True), patch.object(
+        bootstrap_fix, "_launch_executable", return_value=True
+    ):
+        result = _finalize_bootstrap(
+            42, str(destination), str(app), str(destination / "bootstrap.exe"), str(staged), str(backup)
+        )
+
+    assert result == EXIT_SUCCESS
+    assert not backup.exists()
+    assert (destination / "bootstrap.exe").read_bytes() == b"new"
+
+
+def test_finalizer_failure_keeps_the_backup(tmp_path):
+    from update import bootstrap_fix
+
+    source, destination, backup, app = _instalacion_con_backup(tmp_path)
+    staged = destination / "bootstrap.next.exe"
+    staged.write_bytes(b"new")
+    (destination / "bootstrap.exe").write_bytes(b"old")
+    with patch.object(bootstrap_fix, "_wait_for_process_exit", return_value=True), patch.object(
+        bootstrap_fix, "_launch_executable", return_value=False
+    ):
+        result = _finalize_bootstrap(
+            42, str(destination), str(app), str(destination / "bootstrap.exe"), str(staged), str(backup)
+        )
+    assert result == EXIT_FAILURE
+    assert backup.is_dir()
+
+
+def test_legacy_relaunch_removes_backup(tmp_path):
+    from update import bootstrap_fix
+
+    source, destination, backup, app = _instalacion_con_backup(tmp_path)
+    argv = ["bootstrap.exe", "42", str(source), str(destination), str(app), str(backup)]
+    with patch.object(sys, "argv", argv), patch.object(bootstrap_fix, "kill_process"), patch.object(
+        bootstrap_fix.time, "sleep"
+    ), patch.object(bootstrap_fix, "_launch_executable", return_value=True), pytest.raises(
+        SystemExit
+    ) as error:
+        bootstrap_fix.main()
+    assert error.value.code == EXIT_SUCCESS
+    assert not backup.exists()
