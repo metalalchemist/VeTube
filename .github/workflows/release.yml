@@ -136,6 +136,31 @@ jobs:
       - name: Build portable version
         run: uv run cxfreeze build
 
+      # Las instalaciones hasta la 3.97-rc1 copian la actualizacion con el
+      # bootstrap.exe que ya tienen, y ese bootstrap mantiene abiertos estos 4
+      # .pyd de su propio lib\: si el zip trae los mismos nombres, la copia se
+      # corta a mitad (VERSION ya escrito, VeTube sin relanzar). Con el nombre
+      # completo (p. ej. _bz2.cp314-win_amd64.pyd) son archivos nuevos para
+      # ellas, y Python los carga igual: es el primer sufijo que busca.
+      # Solo el zip; el MSI se compila en su propio job y no cambia.
+      - name: Rename locked .pyd (portable zip only)
+        run: |
+          $buildPath = Get-ChildItem -Path "build" -Directory | Select-Object -First 1
+          $suffix = uv run python -c "import importlib.machinery as m; print(m.EXTENSION_SUFFIXES[0])"
+          if ("$suffix" -notmatch '^\.cp\d+-win_\w+\.pyd$') {
+            throw "Unexpected extension suffix: '$suffix'"
+          }
+          foreach ($name in "_bz2", "_ctypes", "_lzma", "_zstd") {
+            $pyd = Join-Path $buildPath.FullName "lib\$name.pyd"
+            if (Test-Path $pyd) {
+              Rename-Item -Path $pyd -NewName "$name$suffix"
+              Write-Host "Renamed lib\$name.pyd -> lib\$name$suffix"
+            } else {
+              Write-Host "::warning::lib\$name.pyd not found, nothing to rename"
+            }
+          }
+        shell: pwsh
+
       - name: Compress build (zip)
         run: |
           $version = "${{ github.ref_name }}"
