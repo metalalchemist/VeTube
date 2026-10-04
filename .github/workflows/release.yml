@@ -136,29 +136,68 @@ jobs:
       - name: Build portable version
         run: uv run cxfreeze build
 
-      # Las instalaciones hasta la 3.97-rc1 copian la actualizacion con el
-      # bootstrap.exe que ya tienen, y ese bootstrap mantiene abiertos estos 4
-      # .pyd de su propio lib\: si el zip trae los mismos nombres, la copia se
-      # corta a mitad (VERSION ya escrito, VeTube sin relanzar). Con el nombre
-      # completo (p. ej. _bz2.cp314-win_amd64.pyd) son archivos nuevos para
-      # ellas, y Python los carga igual: es el primer sufijo que busca.
-      # Solo el zip; el MSI se compila en su propio job y no cambia.
+      # Las instalaciones compiladas con cx_Freeze hasta la 3.97-rc1 copian la
+      # actualizacion con el bootstrap.exe que ya tienen, y ese bootstrap
+      # mantiene abiertos estos 4 .pyd de su propio lib\: si el zip trae los
+      # mismos nombres, la copia se corta a mitad (VERSION ya escrito, VeTube
+      # sin relanzar). Con el nombre completo (p. ej. _bz2.cp314-win_amd64.pyd)
+      # son archivos nuevos para ellas, y Python los carga igual: es el primer
+      # sufijo que busca. Solo el zip: el actualizador integrado no descarga el MSI.
+      #
+      # NO QUITAR mientras se compile con Python 3.14: el actualizador no borra
+      # nada, y donde ya hay un nombre largo, ese gana sobre cualquier .pyd corto
+      # nuevo (modulos viejos para siempre). El paso exige el sufijo de la 3.14:
+      # con 3.15, esas instalaciones conservarian su python3.dll de la 3.14 y
+      # VeTube ya no arrancaria. Antes de pasar a 3.15 hace falta una release en
+      # 3.14 con la #149; despues este paso se quita (los .cp314 quedan inertes).
       - name: Rename locked .pyd (portable zip only)
         run: |
           $buildPath = Get-ChildItem -Path "build" -Directory | Select-Object -First 1
           $suffix = uv run python -c "import importlib.machinery as m; print(m.EXTENSION_SUFFIXES[0])"
-          if ("$suffix" -notmatch '^\.cp\d+-win_\w+\.pyd$') {
-            throw "Unexpected extension suffix: '$suffix'"
+          if ("$suffix" -ne '.cp314-win_amd64.pyd') {
+            throw "Extension suffix is '$suffix', not .cp314-win_amd64.pyd: read the comment above this step before changing Python"
           }
+          $renamed = 0
           foreach ($name in "_bz2", "_ctypes", "_lzma", "_zstd") {
             $pyd = Join-Path $buildPath.FullName "lib\$name.pyd"
             if (Test-Path $pyd) {
               Rename-Item -Path $pyd -NewName "$name$suffix"
               Write-Host "Renamed lib\$name.pyd -> lib\$name$suffix"
+              $renamed++
             } else {
               Write-Host "::warning::lib\$name.pyd not found, nothing to rename"
             }
           }
+          if ($renamed -eq 0) {
+            throw "None of the 4 .pyd found in $($buildPath.FullName)\lib: this zip would break the update of installations up to 3.97-rc1"
+          }
+        shell: pwsh
+
+      # Comprobacion: el bootstrap.exe congelado importa ctypes al arrancar. Sin
+      # argumentos tiene que cargar el _ctypes renombrado, escribir "No hay
+      # suficientes argumentos" en su log y salir con 1; si no, ni el bootstrap
+      # ni VeTube arrancarian con este zip. Con base "gui", un error de
+      # importacion abre una ventana modal: de ahi el limite de 30 s.
+      - name: Check that the frozen bootstrap loads the renamed .pyd
+        run: |
+          $buildPath = Get-ChildItem -Path "build" -Directory | Select-Object -First 1
+          $exe = Join-Path $buildPath.FullName "bootstrap.exe"
+          $tmp = Join-Path ([IO.Path]::GetTempPath()) ("bootstrap-smoke-" + [guid]::NewGuid())
+          New-Item -ItemType Directory -Path $tmp | Out-Null
+          $log = Join-Path $tmp "vetube_bootstrap_debug.txt"
+          $psi = New-Object Diagnostics.ProcessStartInfo $exe
+          $psi.UseShellExecute = $false
+          $psi.EnvironmentVariables["TEMP"] = $tmp
+          $p = [Diagnostics.Process]::Start($psi)
+          if (-not $p.WaitForExit(30000)) {
+            $p.Kill()
+            throw "bootstrap.exe did not exit within 30 s (error dialog of the gui base?)"
+          }
+          $logged = (Test-Path $log) -and (Select-String -Path $log -SimpleMatch "No hay suficientes argumentos" -Quiet)
+          if ($p.ExitCode -ne 1 -or -not $logged) {
+            throw "Frozen bootstrap.exe failed with the renamed .pyd (exit code $($p.ExitCode), log line found: $logged)"
+          }
+          Write-Host "Frozen bootstrap.exe imported ctypes with the renamed .pyd"
         shell: pwsh
 
       - name: Compress build (zip)
