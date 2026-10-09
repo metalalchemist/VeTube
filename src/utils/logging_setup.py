@@ -6,9 +6,11 @@ para no romper nunca el arranque: si algo falla al configurar los logs, la app
 sigue funcionando sin registro.
 """
 
+import atexit
 import logging
 import logging.handlers
 import os
+import queue
 import sys
 import threading
 
@@ -48,7 +50,24 @@ _LOGGERS_VETUBE = (
 )
 
 _configurado = False
+_escucha = None
+_manejador_cola = None
 _log = logging.getLogger("vetube")
+
+
+def cerrar_logs():
+    """Vacía la cola antes de cerrar el archivo y la consola."""
+    global _escucha, _manejador_cola
+    if _escucha is None:
+        return
+    escucha = _escucha
+    _escucha = None
+    logging.getLogger().removeHandler(_manejador_cola)
+    _manejador_cola.close()
+    _manejador_cola = None
+    escucha.stop()
+    for manejador in escucha.handlers:
+        manejador.close()
 
 
 def carpeta_logs():
@@ -62,7 +81,7 @@ def carpeta_logs():
 
 def configurar_logs(nivel=logging.INFO):
     """Configura el logger raíz una sola vez. Seguro de llamar varias veces."""
-    global _configurado
+    global _configurado, _escucha, _manejador_cola
     if _configurado:
         return
 
@@ -73,6 +92,7 @@ def configurar_logs(nivel=logging.INFO):
 
     raiz = logging.getLogger()
     raiz.setLevel(nivel)
+    salidas = []
 
     # Archivo rotativo: máx. ~1 MB por archivo, 5 copias -> tope de ~6 MB.
     try:
@@ -85,7 +105,7 @@ def configurar_logs(nivel=logging.INFO):
             encoding="utf-8",
         )
         manejador_archivo.setFormatter(formato)
-        raiz.addHandler(manejador_archivo)
+        salidas.append(manejador_archivo)
     except OSError:
         # Si no se puede crear la carpeta o el archivo (permisos, disco lleno...),
         # no rompemos el arranque: seguimos sin log en archivo.
@@ -95,7 +115,18 @@ def configurar_logs(nivel=logging.INFO):
     if not getattr(sys, "frozen", False):
         manejador_consola = logging.StreamHandler()
         manejador_consola.setFormatter(formato)
-        raiz.addHandler(manejador_consola)
+        salidas.append(manejador_consola)
+
+    # Sin límite: los productores no esperan al disco ni a la consola.
+    cola = queue.SimpleQueue()
+    _manejador_cola = logging.handlers.QueueHandler(cola)
+    _escucha = logging.handlers.QueueListener(
+        cola, *salidas, respect_handler_level=True
+    )
+    _escucha.start()
+    raiz.addHandler(_manejador_cola)
+    # Se ejecuta antes de logging.shutdown, también ante errores de arranque.
+    atexit.register(cerrar_logs)
 
     for nombre in _LIBRERIAS_RUIDOSAS:
         logging.getLogger(nombre).setLevel(logging.WARNING)

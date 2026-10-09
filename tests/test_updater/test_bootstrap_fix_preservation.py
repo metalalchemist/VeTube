@@ -1,5 +1,7 @@
 """Tests for preserving user-owned files during bootstrap updates."""
 
+import os
+import shutil
 import sys
 from unittest.mock import patch
 
@@ -8,7 +10,9 @@ import pytest
 from update.bootstrap_fix import (
     EXIT_FAILURE,
     EXIT_SUCCESS,
+    LEFTOVERS_MANIFEST,
     _copy_update_files,
+    cleanup_leftovers,
     _finalize_bootstrap,
     _launch_executable,
     _stage_bootstrap,
@@ -178,18 +182,102 @@ def test_finalize_failure_restores_old_bootstrap_and_signals(tmp_path):
     signal.assert_called_once_with(str(destination))
 
 
-def test_locked_existing_runtime_dll_is_preserved(tmp_path):
+def test_existing_dll_is_replaced_and_old_copy_removed(tmp_path):
+    source = tmp_path / "source"
+    destination = tmp_path / "destination"
+    source.mkdir()
+    destination.mkdir()
+    (source / "vcruntime140.dll").write_bytes(b"new")
+    (destination / "vcruntime140.dll").write_bytes(b"old")
+
+    _copy_update_files(str(source), str(destination))
+
+    assert (destination / "vcruntime140.dll").read_bytes() == b"new"
+    assert not (destination / "vcruntime140.dll.old").exists()
+    assert not (destination / LEFTOVERS_MANIFEST).exists()
+
+
+def test_failed_copy_undoes_every_replacement(tmp_path):
+    source = tmp_path / "source"
+    destination = tmp_path / "destination"
+    source.mkdir()
+    destination.mkdir()
+    (source / "a.dll").write_bytes(b"new a")
+    (source / "b.dll").write_bytes(b"new b")
+    (source / "c.dll").write_bytes(b"new c")
+    (destination / "a.dll").write_bytes(b"old a")
+    (destination / "b.dll").write_bytes(b"old b")
+    real_copy2 = shutil.copy2
+
+    def copy_or_fail(src, dst, *args, **kwargs):
+        if src.endswith("c.dll"):
+            raise PermissionError("locked")
+        return real_copy2(src, dst, *args, **kwargs)
+
+    with patch("update.bootstrap_fix.shutil.copy2", side_effect=copy_or_fail), pytest.raises(
+        PermissionError
+    ):
+        _copy_update_files(str(source), str(destination))
+
+    assert (destination / "a.dll").read_bytes() == b"old a"
+    assert (destination / "b.dll").read_bytes() == b"old b"
+    assert not (destination / "c.dll").exists()
+    assert not list(destination.glob("*.old"))
+
+
+def test_old_copy_still_in_use_is_recorded_and_cleaned_later(tmp_path):
     source = tmp_path / "source"
     destination = tmp_path / "destination"
     source.mkdir()
     destination.mkdir()
     (source / "python314.dll").write_bytes(b"new")
     (destination / "python314.dll").write_bytes(b"old")
+    real_remove = os.remove
 
-    with patch("update.bootstrap_fix.shutil.copy2", side_effect=PermissionError):
+    def remove_unless_old(path):
+        if str(path).endswith(".old"):
+            raise PermissionError("in use")
+        return real_remove(path)
+
+    with patch("update.bootstrap_fix.os.remove", side_effect=remove_unless_old):
         _copy_update_files(str(source), str(destination))
 
-    assert (destination / "python314.dll").read_bytes() == b"old"
+    assert (destination / "python314.dll").read_bytes() == b"new"
+    assert (destination / "python314.dll.old").read_bytes() == b"old"
+    assert (destination / LEFTOVERS_MANIFEST).exists()
+
+    cleanup_leftovers(str(destination))
+
+    assert not (destination / "python314.dll.old").exists()
+    assert not (destination / LEFTOVERS_MANIFEST).exists()
+
+
+def test_cleanup_ignores_entries_that_are_not_old_files_inside_destination(tmp_path):
+    destination = tmp_path / "destination"
+    destination.mkdir()
+    outside = tmp_path / "outside.old"
+    outside.write_text("keep", encoding="utf-8")
+    not_old = destination / "VeTube.exe"
+    not_old.write_text("keep", encoding="utf-8")
+    (destination / LEFTOVERS_MANIFEST).write_text(
+        f"{outside}\n{not_old}\n", encoding="utf-8"
+    )
+
+    cleanup_leftovers(str(destination))
+
+    assert outside.exists()
+    assert not_old.exists()
+
+
+def test_kill_process_also_terminates_children():
+    from update import bootstrap_fix
+
+    with patch.object(bootstrap_fix, "_descendant_pids", return_value=[7, 8]), patch.object(
+        bootstrap_fix, "_terminate_process"
+    ) as terminate:
+        bootstrap_fix.kill_process(42)
+
+    assert [call.args[0] for call in terminate.call_args_list] == [42, 7, 8]
 
 
 def test_staging_failure_cleans_temporary_file(tmp_path):

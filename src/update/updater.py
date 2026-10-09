@@ -16,13 +16,19 @@ from globals.paths import BASE_DIR, BOOTSTRAP_EXE
 from update import github_client
 from update.backup import cleanup_backup, create_backup, restore_backup
 from update.bootstrap import launch_bootstrap
+from update.bootstrap_fix import ROLLBACK_SIGNAL, cleanup_leftovers
 from update.channel import get_channel
 from update.downloader import download
 from update.extractor import extract
 from update.release_notes_dialog import show_release_notes_dialog
 from update.update import donation
 from update.verifier import verify
-from update.wxUpdater import progress_callback, update_finished
+from update.wxUpdater import (
+    hide_main_window,
+    progress_callback,
+    show_main_window,
+    update_finished,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -180,6 +186,30 @@ def do_update(is_manual: bool = False) -> None:
     threading.Thread(target=_check_and_notify, daemon=True).start()
 
 
+def check_previous_update_result() -> None:
+    """Avisa si la actualización anterior no se completó y limpia sus restos.
+
+    El instalador (bootstrap.exe) corre cuando VeTube ya está cerrado, así que
+    solo puede dejar constancia con un archivo: aquí se lee al arrancar.
+    """
+    signal_path = BASE_DIR / ROLLBACK_SIGNAL
+    if signal_path.exists():
+        try:
+            signal_path.unlink()
+        except OSError:
+            logger.exception("No se pudo borrar %s", signal_path)
+        wx.MessageBox(
+            _(
+                "La última actualización no se pudo completar. Si VeTube no "
+                "funciona bien, descarga de nuevo la última versión desde la "
+                "página oficial."
+            ),
+            _("Actualización fallida"),
+            wx.ICON_WARNING,
+        )
+    cleanup_leftovers(str(BASE_DIR))
+
+
 def _install_update(release: github_client.ReleaseInfo) -> None:
     """Download, verify, backup, extract, and launch bootstrap.
 
@@ -199,6 +229,10 @@ def _install_update(release: github_client.ReleaseInfo) -> None:
     # nunca: aprovechamos que ya está actualizando para darle esa oportunidad.
     if not config.get("donations", True):
         wx.CallAfter(donation)
+
+    # Solo queda a la vista la barra de progreso; la ventana vuelve si algo falla.
+    hide_main_window()
+    installed = False
 
     try:
         logger.info("Starting update to v%s", release.version)
@@ -221,6 +255,10 @@ def _install_update(release: github_client.ReleaseInfo) -> None:
 
         extract(zip_path, extract_path)
 
+        # Antes del instalador: éste cierra VeTube nada más arrancar y el aviso
+        # no llegaría a verse. Espera a que el usuario pulse Aceptar.
+        update_finished()
+
         exe_path = (
             sys.executable
             if getattr(sys, "frozen", False)
@@ -237,9 +275,9 @@ def _install_update(release: github_client.ReleaseInfo) -> None:
         )
 
         if exit_code == 0:
+            installed = True
             if backup_path:
                 cleanup_backup(backup_path)
-            update_finished()
             logger.info("Update installed successfully")
         else:
             logger.error("Bootstrap exited with code %d, restoring backup", exit_code)
@@ -252,6 +290,9 @@ def _install_update(release: github_client.ReleaseInfo) -> None:
                 restore_backup(backup_path, install_dir)
             except Exception:
                 logger.exception("Failed to restore backup")
+    finally:
+        if not installed:
+            show_main_window()
 
 
 def _fetch_checksum(checksum_url: str) -> str | None:

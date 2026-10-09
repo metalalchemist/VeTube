@@ -48,6 +48,8 @@ class MainController:
         wx.CallAfter(self.iniciar_secuencia_arranque)
 
     def iniciar_secuencia_arranque(self):
+        # 0. Avisar si la actualización anterior falló y borrar sus restos.
+        updater.check_previous_update_result()
         # 1. Verificar e instalar el motor y las voces si es necesario. El
         # motor primero: sin sonata las voces Piper no pueden sonar (las
         # instalaciones nuevas ya no lo traen en el build), y hasta que esté

@@ -25,20 +25,99 @@ APP_EXECUTABLE = "VeTube.exe"
 BOOTSTRAP_NAME = "bootstrap.exe"
 STAGED_BOOTSTRAP_NAME = "bootstrap.next.exe"
 FINALIZE_MODE = "--finalize"
+OLD_SUFFIX = ".old"
+LEFTOVERS_MANIFEST = "_update_leftovers.txt"
 
 
-def _copy_file(source_path: str, dest_path: str) -> None:
-    """Copy a file, retaining an existing locked runtime DLL for finalization."""
+def _copy_file(source_path: str, dest_path: str, journal: list) -> None:
+    """Replace dest_path moving the current file aside instead of overwriting it.
+
+    Windows refuses to overwrite a DLL or exe that is loaded (the bootstrap runs
+    from the install folder and loads the runtime DLLs from there) but lets it
+    be renamed.  The journal records every replacement so a later failure can
+    undo the whole update.
+    """
+    old_path = None
+    if os.path.exists(dest_path):
+        old_path = dest_path + OLD_SUFFIX
+        os.replace(dest_path, old_path)
     try:
         shutil.copy2(source_path, dest_path)
-    except PermissionError:
-        if not dest_path.lower().endswith(".dll") or not os.path.exists(dest_path):
-            raise
-        log(f"Keeping locked runtime dependency: {dest_path}")
+    except Exception:
+        try:
+            if old_path:
+                os.replace(old_path, dest_path)
+            elif os.path.exists(dest_path):
+                os.remove(dest_path)
+        except OSError:
+            pass
+        raise
+    journal.append((dest_path, old_path))
 
 
-def _copy_tree(source_path: str, dest_path: str) -> None:
-    """Copy a directory while applying the locked-DLL policy recursively."""
+def _rollback_copy(journal: list) -> None:
+    """Undo every replacement in the journal, newest first."""
+    for dest_path, old_path in reversed(journal):
+        try:
+            if old_path:
+                os.replace(old_path, dest_path)
+            else:
+                os.remove(dest_path)
+        except OSError as error:
+            log(f"No se pudo deshacer {dest_path}: {error}")
+
+
+def _commit_copy(journal: list, dest: str) -> None:
+    """Delete the .old copies; remember the ones still locked for later."""
+    leftovers = []
+    for _dest_path, old_path in journal:
+        if old_path is None:
+            continue
+        try:
+            os.remove(old_path)
+        except OSError:
+            leftovers.append(old_path)
+    if not leftovers:
+        return
+    log(f"{len(leftovers)} archivos .old siguen en uso; se borrarán más tarde.")
+    try:
+        with open(os.path.join(dest, LEFTOVERS_MANIFEST), "a", encoding="utf-8") as f:
+            f.write("\n".join(leftovers) + "\n")
+    except OSError as error:
+        log(f"No se pudo anotar los restos de la actualización: {error}")
+
+
+def cleanup_leftovers(dest: str) -> None:
+    """Delete the .old files a previous update could not remove while in use."""
+    manifest_path = os.path.join(dest, LEFTOVERS_MANIFEST)
+    try:
+        with open(manifest_path, encoding="utf-8") as f:
+            paths = [line.strip() for line in f if line.strip()]
+    except (OSError, ValueError):
+        return
+    root = os.path.normcase(os.path.abspath(dest)) + os.sep
+    remaining = []
+    for path in dict.fromkeys(paths):
+        inside = os.path.normcase(os.path.abspath(path)).startswith(root)
+        if not (inside and path.endswith(OLD_SUFFIX)):
+            continue
+        try:
+            if os.path.exists(path):
+                os.remove(path)
+        except OSError:
+            remaining.append(path)
+    try:
+        if remaining:
+            with open(manifest_path, "w", encoding="utf-8") as f:
+                f.write("\n".join(remaining) + "\n")
+        else:
+            os.remove(manifest_path)
+    except OSError:
+        pass
+
+
+def _copy_tree(source_path: str, dest_path: str, journal: list) -> None:
+    """Copy a directory replacing files through the journal."""
     for root, dirs, files in os.walk(source_path):
         dirs.sort()
         files.sort()
@@ -49,17 +128,28 @@ def _copy_tree(source_path: str, dest_path: str) -> None:
         os.makedirs(destination_root, exist_ok=True)
         for filename in files:
             _copy_file(
-                os.path.join(root, filename), os.path.join(destination_root, filename)
+                os.path.join(root, filename),
+                os.path.join(destination_root, filename),
+                journal,
             )
 
 
 def _copy_update_files(source: str, dest: str) -> None:
-    """Copy update files while preserving user-owned installation data."""
+    """Copy update files preserving user data; all of it or none of it."""
     if not os.path.isdir(source):
         raise FileNotFoundError(f"Update source directory does not exist: {source}")
 
     os.makedirs(dest, exist_ok=True)
+    journal: list = []
+    try:
+        _copy_entries(source, dest, journal)
+    except Exception:
+        _rollback_copy(journal)
+        raise
+    _commit_copy(journal, dest)
 
+
+def _copy_entries(source: str, dest: str, journal: list) -> None:
     for name in sorted(os.listdir(source)):
         source_path = os.path.join(source, name)
         dest_path = os.path.join(dest, name)
@@ -89,13 +179,15 @@ def _copy_update_files(source: str, dest: str) -> None:
                 for filename in files:
                     destination_file = os.path.join(destination_root, filename)
                     if not os.path.exists(destination_file):
-                        _copy_file(os.path.join(root, filename), destination_file)
+                        _copy_file(
+                            os.path.join(root, filename), destination_file, journal
+                        )
             continue
 
         if os.path.isdir(source_path):
-            _copy_tree(source_path, dest_path)
+            _copy_tree(source_path, dest_path, journal)
         else:
-            _copy_file(source_path, dest_path)
+            _copy_file(source_path, dest_path, journal)
 
 
 def _stage_bootstrap(source: str, dest: str) -> str:
@@ -134,7 +226,32 @@ def log(msg: str) -> None:
         pass
 
 
+def _descendant_pids(pid: int) -> list[int]:
+    """PIDs of everything the app started (voice engines...), except this process.
+
+    Those children also hold DLLs of the install folder open.  Must be read
+    before the parent dies, when the tree is still linked.
+    """
+    try:
+        import psutil
+
+        return [
+            child.pid
+            for child in psutil.Process(pid).children(recursive=True)
+            if child.pid != os.getpid()
+        ]
+    except Exception:
+        return []
+
+
 def kill_process(pid: int) -> None:
+    children = _descendant_pids(pid)
+    _terminate_process(pid)
+    for child in children:
+        _terminate_process(child)
+
+
+def _terminate_process(pid: int) -> None:
     log(f"Intentando matar proceso PID: {pid}")
     try:
         PROCESS_TERMINATE = 1
@@ -245,6 +362,8 @@ def _finalize_bootstrap(pid: int, dest: str, exe_path: str, active_path: str, st
 
         if os.path.exists(backup_path):
             os.remove(backup_path)
+        # El primer bootstrap ya salió: sus DLLs .old dejaron de estar en uso.
+        cleanup_leftovers(dest)
         return EXIT_SUCCESS
     except Exception as error:
         log(f"Bootstrap finalization failed: {error}")

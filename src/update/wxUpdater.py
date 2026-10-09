@@ -1,3 +1,5 @@
+import threading
+
 import wx
 
 from . import utils
@@ -220,14 +222,51 @@ def progress_callback(total_downloaded, total_size):
 
 
 def update_finished():
+    """Avisa de que la actualización está lista y espera a que se pulse Aceptar.
+
+    Bloquea el hilo que llama (nunca el de la interfaz): el instalador cierra
+    VeTube nada más arrancar, así que si no se espera aquí el aviso no llega
+    a leerse.
+    """
+    accepted = threading.Event()
+
     def show_msg():
-        wx.MessageDialog(
-            None,
-            _(
-                "La actualización se ha descargado e instalado exitosamente. "
-                "Pulse en aceptar para continuar."
-            ),
-            _("¡Hecho!"),
-        ).ShowModal()
+        try:
+            dialog = wx.MessageDialog(
+                None,
+                _(
+                    "La actualización se ha descargado e instalado exitosamente. "
+                    "Pulse en aceptar para continuar."
+                ),
+                _("¡Hecho!"),
+            )
+            dialog.ShowModal()
+            dialog.Destroy()
+        finally:
+            accepted.set()
 
     wx.CallAfter(show_msg)
+    accepted.wait()
+
+
+def hide_main_window() -> None:
+    """Oculta la ventana principal mientras se actualiza."""
+
+    def _hide():
+        frame = wx.GetApp().GetTopWindow()
+        if frame:
+            frame.Hide()
+
+    wx.CallAfter(_hide)
+
+
+def show_main_window() -> None:
+    """Vuelve a mostrar la ventana principal si la actualización no siguió adelante."""
+
+    def _show():
+        frame = wx.GetApp().GetTopWindow()
+        if frame:
+            frame.Show()
+            frame.Raise()
+
+    wx.CallAfter(_show)

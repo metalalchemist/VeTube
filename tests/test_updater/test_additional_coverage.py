@@ -19,6 +19,12 @@ from update import (
 from update.github_client import ReleaseInfo
 
 
+@pytest.fixture(autouse=True)
+def _no_real_windows(monkeypatch):
+    for name in ("hide_main_window", "show_main_window", "update_finished"):
+        monkeypatch.setattr(updater, name, MagicMock())
+
+
 def test_convert_bytes_boundaries():
     assert utils.convert_bytes(0) == "0"
     assert utils.convert_bytes(1024) == "1.00Kb"
@@ -257,6 +263,44 @@ def test_install_update_success_cleans_backup_and_notifies(monkeypatch):
     finished.assert_called_once_with()
 
 
+def test_install_update_hides_window_and_confirms_before_bootstrap():
+    release = SimpleNamespace(
+        version="4.0", zip_name="update.zip", zip_url="zip", checksum_url="sum"
+    )
+    order = []
+    updater.update_finished.side_effect = lambda: order.append("finished")
+    with (
+        patch.object(updater, "config", {"create_backup_before_update": False}),
+        patch("update.updater.download"),
+        patch("update.updater._fetch_checksum", return_value="hash"),
+        patch("update.updater.verify", return_value=True),
+        patch("update.updater.extract"),
+        patch(
+            "update.updater.launch_bootstrap",
+            side_effect=lambda **kw: order.append("bootstrap") or 0,
+        ),
+    ):
+        updater._install_update(release)
+    updater.hide_main_window.assert_called_once_with()
+    assert order == ["finished", "bootstrap"]
+    updater.show_main_window.assert_not_called()
+
+
+def test_install_update_shows_window_again_when_it_fails():
+    release = SimpleNamespace(
+        version="4.0", zip_name="update.zip", zip_url="zip", checksum_url="sum"
+    )
+    with (
+        patch.object(updater, "config", {"create_backup_before_update": False}),
+        patch("update.updater.download"),
+        patch("update.updater._fetch_checksum", return_value=None),
+    ):
+        updater._install_update(release)
+    updater.hide_main_window.assert_called_once_with()
+    updater.show_main_window.assert_called_once_with()
+    updater.update_finished.assert_not_called()
+
+
 def test_install_update_restores_when_bootstrap_fails():
     release = SimpleNamespace(
         version="4.0", zip_name="update.zip", zip_url="zip", checksum_url="sum"
@@ -386,6 +430,38 @@ def test_wx_updater_progress_and_notifications(monkeypatch):
         wxUpdater.rollback_notification("checksum")
         wxUpdater.no_updates_dialog("1.0")
         wxUpdater.update_finished()
+
+
+def test_previous_update_failure_is_reported_once_and_signal_removed(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setattr(updater, "_", lambda text: text, raising=False)
+    (tmp_path / updater.ROLLBACK_SIGNAL).write_text("1", encoding="utf-8")
+    with (
+        patch.object(updater, "BASE_DIR", tmp_path),
+        patch.object(updater.wx, "MessageBox") as message_box,
+        patch.object(updater, "cleanup_leftovers") as cleanup,
+    ):
+        updater.check_previous_update_result()
+        updater.check_previous_update_result()
+
+    message_box.assert_called_once()
+    assert not (tmp_path / updater.ROLLBACK_SIGNAL).exists()
+    assert cleanup.call_count == 2
+
+
+def test_wx_updater_hide_and_show_main_window():
+    frame = MagicMock()
+    app = MagicMock(GetTopWindow=MagicMock(return_value=frame))
+    with (
+        patch.object(wxUpdater.wx, "CallAfter", side_effect=lambda fn: fn()),
+        patch.object(wxUpdater.wx, "GetApp", return_value=app),
+    ):
+        wxUpdater.hide_main_window()
+        frame.Hide.assert_called_once_with()
+        wxUpdater.show_main_window()
+    frame.Show.assert_called_once_with()
+    frame.Raise.assert_called_once_with()
 
 
 def test_wx_updater_dialog_choices(monkeypatch):

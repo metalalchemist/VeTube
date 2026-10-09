@@ -14,6 +14,12 @@ def _clear_gh_cache():
     clear_cache()
 
 
+@pytest.fixture(autouse=True)
+def _no_real_windows(monkeypatch):
+    for name in ("hide_main_window", "show_main_window", "update_finished"):
+        monkeypatch.setattr(f"update.updater.{name}", MagicMock())
+
+
 def _make_release(tag="v4.0", version="4.0"):
     return ReleaseInfo(
         tag=tag,
