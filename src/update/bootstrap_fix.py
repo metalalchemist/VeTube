@@ -190,6 +190,39 @@ def _copy_entries(source: str, dest: str, journal: list) -> None:
             _copy_file(source_path, dest_path, journal)
 
 
+def _restore_backup(backup_dir: str, dest: str) -> bool:
+    """Put the pre-update files back over ``dest`` after a failed copy.
+
+    Copies the backup on top of the installation instead of wiping it: the
+    files the failed update did manage to write get their old content back
+    (VERSION included, so the app does not claim a version it is not) and
+    nothing is deleted.  Same policy as the update copy itself: the running
+    bootstrap, data.json and keymaps are left alone (they were never
+    touched), sounds/ only fills gaps.  Returns True when the backup was
+    applied.
+    """
+    if not backup_dir or not os.path.isdir(backup_dir):
+        log("No backup available; the installation stays as it is.")
+        return False
+    try:
+        log(f"Restoring backup from: {backup_dir}")
+        _copy_update_files(backup_dir, dest)
+        log("Backup restored.")
+        return True
+    except Exception as e:
+        log(f"ERROR restoring backup: {e}")
+        log(traceback.format_exc())
+        return False
+
+
+def _remove_backup(backup_dir: str) -> None:
+    """Delete the pre-update copy once the update is installed."""
+    if not backup_dir or not os.path.isdir(backup_dir):
+        return
+    shutil.rmtree(backup_dir, ignore_errors=True)
+    log(f"Backup removed: {backup_dir}")
+
+
 def _stage_bootstrap(source: str, dest: str) -> str:
     """Stage the incoming bootstrap without touching the active executable."""
     source_path = os.path.join(source, BOOTSTRAP_NAME)
@@ -337,7 +370,14 @@ def _launch_executable(exe_path: str) -> bool:
             return False
 
 
-def _finalize_bootstrap(pid: int, dest: str, exe_path: str, active_path: str, staged_path: str) -> int:
+def _finalize_bootstrap(
+    pid: int,
+    dest: str,
+    exe_path: str,
+    active_path: str,
+    staged_path: str,
+    backup_dir: str = "",
+) -> int:
     """Replace the old bootstrap after phase one has exited, then relaunch."""
     backup_path = active_path + ".previous"
     try:
@@ -364,6 +404,7 @@ def _finalize_bootstrap(pid: int, dest: str, exe_path: str, active_path: str, st
             os.remove(backup_path)
         # El primer bootstrap ya salió: sus DLLs .old dejaron de estar en uso.
         cleanup_leftovers(dest)
+        _remove_backup(backup_dir)
         return EXIT_SUCCESS
     except Exception as error:
         log(f"Bootstrap finalization failed: {error}")
@@ -393,12 +434,23 @@ def _write_rollback_signal(dest: str) -> None:
         log(f"Failed to write rollback signal: {e}")
 
 
+def _clear_rollback_signal(dest: str) -> None:
+    """A successful copy supersedes any marker left by an earlier failure."""
+    signal_path = os.path.join(dest, ROLLBACK_SIGNAL)
+    try:
+        if os.path.exists(signal_path):
+            os.remove(signal_path)
+            log(f"Stale rollback signal removed: {signal_path}")
+    except OSError as e:
+        log(f"Failed to remove rollback signal: {e}")
+
+
 def main() -> None:
     log("=== INICIO BOOTSTRAP ===")
     log(f"Argumentos recibidos: {sys.argv}")
 
     if len(sys.argv) >= 2 and sys.argv[1] == FINALIZE_MODE:
-        if len(sys.argv) != 7:
+        if len(sys.argv) not in (7, 8):
             log("ERROR: Argumentos de finalización inválidos.")
             sys.exit(EXIT_FAILURE)
         try:
@@ -408,6 +460,7 @@ def main() -> None:
                 sys.argv[4],
                 sys.argv[5],
                 sys.argv[6],
+                sys.argv[7] if len(sys.argv) == 8 else "",
             )
         except Exception:
             log(traceback.format_exc())
@@ -426,8 +479,15 @@ def main() -> None:
         source = sys.argv[2]
         dest = sys.argv[3]
         exe_path = sys.argv[4]
+        # Quinto argumento (opcional): la copia de seguridad hecha por VeTube
+        # antes de descargar. Si la copia de archivos falla, se vuelve a ella;
+        # si la actualización queda instalada, se borra.
+        backup_dir = sys.argv[5] if len(sys.argv) >= 6 else ""
 
-        log(f"Config inicial -> Source: {source} | Dest: {dest} | Exe: {exe_path}")
+        log(
+            f"Config inicial -> Source: {source} | Dest: {dest} | Exe: {exe_path}"
+            f" | Backup: {backup_dir or '(ninguno)'}"
+        )
 
         if os.path.basename(os.path.normpath(dest)) == "_internal":
             log("Detectado destino '_internal'. Corrigiendo a directorio padre.")
@@ -443,16 +503,22 @@ def main() -> None:
             try:
                 _copy_update_files(source, dest)
                 log("Copia finalizada correctamente.")
-            except PermissionError as e:
-                log(f"ERROR copiando archivos (permiso deniado): {e}")
-                log(traceback.format_exc())
-                _write_rollback_signal(dest)
-                sys.exit(EXIT_CANCELLED)
+                _clear_rollback_signal(dest)
             except Exception as e:
-                log(f"ERROR copiando archivos: {e}")
+                # Copia a medias: se vuelve a la copia de seguridad y se
+                # relanza la app (la versión anterior), en vez de dejar al
+                # usuario sin VeTube y con un VERSION que miente.
+                cancelado = isinstance(e, PermissionError)
+                log(
+                    "ERROR copiando archivos"
+                    + (" (permiso denegado)" if cancelado else "")
+                    + f": {e}"
+                )
                 log(traceback.format_exc())
                 _write_rollback_signal(dest)
-                sys.exit(EXIT_FAILURE)
+                _restore_backup(backup_dir, dest)
+                _launch_executable(_resolve_app_executable(dest, exe_path))
+                sys.exit(EXIT_CANCELLED if cancelado else EXIT_FAILURE)
         else:
             log("ERROR: La carpeta source o dest no existen.")
             sys.exit(EXIT_FAILURE)
@@ -471,6 +537,7 @@ def main() -> None:
                         exe_path,
                         active_path,
                         staged_path,
+                        backup_dir,
                     ],
                     creationflags=subprocess.DETACHED_PROCESS,
                     cwd=dest,
@@ -524,6 +591,7 @@ def main() -> None:
                 if not _launch_executable(final_exe_path):
                     raise OSError("application launch failed")
                 log("subprocess.Popen llamado con éxito (DETACHED).")
+                _remove_backup(backup_dir)
                 exit_code = EXIT_SUCCESS
             except Exception as e:
                 log(f"Fallo intento 1: {e}")

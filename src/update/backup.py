@@ -55,7 +55,17 @@ def check_disk_space(install_dir: str) -> tuple[bool, int]:
     return ok, required_mb
 
 
-def create_backup(install_dir: str, version: str) -> str:
+def _count_files(path: str) -> int:
+    """Count the files of a directory tree (for backup progress)."""
+    return sum(len(filenames) for _, _, filenames in os.walk(path))
+
+
+def backup_dir_for(install_dir: str, version: str) -> str:
+    """Where create_backup() puts the copy: ``_backup_v{version}/`` next to install_dir."""
+    return str(Path(install_dir).parent / f"_backup_v{version}")
+
+
+def create_backup(install_dir: str, version: str, progress_callback=None) -> str:
     """Create a backup of the installation directory.
 
     Checks disk space first (needs 2x install size). Creates a
@@ -64,6 +74,9 @@ def create_backup(install_dir: str, version: str) -> str:
     Args:
         install_dir: Path to the application installation directory.
         version: Version string for the backup directory name.
+        progress_callback: Optional ``callback(current, total)`` called after
+            each copied file (and once with ``(total, total)`` if there was
+            nothing to copy). Without it the backup is silent.
 
     Returns:
         Path to the created backup directory.
@@ -73,15 +86,32 @@ def create_backup(install_dir: str, version: str) -> str:
     """
     ok, required_mb = check_disk_space(install_dir)
     if not ok:
-        raise InsufficientSpaceError(
+        error = InsufficientSpaceError(
             f"Need {required_mb} MB free for backup, insufficient disk space"
         )
+        error.required_mb = required_mb  # para el aviso traducido al usuario
+        raise error
 
-    parent = Path(install_dir).parent
-    backup_path = str(parent / f"_backup_v{version}")
+    backup_path = backup_dir_for(install_dir, version)
 
     logger.info("Creating backup at '%s'", backup_path)
-    shutil.copytree(install_dir, backup_path, dirs_exist_ok=True)
+    if progress_callback is None:
+        shutil.copytree(install_dir, backup_path, dirs_exist_ok=True)
+    else:
+        total = _count_files(install_dir)
+        copiados = 0
+
+        def _copiar(src, dst, *, follow_symlinks=True):
+            nonlocal copiados
+            shutil.copy2(src, dst, follow_symlinks=follow_symlinks)
+            copiados += 1
+            progress_callback(copiados, total)
+
+        shutil.copytree(
+            install_dir, backup_path, dirs_exist_ok=True, copy_function=_copiar
+        )
+        if total == 0:
+            progress_callback(0, 0)
     logger.info("Backup created successfully")
 
     return backup_path
