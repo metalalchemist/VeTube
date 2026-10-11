@@ -64,11 +64,11 @@ googletrans-py = { git = "https://github.com/rmcpantoja/googletrans.git" }
 pytchat = { git = "https://github.com/KaitoCross/pytchat" }
 
 [tool.poe.tasks]
-build = "cxfreeze build"
+build = "powershell -NoProfile -File build.ps1"
 dev = "src/run_main_window.py"
 format = "ruff format src translates"
 lint = "ruff check --fix src translates"
-msi = "cxfreeze bdist_msi"
+msi = "powershell -NoProfile -File build.ps1 -Msi"
 test = "pytest -v --maxfail=1 --disable-warnings tests/"
 check = ["format", "lint", "test"]
 
@@ -86,11 +86,6 @@ target_name = "VeTube.exe"
 shortcut_name = "VeTube"
 shortcut_dir = "ProgramMenuFolder"
 copyright = "Copyright (C) 2026 VeTube Team"
-
-[[tool.cxfreeze.executables]]
-script = "src/update/bootstrap_fix.py"
-base = "gui"
-target_name = "bootstrap.exe"
 
 [tool.cxfreeze.build_exe]
 optimize = 2
@@ -135,7 +130,7 @@ packages = [
     "servicios",
 ]
 
-includes = ["edge_tts"]
+includes = ["edge_tts", "bz2", "ctypes", "lzma", "_zstd"]
 
 excludes = [
     "tkinter",
@@ -165,6 +160,7 @@ bin_excludes = ["api-ms-win-*.dll"]
 
 include_msvcr = true
 include_files = [
+    ["bootstrap.exe", "bootstrap.exe"],
     ["data.json", "data.json"],
     ["VERSION", "VERSION"],
 

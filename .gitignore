@@ -25,6 +25,8 @@ logs/
 # Build artifacts (cx_Freeze / uv)
 build/
 dist/
+/native/bootstrap/target/
+/.test-tools/
 src/vetube.egg-info/
 
 # Local tool state

@@ -3,6 +3,7 @@
 import logging
 import os
 import shutil
+import tempfile
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -55,21 +56,11 @@ def check_disk_space(install_dir: str) -> tuple[bool, int]:
     return ok, required_mb
 
 
-def _count_files(path: str) -> int:
-    """Count the files of a directory tree (for backup progress)."""
-    return sum(len(filenames) for _, _, filenames in os.walk(path))
-
-
-def backup_dir_for(install_dir: str, version: str) -> str:
-    """Where create_backup() puts the copy: ``_backup_v{version}/`` next to install_dir."""
-    return str(Path(install_dir).parent / f"_backup_v{version}")
-
-
 def create_backup(install_dir: str, version: str, progress_callback=None) -> str:
-    """Create a backup of the installation directory.
+    """Create a fresh backup of immutable program files.
 
     Checks disk space first (needs 2x install size). Creates a
-    ``_backup_v{version}/`` directory in the parent of install_dir.
+    unique ``_backup_v{version}-*/`` directory in the parent of install_dir.
 
     Args:
         install_dir: Path to the application installation directory.
@@ -92,53 +83,77 @@ def create_backup(install_dir: str, version: str, progress_callback=None) -> str
         error.required_mb = required_mb  # para el aviso traducido al usuario
         raise error
 
-    backup_path = backup_dir_for(install_dir, version)
+    # Program files are immutable while VeTube runs; mutable user data and logs
+    # must not race the parallel backup or be restored over newer user changes.
+    ignored = {
+        "logs",
+        "voices",
+        "engines",
+        "keymaps",
+        "sounds",
+        "data.json",
+        "favoritos.json",
+        "mensajes_destacados.json",
+        "keys.txt",
+        "_update_transaction",
+        "_update_cleanup.txt",
+        "_update_leftovers.txt",
+    }
 
+    def ignore(directory, names):
+        excluded = (
+            {name for name in names if name.lower() in ignored}
+            if Path(directory).resolve() == Path(install_dir).resolve()
+            else set()
+        )
+        for name in names:
+            if name in excluded:
+                continue
+            candidate = Path(directory) / name
+            if (
+                candidate.is_symlink()
+                or getattr(candidate, "is_junction", lambda: False)()
+            ):
+                raise OSError("Backup contains a linked path")
+        return excluded
+
+    total = 0
+    for directory, subdirs, names in os.walk(install_dir):
+        excluded = ignore(directory, subdirs + names)
+        subdirs[:] = [name for name in subdirs if name not in excluded]
+        total += sum(name not in excluded for name in names)
+    # Allocate only after scanning succeeds, so a bad path leaves no partial dir.
+    backup_path = tempfile.mkdtemp(
+        prefix=f"_backup_v{version}-", dir=Path(install_dir).resolve().parent
+    )
     logger.info("Creating backup at '%s'", backup_path)
-    if progress_callback is None:
-        shutil.copytree(install_dir, backup_path, dirs_exist_ok=True)
-    else:
-        total = _count_files(install_dir)
-        copiados = 0
+    copiados = 0
 
-        def _copiar(src, dst, *, follow_symlinks=True):
-            nonlocal copiados
-            shutil.copy2(src, dst, follow_symlinks=follow_symlinks)
-            copiados += 1
+    def _copiar(src, dst, *, follow_symlinks=True):
+        nonlocal copiados
+        if Path(src).is_symlink():
+            raise OSError("Backup contains a symbolic link")
+        shutil.copy2(src, dst, follow_symlinks=follow_symlinks)
+        copiados += 1
+        if progress_callback:
             progress_callback(copiados, total)
 
+    try:
         shutil.copytree(
-            install_dir, backup_path, dirs_exist_ok=True, copy_function=_copiar
+            install_dir,
+            backup_path,
+            dirs_exist_ok=True,
+            copy_function=_copiar,
+            ignore=ignore,
         )
-        if total == 0:
+        if total == 0 and progress_callback:
             progress_callback(0, 0)
+    except BaseException:
+        shutil.rmtree(backup_path, ignore_errors=True)
+        raise
     logger.info("Backup created successfully")
 
     return backup_path
-
-
-def restore_backup(backup_path: str, install_dir: str) -> None:
-    """Restore a backup to the installation directory.
-
-    Deletes the current install_dir contents and copies the backup back.
-
-    Args:
-        backup_path: Path to the backup directory.
-        install_dir: Path to the application installation directory.
-
-    Raises:
-        FileNotFoundError: If backup_path does not exist.
-    """
-    if not os.path.isdir(backup_path):
-        raise FileNotFoundError(f"Backup not found: '{backup_path}'")
-
-    logger.info("Restoring backup from '%s' to '%s'", backup_path, install_dir)
-
-    if os.path.exists(install_dir):
-        shutil.rmtree(install_dir)
-
-    shutil.copytree(backup_path, install_dir)
-    logger.info("Backup restored successfully")
 
 
 def cleanup_backup(backup_path: str) -> None:

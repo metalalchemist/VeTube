@@ -9,7 +9,6 @@ import httpx
 import pytest
 
 from update import (
-    bootstrap_fix,
     release_notes_dialog,
     update,
     updater,
@@ -199,7 +198,9 @@ def test_do_update_beta_current_prerelease_reports_latest(monkeypatch):
 
     with (
         patch.object(updater, "get_channel", return_value="beta"),
-        patch.object(updater.github_client, "get_latest_release_result", return_value=result),
+        patch.object(
+            updater.github_client, "get_latest_release_result", return_value=result
+        ),
         patch("update.updater.show_release_notes_dialog", return_value=False),
         patch.object(updater.wx, "CallAfter", side_effect=lambda fn, *a: fn(*a)),
         patch.object(updater.threading, "Thread", side_effect=run_thread),
@@ -237,7 +238,7 @@ def test_install_update_handles_checksum_and_disabled_backup(tmp_path):
     extract.assert_not_called()
 
 
-def test_install_update_success_cleans_backup_and_notifies(sin_interfaz):
+def test_install_update_success_leaves_backup_for_native_confirmation(sin_interfaz):
     release = SimpleNamespace(
         version="4.0", zip_name="update.zip", zip_url="zip", checksum_url="sum"
     )
@@ -252,7 +253,7 @@ def test_install_update_success_cleans_backup_and_notifies(sin_interfaz):
         patch("update.updater.cleanup_backup") as cleanup,
     ):
         updater._install_update(release)
-    cleanup.assert_called_once_with("backup")
+    cleanup.assert_not_called()
     assert bootstrap.call_args.kwargs["backup_dir"] == "backup"
     assert sin_interfaz.llamadas == [
         updater.iniciar_descarga,
@@ -277,7 +278,7 @@ def test_install_update_removes_a_half_made_backup(sin_interfaz, tmp_path):
         patch("update.updater.cleanup_backup") as cleanup,
     ):
         updater._install_update(release)
-    cleanup.assert_called_once_with(str(tmp_path / f"_backup_v{updater.VERSION}"))
+    cleanup.assert_not_called()  # create_backup owns its partial directory
 
 
 def test_install_update_discards_backup_when_bootstrap_does_not_start(sin_interfaz):
@@ -301,7 +302,9 @@ def test_install_update_discards_backup_when_bootstrap_does_not_start(sin_interf
     cleanup.assert_called_once_with("backup")
     assert sin_interfaz.llamadas[-2] is updater.mostrar_ventanas
     sin_interfaz.llamadas[-1]()
-    sin_interfaz.aviso.assert_called_once_with("el instalador no pudo arrancar (código 1)")
+    sin_interfaz.aviso.assert_called_once_with(
+        "el instalador no pudo arrancar (código 1)"
+    )
 
 
 def test_install_update_translates_the_disk_space_reason(sin_interfaz):
@@ -336,14 +339,18 @@ def test_en_interfaz_waits_for_the_progress_bar_update_to_finish(sin_interfaz):
     cuando corre de verdad se libera."""
     from update import updater as real
 
-    en_interfaz = sin_interfaz.original  # la fixture sustituye la función; aquí se prueba la real
+    en_interfaz = (
+        sin_interfaz.original
+    )  # la fixture sustituye la función; aquí se prueba la real
     estados = iter([True, True, False])
     aplazadas = []
     hecho = []
     with (
         patch("update.updater.dentro_de_update", side_effect=lambda: next(estados)),
         patch.object(real.wx, "CallAfter", side_effect=lambda fn: fn()),
-        patch.object(real.wx, "CallLater", side_effect=lambda ms, fn: aplazadas.append(fn)),
+        patch.object(
+            real.wx, "CallLater", side_effect=lambda ms, fn: aplazadas.append(fn)
+        ),
     ):
         en_interfaz(lambda: hecho.append(True), esperar=False)
         assert hecho == [] and len(aplazadas) == 1
@@ -359,7 +366,9 @@ def test_bootstrap_del_paquete_prefers_the_downloaded_one(tmp_path):
     carpeta temporal. Si el paquete no trae ninguno, se usa el instalado."""
     assert updater._bootstrap_del_paquete(str(tmp_path)) == str(updater.BOOTSTRAP_EXE)
     (tmp_path / "bootstrap.exe").write_bytes(b"")
-    assert updater._bootstrap_del_paquete(str(tmp_path)) == str(tmp_path / "bootstrap.exe")
+    assert updater._bootstrap_del_paquete(str(tmp_path)) == str(
+        tmp_path / "bootstrap.exe"
+    )
 
 
 def test_fetch_checksum_success_and_http_failure():
@@ -451,7 +460,11 @@ def test_install_update_never_opens_the_donation_dialog(sin_interfaz):
         version="4.0", zip_name="update.zip", zip_url="zip", checksum_url="sum"
     )
     with (
-        patch.object(updater, "config", {"create_backup_before_update": False, "donations": False}),
+        patch.object(
+            updater,
+            "config",
+            {"create_backup_before_update": False, "donations": False},
+        ),
         patch("update.updater.donation") as donation,
         patch("update.updater.download"),
         patch("update.updater._fetch_checksum", return_value="hash"),
@@ -533,11 +546,15 @@ def test_wx_updater_hides_and_restores_windows(monkeypatch):
     monkeypatch.setattr(wxUpdater, "_", lambda text: text, raising=False)
     wxUpdater.progress_dialog = None
     wxUpdater._ventanas_ocultas = []
-    principal = MagicMock(); principal.IsShown.return_value = True
-    escondida = MagicMock(); escondida.IsShown.return_value = False
-    destruida = MagicMock(); destruida.IsShown.return_value = True
+    principal = MagicMock()
+    principal.IsShown.return_value = True
+    escondida = MagicMock()
+    escondida.IsShown.return_value = False
+    destruida = MagicMock()
+    destruida.IsShown.return_value = True
     destruida.__bool__ = lambda self: False
-    dialogo = MagicMock(); dialogo.IsShown.return_value = True
+    dialogo = MagicMock()
+    dialogo.IsShown.return_value = True
     with (
         patch.object(wxUpdater, "create_progress_dialog", return_value=dialogo),
         patch.object(
@@ -570,9 +587,13 @@ def test_wx_updater_hides_and_restores_windows(monkeypatch):
 def test_wx_updater_restores_the_window_that_had_focus_first(monkeypatch):
     monkeypatch.setattr(wxUpdater, "_", lambda text: text, raising=False)
     wxUpdater.progress_dialog = MagicMock()
-    principal = MagicMock(); principal.IsShown.return_value = True
-    chat = MagicMock(); chat.IsShown.return_value = True
-    with patch.object(wxUpdater.wx, "GetTopLevelWindows", return_value=[principal, chat]):
+    principal = MagicMock()
+    principal.IsShown.return_value = True
+    chat = MagicMock()
+    chat.IsShown.return_value = True
+    with patch.object(
+        wxUpdater.wx, "GetTopLevelWindows", return_value=[principal, chat]
+    ):
         wxUpdater.ocultar_ventanas(activa=chat)
     # La que tenía el foco (el chat) es la que vuelve al frente.
     assert wxUpdater._ventanas_ocultas == [chat, principal]
@@ -588,14 +609,12 @@ def test_previous_update_failure_is_reported_once_and_signal_removed(
     with (
         patch.object(updater, "BASE_DIR", tmp_path),
         patch.object(updater.wx, "MessageBox") as message_box,
-        patch.object(updater, "cleanup_leftovers") as cleanup,
     ):
         updater.check_previous_update_result()
         updater.check_previous_update_result()
 
     message_box.assert_called_once()
     assert not (tmp_path / updater.ROLLBACK_SIGNAL).exists()
-    assert cleanup.call_count == 2
 
 
 def test_wx_updater_dialog_choices(monkeypatch):
@@ -676,86 +695,3 @@ def test_show_release_notes_dialog_returns_modal_and_choice(monkeypatch):
     with patch.object(release_notes_dialog, "ReleaseNotesDialog", return_value=dialog):
         assert release_notes_dialog.show_release_notes_dialog(None, "1.0", "notes")
     dialog.Destroy.assert_called_once_with()
-
-
-def test_bootstrap_fix_helpers_and_main_success(tmp_path, monkeypatch):
-    monkeypatch.setattr(bootstrap_fix, "LOG_FILE", str(tmp_path / "log.txt"))
-    bootstrap_fix.log("message")
-    assert "message" in (tmp_path / "log.txt").read_text()
-    bootstrap_fix._write_rollback_signal(str(tmp_path))
-    assert (tmp_path / bootstrap_fix.ROLLBACK_SIGNAL).exists()
-    with patch.object(bootstrap_fix.ctypes, "windll", create=True) as windll:
-        windll.kernel32.OpenProcess.return_value = 0
-        bootstrap_fix.kill_process(123)
-    source = tmp_path / "source"
-    dest = tmp_path / "dest"
-    source.mkdir()
-    dest.mkdir()
-    exe = dest / "app.exe"
-    exe.write_text("exe")
-    monkeypatch.setattr(
-        sys, "argv", ["bootstrap.py", "1", str(source), str(dest), str(exe)]
-    )
-    with (
-        patch.object(bootstrap_fix.time, "sleep"),
-        patch.object(bootstrap_fix, "kill_process"),
-        patch.object(bootstrap_fix.shutil, "copytree"),
-        patch.object(bootstrap_fix.subprocess, "Popen"),
-        pytest.raises(SystemExit) as result,
-    ):
-        bootstrap_fix.main()
-    assert result.value.code == bootstrap_fix.EXIT_SUCCESS
-
-
-def test_bootstrap_fix_rejects_missing_arguments(monkeypatch):
-    monkeypatch.setattr(sys, "argv", ["bootstrap.py"])
-    with patch.object(bootstrap_fix, "log"), pytest.raises(SystemExit) as result:
-        bootstrap_fix.main()
-    assert result.value.code == bootstrap_fix.EXIT_FAILURE
-
-
-@pytest.mark.parametrize(
-    ("error", "exit_code"),
-    [(PermissionError("denied"), bootstrap_fix.EXIT_CANCELLED),
-     (OSError("copy failed"), bootstrap_fix.EXIT_FAILURE)],
-)
-def test_bootstrap_fix_copy_errors_write_rollback(tmp_path, monkeypatch, error, exit_code):
-    source = tmp_path / "source"
-    dest = tmp_path / "dest"
-    source.mkdir()
-    dest.mkdir()
-    monkeypatch.setattr(
-        sys, "argv", ["bootstrap.py", "1", str(source), str(dest), "missing.exe"]
-    )
-    with (
-        patch.object(bootstrap_fix.time, "sleep"),
-        patch.object(bootstrap_fix, "kill_process"),
-        patch.object(bootstrap_fix, "_copy_update_files", side_effect=error),
-        patch.object(bootstrap_fix, "_write_rollback_signal") as rollback,
-        pytest.raises(SystemExit) as result,
-    ):
-        bootstrap_fix.main()
-    assert result.value.code == exit_code
-    rollback.assert_called_once_with(str(dest))
-
-
-def test_bootstrap_fix_uses_fallback_executable_launch(tmp_path, monkeypatch):
-    source = tmp_path / "source"
-    dest = tmp_path / "dest"
-    source.mkdir()
-    dest.mkdir()
-    exe = dest / "app.exe"
-    exe.write_text("exe")
-    original = tmp_path / "_internal" / "app.exe"
-    monkeypatch.setattr(
-        sys, "argv", ["bootstrap.py", "1", str(source), str(dest), str(original)]
-    )
-    with (
-        patch.object(bootstrap_fix.time, "sleep"),
-        patch.object(bootstrap_fix, "kill_process"),
-        patch.object(bootstrap_fix, "_copy_update_files"),
-        patch.object(bootstrap_fix.subprocess, "Popen", side_effect=[OSError("first"), MagicMock()]),
-        pytest.raises(SystemExit) as result,
-    ):
-        bootstrap_fix.main()
-    assert result.value.code == bootstrap_fix.EXIT_SUCCESS

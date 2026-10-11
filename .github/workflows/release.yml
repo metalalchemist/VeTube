@@ -89,9 +89,27 @@ jobs:
           path: uv.lock
           retention-days: 1
 
+  native-bootstrap:
+    name: Use prebuilt native bootstrap
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check prebuilt bootstrap
+        shell: pwsh
+        run: |
+          if (-not (Test-Path -LiteralPath "bootstrap.exe" -PathType Leaf)) {
+            throw "Missing prebuilt bootstrap.exe. Add it to Git before releasing."
+          }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-bootstrap
+          path: bootstrap.exe
+          if-no-files-found: error
+          retention-days: 1
+
   build-portable:
     name: Build Portable Version
-    needs: [lock]
+    needs: [lock, native-bootstrap]
     runs-on: windows-latest
     steps:
       - name: Checkout code
@@ -132,6 +150,11 @@ jobs:
 
       - name: Install dependencies
         run: uv sync --locked --no-install-project
+
+      - name: Download native bootstrap
+        uses: actions/download-artifact@v4
+        with:
+          name: native-bootstrap
 
       - name: Build portable version
         run: uv run cxfreeze build
@@ -173,31 +196,28 @@ jobs:
           }
         shell: pwsh
 
-      # Comprobacion: el bootstrap.exe congelado importa ctypes al arrancar. Sin
-      # argumentos tiene que cargar el _ctypes renombrado, escribir "No hay
-      # suficientes argumentos" en su log y salir con 1; si no, ni el bootstrap
-      # ni VeTube arrancarian con este zip. Con base "gui", un error de
-      # importacion abre una ventana modal: de ahi el limite de 30 s.
-      - name: Check that the frozen bootstrap loads the renamed .pyd
+      - name: Include native bootstrap and program manifest
         run: |
           $buildPath = Get-ChildItem -Path "build" -Directory | Select-Object -First 1
-          $exe = Join-Path $buildPath.FullName "bootstrap.exe"
-          $tmp = Join-Path ([IO.Path]::GetTempPath()) ("bootstrap-smoke-" + [guid]::NewGuid())
-          New-Item -ItemType Directory -Path $tmp | Out-Null
-          $log = Join-Path $tmp "vetube_bootstrap_debug.txt"
-          $psi = New-Object Diagnostics.ProcessStartInfo $exe
+          uv run python tools/package_native.py $buildPath.FullName
+        shell: pwsh
+
+      - name: Check frozen runtime after compatibility renaming
+        run: |
+          $buildPath = Get-ChildItem -Path "build" -Directory | Select-Object -First 1
+          $psi = [Diagnostics.ProcessStartInfo]::new((Join-Path $buildPath.FullName "VeTube.exe"))
+          $psi.Arguments = "--check-update-runtime"
           $psi.UseShellExecute = $false
-          $psi.EnvironmentVariables["TEMP"] = $tmp
+          $psi.CreateNoWindow = $true
+          $psi.WorkingDirectory = $buildPath.FullName
           $p = [Diagnostics.Process]::Start($psi)
-          if (-not $p.WaitForExit(30000)) {
-            $p.Kill()
-            throw "bootstrap.exe did not exit within 30 s (error dialog of the gui base?)"
-          }
-          $logged = (Test-Path $log) -and (Select-String -Path $log -SimpleMatch "No hay suficientes argumentos" -Quiet)
-          if ($p.ExitCode -ne 1 -or -not $logged) {
-            throw "Frozen bootstrap.exe failed with the renamed .pyd (exit code $($p.ExitCode), log line found: $logged)"
-          }
-          Write-Host "Frozen bootstrap.exe imported ctypes with the renamed .pyd"
+          try {
+            if (-not $p.WaitForExit(30000)) {
+              $p.Kill()
+              throw "Frozen Python runtime smoke test timed out"
+            }
+            if ($p.ExitCode -ne 0) { throw "Frozen Python runtime failed: $($p.ExitCode)" }
+          } finally { $p.Dispose() }
         shell: pwsh
 
       - name: Compress build (zip)
@@ -225,7 +245,7 @@ jobs:
 
   build-msi:
     name: Build MSI Installer
-    needs: [lock]
+    needs: [lock, native-bootstrap]
     runs-on: windows-latest
     steps:
       - name: Checkout code
@@ -267,8 +287,19 @@ jobs:
       - name: Install dependencies
         run: uv sync --locked --no-install-project
 
+      - name: Download native bootstrap
+        uses: actions/download-artifact@v4
+        with:
+          name: native-bootstrap
+
       - name: Build MSI installer
-        run: uv run cxfreeze bdist_msi
+        run: |
+          uv run cxfreeze build
+          if ($LASTEXITCODE -ne 0) { throw "Freeze failed" }
+          $buildPath = Get-ChildItem -Path "build" -Directory | Select-Object -First 1
+          uv run python tools/package_native.py $buildPath.FullName
+          if ($LASTEXITCODE -ne 0) { throw "Manifest generation failed" }
+          uv run cxfreeze bdist_msi --skip-build
         shell: pwsh
 
       - name: Rename MSI

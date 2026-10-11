@@ -14,7 +14,7 @@ from globals.data_store import (
     motor_de_interfaz,
     msjs,
 )
-from globals.paths import FAVORITOS_FILE, MENSAJES_DESTACADOS_FILE
+from globals.paths import BASE_DIR, FAVORITOS_FILE, MENSAJES_DESTACADOS_FILE
 from globals.resources import carpeta_voces
 from servicios.discord import ServicioDiscord, extraer_id_canal, validar_token
 from servicios.kick import ServicioKick  # Importar ServicioKick
@@ -26,6 +26,7 @@ from setup import reader
 from ui.dialog_response import response
 from ui.main_window import PLATAFORMAS, MyFrame
 from update import updater
+from update.lifecycle import startup_ready
 from utils import canonical_scraper, fajustes, funciones, languageHandler
 from utils.app_utilitys import (
     asegurar_motor_kokoro,
@@ -48,6 +49,9 @@ class MainController:
         wx.CallAfter(self.iniciar_secuencia_arranque)
 
     def iniciar_secuencia_arranque(self):
+        # La ventana y los componentes esenciales ya están inicializados y el
+        # bucle de eventos atiende llamadas. Las descargas opcionales van después.
+        startup_ready(BASE_DIR)
         # 0. Avisar si la actualización anterior falló y borrar sus restos.
         updater.check_previous_update_result()
         # 1. Verificar e instalar el motor y las voces si es necesario. El

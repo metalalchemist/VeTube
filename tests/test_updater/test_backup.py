@@ -1,6 +1,6 @@
 """Tests for update.backup module."""
 
-import os
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -11,7 +11,6 @@ from update.backup import (
     check_disk_space,
     cleanup_backup,
     create_backup,
-    restore_backup,
 )
 
 
@@ -51,54 +50,13 @@ class TestCheckDiskSpace:
         assert required_mb == 200
 
 
-class TestCreateBackup:
-    @patch("update.backup.shutil.copytree")
-    @patch("update.backup.check_disk_space")
-    def test_creates_correct_path(self, mock_check, mock_copytree):
-        mock_check.return_value = (True, 200)
-        result = create_backup("/opt/VeTube", "3.95")
-        assert result.endswith("_backup_v3.95")
-        mock_copytree.assert_called_once_with("/opt/VeTube", result, dirs_exist_ok=True)
-
-    @patch("update.backup.check_disk_space")
-    def test_raises_insufficient_space(self, mock_check):
-        mock_check.return_value = (False, 500)
-        with pytest.raises(InsufficientSpaceError, match="500 MB"):
-            create_backup("/opt/VeTube", "3.95")
-
-    @patch("update.backup.shutil.copytree")
-    @patch("update.backup.check_disk_space")
-    def test_returns_backup_path(self, mock_check, mock_copytree, tmp_path):
-        mock_check.return_value = (True, 0)
-        install_dir = str(tmp_path / "install")
-        os.makedirs(install_dir)
-        result = create_backup(install_dir, "1.0")
-        assert "_backup_v1.0" in result
-
-
-class TestRestoreBackup:
-    def test_raises_if_backup_missing(self, tmp_path):
-        with pytest.raises(FileNotFoundError, match="Backup not found"):
-            restore_backup(str(tmp_path / "nonexistent"), str(tmp_path / "install"))
-
-    @patch("update.backup.shutil.copytree")
-    @patch("update.backup.shutil.rmtree")
-    def test_restores_files(self, mock_rmtree, mock_copytree, tmp_path):
-        backup = tmp_path / "backup"
-        backup.mkdir()
-        install = tmp_path / "install"
-        install.mkdir()
-        restore_backup(str(backup), str(install))
-        mock_rmtree.assert_called_once_with(str(install))
-        mock_copytree.assert_called_once_with(str(backup), str(install))
-
-    @patch("update.backup.shutil.copytree")
-    def test_restores_when_install_missing(self, mock_copytree, tmp_path):
-        backup = tmp_path / "backup"
-        backup.mkdir()
-        install = str(tmp_path / "nonexistent_install")
-        restore_backup(str(backup), install)
-        mock_copytree.assert_called_once()
+def test_insufficient_space_does_not_create_partial_backup(tmp_path):
+    with (
+        patch("update.backup.check_disk_space", return_value=(False, 500)),
+        pytest.raises(InsufficientSpaceError, match="500 MB"),
+    ):
+        create_backup(str(tmp_path), "old")
+    assert list(tmp_path.iterdir()) == []
 
 
 class TestCleanupBackup:
@@ -128,13 +86,15 @@ class TestBackupProgress:
         )
 
         assert avisos == [(1, 3), (2, 3), (3, 3)]
-        assert (tmp_path / "_backup_v1.0" / "lib" / "b.pyd").read_bytes() == b"b"
-        assert result == str(tmp_path / "_backup_v1.0")
+        assert (Path(result) / "lib" / "b.pyd").read_bytes() == b"b"
+        assert result.startswith(str(tmp_path / "_backup_v1.0-"))
 
     @patch("update.backup.check_disk_space", return_value=(True, 0))
     def test_empty_install_still_closes_the_dialog(self, mock_check, tmp_path):
         install = tmp_path / "install"
         install.mkdir()
         avisos = []
-        create_backup(str(install), "1.0", progress_callback=lambda c, t: avisos.append((c, t)))
+        create_backup(
+            str(install), "1.0", progress_callback=lambda c, t: avisos.append((c, t))
+        )
         assert avisos == [(0, 0)]

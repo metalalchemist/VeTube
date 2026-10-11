@@ -16,15 +16,15 @@ from globals.paths import BASE_DIR, BOOTSTRAP_EXE
 from update import github_client
 from update.backup import (
     InsufficientSpaceError,
-    backup_dir_for,
     cleanup_backup,
     create_backup,
 )
 from update.bootstrap import launch_bootstrap
-from update.bootstrap_fix import ROLLBACK_SIGNAL, cleanup_leftovers
 from update.channel import get_channel
 from update.downloader import download
 from update.extractor import extract
+from update.lifecycle import ROLLBACK_SIGNAL
+from update.preparation import prepare
 from update.release_notes_dialog import show_release_notes_dialog
 from update.update import donation
 from update.verifier import verify
@@ -57,7 +57,7 @@ def _read_version() -> str:
             version = version_file.read_text(encoding="utf-8-sig").strip()
             if version:
                 return version
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - version lookup must not prevent startup
         logger.debug(f"VERSION file read failed: {e}")
 
     # Strategy 2: Try importlib.metadata (standard for installed packages)
@@ -65,7 +65,7 @@ def _read_version() -> str:
         from importlib.metadata import version
 
         return version("vetube")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - metadata lookup must not prevent startup
         logger.debug(f"importlib.metadata failed: {e}")
 
     # Strategy 3: Try pyproject.toml (development mode)
@@ -79,7 +79,7 @@ def _read_version() -> str:
         with open(pyproject_path, "rb") as f:
             data = tomllib.load(f)
         return data["project"]["version"]
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - malformed project metadata is optional
         logger.debug(f"pyproject.toml read failed: {e}")
 
     # Strategy 4: Fallback (should never reach here)
@@ -144,7 +144,9 @@ def do_update(is_manual: bool = False) -> None:
                 if is_manual:
                     wx.CallAfter(
                         wx.MessageBox,
-                        _("No se pudo comprobar actualizaciones. Verifica tu conexión."),
+                        _(
+                            "No se pudo comprobar actualizaciones. Verifica tu conexión."
+                        ),
                         _("Error"),
                         wx.ICON_ERROR,
                     )
@@ -223,7 +225,6 @@ def check_previous_update_result() -> None:
             _("Actualización fallida"),
             wx.ICON_WARNING,
         )
-    cleanup_leftovers(str(BASE_DIR))
 
 
 def _en_interfaz(funcion, esperar: bool = False) -> None:
@@ -322,32 +323,47 @@ def _install_update(release: github_client.ReleaseInfo) -> None:
     create_backup_flag = config.get("create_backup_before_update", True)
 
     try:
+        if (BASE_DIR / "_update_transaction").exists():
+            raise RuntimeError(
+                _(
+                    "Hay una actualización anterior sin confirmar. Conserva la copia de seguridad y revisa el registro antes de actualizar de nuevo."
+                )
+            )
         logger.info("Starting update to v%s", release.version)
 
         # Solo queda a la vista la barra de progreso; las ventanas vuelven si
         # la actualización falla (si sale bien, el bootstrap cierra VeTube).
         _en_interfaz(iniciar_descarga)
         _anunciar(_("Descargando la actualización"))
-        download(release.zip_url, zip_path, progress_callback=progress_callback)
 
-        checksum_content = _fetch_checksum(release.checksum_url)
-        if checksum_content is None:
-            raise RuntimeError("Failed to fetch checksum file")
+        def download_verified():
+            download(release.zip_url, zip_path, progress_callback=progress_callback)
+            checksum_content = _fetch_checksum(release.checksum_url)
+            if checksum_content is None:
+                raise RuntimeError("Failed to fetch checksum file")
+            if not verify(zip_path, checksum_content, release.zip_name):
+                raise RuntimeError(
+                    _("el archivo descargado no supera la comprobación de integridad")
+                )
 
-        if not verify(zip_path, checksum_content, release.zip_name):
-            raise RuntimeError(
-                _("el archivo descargado no supera la comprobación de integridad")
-            )
+        def backup_concurrent(downloaded):
+            nonlocal backup_path
 
-        # Create backup if enabled
-        if create_backup_flag:
-            _anunciar(_("Creando la copia de seguridad..."))
+            def progress(current, total):
+                # While downloading, the bar describes the download only.
+                if downloaded.is_set():
+                    backup_progress_callback(current, total)
+
             backup_path = create_backup(
-                install_dir, VERSION, progress_callback=backup_progress_callback
+                install_dir, VERSION, progress_callback=progress
             )
-            logger.info("Backup created at %s", backup_path)
-        else:
-            logger.info("Backup disabled by user configuration")
+            return backup_path
+
+        prepare(
+            download_verified,
+            backup_concurrent if create_backup_flag else None,
+            lambda: _anunciar(_("Creando la copia de seguridad...")),
+        )
 
         _anunciar(_("Extrayendo la actualización..."))
         extract(zip_path, extract_path)
@@ -378,8 +394,7 @@ def _install_update(release: github_client.ReleaseInfo) -> None:
             # cuanto arranca. Si aun así seguimos vivos (modo de desarrollo,
             # pruebas, un bootstrap que murió antes de matarnos), la interfaz
             # tiene que volver: si no, el programa queda invisible.
-            if backup_path:
-                cleanup_backup(backup_path)
+            # Only the native supervisor can confirm startup and delete backup.
             logger.info("Update installed successfully")
             _en_interfaz(mostrar_ventanas)
         elif exit_code == 2:
@@ -408,10 +423,10 @@ def _install_update(release: github_client.ReleaseInfo) -> None:
         # nada que restaurar, y restaurar con VeTube abierto borraría archivos
         # de una instalación que sigue en uso.
         logger.exception("Update failed")
-        # backup_path sigue en None si create_backup falló a medias: la
-        # carpeta a medio copiar se borra igual.
-        if create_backup_flag:
-            cleanup_backup(backup_path or backup_dir_for(install_dir, VERSION))
+        # prepare joins the backup worker before returning/raising. A partial
+        # backup is removed by create_backup itself; never delete an older one.
+        if backup_path:
+            cleanup_backup(backup_path)
         _avisar_fallo(_motivo(error))
 
 

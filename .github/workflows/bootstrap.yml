@@ -1,0 +1,34 @@
+name: Native bootstrap checks
+
+on:
+  push:
+    paths: ['native/bootstrap/**', '.cargo/config.toml', 'src/update/**', 'tests/test_async_update.py', 'tools/package_native.py', '.github/workflows/bootstrap.yml']
+  pull_request:
+    paths: ['native/bootstrap/**', '.cargo/config.toml', 'src/update/**', 'tests/test_async_update.py', 'tools/package_native.py', '.github/workflows/bootstrap.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - run: cargo fmt --manifest-path native/bootstrap/Cargo.toml --check
+      - run: cargo clippy --manifest-path native/bootstrap/Cargo.toml --locked --all-targets -- -D warnings
+      - run: cargo test --manifest-path native/bootstrap/Cargo.toml --locked -- --test-threads=1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: python -m unittest tests.test_async_logging tests.test_async_update -v
+  memory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@miri
+      - run: cargo miri test --manifest-path native/bootstrap/Cargo.toml --lib
+        env:
+          MIRIFLAGS: -Zmiri-disable-isolation

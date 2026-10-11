@@ -6,6 +6,16 @@ configurar_logs()
 import asyncio
 import sys
 
+# CI smoke test of the frozen Python runtime, without opening the interface.
+if "--check-update-runtime" in sys.argv:
+    import importlib
+    import logging
+
+    for module in ("bz2", "ctypes", "lzma", "_zstd"):
+        importlib.import_module(module)
+    logging.getLogger("vetube").info("Update runtime imports OK")
+    sys.exit(0)
+
 import wx
 
 import setup
