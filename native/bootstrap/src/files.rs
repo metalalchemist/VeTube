@@ -12,6 +12,37 @@ fn invalid(message: &str) -> io::Error {
     io::Error::new(io::ErrorKind::InvalidInput, message)
 }
 
+fn copy_file(source: &Path, target: &Path) -> io::Result<u64> {
+    #[cfg(not(miri))]
+    {
+        fs::copy(source, target)
+    }
+    #[cfg(miri)]
+    {
+        // Miri cannot emulate Linux's copy_file_range used by fs::copy.
+        // Explicit reads/writes also avoid io::copy's kernel specialization.
+        use std::io::Read;
+        let mut source = File::open(source)?;
+        let permissions = source.metadata()?.permissions();
+        let mut target = File::create(target)?;
+        let mut buffer = [0; 8192];
+        let mut copied = 0;
+        loop {
+            let count = match source.read(&mut buffer) {
+                Err(error) if error.kind() == io::ErrorKind::Interrupted => continue,
+                result => result?,
+            };
+            if count == 0 {
+                break;
+            }
+            target.write_all(&buffer[..count])?;
+            copied += count as u64;
+        }
+        target.set_permissions(permissions)?;
+        Ok(copied)
+    }
+}
+
 pub fn relative(name: &str) -> io::Result<PathBuf> {
     let path = PathBuf::from(name.replace('\\', "/"));
     if name.is_empty()
@@ -249,7 +280,7 @@ impl Transaction {
             }
             let target = self.save(&path)?;
             fs::create_dir_all(target.parent().unwrap())?;
-            fs::copy(source.join(&path), target)?;
+            copy_file(&source.join(&path), &target)?;
         }
         // This file is consumed only after the application signals readiness.
         let cleanup = self.save(Path::new(CLEANUP))?;
@@ -317,7 +348,7 @@ pub fn restore_snapshot(backup: &Path, dest: &Path) -> io::Result<()> {
             continue;
         }
         fs::create_dir_all(target.parent().unwrap())?;
-        fs::copy(backup.join(path), target)?;
+        copy_file(&backup.join(path), &target)?;
     }
     Ok(())
 }
