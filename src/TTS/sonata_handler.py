@@ -6,13 +6,24 @@ import socket
 import subprocess
 import sys
 import threading
+from logging import getLogger
 from pathlib import Path
 
 import grpclib.const
 from grpclib.client import Channel
+from grpclib.exceptions import GRPCError
 from sound_lib import stream
 
 from globals.paths import ENGINES_DIR, VOICES_DIR
+
+logger = getLogger(__name__)
+
+# Cuánto se insiste en cargar la voz mientras el servidor arranca (segundos).
+# Al abrir VeTube puede tardar en escuchar (equipo lento, antivirus que analiza
+# un motor recién descargado), y con una sola petición la voz se quedaba vacía
+# toda la sesión: cada mensaje esperaba 12 s y se callaba.
+_PLAZO_CARGA_VOZ = 30
+_PAUSA_CARGA_VOZ = 0.5
 
 # Configuración de Job Objects para Windows
 if sys.platform == "win32":
@@ -86,6 +97,17 @@ def sonata_instalado():
     return (sonata_bin_dir() / NOMBRE_EXE_SONATA).is_file()
 
 
+def _registrar_fallo_arranque(futuro):
+    """Deja en el registro por qué no arrancó el servidor (un ejecutable que el
+    antivirus bloquea, por ejemplo). Sin esto el error se perdía con el futuro
+    de _start_server, que nadie consulta."""
+    if futuro.cancelled():
+        return
+    error = futuro.exception()
+    if error is not None:
+        logger.error("No se pudo arrancar el servidor de Sonata", exc_info=error)
+
+
 class piperSpeak:
     # Cerrojo del stream BASS. Va en la CLASE, no en la instancia: __init__ se
     # vuelve a ejecutar cada vez que el puente se reinicia, y un cerrojo nuevo
@@ -132,6 +154,9 @@ class piperSpeak:
         self.bass_stream = None
         # Generación de habla: silence() la incrementa para invalidar síntesis en curso o pendientes.
         self._speak_generation = 0
+        # Generación de carga: load_model() y unload_model() la incrementan para
+        # que una petición de voz anterior deje de insistir y no pise la nueva.
+        self._carga_generacion = 0
         # close() lo levanta: el arranque del servidor es asíncrono y puede
         # seguir en marcha cuando ya se ha pedido cerrar este puente.
         self._cerrado = False
@@ -166,7 +191,8 @@ class piperSpeak:
         self.thread.start()
 
         # Lanzar servidor
-        asyncio.run_coroutine_threadsafe(self._start_server(), self.loop)
+        arranque = asyncio.run_coroutine_threadsafe(self._start_server(), self.loop)
+        arranque.add_done_callback(_registrar_fallo_arranque)
 
         # Solo la primera vez: __init__ se vuelve a ejecutar en cada cambio de
         # motor (close() deja _inicializado en False) y se acumulaba un
@@ -293,20 +319,17 @@ class piperSpeak:
         if sys.platform == "win32" and self.job_handle and self.process:
             AssignProcessToJobObject(self.job_handle, self.process._handle)
 
-        max_retries = 15
-        for i in range(max_retries):
-            # El canal queda atado al loop donde se crea: si el puente ya se
-            # ha reiniciado, publicarlo aquí se lo daría al puente nuevo, que
-            # lo usaría desde OTRO loop («attached to a different loop») y no
-            # conseguiría cargar ninguna voz.
-            if self._cerrado or self.loop is not mi_loop:
-                return
-            try:
-                self.channel = Channel("127.0.0.1", self.port)
-                await asyncio.sleep(2)
-                break
-            except:
-                await asyncio.sleep(1)
+        # El canal queda atado al loop donde se crea: si el puente ya se ha
+        # reiniciado, publicarlo aquí se lo daría al puente nuevo, que lo usaría
+        # desde OTRO loop («attached to a different loop») y no conseguiría
+        # cargar ninguna voz.
+        if self._cerrado or self.loop is not mi_loop:
+            return
+        # Crear el canal no conecta nada (grpclib se conecta en cada petición),
+        # así que no puede fallar porque el servidor aún no escuche: aquí había
+        # un bucle de 15 intentos que nunca reintentaba. La espera de verdad la
+        # hace _load_voice_task, que repite la petición hasta que hay respuesta.
+        self.channel = Channel("127.0.0.1", self.port)
 
     def load_model(self, model_path=None):
         if not model_path:
@@ -363,40 +386,99 @@ class piperSpeak:
         # que hacía el botón de prueba del descargador, que carga y habla
         # seguido).
         self.voice_id = None
-        asyncio.run_coroutine_threadsafe(self._load_voice_task(model_path), self.loop)
+        self._carga_generacion += 1
+        asyncio.run_coroutine_threadsafe(
+            self._load_voice_task(model_path, self._carga_generacion), self.loop
+        )
 
-    async def _load_voice_task(self, model_path):
+    async def _load_voice_task(self, model_path, generacion):
         # Si el puente se cierra (cambio de motor) mientras esta tarea
         # esperaba, su loop ya no es el del puente: hay que salir en vez de
-        # hablarle a un servidor que ya no existe.
+        # hablarle a un servidor que ya no existe. Y si entretanto se ha pedido
+        # otra voz (o ninguna), esta petición ya no vale: si siguiera
+        # insistiendo, su respuesta podría llegar después y pisar a la nueva.
         mi_loop = asyncio.get_running_loop()
 
         def vigente():
-            return not self._cerrado and self.loop is mi_loop
+            return (
+                not self._cerrado
+                and self.loop is mi_loop
+                and self._carga_generacion == generacion
+            )
 
+        inicio = mi_loop.time()
+        limite = inicio + _PLAZO_CARGA_VOZ
         while self.channel is None:
             if not vigente():
                 return
-            await asyncio.sleep(0.5)
-        if not vigente():
-            return
+            if mi_loop.time() >= limite:
+                logger.warning(
+                    "El servidor de Sonata no llegó a arrancar; no se cargó la voz %s",
+                    model_path,
+                )
+                return
+            await asyncio.sleep(_PAUSA_CARGA_VOZ)
+        canal = self.channel
 
+        # grpclib no se conecta al crear el canal sino en cada petición: si el
+        # servidor aún no escucha, esta falla y la siguiente vuelve a intentar
+        # la conexión. Se repite mientras el servidor siga vivo y dentro del
+        # plazo, que solo decide si se lanza OTRO intento: nunca corta uno en
+        # marcha, porque cargar un modelo puede llevar varios segundos.
         req = sonata_grpc_pb2.VoicePath(config_path=os.path.abspath(model_path))
-        try:
-            async with self.channel.request(
-                "/sonata_grpc.sonata_grpc/LoadVoice",
-                grpclib.const.Cardinality.UNARY_UNARY,
-                sonata_grpc_pb2.VoicePath,
-                sonata_grpc_pb2.VoiceInfo,
-            ) as s:
-                await s.send_message(req, end=True)
-                voice_info = await s.recv_message()
-                if voice_info:
-                    self.voice_id = voice_info.voice_id
-                    if hasattr(voice_info, "audio") and voice_info.audio.sample_rate:
-                        self.sample_rate = voice_info.audio.sample_rate
-        except Exception as e:
-            print(f"Error al cargar voz en Sonata: {e}")
+        intentos = 0
+        while vigente():
+            intentos += 1
+            try:
+                async with canal.request(
+                    "/sonata_grpc.sonata_grpc/LoadVoice",
+                    grpclib.const.Cardinality.UNARY_UNARY,
+                    sonata_grpc_pb2.VoicePath,
+                    sonata_grpc_pb2.VoiceInfo,
+                ) as s:
+                    await s.send_message(req, end=True)
+                    voice_info = await s.recv_message()
+                    # Otra vez: la respuesta puede llegar cuando ya se ha
+                    # pedido otra voz.
+                    if voice_info and vigente():
+                        self.voice_id = voice_info.voice_id
+                        if hasattr(voice_info, "audio") and voice_info.audio.sample_rate:
+                            self.sample_rate = voice_info.audio.sample_rate
+                        if intentos > 1:
+                            logger.info(
+                                "Sonata cargó la voz al intento %d (%.1f s después de pedirla)",
+                                intentos,
+                                mi_loop.time() - inicio,
+                            )
+                return
+            except GRPCError:
+                # El servidor ha contestado, así que está vivo: rechaza esta voz,
+                # y pedírsela otra vez no cambiaría la respuesta.
+                if vigente():
+                    logger.warning(
+                        "Sonata no pudo cargar la voz %s", model_path, exc_info=True
+                    )
+                return
+            except Exception:
+                if not vigente():
+                    return
+                proceso = self.process
+                if proceso is None or proceso.poll() is not None:
+                    logger.warning(
+                        "El servidor de Sonata se cerró sin cargar la voz %s",
+                        model_path,
+                        exc_info=True,
+                    )
+                    return
+                if mi_loop.time() >= limite:
+                    logger.warning(
+                        "El servidor de Sonata no respondió en %d s; no se cargó la voz %s",
+                        _PLAZO_CARGA_VOZ,
+                        model_path,
+                        exc_info=True,
+                    )
+                    return
+                await asyncio.sleep(_PAUSA_CARGA_VOZ)
 
     def get_devices(self):
         try:
@@ -449,6 +531,8 @@ class piperSpeak:
         que quedara de antes."""
         self.current_voice_path = None
         self.voice_id = None
+        # Y que una carga aún en marcha no la resucite al llegar tarde.
+        self._carga_generacion += 1
 
     def speak(self, text):
         if not text:
