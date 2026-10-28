@@ -30,6 +30,29 @@ if sys.platform == "win32":
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 
+def _cargar_voz_edge():
+    """Apunta el lector de Edge a la voz guardada, con el catálogo ya
+    descargado (o con la descarga ya abandonada). Corre en el hilo de la UI."""
+    from TTS.edge_handler import (
+        edge_list_voices,
+        edge_voces_listas,
+        edge_voz_shortname,
+    )
+
+    # Mientras bajaba el catálogo el usuario pudo cambiar de motor o marcar
+    # la casilla «Usar voz sapi»: el lector ya no es el de Edge.
+    if motor_de_interfaz() != "edge":
+        return
+    if not edge_voces_listas():
+        # La descarga ya dejó su error en el registro; abrir los Ajustes la
+        # vuelve a pedir.
+        return
+    if not (0 <= config["voz"] < len(edge_list_voices())):
+        config["voz"] = 0
+    setup.reader._lector.load_model(edge_voz_shortname(config["voz"]))
+    fijar_dispositivo_lector()
+
+
 def run_app():
     app = wx.App(False)
     # El motor que lee el programa, no el elegido en la lista: con la casilla
@@ -59,20 +82,14 @@ def run_app():
             # de arrancar con la voz principal muda (revisión de accesibilidad).
             setup.reader._leer.speak(_("No hay voces instaladas"))
     elif motor == "edge":
-        # Edge no tiene modelo local: basta con apuntar el lector al nombre
-        # corto de la voz elegida y fijar el dispositivo de salida.
-        from TTS.edge_handler import (
-            edge_iniciar_carga,
-            edge_list_voices,
-            edge_voz_shortname,
-        )
+        # La voz de Edge se elige por su posición en el catálogo de Microsoft,
+        # que aquí todavía no ha llegado: se descarga en segundo plano. Mirar
+        # la voz ahora devolvía None con la lista vacía, el lector se quedaba
+        # sin voz (mudo hasta tocar la voz en los Ajustes) y la voz elegida
+        # volvía a la primera. Se carga cuando llega el catálogo.
+        from TTS.edge_handler import edge_iniciar_carga
 
-        if not (0 <= config["voz"] < len(edge_list_voices())):
-            config["voz"] = 0
-        setup.reader._lector.load_model(edge_voz_shortname(config["voz"]))
-        fijar_dispositivo_lector()
-        # La lista de voces se descarga en segundo plano (para los Ajustes).
-        edge_iniciar_carga()
+        edge_iniciar_carga(lambda: wx.CallAfter(_cargar_voz_edge))
 
     # Mostrar donación si es necesario (síncrono al inicio está bien por ser un diálogo de bienvenida)
     if config["donations"]:
