@@ -10,9 +10,17 @@ import asyncio
 import atexit
 import ctypes
 import threading
+from logging import getLogger
 
 from edge_tts import Communicate, VoicesManager
 from sound_lib import stream
+
+logger = getLogger(__name__)
+
+# Esperas entre intentos de descargar el catálogo. Al encender el equipo
+# VeTube puede abrirse antes de que haya red, y sin catálogo no hay voz: sin
+# reintentos, Edge se quedaba mudo toda la sesión.
+_ESPERAS_CATALOGO = (2, 5, 10, 20, 30)
 
 _VOCES = []  # lista caché de voces (dicts de VoicesManager)
 _CARGA_EN_CURSO = False
@@ -44,12 +52,26 @@ def _garantizar_loop():
 async def _fetch_voces():
     global _VOCES, _CARGA_EN_CURSO
     try:
-        manager = await VoicesManager.create()
-        # Lista nueva (no mutación in place): los lectores no ven una lista a
-        # medio llenar mientras la recorren.
-        _VOCES = list(manager.voices)
-    except Exception as e:
-        print(f"No se pudo obtener la lista de voces de Edge TTS: {e}")
+        for espera in (*_ESPERAS_CATALOGO, None):
+            try:
+                manager = await VoicesManager.create()
+                # Lista nueva (no mutación in place): los lectores no ven una
+                # lista a medio llenar mientras la recorren.
+                _VOCES = list(manager.voices)
+                break
+            except Exception:
+                if espera is None:
+                    logger.exception(
+                        "No se pudo obtener la lista de voces de Edge TTS"
+                    )
+                else:
+                    logger.warning(
+                        "No se pudo obtener la lista de voces de Edge TTS; "
+                        "nuevo intento en %s s",
+                        espera,
+                        exc_info=True,
+                    )
+                    await asyncio.sleep(espera)
     finally:
         _CARGA_EN_CURSO = False
         _avisar_carga()
