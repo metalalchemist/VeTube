@@ -48,19 +48,34 @@ class Exchange:
         # Descarga asíncrona usando el network_manager del proyecto
         network_manager.execute(self._download_rates())
 
+    # open.er-api.com es la fuente principal. Si falla (error de red, codigo != 200
+    # o respuesta sin tasas), se intenta AllRatesToday, que devuelve el mismo formato
+    # JSON (tasas de referencia del BCE, ~30 divisas). Si una divisa no esta en la
+    # respuesta, convert() devuelve la cantidad sin convertir, igual que antes.
+    RATE_SOURCES = (
+        "https://open.er-api.com/v6/latest/{base}",
+        "https://allratestoday.com/api/open/latest/{base}",
+    )
+
     async def _download_rates(self):
-        url = f"https://open.er-api.com/v6/latest/{self.base_currency}"
-        try:
-            response = await network_manager.client.get(url)
-            if response.status_code == 200:
+        for template in self.RATE_SOURCES:
+            url = template.format(base=self.base_currency)
+            try:
+                response = await network_manager.client.get(url)
+                if response.status_code != 200:
+                    print(f"Error API Divisas ({url}): Código de estado {response.status_code}")
+                    continue
                 data = response.json()
-                self.rates = data.get("rates", {})
+                rates = data.get("rates") or {}
+                if not rates:
+                    print(f"Error API Divisas ({url}): respuesta sin tasas")
+                    continue
+                self.rates = rates
                 with open(self.cache_file, "w", encoding="utf-8") as f:
                     json.dump(data, f)
-            else:
-                print(f"Error API Divisas: Código de estado {response.status_code}")
-        except Exception as e:
-            print(f"Error descargando divisas: {e}")
+                return
+            except Exception as e:
+                print(f"Error descargando divisas ({url}): {e}")
 
     def convert(self, amount, from_currency):
         """

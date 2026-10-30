@@ -134,6 +134,7 @@ VeTube is developed and maintained by [Cesar Verastegui](https://github.com/meta
 Special thanks to:
 - The [Piper TTS](https://github.com/rhasspy/piper) project for high-quality neural voices
 - The [BASS](https://www.un4seen.com/) audio library team
+- [ExchangeRate-API](https://www.exchangerate-api.com) (open.er-api.com) for currency rates, with [Exchange rates by AllRatesToday](https://allratestoday.com) as a fallback
 - All [contributors](contributors.md) who have helped make VeTube better
 
 ---
