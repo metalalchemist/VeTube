@@ -66,7 +66,10 @@ class ServicioYouTube:
 
     def prepare_player(self, status):
         try:
-            format_pref = "mp4" if status == "past" else "best"
+            # Desde agosto de 2026 YouTube sirve los directos con el sonido y la imagen por
+            # separado: "best" (ambos en un solo formato) ya no existe y yt-dlp fallaba sin que
+            # se oyera nada (issue #155). VeTube solo reproduce el sonido; "best" queda de respaldo.
+            format_pref = "mp4" if status == "past" else "bestaudio/best"
             video_url = extract_stream_url(self.url, format_preference=format_pref)
             if video_url:
                 self.media_controller = MediaController(
