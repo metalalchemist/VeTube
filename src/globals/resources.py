@@ -57,6 +57,9 @@ codigos_traduccion = [""] + [
     k for k in LANGUAGES.keys()
 ]  # mismo orden que idiomas_disponibles: los índices deben coincidir
 monedas = [_("Por defecto")] + [f"{CODES[k]}, ({k})" for k in CODES]
+codigos_monedas = ["Por defecto"] + list(
+    CODES
+)  # mismo orden que monedas: los índices deben coincidir
 voces_p = piper_list_voices()
 if not voces_p:
     lista_voces_piper = [_("No hay voces instaladas")]

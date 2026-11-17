@@ -183,9 +183,13 @@ class ServicioTwich:
                     # Sumamos todos los bits encontrados en el mensaje
                     bits_total = sum(int(b) for b in cheer_matches)
 
+                    # Sin tasas (aún no llegaron o falló la descarga) from_bits()
+                    # devuelve None: se anuncian los bits, no un importe falso.
+                    convertido = None
                     if data_store.divisa != "Por defecto":
-                        total_local = exchange.from_bits(bits_total)
-                        dinero = f"{total_local} {data_store.divisa}"
+                        convertido = exchange.from_bits(bits_total)
+                    if convertido:
+                        dinero = f"{convertido[0]} {convertido[1]}"
                     else:
                         dinero = f"{bits_total} Bits"
 

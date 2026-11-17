@@ -2,7 +2,12 @@ import wx
 
 from globals import data_store
 from globals.data_store import config
-from globals.resources import codigos_traduccion, idiomas_disponibles, monedas
+from globals.resources import (
+    codigos_monedas,
+    codigos_traduccion,
+    idiomas_disponibles,
+    monedas,
+)
 
 
 class PanelChat(wx.Panel):
@@ -36,7 +41,12 @@ class PanelChat(wx.Panel):
         )
         boxSizer_chat.Add(label_monedas, 0, wx.ALL, 5)
         self.choice_moneditas = wx.Choice(self, wx.ID_ANY, choices=monedas)
-        self.choice_moneditas.SetSelection(0)
+        # La lista se abre en la divisa en uso: así Aceptar sin tocarla la
+        # conserva, y elegir «Por defecto» vuelve de verdad a no convertir.
+        try:
+            self.choice_moneditas.SetSelection(codigos_monedas.index(data_store.divisa))
+        except ValueError:
+            self.choice_moneditas.SetSelection(0)
         boxSizer_chat.Add(self.choice_moneditas, 0, wx.EXPAND | wx.ALL, 5)
         panel_sizer_chat.Add(boxSizer_chat, 1, wx.EXPAND | wx.ALL, 5)
         self.SetSizer(panel_sizer_chat)
