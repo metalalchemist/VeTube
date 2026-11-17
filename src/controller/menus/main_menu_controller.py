@@ -6,9 +6,14 @@ from controller.kokoro_downloader_controller import KokoroDownloaderController
 from controller.sherpa_downloader_controller import SherpaDownloaderController
 from controller.sonata_downloader_controller import SonataDownloaderController
 from controller.update_languages_controller import UpdateLanguagesController
-from exchange import codes as currency_codes
+from exchange import exchange
 from globals import data_store
-from globals.resources import carpeta_voces, codes, codigos_traduccion
+from globals.resources import (
+    carpeta_voces,
+    codes,
+    codigos_monedas,
+    codigos_traduccion,
+)
 from servicios.language_updater import GestorRepositorios
 from setup import reader
 from TTS.sherpa_handler import kokoro_model_instalado, sherpa_instalado
@@ -345,9 +350,16 @@ class MainMenuController:
                 app_utilitys.configurar_piper(self.frame, carpeta_voces)
         elif motor == "edge":
             app_utilitys.fijar_dispositivo_lector()
-        if cf.choice_moneditas.GetStringSelection() != "Por defecto":
-            monedita = cf.choice_moneditas.GetStringSelection().split(", (")
-            for k in currency_codes.CODES:
-                if currency_codes.CODES[k] == monedita[0]:
-                    data_store.divisa = k
-                    break
+        # La divisa se decide por la POSICIÓN en la lista, no por el texto: el
+        # primer elemento («Por defecto») está traducido, y ocho divisas repiten
+        # nombre con su código retirado (rublo ruso: RUR y RUB), así que buscar
+        # por nombre elegía el código antiguo, que no tiene tasas.
+        seleccion_moneda = cf.choice_moneditas.GetSelection()
+        data_store.divisa = (
+            codigos_monedas[seleccion_moneda]
+            if seleccion_moneda != wx.NOT_FOUND
+            else "Por defecto"
+        )
+        # El conversor nace al arrancar, cuando aún no hay divisa elegida: hay
+        # que avisarle del cambio o no cargaría nunca las tasas.
+        exchange.set_base_currency(data_store.divisa)

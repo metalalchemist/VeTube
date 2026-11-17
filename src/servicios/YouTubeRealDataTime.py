@@ -102,16 +102,21 @@ class YouTubeRealTimeService:
                             and data_store.config["categorias"][3]
                             and hasattr(self.chat_controller.ui, "list_box_donaciones")
                         ):
-                            amount = c.amountString
+                            # amountString ya trae la divisa («ARS 500.00»): sin
+                            # conversión se anuncia tal cual, sin repetirla detrás.
+                            importe = c.amountString
                             currency = c.currency
                             if (
                                 data_store.divisa != "Por defecto"
                                 and data_store.divisa != currency
                             ):
-                                amount = exchange.convert(c.amountValue, currency)
-                                currency = data_store.divisa
+                                # Sin tasa para esa divisa convert() devuelve None y la
+                                # donación se anuncia tal como llegó, con SU divisa.
+                                convertido = exchange.convert(c.amountValue, currency)
+                                if convertido:
+                                    importe = f"{convertido[0]} {convertido[1]}"
 
-                            full_message = f"{amount} {currency}, {author_name}: {msg}"
+                            full_message = f"{importe}, {author_name}: {msg}"
                             if (
                                 data_store.config["sonidos"]
                                 and data_store.config["listasonidos"][3]

@@ -231,10 +231,16 @@ class ServicioYouTube:
                             data_store.divisa != "Por defecto"
                             and data_store.divisa != message["money"]["currency"]
                         ):
-                            message["money"]["amount"] = exchange.convert(
+                            # Sin tasa para esa divisa convert() devuelve None y la
+                            # donación se anuncia tal como llegó, con SU divisa.
+                            convertido = exchange.convert(
                                 message["money"]["amount"], message["money"]["currency"]
                             )
-                            message["money"]["currency"] = data_store.divisa
+                            if convertido:
+                                (
+                                    message["money"]["amount"],
+                                    message["money"]["currency"],
+                                ) = convertido
                         full_message = f"{message['money']['amount']} {message['money']['currency']}, {author_name}: {msg}"
                         if (
                             data_store.config["sonidos"]

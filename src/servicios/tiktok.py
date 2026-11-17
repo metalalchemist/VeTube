@@ -509,14 +509,20 @@ class ServicioTiktok:
                 return
             mensajito = ""
             nombre = _nombre_usuario(event.user)
+            # Sin tasas (aún no llegaron o falló la descarga) from_diamonds()
+            # devuelve None: se anuncian los diamantes, no un importe falso.
+            convertido = None
             if data_store.divisa != "Por defecto":
-                total = exchange.from_diamonds(gift.diamond_count * event.repeat_count)
+                convertido = exchange.from_diamonds(
+                    gift.diamond_count * event.repeat_count
+                )
+            if convertido:
                 mensajito = _("%s ha enviado %s %s (%s %s)") % (
                     nombre,
                     str(event.repeat_count),
                     gift.name,
-                    str(total),
-                    data_store.divisa,
+                    str(convertido[0]),
+                    convertido[1],
                 )
             else:
                 mensajito = _("%s ha enviado %s %s (%s diamante)") % (

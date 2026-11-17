@@ -21,6 +21,8 @@ mensajes_destacados.json
 keys.txt
 .vscode
 logs/
+# Caché de las tasas de cambio (exchange): como logs/, sigue al directorio de trabajo
+divisas/
 
 # Build artifacts (cx_Freeze / uv)
 build/
