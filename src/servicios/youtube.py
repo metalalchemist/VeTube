@@ -71,14 +71,29 @@ class ServicioYouTube:
             # se oyera nada (issue #155). VeTube solo reproduce el sonido; "best" queda de respaldo.
             format_pref = "mp4" if status == "past" else "bestaudio/best"
             video_url = extract_stream_url(self.url, format_preference=format_pref)
-            if video_url:
+            # Si el chat se cerró mientras yt-dlp buscaba la transmisión, no crear el
+            # reproductor: con la reproducción automática sonaría sin ventana para pararlo.
+            if video_url and not self._detener:
                 self.media_controller = MediaController(
                     url=video_url,
-                    state_callback=self.chat_controller.chat_dialog.on_media_player_state_change,
+                    state_callback=self._estado_reproductor,
                 )
                 self.chat_controller.set_media_controller(self.media_controller)
         except Exception:
             logger.exception("Error al iniciar la reproducción de video en YouTube")
+
+    def _estado_reproductor(self, media_controller, estado):
+        if estado == "playing" and self._detener:
+            # El chat se cerró mientras el reproductor cargaba: el release() de detener()
+            # llegó antes de que el reproductor existiera y ya no queda ventana ni atajo
+            # para pararlo. Se libera en el hilo de la interfaz, como en detener(), y nunca
+            # desde este aviso, que puede venir del hilo de eventos de VLC.
+            logger.info("Chat cerrado mientras cargaba el reproductor: se libera")
+            wx.CallAfter(media_controller.release)
+            return
+        self.chat_controller.chat_dialog.on_media_player_state_change(
+            media_controller, estado
+        )
 
     def recibir(self):
         try:
@@ -91,6 +106,9 @@ class ServicioYouTube:
                 message_groups=["messages", "superchat"],
                 interruptible_retry=False,
             )
+            if self._detener:
+                # Cerrado mientras se conectaba: ni reproductor, ni contador, ni título.
+                return
             if self.chat.status == "past":
                 # El diálogo debe mostrarse en el hilo principal; esperamos la respuesta desde este hilo.
                 respuesta = []
